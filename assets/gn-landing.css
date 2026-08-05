@@ -9,6 +9,10 @@
    modo oscuro. Todo se resuelve con variables, no hay una hoja por tema.
    ========================================================================== */
 
+/* NOTA: el tema define html{font-size:62.5%} en assets/reset.css, o sea 1rem=10px.
+   Por eso esta hoja no usa rem para tipografía: todo va en px, para que la
+   landing se vea igual sin importar qué haga el tema con la raíz. */
+
 .gn {
   /* --- Marca (no cambian entre temas) --- */
   --go-blue: #44b7e8;
@@ -111,7 +115,6 @@
   font-family: inherit;
   color: var(--text);
   text-transform: none;
-  line-height: inherit;
 }
 
 .gn a {
@@ -145,7 +148,7 @@
   align-items: center;
   gap: 12px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.74rem;
+  font-size: 11.8px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -167,7 +170,7 @@
 
 .gn__eyebrow {
   display: inline-block;
-  font-size: 0.73rem;
+  font-size: 11.7px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 600;
@@ -176,7 +179,7 @@
 }
 
 .gn__h1 {
-  font-size: clamp(2.4rem, 5.6vw, 4.2rem);
+  font-size: clamp(38.4px, 5.6vw, 67.2px);
   font-weight: 680;
   letter-spacing: -0.038em;
   line-height: 1.03;
@@ -184,7 +187,7 @@
 }
 
 .gn__h2 {
-  font-size: clamp(1.85rem, 3.6vw, 2.85rem);
+  font-size: clamp(29.6px, 3.6vw, 45.6px);
   font-weight: 660;
   letter-spacing: -0.032em;
   line-height: 1.13;
@@ -192,7 +195,7 @@
 }
 
 .gn__h3 {
-  font-size: 1.08rem;
+  font-size: 17.3px;
   font-weight: 600;
   letter-spacing: -0.012em;
   line-height: 1.35;
@@ -204,14 +207,14 @@
 }
 
 .gn__lead {
-  font-size: clamp(1.02rem, 1.35vw, 1.18rem);
+  font-size: clamp(16.3px, 1.35vw, 18.9px);
   line-height: 1.62;
   color: var(--text-soft);
   max-width: 54ch;
 }
 
 .gn__body {
-  font-size: 1rem;
+  font-size: 16px;
   line-height: 1.72;
   color: var(--text-soft);
 }
@@ -261,7 +264,7 @@
   border: 1px solid transparent;
   border-radius: var(--r-md);
   font-family: inherit;
-  font-size: 0.94rem;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.005em;
   text-decoration: none;
@@ -317,7 +320,7 @@
 
 .gn__tag {
   display: inline-block;
-  font-size: 0.74rem;
+  font-size: 11.8px;
   font-weight: 500;
   padding: 5px 11px;
   border-radius: var(--r-sm);
@@ -398,7 +401,7 @@
 }
 
 .gn-hero__meta dt {
-  font-size: 0.72rem;
+  font-size: 11.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -407,7 +410,7 @@
 
 .gn-hero__meta dd {
   margin: 6px 0 0;
-  font-size: 0.94rem;
+  font-size: 15px;
   color: var(--text);
   font-weight: 500;
 }
@@ -430,7 +433,7 @@
   margin-bottom: 20px;
   border-bottom: 1px solid var(--rule);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
+  font-size: 10.9px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -445,7 +448,7 @@
 .gn-arch__label {
   align-self: flex-start;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.64rem;
+  font-size: 10.2px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -464,7 +467,7 @@
   border-radius: var(--r-md);
   background: var(--bg);
   border: 1px solid var(--border);
-  font-size: 0.86rem;
+  font-size: 13.8px;
   font-weight: 500;
   color: var(--text-faint);
   text-align: center;
@@ -478,7 +481,7 @@
 
 .gn-arch__node--primary {
   padding: 13px 20px;
-  font-size: 0.98rem;
+  font-size: 15.7px;
   font-weight: 600;
   background: var(--accent-quiet);
   border-color: var(--border);
@@ -494,7 +497,7 @@
 .gn-arch__node--sm {
   width: auto;
   padding: 7px 11px;
-  font-size: 0.74rem;
+  font-size: 11.8px;
   border-radius: var(--r-sm);
 }
 
@@ -551,7 +554,7 @@
 
 .gn-arch__chat-text {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.76rem;
+  font-size: 12.2px;
   color: var(--accent);
   white-space: nowrap;
   overflow: hidden;
@@ -619,7 +622,7 @@
 }
 
 .gn-shift__tension p {
-  font-size: clamp(1.08rem, 1.7vw, 1.32rem);
+  font-size: clamp(17.3px, 1.7vw, 21.1px);
   line-height: 1.45;
   color: var(--text);
   font-weight: 500;
@@ -642,7 +645,7 @@
 
 .gn-shift__velocity-title {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
+  font-size: 10.9px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -659,7 +662,7 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 8px;
-  font-size: 0.85rem;
+  font-size: 13.6px;
 }
 
 .gn-shift__row-name {
@@ -669,7 +672,7 @@
 
 .gn-shift__row-val {
   color: var(--text-faint);
-  font-size: 0.78rem;
+  font-size: 12.5px;
   font-weight: 500;
 }
 
@@ -701,7 +704,7 @@
 }
 
 .gn-shift__note {
-  font-size: 0.85rem;
+  font-size: 13.6px;
   color: var(--text-soft);
   margin-top: 20px;
   padding-top: 16px;
@@ -741,7 +744,7 @@
 
 .gn-shift__card-label {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
+  font-size: 10.9px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -754,7 +757,7 @@
 }
 
 .gn-shift__card li {
-  font-size: 0.94rem;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--text-soft);
   padding: 11px 0;
@@ -812,14 +815,14 @@
 
 .gn-platform__num {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.7rem;
+  font-size: 11.2px;
   color: var(--accent);
   font-weight: 600;
   margin-bottom: 16px;
 }
 
 .gn-platform__desc {
-  font-size: 0.95rem;
+  font-size: 15.2px;
   line-height: 1.6;
   color: var(--text-soft);
   margin-top: 10px;
@@ -835,7 +838,7 @@
 .gn-platform__tag,
 .gn-culture__tags span {
   display: inline-block;
-  font-size: 0.74rem;
+  font-size: 11.8px;
   font-weight: 500;
   padding: 5px 11px;
   border-radius: var(--r-sm);
@@ -847,7 +850,7 @@
   margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--rule);
-  font-size: 0.79rem;
+  font-size: 12.6px;
   color: var(--text-faint);
 }
 
@@ -856,7 +859,7 @@
    ========================================================================== */
 
 .gn-imagine__punch {
-  font-size: clamp(1.1rem, 1.9vw, 1.35rem);
+  font-size: clamp(17.6px, 1.9vw, 21.6px);
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -891,7 +894,7 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 0.79rem;
+  font-size: 12.6px;
   font-weight: 600;
   color: var(--text);
 }
@@ -905,7 +908,7 @@
 
 .gn-console__mode {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.7rem;
+  font-size: 11.2px;
   letter-spacing: 0.04em;
   color: var(--text-faint);
 }
@@ -916,14 +919,14 @@
 
 .gn-console__prefix {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.72rem;
+  font-size: 11.5px;
   color: var(--text-faint);
   margin-bottom: 12px;
 }
 
 .gn-console__line {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: clamp(0.82rem, 1.2vw, 0.93rem);
+  font-size: clamp(13.1px, 1.2vw, 14.9px);
   line-height: 1.6;
   color: var(--text);
   display: flex;
@@ -959,13 +962,13 @@
 
 .gn-console__step-n {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
+  font-size: 10.9px;
   color: var(--text-faint);
   transition: color 0.3s ease;
 }
 
 .gn-console__step-l {
-  font-size: 0.79rem;
+  font-size: 12.6px;
   font-weight: 500;
   color: var(--text-faint);
   margin-top: 5px;
@@ -1001,7 +1004,7 @@
 }
 
 .gn-imagine__footer {
-  font-size: 1.06rem;
+  font-size: 17px;
   color: var(--text);
   font-weight: 500;
   text-align: center;
@@ -1051,14 +1054,14 @@
 
 .gn-cap__num {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.72rem;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--accent);
   margin-bottom: 16px;
 }
 
 .gn-cap__desc {
-  font-size: 0.94rem;
+  font-size: 15px;
   line-height: 1.62;
   color: var(--text-soft);
   margin-top: 10px;
@@ -1101,14 +1104,14 @@
 }
 
 .gn-ind__title {
-  font-size: 0.97rem;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--text);
   letter-spacing: -0.01em;
 }
 
 .gn-ind__subs {
-  font-size: 0.86rem;
+  font-size: 13.8px;
   line-height: 1.55;
   color: var(--text-faint);
 }
@@ -1122,7 +1125,7 @@
 }
 
 .gn-future__body {
-  font-size: clamp(1.02rem, 1.4vw, 1.16rem);
+  font-size: clamp(16.3px, 1.4vw, 18.6px);
   line-height: 1.68;
   color: var(--text-soft);
   max-width: 58ch;
@@ -1130,7 +1133,7 @@
 }
 
 .gn-future__closing {
-  font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+  font-size: clamp(19.2px, 2.4vw, 27.2px);
   font-weight: 640;
   letter-spacing: -0.025em;
   color: var(--text);
@@ -1186,7 +1189,7 @@
   border: 1px solid var(--border-strong);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.94rem;
+  font-size: 15px;
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -1209,7 +1212,7 @@
   margin-bottom: 18px;
   padding: 13px 15px;
   border-radius: var(--r-md);
-  font-size: 0.88rem;
+  font-size: 14.1px;
   line-height: 1.5;
   border: 1px solid;
 }
@@ -1228,7 +1231,7 @@
 
 .gn-cta__legal {
   margin-top: 16px;
-  font-size: 0.78rem;
+  font-size: 12.5px;
   color: var(--text-faint);
   line-height: 1.5;
 }
@@ -1253,7 +1256,7 @@
   border: 0;
   color: var(--text-soft);
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 14.1px;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -1285,7 +1288,7 @@
 }
 
 .gn-holdings__logo {
-  font-size: 1.7rem;
+  font-size: 27.2px;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
@@ -1296,7 +1299,7 @@
 }
 
 .gn-holdings__sub {
-  font-size: 0.89rem;
+  font-size: 14.2px;
   color: var(--text-faint);
   margin-top: 8px;
   line-height: 1.5;
@@ -1342,7 +1345,7 @@
 }
 
 .gn-principle p {
-  font-size: 0.89rem;
+  font-size: 14.2px;
   line-height: 1.62;
   color: var(--text-soft);
   margin-top: 10px;
@@ -1357,7 +1360,7 @@
 }
 
 .gn-culture p {
-  font-size: 1rem;
+  font-size: 16px;
   line-height: 1.65;
   color: var(--text-soft);
   max-width: 58ch;
@@ -1377,7 +1380,7 @@
 
 .gn-policies__title {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.68rem;
+  font-size: 10.9px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1392,7 +1395,7 @@
 .gn-policy summary {
   padding: 20px 0;
   cursor: pointer;
-  font-size: 0.98rem;
+  font-size: 15.7px;
   font-weight: 500;
   color: var(--text);
   list-style: none;
@@ -1409,7 +1412,7 @@
 
 .gn-policy summary::after {
   content: '+';
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 300;
   color: var(--text-faint);
   line-height: 1;
@@ -1431,7 +1434,7 @@
 }
 
 .gn-policy__body p {
-  font-size: 0.93rem;
+  font-size: 14.9px;
   line-height: 1.7;
   color: var(--text-soft);
 }
@@ -1444,7 +1447,7 @@
   margin-top: 44px;
   padding-top: 24px;
   border-top: 1px solid var(--rule);
-  font-size: 0.79rem;
+  font-size: 12.6px;
   color: var(--text-faint);
 }
 
