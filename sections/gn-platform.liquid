@@ -1,0 +1,175 @@
+{% comment %}
+  GOnama landing 2026 — "One infrastructure"
+  Cada pilar de producto es un bloque, así se agregan o reordenan desde el editor.
+{% endcomment %}
+
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gn gn-platform" id="section-{{ section.id }}">
+  <div class="gn__inner">
+    <div class="gn__section-head gn__section-head--center gn-reveal">
+      {%- if st.heading != blank -%}
+        <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+      {%- endif -%}
+      {%- if st.subheading != blank -%}
+        <p class="gn__lead">{{ st.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gn-platform__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign tags = b.tags | split: ','
+          assign featured = ''
+          if b.featured
+            assign featured = ' gn-platform__item--featured'
+          endif
+        -%}
+        <article class="gn-platform__item{{ featured }} gn-reveal" {{ block.shopify_attributes }}>
+          <div class="gn-platform__dot"></div>
+
+          {%- if b.name != blank -%}
+            <h3 class="gn__h3">{{ b.name | escape }}</h3>
+          {%- endif -%}
+
+          {%- if b.desc != blank -%}
+            <p class="gn-platform__desc">{{ b.desc | escape }}</p>
+          {%- endif -%}
+
+          {%- if b.tags != blank -%}
+            <div class="gn-platform__tags">
+              {%- for tag in tags -%}
+                {%- assign clean = tag | strip -%}
+                {%- if clean != blank -%}
+                  <span class="gn-platform__tag">{{ clean | escape }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if b.note != blank -%}
+            <p class="gn-platform__note">{{ b.note | escape }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · One infrastructure",
+  "tag": "section",
+  "class": "gn-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "One infrastructure."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Bajada",
+      "default": "Every capability. Built for agents."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pilar",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre",
+          "default": "Commerce Infrastructure"
+        },
+        {
+          "type": "text",
+          "id": "desc",
+          "label": "Descripción",
+          "default": "Run global commerce & checkout operations."
+        },
+        {
+          "type": "text",
+          "id": "tags",
+          "label": "Tags",
+          "info": "Separados por comas.",
+          "default": "Global Checkout, Local Payment Gateways, Order Management"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Nota al pie"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Destacar (ocupa todo el ancho)",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · One infrastructure",
+      "blocks": [
+        {
+          "type": "pillar",
+          "settings": {
+            "name": "GOnama AI Studio",
+            "desc": "Make commerce intelligent.",
+            "tags": "GOnama AI Chat, Emagine Code, AI Domain Experts, GO Agent Skills",
+            "featured": true
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "name": "Commerce Infrastructure",
+            "desc": "Run global commerce & checkout operations.",
+            "tags": "Global Checkout, Local Payment Gateways, Order Management, Local Logistics Engine",
+            "note": "Every module includes a dedicated AI Domain Expert"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "name": "Commerce Intelligence",
+            "desc": "Understand every interaction.",
+            "tags": "Analytics, Funnel Analytics, Customer Intelligence, CCS",
+            "note": "Every module includes a dedicated AI Domain Expert"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "name": "Growth & Retention",
+            "desc": "Drive growth and retention across every channel.",
+            "tags": "Promotions, Loyalty, eWallet, Cart Recovery",
+            "note": "Every module includes a dedicated AI Domain Expert"
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "name": "Developer Platform",
+            "desc": "Build the next generation of commerce.",
+            "tags": "APIs, MCP/A2A, Sandbox, UI Components"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,256 @@
+{% comment %}
+  GOnama landing 2026 — "Commerce is changing"
+  Las listas de comparación se cargan con un ítem por línea.
+{% endcomment %}
+
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+  assign trad_items = st.trad_items | newline_to_br | split: '<br />'
+  assign auto_items = st.auto_items | newline_to_br | split: '<br />'
+-%}
+
+<section class="gn gn-shift" id="section-{{ section.id }}">
+  <div class="gn__inner">
+    <div class="gn__section-head gn-reveal">
+      {%- if st.heading != blank -%}
+        <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+      {%- endif -%}
+    </div>
+
+    <div class="gn-reveal">
+      {%- if st.body_1 != blank -%}
+        <p class="gn__body gn-shift__body">{{ st.body_1 }}</p>
+      {%- endif -%}
+      {%- if st.body_2 != blank -%}
+        <p class="gn__body gn-shift__body">{{ st.body_2 }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if st.tension != blank or st.tension_em != blank -%}
+      <div class="gn-shift__tension gn-reveal">
+        <p>
+          {{ st.tension | escape }}
+          {%- if st.tension_em != blank -%}
+            <em>{{ st.tension_em | escape }}</em>
+          {%- endif -%}
+        </p>
+      </div>
+    {%- endif -%}
+
+    {%- if st.show_velocity -%}
+      <div class="gn-reveal" data-gn-velocity>
+        {%- if st.velocity_title != blank -%}
+          <p class="gn-shift__velocity-title">{{ st.velocity_title | escape }}</p>
+        {%- endif -%}
+
+        <div class="gn-shift__row">
+          <div class="gn-shift__row-label">
+            <span class="gn-shift__row-name">{{ st.human_label | escape }}</span>
+            <span class="gn-shift__row-val">{{ st.human_value | escape }}</span>
+          </div>
+          <div class="gn-shift__track">
+            <div
+              class="gn-shift__bar gn-shift__bar--human"
+              data-gn-bar="human"
+              data-gn-width="{{ st.human_width }}%"
+            ></div>
+          </div>
+        </div>
+
+        <div class="gn-shift__row">
+          <div class="gn-shift__row-label">
+            <span class="gn-shift__row-name">{{ st.agent_label | escape }}</span>
+            <span class="gn-shift__row-val gn-shift__row-val--fast">{{ st.agent_value | escape }}</span>
+          </div>
+          <div class="gn-shift__track">
+            <div
+              class="gn-shift__bar gn-shift__bar--agent"
+              data-gn-bar="agent"
+              data-gn-width="{{ st.agent_width }}%"
+            ></div>
+          </div>
+        </div>
+
+        {%- if st.velocity_note != blank -%}
+          <p class="gn-shift__note">{{ st.velocity_note }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gn-shift__compare">
+      <div class="gn-shift__card gn-shift__card--trad gn-reveal">
+        <p class="gn-shift__card-label">{{ st.trad_title | escape }}</p>
+        <ul>
+          {%- for item in trad_items -%}
+            {%- assign clean = item | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <li>{{ clean | escape }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="gn-shift__card gn-shift__card--auto gn-reveal">
+        <p class="gn-shift__card-label">{{ st.auto_title | escape }}</p>
+        <ul>
+          {%- for item in auto_items -%}
+            {%- assign clean = item | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <li>{{ clean | escape }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · Commerce is changing",
+  "tag": "section",
+  "class": "gn-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Commerce is changing."
+    },
+    {
+      "type": "richtext",
+      "id": "body_1",
+      "label": "Párrafo 1",
+      "default": "<p>The last generation of commerce software was built for people. The next generation will be built for <strong>AI agents and people</strong>.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "body_2",
+      "label": "Párrafo 2",
+      "default": "<p>Intelligent agents won't just answer questions. They'll launch campaigns, negotiate offers, manage customer relationships, optimize operations, and complete purchases.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Frase destacada"
+    },
+    {
+      "type": "text",
+      "id": "tension",
+      "label": "Línea 1",
+      "default": "But today's commerce stack wasn't designed for that world."
+    },
+    {
+      "type": "text",
+      "id": "tension_em",
+      "label": "Línea 2 (resaltada)",
+      "default": "It needs a new operating system."
+    },
+    {
+      "type": "header",
+      "content": "Business velocity"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_velocity",
+      "label": "Mostrar las barras de velocidad",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "velocity_title",
+      "label": "Título del bloque",
+      "default": "Business Velocity"
+    },
+    {
+      "type": "text",
+      "id": "human_label",
+      "label": "Barra 1 · nombre",
+      "default": "Traditional business"
+    },
+    {
+      "type": "text",
+      "id": "human_value",
+      "label": "Barra 1 · valor",
+      "default": "Human speed"
+    },
+    {
+      "type": "range",
+      "id": "human_width",
+      "label": "Barra 1 · largo",
+      "min": 5,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "text",
+      "id": "agent_label",
+      "label": "Barra 2 · nombre",
+      "default": "Business on GOnama"
+    },
+    {
+      "type": "text",
+      "id": "agent_value",
+      "label": "Barra 2 · valor",
+      "default": "Agent speed"
+    },
+    {
+      "type": "range",
+      "id": "agent_width",
+      "label": "Barra 2 · largo",
+      "min": 5,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "richtext",
+      "id": "velocity_note",
+      "label": "Nota",
+      "default": "<p>What used to take <strong>days</strong> now takes <strong>minutes</strong></p>"
+    },
+    {
+      "type": "header",
+      "content": "Comparación"
+    },
+    {
+      "type": "paragraph",
+      "content": "Un ítem por línea."
+    },
+    {
+      "type": "text",
+      "id": "trad_title",
+      "label": "Columna 1 · título",
+      "default": "Traditional Commerce"
+    },
+    {
+      "type": "textarea",
+      "id": "trad_items",
+      "label": "Columna 1 · ítems",
+      "default": "Human-operated workflows\nManual campaign configuration\nStatic rules and pricing\nSingle-market infrastructure"
+    },
+    {
+      "type": "text",
+      "id": "auto_title",
+      "label": "Columna 2 · título",
+      "default": "Autonomous Commerce"
+    },
+    {
+      "type": "textarea",
+      "id": "auto_items",
+      "label": "Columna 2 · ítems",
+      "default": "Human + AI agent collaboration\nSelf-optimizing operations\nAdaptive, context-aware decisions\nGlobal, multi-market by design"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Commerce is changing"
+    }
+  ]
+}
+{% endschema %}

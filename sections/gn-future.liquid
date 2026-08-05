@@ -1,0 +1,72 @@
+{% comment %}
+  GOnama landing 2026 — The future is autonomous
+{% endcomment %}
+
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gn gn-future" id="section-{{ section.id }}">
+  <div class="gn__orb gn-future__orb"></div>
+  <div class="gn__grid-bg"></div>
+
+  <div class="gn__inner gn__inner--narrow gn-reveal">
+    {%- if st.eyebrow != blank -%}
+      <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+    {%- endif -%}
+
+    {%- if st.heading != blank -%}
+      <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+    {%- endif -%}
+
+    {%- if st.body != blank -%}
+      <p class="gn-future__body">{{ st.body | escape }}</p>
+    {%- endif -%}
+
+    {%- if st.closing != blank -%}
+      <p class="gn-future__closing">{{ st.closing | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · The future",
+  "tag": "section",
+  "class": "gn-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The future of commerce"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "The future is autonomous."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Texto",
+      "default": "The next decade will transform how businesses sell, operate and interact with customers. The companies that succeed will operate through intelligent infrastructure."
+    },
+    {
+      "type": "text",
+      "id": "closing",
+      "label": "Cierre",
+      "default": "GOnama is building that infrastructure."
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · The future"
+    }
+  ]
+}
+{% endschema %}

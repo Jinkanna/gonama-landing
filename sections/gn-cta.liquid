@@ -1,0 +1,240 @@
+{% comment %}
+  GOnama landing 2026 — CTA con formulario
+  Usa el formulario de contacto nativo de Shopify, así los envíos llegan al mail
+  configurado en Settings › Notifications sin depender de nada externo.
+{% endcomment %}
+
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gn gn-cta" id="gn-contact">
+  <div class="gn__inner">
+    <div class="gn-cta__layout">
+      <div class="gn-reveal">
+        {%- if st.eyebrow != blank -%}
+          <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if st.heading != blank -%}
+          <h2 class="gn__h2">
+            <span class="gn__gradient">{{ st.heading | escape }}</span>
+            {%- if st.heading_2 != blank -%}
+              <br><span class="gn__gradient">{{ st.heading_2 | escape }}</span>
+            {%- endif -%}
+          </h2>
+        {%- endif -%}
+
+        {%- if st.sub != blank -%}
+          <p class="gn__lead" style="margin-top: 20px;">{{ st.sub | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="gn-cta__form gn-reveal">
+        {%- form 'contact', id: 'gn-contact-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="gn-cta__msg gn-cta__msg--ok" role="status">
+              {{ st.success_message | escape }}
+            </p>
+          {%- elsif form.errors -%}
+            <div class="gn-cta__msg gn-cta__msg--err" role="alert">
+              {{ st.error_message | escape }}
+              <ul>
+                {%- for field in form.errors -%}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="gn-cta__fields">
+            <div>
+              <label class="visually-hidden" for="gn-name">{{ st.label_name | escape }}</label>
+              <input
+                class="gn-cta__input"
+                type="text"
+                id="gn-name"
+                name="contact[name]"
+                placeholder="{{ st.label_name | escape }}"
+                autocomplete="name"
+                value="{{ form.name }}"
+                required
+              >
+            </div>
+
+            <div>
+              <label class="visually-hidden" for="gn-email">{{ st.label_email | escape }}</label>
+              <input
+                class="gn-cta__input"
+                type="email"
+                id="gn-email"
+                name="contact[email]"
+                placeholder="{{ st.label_email | escape }}"
+                autocomplete="email"
+                inputmode="email"
+                value="{{ form.email }}"
+                required
+              >
+            </div>
+
+            <div>
+              <label class="visually-hidden" for="gn-phone">{{ st.label_phone | escape }}</label>
+              <input
+                class="gn-cta__input"
+                type="tel"
+                id="gn-phone"
+                name="contact[phone]"
+                placeholder="{{ st.label_phone | escape }}"
+                autocomplete="tel"
+                inputmode="tel"
+              >
+            </div>
+
+            <div>
+              <label class="visually-hidden" for="gn-company">{{ st.label_company | escape }}</label>
+              <input
+                class="gn-cta__input"
+                type="text"
+                id="gn-company"
+                name="contact[company]"
+                placeholder="{{ st.label_company | escape }}"
+                autocomplete="organization"
+              >
+            </div>
+
+            {%- if st.show_message -%}
+              <div class="gn-cta__field--full">
+                <label class="visually-hidden" for="gn-body">{{ st.label_message | escape }}</label>
+                <textarea
+                  class="gn-cta__input"
+                  id="gn-body"
+                  name="contact[body]"
+                  rows="4"
+                  placeholder="{{ st.label_message | escape }}"
+                >{{ form.body }}</textarea>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <button class="gn__btn gn__btn--primary gn-cta__submit" type="submit">
+            {{ st.submit_label | escape }}
+          </button>
+
+          {%- if st.legal != blank -%}
+            <p class="gn-cta__legal">{{ st.legal }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · CTA y formulario",
+  "tag": "section",
+  "class": "gn-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Next move"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título · línea 1",
+      "default": "Your competitors aren't reading the memo."
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Título · línea 2",
+      "default": "They're shipping agents."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "Tell us who you are. We'll follow up."
+    },
+    {
+      "type": "header",
+      "content": "Campos"
+    },
+    {
+      "type": "text",
+      "id": "label_name",
+      "label": "Nombre",
+      "default": "Name"
+    },
+    {
+      "type": "text",
+      "id": "label_email",
+      "label": "Email",
+      "default": "Work email"
+    },
+    {
+      "type": "text",
+      "id": "label_phone",
+      "label": "Teléfono",
+      "default": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "label_company",
+      "label": "Empresa",
+      "default": "Company"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_message",
+      "label": "Incluir campo de mensaje",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "label_message",
+      "label": "Mensaje",
+      "default": "What are you building?"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Botón",
+      "default": "Talk to GOnama"
+    },
+    {
+      "type": "header",
+      "content": "Mensajes"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Éxito",
+      "default": "Thanks — we received your message and will follow up shortly."
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Error",
+      "default": "Please review the following:"
+    },
+    {
+      "type": "richtext",
+      "id": "legal",
+      "label": "Nota legal",
+      "default": "<p>We use your details only to respond to your enquiry.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · CTA y formulario"
+    }
+  ]
+}
+{% endschema %}
