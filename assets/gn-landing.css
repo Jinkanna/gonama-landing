@@ -404,8 +404,26 @@
 
 .gn-header__logo-img {
   height: 30px;
+}
+
+/* Dos archivos de logo, uno por tema: se muestra el que corresponda. */
+.gn-logo-img {
   width: auto;
   display: block;
+}
+
+.gn-logo-img--dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gn-logo-img--light {
+    display: none;
+  }
+
+  .gn-logo-img--dark {
+    display: block;
+  }
 }
 
 .gn-header__wordmark {

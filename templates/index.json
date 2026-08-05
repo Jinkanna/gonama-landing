@@ -479,24 +479,21 @@
           "type": "column",
           "settings": {
             "title": "Platform",
-            "labels": "AI Studio\nCommerce Infrastructure\nCommerce Intelligence\nGrowth & Retention\nDeveloper Platform",
-            "links": "#section-platform\n#section-platform\n#section-platform\n#section-platform\n#section-platform"
+            "items": "AI Studio | #section-platform\nCommerce Infrastructure | #section-platform\nCommerce Intelligence | #section-platform\nGrowth & Retention | #section-platform\nDeveloper Platform | #section-platform"
           }
         },
         "c2": {
           "type": "column",
           "settings": {
             "title": "Solutions",
-            "labels": "Global Checkout\nImagine Code\nIndustries",
-            "links": "#section-checkout\n#section-imagine\n#section-industries"
+            "items": "Global Checkout | #section-checkout\nImagine Code | #section-imagine\nIndustries | #section-industries"
           }
         },
         "c3": {
           "type": "column",
           "settings": {
             "title": "Company",
-            "labels": "Principles & Policies\nContact",
-            "links": "#section-holdings\n#gn-contact"
+            "items": "Principles & Policies | #section-holdings\nContact | #gn-contact"
           }
         }
       },

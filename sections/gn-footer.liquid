@@ -14,15 +14,31 @@
 {%- liquid
   assign st = section.settings
   assign year = 'now' | date: '%Y'
+
+  # Si no se elige un logo en la sección, se usa el del tema (Settings › Logo).
+  assign logo = st.logo | default: settings.logo_image_desktop
+  # El logo del tema tiene "nama" en gris oscuro: sobre Panda 1 no se lee.
+  assign logo_dark = st.logo_dark | default: st.logo | default: settings.logo_image_desktop
 -%}
 
 <footer class="gn gn-footer">
   <div class="gn__inner">
     <div class="gn-footer__top">
       <div class="gn-footer__brand">
-        {%- if st.logo != blank -%}
-          {{ st.logo | image_url: height: 64 | image_tag: alt: shop.name, class: 'gn-footer__logo-img', loading: 'lazy' }}
-        {%- else -%}
+        {%- if logo != blank -%}
+        <img
+          class="gn-footer__logo-img gn-logo-img gn-footer__logo-img gn-logo-img--light"
+          src="{{ logo | image_url: height: 80 }}"
+          alt="{{ shop.name | escape }}"
+          loading="lazy"
+        >
+        <img
+          class="gn-footer__logo-img gn-logo-img gn-footer__logo-img gn-logo-img--dark"
+          src="{{ logo_dark | image_url: height: 80 }}"
+          alt="{{ shop.name | escape }}"
+          loading="lazy"
+        >
+      {%- else -%}
           <p class="gn-footer__wordmark">{{ st.logo_text }}</p>
         {%- endif -%}
 
@@ -35,25 +51,25 @@
         {%- for block in section.blocks -%}
           {%- liquid
             assign b = block.settings
-            assign labels = b.labels | newline_to_br | split: '<br />'
-            assign links = b.links | newline_to_br | split: '<br />'
+            assign rows = b.items | newline_to_br | split: '<br />'
           -%}
           <div class="gn-footer__col" {{ block.shopify_attributes }}>
             {%- if b.title != blank -%}
               <p class="gn-footer__col-title">{{ b.title | escape }}</p>
             {%- endif -%}
             <ul>
-              {%- for label in labels -%}
+              {%- for row in rows -%}
                 {%- liquid
-                  assign clean = label | strip_html | strip
-                  assign href = links[forloop.index0] | strip_html | strip
+                  assign parts = row | strip_html | strip | split: '|'
+                  assign label = parts[0] | strip
+                  assign href = parts[1] | strip
                 -%}
-                {%- if clean != blank -%}
+                {%- if label != blank -%}
                   <li>
                     {%- if href != blank -%}
-                      <a href="{{ href }}">{{ clean | escape }}</a>
+                      <a href="{{ href }}">{{ label | escape }}</a>
                     {%- else -%}
-                      <span>{{ clean | escape }}</span>
+                      <span>{{ label | escape }}</span>
                     {%- endif -%}
                   </li>
                 {%- endif -%}
@@ -76,8 +92,6 @@
 {% schema %}
 {
   "name": "GN · Footer",
-  "tag": "footer",
-  "class": "gn-footer-section",
   "max_blocks": 4,
   "settings": [
     {
@@ -85,6 +99,12 @@
       "id": "logo",
       "label": "Logo",
       "info": "Si lo dejás vacío se usa el texto de abajo."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_dark",
+      "label": "Logo para fondo oscuro",
+      "info": "Se usa cuando el visitante tiene el navegador en modo oscuro. Si lo dejás vacío se usa el mismo de arriba."
     },
     {
       "type": "text",
@@ -123,15 +143,9 @@
         },
         {
           "type": "textarea",
-          "id": "labels",
-          "label": "Textos",
-          "info": "Uno por línea."
-        },
-        {
-          "type": "textarea",
-          "id": "links",
-          "label": "Links",
-          "info": "Uno por línea, en el mismo orden que los textos. Dejá la línea vacía si el ítem no lleva link."
+          "id": "items",
+          "label": "Ítems",
+          "info": "Uno por línea, con el formato  Texto | destino  — el destino es opcional."
         }
       ]
     }
@@ -144,16 +158,14 @@
           "type": "column",
           "settings": {
             "title": "Platform",
-            "labels": "AI Studio\nCommerce Infrastructure\nCommerce Intelligence\nDeveloper Platform",
-            "links": "#section-platform\n#section-platform\n#section-platform\n#section-platform"
+            "items": "AI Studio | #section-platform\nCommerce Infrastructure | #section-platform\nDeveloper Platform | #section-platform"
           }
         },
         {
           "type": "column",
           "settings": {
             "title": "Company",
-            "labels": "Principles & Policies\nContact",
-            "links": "#section-holdings\n#gn-contact"
+            "items": "Principles & Policies | #section-holdings\nContact | #gn-contact"
           }
         }
       ]
