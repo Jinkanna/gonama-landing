@@ -530,6 +530,10 @@
   }
 }
 
+.gn-footer__brand {
+  max-width: 34ch;
+}
+
 .gn-footer__wordmark {
   font-size: 24px;
 }
