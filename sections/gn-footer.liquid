@@ -17,30 +17,19 @@
 
   # Si no se elige un logo en la sección, se usa el del tema (Settings › Logo).
   assign logo = st.logo | default: settings.logo_image_desktop
-  # El logo del tema tiene "nama" en gris oscuro: sobre Panda 1 no se lee.
-  assign logo_dark = st.logo_dark | default: st.logo | default: settings.logo_image_desktop
 -%}
 
 <footer class="gn gn-footer">
   <div class="gn__inner">
     <div class="gn-footer__top">
       <div class="gn-footer__brand">
-        {%- if logo != blank -%}
-        <img
-          class="gn-footer__logo-img gn-logo-img gn-footer__logo-img gn-logo-img--light"
-          src="{{ logo | image_url: height: 80 }}"
-          alt="{{ shop.name | escape }}"
-          loading="lazy"
-        >
-        <img
-          class="gn-footer__logo-img gn-logo-img gn-footer__logo-img gn-logo-img--dark"
-          src="{{ logo_dark | image_url: height: 80 }}"
-          alt="{{ shop.name | escape }}"
-          loading="lazy"
-        >
-      {%- else -%}
-          <p class="gn-footer__wordmark gn-logo-word"><b>{{ st.logo_go | escape }}</b>{{ st.logo_rest | escape }}</p>
-        {%- endif -%}
+        {%- render 'gn-logo',
+          logo: logo,
+          logo_dark: st.logo_dark,
+          go: st.logo_go,
+          rest: st.logo_rest,
+          size: 32
+        -%}
 
         {%- if st.tagline != blank -%}
           <p class="gn-footer__tagline">{{ st.tagline | escape }}</p>

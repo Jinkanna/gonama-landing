@@ -368,45 +368,38 @@
   flex-shrink: 0;
 }
 
-.gn-header__logo-img {
-  height: 30px;
-}
-
-/* Dos archivos de logo, uno por tema: se muestra el que corresponda. */
-.gn-logo-img {
+/* Dos variantes del logo en el HTML; el CSS muestra la del modo activo.
+   En oscuro, si no hay un archivo claro subido, se ve el wordmark en texto:
+   "nama" toma var(--text), que en oscuro es Panda 2. */
+.gn-logo__img {
   width: auto;
   display: block;
 }
 
-.gn-logo-img--dark {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  .gn-logo-img--light {
-    display: none;
-  }
-
-  .gn-logo-img--dark {
-    display: block;
-  }
-}
-
-/* Fallback en texto cuando no hay imagen de logo: respeta la construcción de
-   la marca — "GO" en GO blue, "nama" en el color de texto del tema. */
-.gn-logo-word {
+.gn-logo__word {
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text);
+  white-space: nowrap;
 }
 
-.gn-logo-word b {
+.gn-logo__word b {
   color: var(--go-blue);
   font-weight: 600;
 }
 
-.gn-header__wordmark {
-  font-size: 22px;
+.gn-logo__dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gn-logo__light {
+    display: none;
+  }
+
+  .gn-logo__dark {
+    display: block;
+  }
 }
 
 .gn-header__nav {
@@ -532,15 +525,6 @@
 
 .gn-footer__brand {
   max-width: 34ch;
-}
-
-.gn-footer__wordmark {
-  font-size: 24px;
-}
-
-.gn-footer__logo-img {
-  height: 30px;
-  width: auto;
 }
 
 .gn-footer__tagline {
