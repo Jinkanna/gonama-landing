@@ -6,7 +6,7 @@
         "tone": "a",
         "label": "Agentic commerce infrastructure",
         "headline": "One platform\nevery step\nof the sale",
-        "sub": "Checkout, payments, fulfilment and AI agents, unified across Latin America under one accountable platform.",
+        "sub": "Checkout, payments, fulfilment and AI agents, unified for Uruguay under one accountable platform.",
         "cta1_label": "Talk with us",
         "cta1_link": "#gnp-contact"
       }
@@ -37,11 +37,11 @@
         "n3": {
           "type": "number",
           "settings": {
-            "prefix": "+",
-            "value": "10",
+            "prefix": "",
+            "value": "8",
             "decimals": 0,
-            "suffix": "",
-            "label": "Markets with local rules already solved"
+            "suffix": "+",
+            "label": "Years operating Uruguayan e-commerce"
           }
         },
         "n4": {
@@ -146,7 +146,7 @@
           "type": "pillar",
           "settings": {
             "name": "Regional\ncoverage",
-            "desc": "From Uruguay and Argentina outward, the payment, tax and delivery rules of each market are already solved."
+            "desc": "Uruguayan payment, tax and delivery rules are already solved, so you do not have to learn them one by one."
           }
         },
         "r3": {
@@ -273,7 +273,7 @@
         "tone": "b",
         "label": "Ecosystem",
         "headline": "Connected to what you already use",
-        "sub": "Payment gateways, carriers, marketplaces and ERPs already integrated, so nothing has to be rebuilt."
+        "sub": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt."
       }
     },
     "faq": {
@@ -297,7 +297,7 @@
           "type": "faq",
           "settings": {
             "q": "Which markets are covered?",
-            "a": "<p>Latin America is where we operate deepest, with payment, tax and delivery rules already solved per country. We also support cross-border selling into the United States and Europe.</p>"
+            "a": "<p>Uruguay. That is where we operate, where our integrations are already running and where we know the payment, tax and delivery rules first hand. If your plan is to sell outside the country, contact us and we tell you honestly what we can and cannot do today.</p>"
           }
         },
         "q4": {

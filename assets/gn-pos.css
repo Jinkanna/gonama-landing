@@ -294,32 +294,143 @@
    Reveal
    -------------------------------------------------------------------------- */
 
-.gnp-js .gnp-rv {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+/* El contenido está visible siempre. El movimiento se agrega por encima con
+   scroll-driven animations, que corren en el navegador sin JavaScript. La
+   clase .is-in que pone el script sigue funcionando como refuerzo. */
+
+@keyframes gnpRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
 }
 
-.gnp-js .gnp-rv.is-in {
-  opacity: 1;
-  transform: none;
+@keyframes gnpLine {
+  from {
+    transform: translateY(105%);
+  }
 }
 
-/* El display entra línea por línea. */
-.gnp-js .gnp-line {
+@keyframes gnpWipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .gnp-rv {
+    animation: gnpRise 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 26%;
+  }
+
+  .gnp-line > span {
+    display: block;
+    animation: gnpLine 0.9s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+
+  .gnp-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  /* Cada tarjeta entra un poco después que la anterior. */
+  .gnp-serv,
+  .gnp-rel,
+  .gnp-edge,
+  .gnp-part,
+  .gnp-num {
+    animation: gnpRise 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 2% cover 24%;
+  }
+
+  .gnp__label::before {
+    animation: gnpWipe 0.7s ease both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 26%;
+  }
+
+  /* Barra de progreso de lectura, arriba de todo. */
+  .gnp-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    transform-origin: left;
+    background: var(--accent);
+    animation: gnpProgress linear both;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes gnpProgress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* Sin soporte de scroll-driven, el script hace el trabajo. */
+@supports not (animation-timeline: view()) {
+  .gnp-js .gnp-rv {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  .gnp-js .gnp-rv.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gnp-js .gnp-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .gnp-js .gnp-line > span {
+    display: block;
+    transform: translateY(105%);
+    transition: transform 0.85s cubic-bezier(0.2, 0.75, 0.25, 1);
+  }
+
+  .gnp-js .is-in .gnp-line > span,
+  .gnp-js .gnp-line.is-in > span {
+    transform: none;
+  }
+}
+
+/* El titular del hero entra al cargar, sin esperar scroll ni script. */
+.gnp-hero .gnp-line > span {
+  animation: gnpLine 1s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  animation-delay: calc(0.1s + var(--l, 0) * 0.09s);
+}
+
+.gnp-hero .gnp-line {
   display: block;
   overflow: hidden;
 }
 
-.gnp-js .gnp-line > span {
-  display: block;
-  transform: translateY(105%);
-  transition: transform 0.85s cubic-bezier(0.2, 0.75, 0.25, 1);
+@supports (animation-timeline: view()) {
+  .gnp-hero .gnp-line > span {
+    animation-timeline: auto;
+  }
 }
 
-.gnp-js .is-in .gnp-line > span,
-.gnp-js .gnp-line.is-in > span {
-  transform: none;
+/* Los encabezados quedan fijos mientras pasa la grilla al lado. */
+@media (min-width: 1000px) {
+  .gnp-serv-sec .gnp__head--split > div:first-child,
+  .gnp-rel-sec .gnp__head--split > div:first-child {
+    position: sticky;
+    top: 110px;
+  }
 }
 
 /* ==========================================================================
@@ -720,6 +831,7 @@
 
 .gnp-faq__q {
   width: 100%;
+  list-style: none;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -735,6 +847,10 @@
   letter-spacing: -0.02em;
   color: var(--fg);
   transition: color 0.3s ease;
+}
+
+.gnp-faq__q::-webkit-details-marker {
+  display: none;
 }
 
 .gnp-faq__q:hover {
@@ -771,21 +887,29 @@
   height: 11px;
 }
 
-.gnp-faq__item.is-open .gnp-faq__ico {
+.gnp-faq__item[open] .gnp-faq__ico {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
   transform: rotate(90deg);
 }
 
-.gnp-faq__item.is-open .gnp-faq__ico::after {
+.gnp-faq__item[open] .gnp-faq__ico::after {
   opacity: 0;
 }
 
+/* details nativo: sin JavaScript el acordeón sigue funcionando. La apertura
+   se acompaña con un desplazamiento del contenido, no con altura animada. */
 .gnp-faq__a {
   overflow: hidden;
-  height: 0;
-  transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: gnpFaqOpen 0.4s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@keyframes gnpFaqOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 .gnp-faq__a-in {
@@ -913,10 +1037,11 @@
     transition-duration: 0.001ms !important;
   }
 
-  .gnp-js .gnp-rv,
-  .gnp-js .gnp-line > span {
-    opacity: 1;
-    transform: none;
+  .gnp-rv,
+  .gnp-line > span {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }
 
@@ -947,9 +1072,9 @@
 }
 
 /* Con el panel abierto el header nunca se esconde. */
-.gnp-nav.is-open,
-.gnp-nav.is-open.is-hidden {
-  transform: none;
+/* Con el panel abierto el header nunca se esconde. */
+.gnp-nav:has(.gnp-nav__overlay:target) {
+  transform: none !important;
   background: var(--bg);
   border-bottom-color: transparent;
 }
@@ -999,12 +1124,12 @@
   display: none;
 }
 
-.gnp-nav.is-open .gnp-nav__logo-img--light,
+.gnp-nav:has(.gnp-nav__overlay:target) .gnp-nav__logo-img--light,
 .gnp--b .gnp-nav__logo-img--light {
   display: none;
 }
 
-.gnp-nav.is-open .gnp-nav__word--dark,
+.gnp-nav:has(.gnp-nav__overlay:target) .gnp-nav__word--dark,
 .gnp--b .gnp-nav__word--dark {
   display: inline;
 }
@@ -1055,6 +1180,7 @@
 
 .gnp-nav__toggle {
   display: inline-flex;
+  text-decoration: none;
   align-items: center;
   gap: 12px;
   padding: 0;
@@ -1068,35 +1194,16 @@
   color: var(--fg);
 }
 
-/* Las dos etiquetas ocupan la misma celda: el ancho no salta al cambiar. */
-.gnp-nav__toggle-txt {
-  grid-area: 1 / 1;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+.gnp-nav__toggle--close {
+  display: none;
 }
 
-.gnp-nav__toggle {
-  display: inline-grid;
-  grid-auto-flow: column;
-  align-items: center;
+.gnp-nav__overlay:target ~ .gnp-nav__bar .gnp-nav__toggle--open {
+  display: none;
 }
 
-.gnp-nav__toggle > .gnp-nav__toggle-txt {
-  display: grid;
-}
-
-.gnp-nav__toggle [data-gnp-nav-close-txt] {
-  opacity: 0;
-  transform: translateY(4px);
-}
-
-.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-open-txt] {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-
-.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-close-txt] {
-  opacity: 1;
-  transform: none;
+.gnp-nav__overlay:target ~ .gnp-nav__bar .gnp-nav__toggle--close {
+  display: inline-flex;
 }
 
 .gnp-nav__burger {
@@ -1125,15 +1232,15 @@
   width: 62%;
 }
 
-.gnp-nav:not(.is-open) .gnp-nav__toggle:hover .gnp-nav__burger i:last-child {
+.gnp-nav__toggle--open:hover .gnp-nav__burger i:last-child {
   width: 100%;
 }
 
-.gnp-nav.is-open .gnp-nav__burger i:first-child {
+.gnp-nav__toggle--close .gnp-nav__burger i:first-child {
   transform: translateY(3.5px) rotate(45deg);
 }
 
-.gnp-nav.is-open .gnp-nav__burger i:last-child {
+.gnp-nav__toggle--close .gnp-nav__burger i:last-child {
   width: 100%;
   transform: translateY(-3.5px) rotate(-45deg);
 }
@@ -1151,12 +1258,11 @@
   transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-.gnp-nav.is-open .gnp-nav__overlay {
+/* :target en vez de una clase: el menú abre y cierra sin JavaScript. Los
+   enlaces de navegación cambian el target, así que al elegir uno el panel se
+   cierra solo. */
+.gnp-nav__overlay:target {
   clip-path: inset(0 0 0 0);
-}
-
-.gnp-nav__overlay[hidden] {
-  display: none;
 }
 
 .gnp-nav__overlay-in {
@@ -1194,7 +1300,7 @@
     color 0.3s ease;
 }
 
-.gnp-nav.is-open .gnp-nav__item {
+.gnp-nav__overlay:target .gnp-nav__item {
   opacity: 1;
   transform: none;
   /* Escalonado por índice, sin necesidad de temporizadores en JS. */
@@ -1245,7 +1351,7 @@
   transition: opacity 0.5s ease 0.42s, transform 0.5s ease 0.42s;
 }
 
-.gnp-nav.is-open .gnp-nav__aside {
+.gnp-nav__overlay:target .gnp-nav__aside {
   opacity: 1;
   transform: none;
 }
