@@ -150,32 +150,6 @@
   color: var(--accent);
 }
 
-/* Índice de sección: "01 / Platform". Da estructura sin decorar. */
-.gn__index {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11.8px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 26px;
-}
-
-.gn__index::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--rule);
-  max-width: 120px;
-}
-
-.gn__index b {
-  color: var(--accent);
-  font-weight: 600;
-}
-
 .gn__eyebrow {
   display: inline-block;
   font-size: 11.7px;
@@ -245,14 +219,6 @@
 .gn__head--center .gn__h2,
 .gn__head--center .gn__lead {
   margin-inline: auto;
-}
-
-.gn__head--center .gn__index {
-  justify-content: center;
-}
-
-.gn__head--center .gn__index::after {
-  display: none;
 }
 
 .gn__head .gn__lead {

@@ -18,9 +18,6 @@
 <section class="gn gn-platform" id="section-{{ section.id }}">
   <div class="gn__inner">
     <div class="gn__head gn__head--center gn-reveal">
-      {%- if st.index != blank -%}
-        <p class="gn__index"><b>{{ st.index | escape }}</b> {{ st.index_label | escape }}</p>
-      {%- endif -%}
       {%- if st.heading != blank -%}
         <h2 class="gn__h2">{{ st.heading | escape }}</h2>
       {%- endif -%}
@@ -81,18 +78,6 @@
   "class": "gn-section",
   "max_blocks": 8,
   "settings": [
-    {
-      "type": "text",
-      "id": "index",
-      "label": "Número de sección",
-      "default": "02"
-    },
-    {
-      "type": "text",
-      "id": "index_label",
-      "label": "Etiqueta de sección",
-      "default": "Platform"
-    },
     {
       "type": "text",
       "id": "heading",

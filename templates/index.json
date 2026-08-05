@@ -27,8 +27,6 @@
     "shift": {
       "type": "gn-shift",
       "settings": {
-        "index": "01",
-        "index_label": "The shift",
         "heading": "Commerce is changing.",
         "body_1": "<p>The last generation of commerce software was built for people. The next generation will be built for <strong>AI agents and people</strong>.</p>",
         "body_2": "<p>Intelligent agents won't just answer questions. They'll launch campaigns, negotiate offers, manage customer relationships, optimize operations, and complete purchases.</p>",
@@ -109,8 +107,6 @@
         "developers"
       ],
       "settings": {
-        "index": "02",
-        "index_label": "Platform",
         "heading": "One infrastructure.",
         "subheading": "Every capability. Built for agents."
       }
@@ -118,8 +114,7 @@
     "imagine": {
       "type": "gn-imagine",
       "settings": {
-        "index": "03",
-        "index_label": "Imagine Code",
+        "eyebrow": "GOnama Imagine Code",
         "heading": "The feature you need doesn't have to wait for a roadmap.",
         "punch": "Describe it.",
         "punch_em": "GOnama builds it.",
@@ -172,8 +167,7 @@
         "agentic"
       ],
       "settings": {
-        "index": "04",
-        "index_label": "Global Checkout",
+        "eyebrow": "Global Checkout",
         "heading": "Unify payments and fulfillment.",
         "heading_2": "Scale everywhere, convert anywhere.",
         "lead": "Eliminate checkout friction globally. Route payments through local acquirers and automate last-mile fulfillment.",
@@ -292,8 +286,7 @@
         "membership"
       ],
       "settings": {
-        "index": "05",
-        "index_label": "Industries",
+        "eyebrow": "Major Global Industries",
         "heading": "Built for every commerce model in global industries.",
         "lead": "From regulated sectors to high-velocity retail, the same infrastructure adapts to how each industry sells."
       }
@@ -301,8 +294,7 @@
     "future": {
       "type": "gn-future",
       "settings": {
-        "index": "06",
-        "index_label": "Outlook",
+        "eyebrow": "The future of commerce",
         "heading": "The future is autonomous.",
         "body": "The next decade will transform how businesses sell, operate and interact with customers. The companies that succeed will operate through intelligent infrastructure.",
         "closing": "GOnama is building that infrastructure."
