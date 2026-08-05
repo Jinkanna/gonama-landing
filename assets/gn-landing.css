@@ -344,7 +344,25 @@
   top: 0;
   z-index: 60;
   background: var(--bg);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid transparent;
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+  will-change: transform;
+}
+
+/* La línea inferior aparece recién cuando se despegó del tope. */
+.gn-header.is-stuck {
+  border-bottom-color: var(--rule);
+}
+
+/* Se esconde al bajar; el JS le saca la clase al subir. */
+.gn-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-header.is-hidden {
+    transform: none;
+  }
 }
 
 @supports (backdrop-filter: blur(12px)) {
@@ -1476,6 +1494,8 @@
   line-height: 1.5;
 }
 
+/* Son 6 principios: 2 columnas en mobile y 3 en escritorio, para que siempre
+   cierren en filas completas. Con auto-fit quedaban 4 + 2 y dos huecos. */
 .gn-principles {
   display: grid;
   gap: 1px;
@@ -1484,35 +1504,89 @@
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 860px) {
+  .gn-principles {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .gn-principle {
-  padding: 28px;
+  position: relative;
+  padding: 30px 26px;
   background: var(--bg);
-  transition: background 0.2s ease;
+  transition: background 0.35s ease;
 }
 
-.gn-principle:hover {
-  background: var(--surface-tint);
+/* El resalte entra como un velo que sube, en vez de un cambio de color seco. */
+.gn-principle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-quiet);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.gn-principle:hover::before,
+.gn-principle:focus-within::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gn-principle > * {
+  position: relative;
+  z-index: 1;
 }
 
 .gn-principle__icon {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
   margin-bottom: 18px;
+  border-radius: var(--r-md);
+  background: var(--accent-quiet);
+  transition: background 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.gn-principle:hover .gn-principle__icon {
+  background: var(--accent);
+  transform: translateY(-2px);
 }
 
 .gn-principle__icon svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   stroke: var(--accent);
   fill: none;
   stroke-width: 1.7;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: stroke 0.35s ease;
+}
+
+.gn-principle:hover .gn-principle__icon svg {
+  stroke: var(--on-accent);
+}
+
+.gn-principle .gn__h3 {
+  transition: color 0.35s ease;
+}
+
+.gn-principle:hover .gn__h3 {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-principle::before,
+  .gn-principle__icon {
+    transition: none;
+  }
 }
 
 .gn-principle p {

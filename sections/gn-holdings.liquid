@@ -36,9 +36,6 @@
     data-gn-holdings-panel
   >
     <div class="gn__inner">
-      {%- if st.eyebrow != blank -%}
-        <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
-      {%- endif -%}
 
       {%- if st.logo != blank -%}
         <p class="gn-holdings__logo">{{ st.logo }}</p>
@@ -155,12 +152,6 @@
       "default": "GOnama Holdings · Principles & Policies"
     },
     {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Corporate"
-    },
-    {
       "type": "html",
       "id": "logo",
       "label": "Logo en texto",
@@ -234,12 +225,30 @@
           "id": "icon",
           "label": "Ícono",
           "options": [
-            { "value": "home", "label": "Casa" },
-            { "value": "search", "label": "Lupa" },
-            { "value": "bolt", "label": "Rayo" },
-            { "value": "people", "label": "Personas" },
-            { "value": "bars", "label": "Barras" },
-            { "value": "heart", "label": "Corazón" }
+            {
+              "value": "home",
+              "label": "Casa"
+            },
+            {
+              "value": "search",
+              "label": "Lupa"
+            },
+            {
+              "value": "bolt",
+              "label": "Rayo"
+            },
+            {
+              "value": "people",
+              "label": "Personas"
+            },
+            {
+              "value": "bars",
+              "label": "Barras"
+            },
+            {
+              "value": "heart",
+              "label": "Corazón"
+            }
           ],
           "default": "home"
         },

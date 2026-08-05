@@ -279,7 +279,49 @@
 
   /* --------------------------------------------------------------- Header */
 
+  /**
+   * Se oculta al bajar y reaparece al subir. El umbral evita que titile con
+   * los microdesplazamientos del trackpad.
+   */
+  function initHeaderScroll(root) {
+    var last = window.pageYOffset;
+    var ticking = false;
+    var THRESHOLD = 6;
+    var TOP_ZONE = 90;
+
+    function update() {
+      var y = window.pageYOffset;
+      var delta = y - last;
+      var menu = root.querySelector('[data-gn-header-menu]');
+      var menuOpen = menu && menu.classList.contains('is-open');
+
+      if (y <= TOP_ZONE || menuOpen) {
+        root.classList.remove('is-hidden');
+      } else if (delta > THRESHOLD) {
+        root.classList.add('is-hidden');
+      } else if (delta < -THRESHOLD) {
+        root.classList.remove('is-hidden');
+      }
+
+      root.classList.toggle('is-stuck', y > TOP_ZONE);
+      last = y;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+  }
+
   function initHeader(root) {
+    initHeaderScroll(root);
+
     var btn = root.querySelector('[data-gn-header-toggle]');
     var menu = root.querySelector('[data-gn-header-menu]');
     if (!btn || !menu) return;
