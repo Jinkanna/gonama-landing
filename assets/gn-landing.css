@@ -954,63 +954,6 @@
   font-weight: 600;
 }
 
-/* Comparación */
-.gn-shift__compare {
-  display: grid;
-  gap: 1px;
-  margin-top: clamp(48px, 6vw, 72px);
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-}
-
-@media (min-width: 780px) {
-  .gn-shift__compare {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.gn-shift__card {
-  padding: 32px;
-  background: var(--bg);
-}
-
-.gn-shift__card--auto {
-  background: var(--surface-tint);
-}
-
-.gn-shift__card-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10.9px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 22px;
-}
-
-.gn-shift__card--auto .gn-shift__card-label {
-  color: var(--accent);
-}
-
-.gn-shift__card li {
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--text-soft);
-  padding: 11px 0;
-  border-top: 1px solid var(--rule);
-}
-
-.gn-shift__card li:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
-.gn-shift__card--auto li {
-  color: var(--text);
-}
-
 /* ==========================================================================
    3. ONE INFRASTRUCTURE
    ========================================================================== */

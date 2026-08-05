@@ -40,11 +40,7 @@
         "agent_label": "Business on GOnama",
         "agent_value": "Agent speed",
         "agent_width": 100,
-        "velocity_note": "<p>What used to take <strong>days</strong> now takes <strong>minutes</strong></p>",
-        "trad_title": "Traditional Commerce",
-        "trad_items": "Human-operated workflows\nManual campaign configuration\nStatic rules and pricing\nSingle-market infrastructure",
-        "auto_title": "Autonomous Commerce",
-        "auto_items": "Human + AI agent collaboration\nSelf-optimizing operations\nAdaptive, context-aware decisions\nGlobal, multi-market by design"
+        "velocity_note": "<p>What used to take <strong>days</strong> now takes <strong>minutes</strong></p>"
       }
     },
     "platform": {

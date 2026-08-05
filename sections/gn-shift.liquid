@@ -13,8 +13,6 @@
 
 {%- liquid
   assign st = section.settings
-  assign trad_items = st.trad_items | newline_to_br | split: '<br />'
-  assign auto_items = st.auto_items | newline_to_br | split: '<br />'
 -%}
 
 <section class="gn gn-shift" id="section-{{ section.id }}">
@@ -86,33 +84,6 @@
       </div>
     {%- endif -%}
     </div>
-
-    <div class="gn-shift__compare">
-      <div class="gn-shift__card gn-shift__card--trad gn-reveal">
-        <p class="gn-shift__card-label">{{ st.trad_title | escape }}</p>
-        <ul>
-          {%- for item in trad_items -%}
-            {%- assign clean = item | strip_html | strip -%}
-            {%- if clean != blank -%}
-              <li>{{ clean | escape }}</li>
-            {%- endif -%}
-          {%- endfor -%}
-        </ul>
-      </div>
-
-      <div class="gn-shift__card gn-shift__card--auto gn-reveal">
-        <p class="gn-shift__card-label">{{ st.auto_title | escape }}</p>
-        <ul>
-          {%- for item in auto_items -%}
-            {%- assign clean = item | strip_html | strip -%}
-            {%- if clean != blank -%}
-              <li>{{ clean | escape }}</li>
-            {%- endif -%}
-          {%- endfor -%}
-        </ul>
-      </div>
-    </div>
-  </div>
 </section>
 
 {% schema %}
@@ -220,38 +191,6 @@
       "id": "velocity_note",
       "label": "Nota",
       "default": "<p>What used to take <strong>days</strong> now takes <strong>minutes</strong></p>"
-    },
-    {
-      "type": "header",
-      "content": "Comparación"
-    },
-    {
-      "type": "paragraph",
-      "content": "Un ítem por línea."
-    },
-    {
-      "type": "text",
-      "id": "trad_title",
-      "label": "Columna 1 · título",
-      "default": "Traditional Commerce"
-    },
-    {
-      "type": "textarea",
-      "id": "trad_items",
-      "label": "Columna 1 · ítems",
-      "default": "Human-operated workflows\nManual campaign configuration\nStatic rules and pricing\nSingle-market infrastructure"
-    },
-    {
-      "type": "text",
-      "id": "auto_title",
-      "label": "Columna 2 · título",
-      "default": "Autonomous Commerce"
-    },
-    {
-      "type": "textarea",
-      "id": "auto_items",
-      "label": "Columna 2 · ítems",
-      "default": "Human + AI agent collaboration\nSelf-optimizing operations\nAdaptive, context-aware decisions\nGlobal, multi-market by design"
     }
   ],
   "presets": [
