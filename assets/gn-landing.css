@@ -1486,24 +1486,6 @@
   display: block;
 }
 
-.gn-holdings__logo {
-  font-size: 27.2px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-
-.gn-holdings__logo span {
-  color: var(--go-blue);
-}
-
-.gn-holdings__sub {
-  font-size: 14.2px;
-  color: var(--text-faint);
-  margin-top: 8px;
-  line-height: 1.5;
-}
-
 /* Son 6 principios: 2 columnas en mobile y 3 en escritorio, para que siempre
    cierren en filas completas. Con auto-fit quedaban 4 + 2 y dos huecos. */
 .gn-principles {

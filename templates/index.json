@@ -120,7 +120,7 @@
         "prompts": "Create a multi-currency checkout with local payments for Uruguay and Argentina…\nBuild a loyalty wallet that issues points on every order and redeems at cart…\nGenerate an agent that recovers abandoned carts with personalized offers…\nAdd a last-mile logistics board with carrier routing per market…",
         "steps": "Code, Interface, Validate, Deploy",
         "body_1": "<p>Transform ideas into <strong>production-ready commerce capabilities</strong> using natural language. GOnama generates the code, builds the interface, validates the solution, and prepares it for deployment.</p>",
-        "body_2": "<p>Developers, agencies, IT teams, and business owners can ship checkouts, dashboards, integrations, AI agents, workflows, or entire modules — without starting from scratch.</p>",
+        "body_2": "<p>Developers, agencies, IT teams, and business owners can ship checkouts, dashboards, integrations, AI agents, workflows, or entire modules, without starting from scratch.</p>",
         "footer": "<p>From prompt to production, in <strong>hours</strong> instead of weeks.</p>"
       }
     },
@@ -310,7 +310,7 @@
         "show_message": true,
         "label_message": "What are you building?",
         "submit_label": "Talk to GOnama",
-        "success_message": "Thanks — we received your message and will follow up shortly.",
+        "success_message": "Thanks. We received your message and will follow up shortly.",
         "error_message": "Please review the following:",
         "legal": "<p>We use your details only to respond to your enquiry.</p>"
       }
@@ -409,10 +409,8 @@
       ],
       "settings": {
         "trigger_label": "GOnama Holdings · Principles & Policies",
-        "logo": "<span>GO</span>nama",
-        "sub": "Holdings Ltd.<br>Leadership Principles & Corporate Policies",
         "heading": "Discover Our Leadership Principles",
-        "lead": "Our principles define who we are — our identity, our mindset and the way we build the future of commerce. They guide how we make decisions, solve problems and create value.",
+        "lead": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce. They guide how we make decisions, solve problems and create value.",
         "culture_heading": "Our Culture",
         "culture_body": "At GOnama, we believe the future of commerce will be built by combining technology, artificial intelligence and exceptional people.",
         "culture_tags": "Ownership, Curiosity, Speed, Excellence, Humility",

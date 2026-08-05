@@ -1,5 +1,5 @@
 {% comment %}
-  GOnama landing 2026 — GOnama Holdings
+  GOnama landing 2026 · GOnama Holdings
   Panel colapsado al pie: principios de liderazgo, cultura y políticas.
 {% endcomment %}
 
@@ -36,14 +36,6 @@
     data-gn-holdings-panel
   >
     <div class="gn__inner">
-
-      {%- if st.logo != blank -%}
-        <p class="gn-holdings__logo">{{ st.logo }}</p>
-      {%- endif -%}
-
-      {%- if st.sub != blank -%}
-        <p class="gn-holdings__sub">{{ st.sub }}</p>
-      {%- endif -%}
 
       {%- if st.heading != blank -%}
         <h2 class="gn__h2">
@@ -152,19 +144,6 @@
       "default": "GOnama Holdings · Principles & Policies"
     },
     {
-      "type": "html",
-      "id": "logo",
-      "label": "Logo en texto",
-      "default": "<span>GO</span>nama",
-      "info": "Lo que va entre <span> sale en GO blue."
-    },
-    {
-      "type": "html",
-      "id": "sub",
-      "label": "Subtítulo",
-      "default": "Holdings Ltd.<br>Leadership Principles & Corporate Policies"
-    },
-    {
       "type": "text",
       "id": "heading",
       "label": "Título",
@@ -174,7 +153,7 @@
       "type": "textarea",
       "id": "lead",
       "label": "Bajada",
-      "default": "Our principles define who we are — our identity, our mindset and the way we build the future of commerce. They guide how we make decisions, solve problems and create value."
+      "default": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce. They guide how we make decisions, solve problems and create value."
     },
     {
       "type": "header",
