@@ -338,15 +338,25 @@
    HEADER (solo en la home; el del tema queda oculto en index)
    ========================================================================== */
 
+/* fixed y no sticky: el tema define html{overflow-x:hidden} en reset.css, y eso
+   rompe position:sticky — el header se iba con el scroll y no volvia. Como
+   queda fuera del flujo, el espaciador de abajo reserva su altura. */
 .gn-header {
   padding: 0;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 60;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 900;
   background: var(--bg);
   border-bottom: 1px solid transparent;
   transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
   will-change: transform;
+}
+
+.gn-header__spacer {
+  height: 69px;
 }
 
 /* La línea inferior aparece recién cuando se despegó del tope. */
@@ -1484,7 +1494,7 @@
 }
 
 .gn-holdings__logo span {
-  color: var(--accent);
+  color: var(--go-blue);
 }
 
 .gn-holdings__sub {

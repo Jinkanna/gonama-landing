@@ -84,6 +84,12 @@
   </div>
 </header>
 
+{%- comment -%}
+  El header es fixed, así que no ocupa lugar en el flujo. Este espaciador
+  reserva su altura para que el hero no arranque debajo.
+{%- endcomment -%}
+<div class="gn-header__spacer" aria-hidden="true"></div>
+
 {% schema %}
 {
   "name": "GN · Header",
