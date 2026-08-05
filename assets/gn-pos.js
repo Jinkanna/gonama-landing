@@ -192,6 +192,85 @@
     });
   }
 
+  /* --------------------------------------------------------------- Header */
+
+  function initNav(root) {
+    var btn = root.querySelector('[data-gnp-nav-toggle]');
+    var panel = root.querySelector('[data-gnp-nav-panel]');
+    if (!btn || !panel) return;
+
+    var lastFocus = null;
+
+    function open() {
+      lastFocus = document.activeElement;
+      panel.hidden = false;
+      // Un cuadro de margen para que el navegador registre el estado inicial
+      // antes de animar el clip-path.
+      window.requestAnimationFrame(function () {
+        root.classList.add('is-open');
+      });
+      btn.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      var first = panel.querySelector('a');
+      if (first) first.focus({ preventScroll: true });
+    }
+
+    function close() {
+      root.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      // Se oculta recién cuando terminó la transición, para no cortarla.
+      setTimeout(function () {
+        if (!root.classList.contains('is-open')) panel.hidden = true;
+      }, 620);
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+
+    btn.addEventListener('click', function () {
+      if (root.classList.contains('is-open')) close();
+      else open();
+    });
+
+    panel.addEventListener('click', function (ev) {
+      if (ev.target.closest('a')) close();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && root.classList.contains('is-open')) close();
+    });
+
+    // El header se esconde al bajar y vuelve al subir.
+    var last = window.pageYOffset;
+    var ticking = false;
+
+    function update() {
+      var y = window.pageYOffset;
+      var delta = y - last;
+
+      if (root.classList.contains('is-open') || y <= 90) {
+        root.classList.remove('is-hidden');
+      } else if (delta > 6) {
+        root.classList.add('is-hidden');
+      } else if (delta < -6) {
+        root.classList.remove('is-hidden');
+      }
+
+      root.classList.toggle('is-solid', y > 90);
+      last = y;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+  }
+
   /* ----------------------------------------------------------------- Boot */
 
   function each(selector, fn) {
@@ -205,6 +284,7 @@
   function boot() {
     stageLines();
     initReveal();
+    each('[data-gnp-nav]', initNav);
     each('[data-gnp-marquee]', initMarquee);
     each('[data-gnp-count]', initCounter);
     each('[data-gnp-faq]', initFaq);

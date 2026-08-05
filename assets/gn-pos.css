@@ -345,7 +345,7 @@
 
 .gnp-ticker__tag {
   flex-shrink: 0;
-  padding: 13px var(--gutter);
+  padding: 13px clamp(14px, 4.5vw, 40px);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10.5px;
   letter-spacing: 0.18em;
@@ -531,6 +531,12 @@
   .gnp-serv__grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Alto mínimo solo cuando hay varias columnas: en una sola, seis celdas de
+     300px daban 1800px de scroll muerto en mobile. */
+  .gnp-serv {
+    min-height: 300px;
+  }
 }
 
 @media (min-width: 1060px) {
@@ -542,8 +548,8 @@
 .gnp-serv {
   position: relative;
   background: var(--bg);
-  padding: clamp(28px, 3vw, 44px);
-  min-height: 300px;
+  padding: clamp(26px, 3vw, 44px);
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -587,7 +593,7 @@
 }
 
 .gnp-serv__name {
-  padding-top: 40px;
+  padding-top: clamp(26px, 3vw, 48px);
   font-size: clamp(22px, 2.2vw, 32px);
   line-height: 1;
   font-weight: 700;
@@ -650,25 +656,42 @@
   border-top: 1px solid var(--line);
 }
 
+/* Tres columnas recién a los 1000px: a 820 el titular quedaba en una columna
+   de 340px fija y la descripción se estiraba a casi 700px, con renglones de
+   más de 100 caracteres. */
 .gnp-edge {
-  display: grid;
-  gap: 10px;
-  padding: clamp(24px, 2.6vw, 38px) 0;
-  border-bottom: 1px solid var(--line);
   position: relative;
-  transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: grid;
+  gap: 12px;
+  padding: clamp(26px, 3vw, 46px) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-@media (min-width: 820px) {
+@media (min-width: 1000px) {
   .gnp-edge {
-    grid-template-columns: 80px minmax(0, 340px) 1fr;
-    gap: 40px;
-    align-items: baseline;
+    grid-template-columns: 64px minmax(220px, 1fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 4vw, 76px);
+    align-items: start;
   }
+}
 
-  .gnp-edge:hover {
-    padding-left: 18px;
-  }
+/* Filo que crece desde el centro, en lugar de correr la fila con padding:
+   mover el padding en hover empujaba el texto y se sentía inestable. */
+.gnp-edge::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-edge:hover::before {
+  transform: scaleX(1);
 }
 
 .gnp-edge__num {
@@ -679,15 +702,21 @@
   transition: color 0.35s ease;
 }
 
+@media (min-width: 1000px) {
+  .gnp-edge__num {
+    padding-top: 6px;
+  }
+}
+
 .gnp-edge:hover .gnp-edge__num {
   color: var(--accent);
 }
 
 .gnp-edge__name {
-  font-size: clamp(18px, 1.7vw, 23px);
-  line-height: 1.12;
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   transition: color 0.35s ease;
 }
@@ -697,9 +726,10 @@
 }
 
 .gnp-edge__desc {
-  font-size: 15px;
-  line-height: 1.62;
+  font-size: 15.5px;
+  line-height: 1.65;
   color: var(--fg-soft);
+  max-width: 52ch;
 }
 
 /* ==========================================================================
@@ -980,5 +1010,365 @@
 
   .gnp-ticker__group {
     animation: none;
+  }
+}
+
+/* ==========================================================================
+   HEADER CON OVERLAY
+   ========================================================================== */
+
+/* fixed y no sticky: el tema define html{overflow-x:hidden} en reset.css y eso
+   anula position:sticky. El espaciador de abajo reserva la altura. */
+.gnp-nav {
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+.gnp-nav.is-solid {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.gnp-nav.is-hidden {
+  transform: translateY(-100%);
+}
+
+/* Con el panel abierto el header nunca se esconde. */
+.gnp-nav.is-open,
+.gnp-nav.is-open.is-hidden {
+  transform: none;
+  background: var(--bg);
+  border-bottom-color: transparent;
+}
+
+.gnp-nav__spacer {
+  height: 76px;
+}
+
+.gnp-nav__bar {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.gnp-nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gnp-nav__logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.gnp-nav__word {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+
+.gnp-nav__word b {
+  color: var(--go-blue);
+  font-weight: 700;
+}
+
+/* Con imagen de logo, el wordmark solo aparece donde el SVG no se lee. */
+.gnp-nav__word--dark {
+  display: none;
+}
+
+.gnp-nav.is-open .gnp-nav__logo-img--light,
+.gnp--b .gnp-nav__logo-img--light {
+  display: none;
+}
+
+.gnp-nav.is-open .gnp-nav__word--dark,
+.gnp--b .gnp-nav__word--dark {
+  display: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gnp--a .gnp-nav__logo-img--light {
+    display: none;
+  }
+
+  .gnp--a .gnp-nav__word--dark {
+    display: inline;
+  }
+
+  .gnp--b .gnp-nav__logo-img--light {
+    display: block;
+  }
+
+  .gnp--b .gnp-nav__word--dark {
+    display: none;
+  }
+}
+
+.gnp-nav__right {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 32px);
+}
+
+.gnp-nav__util {
+  display: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-soft);
+  transition: color 0.25s ease;
+}
+
+.gnp-nav__util:hover {
+  color: var(--accent);
+}
+
+@media (min-width: 700px) {
+  .gnp-nav__util {
+    display: inline-flex;
+  }
+}
+
+.gnp-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* Las dos etiquetas ocupan la misma celda: el ancho no salta al cambiar. */
+.gnp-nav__toggle-txt {
+  grid-area: 1 / 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gnp-nav__toggle {
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
+.gnp-nav__toggle > .gnp-nav__toggle-txt {
+  display: grid;
+}
+
+.gnp-nav__toggle [data-gnp-nav-close-txt] {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-open-txt] {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-close-txt] {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__burger {
+  display: block;
+  width: 22px;
+  height: 12px;
+  position: relative;
+  margin-left: 12px;
+}
+
+.gnp-nav__burger i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s ease;
+}
+
+.gnp-nav__burger i:first-child {
+  top: 2px;
+}
+
+.gnp-nav__burger i:last-child {
+  bottom: 2px;
+  width: 62%;
+}
+
+.gnp-nav:not(.is-open) .gnp-nav__toggle:hover .gnp-nav__burger i:last-child {
+  width: 100%;
+}
+
+.gnp-nav.is-open .gnp-nav__burger i:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.gnp-nav.is-open .gnp-nav__burger i:last-child {
+  width: 100%;
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* Overlay ---------------------------------------------------------------- */
+
+.gnp-nav__overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.gnp-nav.is-open .gnp-nav__overlay {
+  clip-path: inset(0 0 0 0);
+}
+
+.gnp-nav__overlay[hidden] {
+  display: none;
+}
+
+.gnp-nav__overlay-in {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 110px var(--gutter) 48px;
+  display: grid;
+  gap: clamp(36px, 5vw, 72px);
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 900px) {
+  .gnp-nav__overlay-in {
+    grid-template-columns: 1fr 300px;
+    align-items: center;
+  }
+}
+
+.gnp-nav__list {
+  display: block;
+}
+
+.gnp-nav__item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: clamp(12px, 1.4vw, 20px) 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2, 0.75, 0.25, 1),
+    color 0.3s ease;
+}
+
+.gnp-nav.is-open .gnp-nav__item {
+  opacity: 1;
+  transform: none;
+  /* Escalonado por índice, sin necesidad de temporizadores en JS. */
+  transition-delay: calc(0.16s + var(--i) * 0.055s);
+}
+
+.gnp-nav__item:hover {
+  color: var(--accent);
+}
+
+.gnp-nav__item-n {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+}
+
+.gnp-nav__item-t {
+  font-size: clamp(28px, 5vw, 62px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.gnp-nav__item-a {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.gnp-nav__item:hover .gnp-nav__item-a {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__aside {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease 0.42s, transform 0.5s ease 0.42s;
+}
+
+.gnp-nav.is-open .gnp-nav__aside {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__contact {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+  transition: color 0.25s ease;
+}
+
+.gnp-nav__contact:hover {
+  color: var(--accent);
+}
+
+.gnp-nav__cta {
+  margin-top: 12px;
+  justify-self: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnp-nav,
+  .gnp-nav__overlay,
+  .gnp-nav__item,
+  .gnp-nav__aside {
+    transition: none;
+  }
+
+  .gnp-nav.is-hidden {
+    transform: none;
   }
 }
