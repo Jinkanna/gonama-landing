@@ -1,0 +1,97 @@
+{% comment %}
+  GOnama · new-pos · F.A.Q.
+  Acordeón: se abre una a la vez y la altura se anima midiendo el contenido,
+  no con un max-height a ojo.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-faq" id="section-{{ section.id }}">
+  <div class="gnp__in">
+    <div class="gnp__head gnp__head--split">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 24px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+        {%- if st.headline != blank -%}
+          <h2 class="gnp__title gnp-rv">{{ st.headline | escape }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gnp-faq__list gnp-rv" data-gnp-faq>
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <div class="gnp-faq__item" {{ block.shopify_attributes }}>
+          <button
+            class="gnp-faq__q"
+            type="button"
+            aria-expanded="false"
+            aria-controls="gnp-faq-{{ block.id }}"
+          >
+            <span>{{ b.q | escape }}</span>
+            <span class="gnp-faq__ico" aria-hidden="true"></span>
+          </button>
+          <div class="gnp-faq__a" id="gnp-faq-{{ block.id }}" style="height: 0px">
+            <div class="gnp-faq__a-in">{{ b.a }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · F.A.Q.",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "F.A.Q."
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular",
+      "default": "Questions we get asked"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "If yours is not here, write to us and a person answers."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "q", "label": "Pregunta" },
+        { "type": "richtext", "id": "a", "label": "Respuesta" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "POS · F.A.Q." }]
+}
+{% endschema %}

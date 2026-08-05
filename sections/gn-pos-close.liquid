@@ -1,0 +1,190 @@
+{% comment %}
+  GOnama · new-pos · Cierre
+  Formulario de contacto nativo de Shopify: los envíos llegan al mail de
+  Settings › Notifications, sin depender de nada externo.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign lines = st.headline | newline_to_br | split: '<br />'
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-close" id="gnp-contact">
+  <div class="gnp__in">
+    <div class="gnp-close__grid">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 26px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+
+        <h2 class="gnp__display" data-gnp-lines style="font-size: clamp(34px, 5.4vw, 84px);">
+          {%- for line in lines -%}
+            {%- assign clean = line | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+            {%- endif -%}
+          {%- endfor -%}
+        </h2>
+
+        {%- if st.sub != blank -%}
+          <p class="gnp__sub gnp-rv" style="margin-top: 26px;">{{ st.sub | escape }}</p>
+        {%- endif -%}
+
+        <div class="gnp-close__contact gnp-rv">
+          {%- if st.email != blank -%}
+            <div>
+              <p class="gnp-close__ct-lab">{{ st.email_label | escape }}</p>
+              <a class="gnp-close__ct-val" href="mailto:{{ st.email }}">{{ st.email }}</a>
+            </div>
+          {%- endif -%}
+          {%- if st.phone != blank -%}
+            <div>
+              <p class="gnp-close__ct-lab">{{ st.phone_label | escape }}</p>
+              <a class="gnp-close__ct-val" href="tel:{{ st.phone | replace: ' ', '' }}">{{ st.phone }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="gnp-rv">
+        {%- form 'contact', id: 'gnp-contact-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="gnp-close__msg" role="status">{{ st.ok_msg | escape }}</p>
+          {%- elsif form.errors -%}
+            <div class="gnp-close__msg" role="alert">
+              {{ st.err_msg | escape }}
+              {%- for field in form.errors -%}
+                <p>{{ form.errors.messages[field] }}</p>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="gnp-close__form">
+            <div class="gnp-close__row">
+              <input
+                class="gnp-close__input"
+                type="text"
+                name="contact[name]"
+                placeholder="{{ st.f_name | escape }}"
+                autocomplete="name"
+                value="{{ form.name }}"
+                required
+                aria-label="{{ st.f_name | escape }}"
+              >
+              <input
+                class="gnp-close__input"
+                type="email"
+                name="contact[email]"
+                placeholder="{{ st.f_email | escape }}"
+                autocomplete="email"
+                inputmode="email"
+                value="{{ form.email }}"
+                required
+                aria-label="{{ st.f_email | escape }}"
+              >
+            </div>
+
+            <div class="gnp-close__row">
+              <input
+                class="gnp-close__input"
+                type="text"
+                name="contact[company]"
+                placeholder="{{ st.f_company | escape }}"
+                autocomplete="organization"
+                aria-label="{{ st.f_company | escape }}"
+              >
+              <input
+                class="gnp-close__input"
+                type="tel"
+                name="contact[phone]"
+                placeholder="{{ st.f_phone | escape }}"
+                autocomplete="tel"
+                inputmode="tel"
+                aria-label="{{ st.f_phone | escape }}"
+              >
+            </div>
+
+            <textarea
+              class="gnp-close__input"
+              name="contact[body]"
+              rows="3"
+              placeholder="{{ st.f_msg | escape }}"
+              aria-label="{{ st.f_msg | escape }}"
+            >{{ form.body }}</textarea>
+
+            <button class="gnp__btn gnp-close__submit" type="submit">
+              {{ st.submit | escape }}
+              <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            {%- if st.note != blank -%}
+              <p class="gnp-close__note">{{ st.note | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Cierre",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "b"
+    },
+    { "type": "text", "id": "label", "label": "Etiqueta", "default": "Next move" },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titular",
+      "info": "Una línea por renglón.",
+      "default": "Ready to sell\nsmarter?"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "Tell us what you are building and a person from the team answers, not a bot."
+    },
+    { "type": "header", "content": "Contacto" },
+    { "type": "text", "id": "email_label", "label": "Etiqueta del mail", "default": "Write to us" },
+    { "type": "text", "id": "email", "label": "Mail", "default": "go@gonama.com" },
+    { "type": "text", "id": "phone_label", "label": "Etiqueta del teléfono", "default": "Call us" },
+    { "type": "text", "id": "phone", "label": "Teléfono", "default": "+598 96 331 868" },
+    { "type": "header", "content": "Formulario" },
+    { "type": "text", "id": "f_name", "label": "Nombre", "default": "Name" },
+    { "type": "text", "id": "f_email", "label": "Email", "default": "Work email" },
+    { "type": "text", "id": "f_company", "label": "Empresa", "default": "Company" },
+    { "type": "text", "id": "f_phone", "label": "Teléfono", "default": "Phone" },
+    { "type": "text", "id": "f_msg", "label": "Mensaje", "default": "What are you building?" },
+    { "type": "text", "id": "submit", "label": "Botón", "default": "Send" },
+    {
+      "type": "text",
+      "id": "ok_msg",
+      "label": "Mensaje de éxito",
+      "default": "Thanks. We received your message and will follow up shortly."
+    },
+    { "type": "text", "id": "err_msg", "label": "Mensaje de error", "default": "Please review the following:" },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Nota",
+      "default": "We use your details only to respond to your enquiry."
+    }
+  ],
+  "presets": [{ "name": "POS · Cierre" }]
+}
+{% endschema %}

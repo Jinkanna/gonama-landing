@@ -1,0 +1,9 @@
+{% comment %}
+  Assets compartidos por todas las secciones gnp.
+  El script inline marca que hay JS antes de que se parsee el resto: sin eso,
+  si el archivo no carga, el reveal dejaría la página en blanco.
+{% endcomment %}
+
+<script>document.documentElement.classList.add('gnp-js');</script>
+{{ 'gn-pos.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-pos.js' | asset_url }}" defer="defer"></script>

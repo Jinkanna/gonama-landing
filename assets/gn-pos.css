@@ -1,0 +1,984 @@
+/* ==========================================================================
+   GOnama · landing new-pos
+   Estructura basada en unitedcarriers.com, con la paleta de marca GOnama.
+
+   Paleta:
+     GO blue #44B7E8   Ocean #178DBE   Sky #D9F4FC
+     Panda 1 #0F172A   Panda 2 #F7F9FC
+
+   Las secciones alternan tono. En vez de fijar claro u oscuro, cada sección
+   declara si va en el tono base (.gnp--a) o en el invertido (.gnp--b), y el
+   par se da vuelta según el modo del navegador. Así la alternancia se mantiene
+   en los dos modos.
+
+   Tipografía en px: el tema define html{font-size:62.5%} en reset.css.
+   ========================================================================== */
+
+.gnp {
+  --go-blue: #44b7e8;
+  --ocean: #178dbe;
+  --sky: #d9f4fc;
+  --panda-1: #0f172a;
+  --panda-2: #f7f9fc;
+
+  --max: 1320px;
+  --gutter: clamp(20px, 4.5vw, 64px);
+  --pad-y: clamp(72px, 8vw, 150px);
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  padding: var(--pad-y) 0;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tono base: sigue al navegador. */
+.gnp--a {
+  --bg: var(--panda-2);
+  --fg: var(--panda-1);
+  --fg-soft: #46536b;
+  --fg-faint: #77839a;
+  --line: rgba(15, 23, 42, 0.12);
+  --line-soft: rgba(15, 23, 42, 0.07);
+  --accent: var(--ocean);
+  --on-accent: #ffffff;
+  --veil: rgba(23, 141, 190, 0.07);
+  --surface: #ffffff;
+}
+
+/* Tono invertido. */
+.gnp--b {
+  --bg: var(--panda-1);
+  --fg: var(--panda-2);
+  --fg-soft: #a9b7cc;
+  --fg-faint: #7f8ea6;
+  --line: rgba(217, 244, 252, 0.16);
+  --line-soft: rgba(217, 244, 252, 0.08);
+  --accent: var(--go-blue);
+  --on-accent: var(--panda-1);
+  --veil: rgba(68, 183, 232, 0.1);
+  --surface: rgba(217, 244, 252, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .gnp--a {
+    --bg: var(--panda-1);
+    --fg: var(--panda-2);
+    --fg-soft: #a9b7cc;
+    --fg-faint: #7f8ea6;
+    --line: rgba(217, 244, 252, 0.16);
+    --line-soft: rgba(217, 244, 252, 0.08);
+    --accent: var(--go-blue);
+    --on-accent: var(--panda-1);
+    --veil: rgba(68, 183, 232, 0.1);
+    --surface: rgba(217, 244, 252, 0.04);
+  }
+
+  .gnp--b {
+    --bg: var(--panda-2);
+    --fg: var(--panda-1);
+    --fg-soft: #46536b;
+    --fg-faint: #77839a;
+    --line: rgba(15, 23, 42, 0.12);
+    --line-soft: rgba(15, 23, 42, 0.07);
+    --accent: var(--ocean);
+    --on-accent: #ffffff;
+    --veil: rgba(23, 141, 190, 0.07);
+    --surface: #ffffff;
+  }
+}
+
+.gnp *,
+.gnp *::before,
+.gnp *::after {
+  box-sizing: border-box;
+}
+
+/* El tema pinta headings, enlaces y negritas con selectores de elemento. */
+.gnp h1,
+.gnp h2,
+.gnp h3,
+.gnp h4 {
+  font-family: inherit;
+  color: var(--fg);
+  text-transform: none;
+  margin: 0;
+}
+
+.gnp p,
+.gnp ul,
+.gnp li,
+.gnp figure {
+  margin: 0;
+}
+
+.gnp ul {
+  padding: 0;
+  list-style: none;
+}
+
+.gnp a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gnp strong,
+.gnp b {
+  color: inherit;
+  font-weight: 600;
+}
+
+.gnp__in {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Tipografía
+   -------------------------------------------------------------------------- */
+
+/* Display apilado en mayúsculas, interlineado cerrado. */
+.gnp__display {
+  font-size: clamp(40px, 8.2vw, 132px);
+  line-height: 0.92;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.gnp__title {
+  font-size: clamp(30px, 4.6vw, 68px);
+  line-height: 0.98;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  max-width: 18ch;
+}
+
+.gnp__sub {
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.55;
+  color: var(--fg-soft);
+  max-width: 46ch;
+}
+
+.gnp__body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--fg-soft);
+}
+
+/* Etiqueta monoespaciada, el recurso que ordena toda la página. */
+.gnp__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.gnp__label::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.gnp__head {
+  display: grid;
+  gap: 26px;
+  margin-bottom: clamp(48px, 6vw, 90px);
+}
+
+@media (min-width: 900px) {
+  .gnp__head--split {
+    grid-template-columns: 1.25fr 1fr;
+    align-items: end;
+    gap: 60px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Botones y enlaces
+   -------------------------------------------------------------------------- */
+
+.gnp__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 17px 32px;
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.gnp .gnp__btn:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.gnp__btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--fg);
+}
+
+.gnp .gnp__btn--ghost:hover {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+/* Enlace con subrayado que se dibuja al pasar. */
+.gnp__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.gnp__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp__link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.gnp__arrow {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.3s ease;
+}
+
+.gnp__link:hover .gnp__arrow,
+.gnp__btn:hover .gnp__arrow {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   Reveal
+   -------------------------------------------------------------------------- */
+
+.gnp-js .gnp-rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.gnp-js .gnp-rv.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* El display entra línea por línea. */
+.gnp-js .gnp-line {
+  display: block;
+  overflow: hidden;
+}
+
+.gnp-js .gnp-line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.85s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.gnp-js .is-in .gnp-line > span,
+.gnp-js .gnp-line.is-in > span {
+  transform: none;
+}
+
+/* ==========================================================================
+   1. TICKER
+   ========================================================================== */
+
+.gnp-ticker {
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.gnp-ticker__row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+
+.gnp-ticker__row:last-child {
+  border-bottom: 0;
+}
+
+.gnp-ticker__tag {
+  flex-shrink: 0;
+  padding: 13px var(--gutter);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--on-accent);
+  background: var(--accent);
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.gnp-ticker__track {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+}
+
+.gnp-ticker__group {
+  display: flex;
+  flex-shrink: 0;
+  animation: gnpMarquee var(--speed, 42s) linear infinite;
+}
+
+.gnp-ticker__row:hover .gnp-ticker__group {
+  animation-play-state: paused;
+}
+
+.gnp-ticker__row--rev .gnp-ticker__group {
+  animation-direction: reverse;
+}
+
+.gnp-ticker__item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 13px 0;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-soft);
+}
+
+.gnp-ticker__item::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin: 0 18px;
+}
+
+@keyframes gnpMarquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+/* ==========================================================================
+   2. HERO
+   ========================================================================== */
+
+.gnp-hero {
+  padding-top: clamp(56px, 7vw, 110px);
+  padding-bottom: clamp(56px, 7vw, 110px);
+  min-height: min(88vh, 900px);
+  display: flex;
+  align-items: center;
+}
+
+.gnp-hero__label {
+  margin-bottom: clamp(28px, 3vw, 44px);
+}
+
+.gnp-hero__foot {
+  display: grid;
+  gap: 32px;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: clamp(28px, 3vw, 40px);
+  border-top: 1px solid var(--line);
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .gnp-hero__foot {
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+  }
+}
+
+.gnp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   3. STATEMENT + CONTADORES
+   ========================================================================== */
+
+.gnp-stat__grid {
+  display: grid;
+  gap: clamp(36px, 4vw, 64px);
+}
+
+@media (min-width: 900px) {
+  .gnp-stat__grid {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.gnp-stat__copy p + p {
+  margin-top: 18px;
+}
+
+.gnp-stat__link {
+  margin-top: 34px;
+}
+
+.gnp-stat__nums {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 560px) {
+  .gnp-stat__nums {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gnp-num {
+  background: var(--bg);
+  padding: 30px 28px;
+}
+
+.gnp-num__val {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: clamp(38px, 4.4vw, 62px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--fg);
+}
+
+.gnp-num__suffix {
+  color: var(--accent);
+}
+
+.gnp-num__lab {
+  margin-top: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   4. SERVICIOS
+   ========================================================================== */
+
+.gnp-serv__grid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+@media (min-width: 700px) {
+  .gnp-serv__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1060px) {
+  .gnp-serv__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gnp-serv {
+  position: relative;
+  background: var(--bg);
+  padding: clamp(28px, 3vw, 44px);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.gnp-serv::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.gnp-serv:hover::before,
+.gnp-serv:focus-within::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-serv > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* El numero queda arriba y el resto del bloque se apoya en la base de la
+   celda: con margin-top:auto solo en el titulo quedaba un hueco al pie. */
+.gnp-serv__num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  margin-bottom: auto;
+  transition: color 0.35s ease;
+}
+
+.gnp-serv:hover .gnp-serv__num {
+  color: var(--accent);
+}
+
+.gnp-serv__name {
+  padding-top: 40px;
+  font-size: clamp(22px, 2.2vw, 32px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.028em;
+  text-transform: uppercase;
+  transition: color 0.35s ease;
+}
+
+.gnp-serv:hover .gnp-serv__name {
+  color: var(--accent);
+}
+
+.gnp-serv__desc {
+  margin-top: 16px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+}
+
+/* ==========================================================================
+   5. CONFIABILIDAD
+   ========================================================================== */
+
+.gnp-rel__grid {
+  display: grid;
+  gap: clamp(28px, 3vw, 44px);
+}
+
+@media (min-width: 860px) {
+  .gnp-rel__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gnp-rel {
+  padding-top: 26px;
+  border-top: 2px solid var(--accent);
+}
+
+.gnp-rel__name {
+  font-size: clamp(19px, 1.9vw, 25px);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.gnp-rel__desc {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--fg-soft);
+}
+
+/* ==========================================================================
+   6. DIFERENCIALES
+   ========================================================================== */
+
+.gnp-edge__list {
+  border-top: 1px solid var(--line);
+}
+
+.gnp-edge {
+  display: grid;
+  gap: 10px;
+  padding: clamp(24px, 2.6vw, 38px) 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  transition: padding-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 820px) {
+  .gnp-edge {
+    grid-template-columns: 80px minmax(0, 340px) 1fr;
+    gap: 40px;
+    align-items: baseline;
+  }
+
+  .gnp-edge:hover {
+    padding-left: 18px;
+  }
+}
+
+.gnp-edge__num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  transition: color 0.35s ease;
+}
+
+.gnp-edge:hover .gnp-edge__num {
+  color: var(--accent);
+}
+
+.gnp-edge__name {
+  font-size: clamp(18px, 1.7vw, 23px);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  transition: color 0.35s ease;
+}
+
+.gnp-edge:hover .gnp-edge__name {
+  color: var(--accent);
+}
+
+.gnp-edge__desc {
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--fg-soft);
+}
+
+/* ==========================================================================
+   7. PARTNERS
+   ========================================================================== */
+
+.gnp-part__strip {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 700px) {
+  .gnp-part__strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1060px) {
+  .gnp-part__strip {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.gnp-part {
+  background: var(--bg);
+  min-height: 118px;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  transition: background 0.35s ease;
+}
+
+.gnp-part:hover {
+  background: var(--veil);
+}
+
+.gnp-part img {
+  max-width: 100%;
+  max-height: 42px;
+  width: auto;
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+}
+
+.gnp-part:hover img {
+  opacity: 1;
+}
+
+.gnp-part__text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  text-align: center;
+  transition: color 0.35s ease;
+}
+
+.gnp-part:hover .gnp-part__text {
+  color: var(--fg);
+}
+
+/* ==========================================================================
+   8. FAQ
+   ========================================================================== */
+
+.gnp-faq__list {
+  border-top: 1px solid var(--line);
+}
+
+.gnp-faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.gnp-faq__q {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  padding: clamp(22px, 2.4vw, 32px) 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  transition: color 0.3s ease;
+}
+
+.gnp-faq__q:hover {
+  color: var(--accent);
+}
+
+.gnp-faq__ico {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.35s ease;
+}
+
+.gnp-faq__ico::before,
+.gnp-faq__ico::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: opacity 0.3s ease;
+}
+
+.gnp-faq__ico::before {
+  width: 11px;
+  height: 1.5px;
+}
+
+.gnp-faq__ico::after {
+  width: 1.5px;
+  height: 11px;
+}
+
+.gnp-faq__item.is-open .gnp-faq__ico {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  transform: rotate(90deg);
+}
+
+.gnp-faq__item.is-open .gnp-faq__ico::after {
+  opacity: 0;
+}
+
+.gnp-faq__a {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-faq__a-in {
+  padding-bottom: 30px;
+  max-width: 74ch;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--fg-soft);
+}
+
+.gnp-faq__a-in p + p {
+  margin-top: 12px;
+}
+
+/* ==========================================================================
+   9. CIERRE
+   ========================================================================== */
+
+.gnp-close__grid {
+  display: grid;
+  gap: clamp(40px, 5vw, 72px);
+  align-items: start;
+}
+
+@media (min-width: 940px) {
+  .gnp-close__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gnp-close__form {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 560px) {
+  .gnp-close__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+.gnp-close__input {
+  width: 100%;
+  padding: 16px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.gnp-close__input::placeholder {
+  color: var(--fg-faint);
+}
+
+.gnp-close__input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.gnp-close__submit {
+  margin-top: 12px;
+  justify-self: start;
+}
+
+.gnp-close__msg {
+  padding: 14px 18px;
+  border: 1px solid var(--accent);
+  background: var(--veil);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.gnp-close__note {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--fg-faint);
+  line-height: 1.5;
+}
+
+.gnp-close__contact {
+  margin-top: clamp(36px, 4vw, 56px);
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 560px) {
+  .gnp-close__contact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gnp-close__ct-lab {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 8px;
+}
+
+.gnp-close__ct-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .gnp *,
+  .gnp *::before,
+  .gnp *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .gnp-js .gnp-rv,
+  .gnp-js .gnp-line > span {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gnp-ticker__group {
+    animation: none;
+  }
+}

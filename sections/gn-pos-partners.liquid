@@ -1,0 +1,94 @@
+{% comment %}
+  GOnama · new-pos · Partners
+  Cada celda acepta un logo o, si no hay imagen, el nombre en texto.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-part" id="section-{{ section.id }}">
+  <div class="gnp__in">
+    <div class="gnp__head gnp__head--split">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 24px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+        {%- if st.headline != blank -%}
+          <h2 class="gnp__title gnp-rv">{{ st.headline | escape }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gnp-part__strip gnp-rv">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <div class="gnp-part" {{ block.shopify_attributes }}>
+          {%- if b.logo != blank -%}
+            <img src="{{ b.logo | image_url: height: 120 }}" alt="{{ b.name | escape }}" loading="lazy">
+          {%- else -%}
+            <span class="gnp-part__text">{{ b.name | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Partners",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "b"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "Ecosystem"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular",
+      "default": "Connected to what you already use"
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "Payment gateways, carriers, marketplaces and ERPs already integrated, so nothing has to be rebuilt."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner",
+      "name": "Partner",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre" },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo",
+          "info": "Si lo dejás vacío se muestra el nombre en texto."
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "POS · Partners" }]
+}
+{% endschema %}

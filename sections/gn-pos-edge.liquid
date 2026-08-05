@@ -1,0 +1,85 @@
+{% comment %}
+  GOnama · new-pos · Diferenciales
+  Lista numerada en tres columnas, con la fila corriéndose al pasar el mouse.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign lines = st.headline | newline_to_br | split: '<br />'
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-edge" id="section-{{ section.id }}">
+  <div class="gnp__in">
+    <div class="gnp__head">
+      {%- if st.label != blank -%}
+        <p class="gnp__label gnp-rv">{{ st.label | escape }}</p>
+      {%- endif -%}
+      <h2 class="gnp__title" data-gnp-lines>
+        {%- for line in lines -%}
+          {%- assign clean = line | strip_html | strip -%}
+          {%- if clean != blank -%}
+            <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+          {%- endif -%}
+        {%- endfor -%}
+      </h2>
+    </div>
+
+    <div class="gnp-edge__list">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <article class="gnp-edge gnp-rv" {{ block.shopify_attributes }}>
+          <p class="gnp-edge__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+          <h3 class="gnp-edge__name">{{ b.name | escape }}</h3>
+          {%- if b.desc != blank -%}
+            <p class="gnp-edge__desc">{{ b.desc | escape }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Diferenciales",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "Why us"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titular",
+      "info": "Una línea por renglón.",
+      "default": "Commerce that works\nas hard as you do."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "edge",
+      "name": "Diferencial",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Título" },
+        { "type": "textarea", "id": "desc", "label": "Descripción" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "POS · Diferenciales" }]
+}
+{% endschema %}

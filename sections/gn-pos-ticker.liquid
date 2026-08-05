@@ -1,0 +1,108 @@
+{% comment %}
+  GOnama · new-pos · Ticker
+  Dos filas que corren en sentidos opuestos, con una etiqueta fija a la
+  izquierda. El JS duplica el contenido hasta cubrir el ancho, así el bucle
+  no deja huecos en pantallas anchas.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign row1 = st.row1_items | split: ','
+  assign row2 = st.row2_items | split: ','
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-ticker" id="section-{{ section.id }}">
+  {%- if st.row1_items != blank -%}
+    <div class="gnp-ticker__row">
+      {%- if st.row1_tag != blank -%}
+        <span class="gnp-ticker__tag">{{ st.row1_tag | escape }}</span>
+      {%- endif -%}
+      <div class="gnp-ticker__track" data-gnp-marquee data-gnp-speed="{{ st.speed }}">
+        <div class="gnp-ticker__group">
+          {%- for item in row1 -%}
+            {%- assign clean = item | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-ticker__item">{{ clean | escape }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if st.row2_items != blank -%}
+    <div class="gnp-ticker__row gnp-ticker__row--rev">
+      {%- if st.row2_tag != blank -%}
+        <span class="gnp-ticker__tag">{{ st.row2_tag | escape }}</span>
+      {%- endif -%}
+      <div class="gnp-ticker__track" data-gnp-marquee data-gnp-speed="{{ st.speed }}">
+        <div class="gnp-ticker__group">
+          {%- for item in row2 -%}
+            {%- assign clean = item | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-ticker__item">{{ clean | escape }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "POS · Ticker",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    {
+      "type": "text",
+      "id": "row1_tag",
+      "label": "Fila 1 · etiqueta",
+      "default": "Markets"
+    },
+    {
+      "type": "textarea",
+      "id": "row1_items",
+      "label": "Fila 1 · ítems",
+      "info": "Separados por comas.",
+      "default": "Uruguay, Argentina, Brazil, Chile, Colombia, Mexico, Peru, Paraguay, United States, Spain"
+    },
+    {
+      "type": "text",
+      "id": "row2_tag",
+      "label": "Fila 2 · etiqueta",
+      "default": "Capabilities"
+    },
+    {
+      "type": "textarea",
+      "id": "row2_items",
+      "label": "Fila 2 · ítems",
+      "info": "Separados por comas.",
+      "default": "Global Checkout, Local Payments, Order Management, Logistics Engine, Loyalty, Cart Recovery, Analytics, AI Agents, Developer APIs"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Velocidad",
+      "info": "Píxeles por segundo.",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 55
+    }
+  ],
+  "presets": [{ "name": "POS · Ticker" }]
+}
+{% endschema %}

@@ -1,0 +1,112 @@
+{% comment %}
+  GOnama · new-pos · Capacidades
+  Grilla sin separación: las celdas se apoyan en el fondo y las líneas salen
+  del gap de 1px, como en la referencia.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign lines = st.headline | newline_to_br | split: '<br />'
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-serv" id="section-{{ section.id }}">
+  <div class="gnp__in">
+    <div class="gnp__head gnp__head--split">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 24px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+        <h2 class="gnp__title" data-gnp-lines>
+          {%- for line in lines -%}
+            {%- assign clean = line | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+            {%- endif -%}
+          {%- endfor -%}
+        </h2>
+      </div>
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gnp-serv__grid gnp-rv">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign name_lines = b.name | newline_to_br | split: '<br />'
+        -%}
+        <article class="gnp-serv" {{ block.shopify_attributes }}>
+          <p class="gnp-serv__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+          <h3 class="gnp-serv__name">
+            {%- for nl in name_lines -%}
+              {%- assign cn = nl | strip_html | strip -%}
+              {%- if cn != blank -%}
+                <span style="display:block">{{ cn | escape }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </h3>
+          {%- if b.desc != blank -%}
+            <p class="gnp-serv__desc">{{ b.desc | escape }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Capacidades",
+  "max_blocks": 9,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "What we run"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titular",
+      "info": "Una línea por renglón.",
+      "default": "Everything your store needs.\nUnder one platform."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "From the first click to the final delivery, every layer of the sale runs on the same infrastructure, with one point of contact and full visibility."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Capacidad",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "name",
+          "label": "Nombre",
+          "info": "Una línea por renglón, como en el diseño de referencia."
+        },
+        { "type": "textarea", "id": "desc", "label": "Descripción" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "POS · Capacidades" }]
+}
+{% endschema %}
