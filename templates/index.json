@@ -1,16 +1,5 @@
 {
   "sections": {
-    "ticker": {
-      "type": "gn-pos-ticker",
-      "settings": {
-        "tone": "a",
-        "row1_tag": "Markets",
-        "row1_items": "Uruguay, Argentina, Brazil, Chile, Colombia, Mexico, Peru, Paraguay, United States, Spain",
-        "row2_tag": "Capabilities",
-        "row2_items": "Global Checkout, Local Payments, Order Management, Logistics Engine, Loyalty, Cart Recovery, Analytics, AI Agents, Developer APIs",
-        "speed": 55
-      }
-    },
     "hero": {
       "type": "gn-pos-hero",
       "settings": {
@@ -366,7 +355,6 @@
     }
   },
   "order": [
-    "ticker",
     "hero",
     "statement",
     "services",
