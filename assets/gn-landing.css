@@ -60,7 +60,9 @@
 @media (prefers-color-scheme: dark) {
   .gn {
     --bg: var(--panda-1);
-    --bg-alt: #0a1120;
+    /* En oscuro no hay un segundo fondo: el footer se separa con su línea
+       superior, no con otro tono. Antes había un #0A1120 inventado. */
+    --bg-alt: var(--panda-1);
     --surface: #16203a;
     --surface-tint: rgba(68, 183, 232, 0.07);
     --border: rgba(217, 244, 252, 0.13);
