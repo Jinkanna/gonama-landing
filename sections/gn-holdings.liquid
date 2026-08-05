@@ -44,13 +44,13 @@
       {%- endif -%}
 
       {%- if st.heading != blank -%}
-        <h2 class="gn__h2" style="margin-top: 28px;">
-          <span class="gn__gradient">{{ st.heading | escape }}</span>
+        <h2 class="gn__h2">
+          {{ st.heading | escape }}
         </h2>
       {%- endif -%}
 
       {%- if st.lead != blank -%}
-        <p class="gn__lead" style="margin-top: 18px;">{{ st.lead | escape }}</p>
+        <p class="gn__lead">{{ st.lead | escape }}</p>
       {%- endif -%}
 
       {%- assign principles = section.blocks | where: 'type', 'principle' -%}

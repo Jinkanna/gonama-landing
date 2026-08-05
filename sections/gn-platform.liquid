@@ -12,9 +12,12 @@
 
 <section class="gn gn-platform" id="section-{{ section.id }}">
   <div class="gn__inner">
-    <div class="gn__section-head gn__section-head--center gn-reveal">
+    <div class="gn__head gn__head--center gn-reveal">
+      {%- if st.index != blank -%}
+        <p class="gn__index"><b>{{ st.index | escape }}</b> {{ st.index_label | escape }}</p>
+      {%- endif -%}
       {%- if st.heading != blank -%}
-        <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+        <h2 class="gn__h2">{{ st.heading | escape }}</h2>
       {%- endif -%}
       {%- if st.subheading != blank -%}
         <p class="gn__lead">{{ st.subheading | escape }}</p>
@@ -32,7 +35,8 @@
           endif
         -%}
         <article class="gn-platform__item{{ featured }} gn-reveal" {{ block.shopify_attributes }}>
-          <div class="gn-platform__dot"></div>
+          <div>
+          <p class="gn-platform__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
 
           {%- if b.name != blank -%}
             <h3 class="gn__h3">{{ b.name | escape }}</h3>
@@ -41,7 +45,9 @@
           {%- if b.desc != blank -%}
             <p class="gn-platform__desc">{{ b.desc | escape }}</p>
           {%- endif -%}
+          </div>
 
+          <div>
           {%- if b.tags != blank -%}
             <div class="gn-platform__tags">
               {%- for tag in tags -%}
@@ -56,6 +62,7 @@
           {%- if b.note != blank -%}
             <p class="gn-platform__note">{{ b.note | escape }}</p>
           {%- endif -%}
+          </div>
         </article>
       {%- endfor -%}
     </div>
@@ -69,6 +76,18 @@
   "class": "gn-section",
   "max_blocks": 8,
   "settings": [
+    {
+      "type": "text",
+      "id": "index",
+      "label": "Número de sección",
+      "default": "02"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Etiqueta de sección",
+      "default": "Platform"
+    },
     {
       "type": "text",
       "id": "heading",

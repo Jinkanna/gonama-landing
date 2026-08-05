@@ -14,34 +14,38 @@
 
 <section class="gn gn-shift" id="section-{{ section.id }}">
   <div class="gn__inner">
-    <div class="gn__section-head gn-reveal">
+    <div class="gn__head gn-reveal">
+      {%- if st.index != blank -%}
+        <p class="gn__index"><b>{{ st.index | escape }}</b> {{ st.index_label | escape }}</p>
+      {%- endif -%}
       {%- if st.heading != blank -%}
-        <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+        <h2 class="gn__h2">{{ st.heading | escape }}</h2>
       {%- endif -%}
     </div>
 
-    <div class="gn-reveal">
-      {%- if st.body_1 != blank -%}
-        <p class="gn__body gn-shift__body">{{ st.body_1 }}</p>
-      {%- endif -%}
-      {%- if st.body_2 != blank -%}
-        <p class="gn__body gn-shift__body">{{ st.body_2 }}</p>
-      {%- endif -%}
-    </div>
+    <div class="gn-shift__layout">
+      <div class="gn-reveal">
+        {%- if st.body_1 != blank -%}
+          <p class="gn__body gn-shift__body">{{ st.body_1 }}</p>
+        {%- endif -%}
+        {%- if st.body_2 != blank -%}
+          <p class="gn__body gn-shift__body">{{ st.body_2 }}</p>
+        {%- endif -%}
 
-    {%- if st.tension != blank or st.tension_em != blank -%}
-      <div class="gn-shift__tension gn-reveal">
-        <p>
-          {{ st.tension | escape }}
-          {%- if st.tension_em != blank -%}
-            <em>{{ st.tension_em | escape }}</em>
-          {%- endif -%}
-        </p>
+        {%- if st.tension != blank or st.tension_em != blank -%}
+          <div class="gn-shift__tension">
+            <p>
+              {{ st.tension | escape }}
+              {%- if st.tension_em != blank -%}
+                <em>{{ st.tension_em | escape }}</em>
+              {%- endif -%}
+            </p>
+          </div>
+        {%- endif -%}
       </div>
-    {%- endif -%}
 
     {%- if st.show_velocity -%}
-      <div class="gn-reveal" data-gn-velocity>
+      <div class="gn-shift__velocity gn-reveal" data-gn-velocity>
         {%- if st.velocity_title != blank -%}
           <p class="gn-shift__velocity-title">{{ st.velocity_title | escape }}</p>
         {%- endif -%}
@@ -79,6 +83,7 @@
         {%- endif -%}
       </div>
     {%- endif -%}
+    </div>
 
     <div class="gn-shift__compare">
       <div class="gn-shift__card gn-shift__card--trad gn-reveal">
@@ -114,6 +119,18 @@
   "tag": "section",
   "class": "gn-section",
   "settings": [
+    {
+      "type": "text",
+      "id": "index",
+      "label": "Número de sección",
+      "default": "01"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Etiqueta de sección",
+      "default": "The shift"
+    },
     {
       "type": "text",
       "id": "heading",

@@ -10,16 +10,14 @@
 -%}
 
 <section class="gn gn-future" id="section-{{ section.id }}">
-  <div class="gn__orb gn-future__orb"></div>
-  <div class="gn__grid-bg"></div>
 
   <div class="gn__inner gn__inner--narrow gn-reveal">
-    {%- if st.eyebrow != blank -%}
-      <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
-    {%- endif -%}
+    {%- if st.index != blank -%}
+        <p class="gn__index"><b>{{ st.index | escape }}</b> {{ st.index_label | escape }}</p>
+      {%- endif -%}
 
     {%- if st.heading != blank -%}
-      <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+      <h2 class="gn__h2">{{ st.heading | escape }}</h2>
     {%- endif -%}
 
     {%- if st.body != blank -%}
@@ -40,9 +38,15 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "The future of commerce"
+      "id": "index",
+      "label": "Número de sección",
+      "default": "06"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Etiqueta de sección",
+      "default": "Outlook"
     },
     {
       "type": "text",

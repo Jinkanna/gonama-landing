@@ -20,10 +20,6 @@
 -%}
 
 <section class="gn gn-hero" id="section-{{ section.id }}">
-  <div class="gn__orb gn-hero__orb-1"></div>
-  <div class="gn__orb gn-hero__orb-2"></div>
-  <div class="gn__grid-bg"></div>
-
   <div class="gn__inner">
     <div class="gn-hero__layout">
       <div class="gn-reveal">
@@ -32,7 +28,7 @@
         {%- endif -%}
 
         {%- if st.heading != blank -%}
-          <h1 class="gn__h1"><span class="gn__gradient">{{ st.heading | escape }}</span></h1>
+          <h1 class="gn__h1">{{ st.heading | escape }}</h1>
         {%- endif -%}
 
         {%- if st.lead != blank -%}
@@ -63,6 +59,12 @@
           role="img"
           aria-label="{{ st.diagram_alt | escape }}"
         >
+          <div class="gn-arch__head">
+            <span>{{ st.diagram_title | escape }}</span>
+            <span>{{ st.diagram_meta | escape }}</span>
+          </div>
+
+          <div class="gn-arch__flow">
           <p class="gn-arch__label" data-gn-label>{{ st.entry_label | escape }}</p>
 
           <div class="gn-arch__node" data-gn-node="0">{{ st.node_business | escape }}</div>
@@ -101,6 +103,7 @@
           <div class="gn-arch__line" data-gn-line></div>
 
           <div class="gn-arch__node" data-gn-node="6">{{ st.node_compliance | escape }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -164,6 +167,18 @@
     {
       "type": "paragraph",
       "content": "Los grupos se separan con comas."
+    },
+    {
+      "type": "text",
+      "id": "diagram_title",
+      "label": "Encabezado del recuadro",
+      "default": "Platform architecture"
+    },
+    {
+      "type": "text",
+      "id": "diagram_meta",
+      "label": "Encabezado · derecha",
+      "default": "v1"
     },
     {
       "type": "text",

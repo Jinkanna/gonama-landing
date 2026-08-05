@@ -13,15 +13,15 @@
 
 <section class="gn gn-industries" id="section-{{ section.id }}">
   <div class="gn__inner">
-    <div class="gn__section-head gn__section-head--center gn-reveal">
-      {%- if st.eyebrow != blank -%}
-        <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+    <div class="gn__head gn__head--center gn-reveal">
+      {%- if st.index != blank -%}
+        <p class="gn__index"><b>{{ st.index | escape }}</b> {{ st.index_label | escape }}</p>
       {%- endif -%}
       {%- if st.heading != blank -%}
-        <h2 class="gn__h2"><span class="gn__gradient">{{ st.heading | escape }}</span></h2>
+        <h2 class="gn__h2">{{ st.heading | escape }}</h2>
       {%- endif -%}
       {%- if st.lead != blank -%}
-        <p class="gn__lead" style="margin-top: 18px;">{{ st.lead | escape }}</p>
+        <p class="gn__lead">{{ st.lead | escape }}</p>
       {%- endif -%}
     </div>
 
@@ -34,14 +34,15 @@
         <article class="gn-ind gn-reveal" {{ block.shopify_attributes }}>
           <h3 class="gn-ind__title">{{ b.title | escape }}</h3>
           {%- if b.subs != blank -%}
-            <div class="gn-ind__subs">
+            <p class="gn-ind__subs">
               {%- for sub in subs -%}
                 {%- assign clean = sub | strip -%}
                 {%- if clean != blank -%}
-                  <span class="gn-ind__sub">{{ clean | escape }}</span>
+                  {{- clean | escape -}}
+                  {%- unless forloop.last %} · {% endunless -%}
                 {%- endif -%}
               {%- endfor -%}
-            </div>
+            </p>
           {%- endif -%}
         </article>
       {%- endfor -%}
@@ -58,9 +59,15 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Major Global Industries"
+      "id": "index",
+      "label": "Número de sección",
+      "default": "05"
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Etiqueta de sección",
+      "default": "Industries"
     },
     {
       "type": "text",

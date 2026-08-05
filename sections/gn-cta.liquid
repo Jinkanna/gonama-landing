@@ -21,15 +21,15 @@
 
         {%- if st.heading != blank -%}
           <h2 class="gn__h2">
-            <span class="gn__gradient">{{ st.heading | escape }}</span>
+            {{ st.heading | escape }}
             {%- if st.heading_2 != blank -%}
-              <br><span class="gn__gradient">{{ st.heading_2 | escape }}</span>
+              <br>{{ st.heading_2 | escape }}
             {%- endif -%}
           </h2>
         {%- endif -%}
 
         {%- if st.sub != blank -%}
-          <p class="gn__lead" style="margin-top: 20px;">{{ st.sub | escape }}</p>
+          <p class="gn__lead">{{ st.sub | escape }}</p>
         {%- endif -%}
       </div>
 
