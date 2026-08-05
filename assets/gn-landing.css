@@ -996,15 +996,46 @@
 }
 
 .gn-platform__item {
+  position: relative;
   padding: 30px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  transition: border-color 0.2s ease;
+  overflow: hidden;
+  transition: border-color 0.35s ease;
+}
+
+.gn-platform__item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-quiet);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
 }
 
 .gn-platform__item:hover {
   border-color: var(--accent);
+}
+
+.gn-platform__item:hover::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gn-platform__item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gn-platform__item .gn__h3 {
+  transition: color 0.35s ease;
+}
+
+.gn-platform__item:hover .gn__h3 {
+  color: var(--accent);
 }
 
 .gn-platform__item--featured {
@@ -1241,22 +1272,82 @@
   }
 }
 
+/* Mismo lenguaje de hover que los principios: un velo que sube en 0.35s en
+   lugar de un cambio de fondo seco. */
 .gn-cap {
+  position: relative;
   padding: 34px 30px;
   background: var(--bg);
-  transition: background 0.2s ease;
+  overflow: hidden;
 }
 
-.gn-cap:hover {
-  background: var(--surface-tint);
+.gn-cap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-quiet);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+/* Filo de acento que crece desde arriba. */
+.gn-cap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gn-cap:hover::before,
+.gn-cap:focus-within::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gn-cap:hover::after,
+.gn-cap:focus-within::after {
+  transform: scaleY(1);
+}
+
+.gn-cap > * {
+  position: relative;
+  z-index: 1;
 }
 
 .gn-cap__num {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11.5px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--text-faint);
   margin-bottom: 16px;
+  transition: color 0.35s ease;
+}
+
+.gn-cap:hover .gn-cap__num {
+  color: var(--accent);
+}
+
+.gn-cap .gn__h3 {
+  transition: color 0.35s ease;
+}
+
+.gn-cap:hover .gn__h3 {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-cap::before,
+  .gn-cap::after {
+    transition: none;
+  }
 }
 
 .gn-cap__desc {
