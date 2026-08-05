@@ -3,6 +3,11 @@
   Las listas de comparación se cargan con un ítem por línea.
 {% endcomment %}
 
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
 {{ 'gn-landing.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
 
@@ -26,10 +31,10 @@
     <div class="gn-shift__layout">
       <div class="gn-reveal">
         {%- if st.body_1 != blank -%}
-          <p class="gn__body gn-shift__body">{{ st.body_1 }}</p>
+          <div class="gn__body gn-shift__body">{{ st.body_1 }}</div>
         {%- endif -%}
         {%- if st.body_2 != blank -%}
-          <p class="gn__body gn-shift__body">{{ st.body_2 }}</p>
+          <div class="gn__body gn-shift__body">{{ st.body_2 }}</div>
         {%- endif -%}
 
         {%- if st.tension != blank or st.tension_em != blank -%}
@@ -79,7 +84,7 @@
         </div>
 
         {%- if st.velocity_note != blank -%}
-          <p class="gn-shift__note">{{ st.velocity_note }}</p>
+          <div class="gn-shift__note">{{ st.velocity_note }}</div>
         {%- endif -%}
       </div>
     {%- endif -%}

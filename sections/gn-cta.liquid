@@ -4,6 +4,11 @@
   configurado en Settings › Notifications sin depender de nada externo.
 {% endcomment %}
 
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
 {{ 'gn-landing.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
 
@@ -124,7 +129,7 @@
           </button>
 
           {%- if st.legal != blank -%}
-            <p class="gn-cta__legal">{{ st.legal }}</p>
+            <div class="gn-cta__legal">{{ st.legal }}</div>
           {%- endif -%}
         {%- endform -%}
       </div>

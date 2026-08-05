@@ -277,6 +277,33 @@
     );
   }
 
+  /* --------------------------------------------------------------- Header */
+
+  function initHeader(root) {
+    var btn = root.querySelector('[data-gn-header-toggle]');
+    var menu = root.querySelector('[data-gn-header-menu]');
+    if (!btn || !menu) return;
+
+    function close() {
+      menu.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', function () {
+      var open = menu.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // Al elegir un ancla el menú se cierra solo.
+    menu.addEventListener('click', function (ev) {
+      if (ev.target.closest('a')) close();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') close();
+    });
+  }
+
   /* ------------------------------------------------------------- Holdings */
 
   function initHoldings(root) {
@@ -312,6 +339,7 @@
   function boot() {
     initReveal();
 
+    each('[data-gn-header]', initHeader);
     each('[data-gn-arch]', initArch);
     each('[data-gn-velocity]', initVelocity);
     each('[data-gn-console]', initConsole);

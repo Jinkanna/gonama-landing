@@ -1,0 +1,163 @@
+{% comment %}
+  GOnama landing 2026 — Footer propio de la home
+  Reemplaza al footer del tema solo en index. Columnas de links como bloques.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+  assign year = 'now' | date: '%Y'
+-%}
+
+<footer class="gn gn-footer">
+  <div class="gn__inner">
+    <div class="gn-footer__top">
+      <div class="gn-footer__brand">
+        {%- if st.logo != blank -%}
+          {{ st.logo | image_url: height: 64 | image_tag: alt: shop.name, class: 'gn-footer__logo-img', loading: 'lazy' }}
+        {%- else -%}
+          <p class="gn-footer__wordmark">{{ st.logo_text }}</p>
+        {%- endif -%}
+
+        {%- if st.tagline != blank -%}
+          <p class="gn-footer__tagline">{{ st.tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="gn-footer__cols">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign b = block.settings
+            assign labels = b.labels | newline_to_br | split: '<br />'
+            assign links = b.links | newline_to_br | split: '<br />'
+          -%}
+          <div class="gn-footer__col" {{ block.shopify_attributes }}>
+            {%- if b.title != blank -%}
+              <p class="gn-footer__col-title">{{ b.title | escape }}</p>
+            {%- endif -%}
+            <ul>
+              {%- for label in labels -%}
+                {%- liquid
+                  assign clean = label | strip_html | strip
+                  assign href = links[forloop.index0] | strip_html | strip
+                -%}
+                {%- if clean != blank -%}
+                  <li>
+                    {%- if href != blank -%}
+                      <a href="{{ href }}">{{ clean | escape }}</a>
+                    {%- else -%}
+                      <span>{{ clean | escape }}</span>
+                    {%- endif -%}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="gn-footer__bottom">
+      <p>{{ st.copyright | replace: '{year}', year }}</p>
+      {%- if st.legal != blank -%}
+        <div class="gn-footer__legal">{{ st.legal }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "GN · Footer",
+  "tag": "footer",
+  "class": "gn-footer-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Si lo dejás vacío se usa el texto de abajo."
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo en texto",
+      "default": "GOnama"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Bajada",
+      "default": "Infrastructure for the autonomous economy."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "info": "Usá {year} para el año actual.",
+      "default": "© {year} GOnama Holdings Ltd."
+    },
+    {
+      "type": "richtext",
+      "id": "legal",
+      "label": "Línea legal"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Columna",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título"
+        },
+        {
+          "type": "textarea",
+          "id": "labels",
+          "label": "Textos",
+          "info": "Uno por línea."
+        },
+        {
+          "type": "textarea",
+          "id": "links",
+          "label": "Links",
+          "info": "Uno por línea, en el mismo orden que los textos. Dejá la línea vacía si el ítem no lleva link."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Footer",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "title": "Platform",
+            "labels": "AI Studio\nCommerce Infrastructure\nCommerce Intelligence\nDeveloper Platform",
+            "links": "#section-platform\n#section-platform\n#section-platform\n#section-platform"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "title": "Company",
+            "labels": "Principles & Policies\nContact",
+            "links": "#section-holdings\n#gn-contact"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

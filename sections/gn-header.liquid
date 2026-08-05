@@ -1,0 +1,156 @@
+{% comment %}
+  GOnama landing 2026 — Header propio de la home
+  El header del tema queda oculto en index (ver layout/theme.liquid), así que
+  esta sección es la navegación de la landing. Sticky y con menú mobile.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<header class="gn gn-header" data-gn-header>
+  <div class="gn-header__bar">
+    <a class="gn-header__logo" href="{{ st.logo_link | default: routes.root_url }}">
+      {%- if st.logo != blank -%}
+        {{ st.logo | image_url: height: 72 | image_tag: alt: shop.name, class: 'gn-header__logo-img', loading: 'eager' }}
+      {%- else -%}
+        <span class="gn-header__wordmark">{{ st.logo_text }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="gn-header__nav" aria-label="{{ st.nav_label | escape }}">
+      {%- for block in section.blocks -%}
+        <a class="gn-header__link" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+          {{- block.settings.label | escape -}}
+        </a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="gn-header__actions">
+      {%- if st.cta_label != blank -%}
+        <a class="gn__btn gn__btn--primary gn-header__cta" href="{{ st.cta_link | default: '#gn-contact' }}">
+          {{- st.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+
+      <button
+        class="gn-header__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="gn-header-menu"
+        aria-label="{{ st.menu_label | escape }}"
+        data-gn-header-toggle
+      >
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gn-header__menu" id="gn-header-menu" data-gn-header-menu>
+    {%- for block in section.blocks -%}
+      <a class="gn-header__menu-link" href="{{ block.settings.link }}">
+        {{- block.settings.label | escape -}}
+      </a>
+    {%- endfor -%}
+    {%- if st.cta_label != blank -%}
+      <a class="gn__btn gn__btn--primary" href="{{ st.cta_link | default: '#gn-contact' }}">
+        {{- st.cta_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "GN · Header",
+  "tag": "header",
+  "class": "gn-header-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Si lo dejás vacío se usa el texto de abajo."
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo en texto",
+      "default": "GOnama"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Link del logo"
+    },
+    {
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texto",
+      "default": "Talk to GOnama"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Accesibilidad"
+    },
+    {
+      "type": "text",
+      "id": "nav_label",
+      "label": "Nombre de la navegación",
+      "default": "Main"
+    },
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "Botón de menú",
+      "default": "Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texto"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Destino"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Header",
+      "blocks": [
+        { "type": "link", "settings": { "label": "Platform", "link": "#section-platform" } },
+        { "type": "link", "settings": { "label": "Checkout", "link": "#section-checkout" } },
+        { "type": "link", "settings": { "label": "Industries", "link": "#section-industries" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

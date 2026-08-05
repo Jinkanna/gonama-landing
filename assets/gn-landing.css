@@ -122,6 +122,14 @@
   text-decoration: none;
 }
 
+/* El tema define `b,dt,strong{color:var(--heading-color)}`, que sobre fondo
+   oscuro deja las negritas ilegibles. */
+.gn strong,
+.gn b {
+  color: inherit;
+  font-weight: 600;
+}
+
 .gn h1,
 .gn h2,
 .gn h3,
@@ -344,15 +352,254 @@
    Reveal al scroll
    -------------------------------------------------------------------------- */
 
-.gn-reveal {
+/* Sin JS el contenido se ve igual: el reveal solo se activa cuando el snippet
+   inline de cada sección marcó .gn-js en el <html>. Si el script no carga, la
+   landing se muestra completa en vez de quedar en blanco. */
+.gn-js .gn-reveal {
   opacity: 0;
   transform: translateY(14px);
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
 
-.gn-reveal.is-visible {
+.gn-js .gn-reveal.is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* ==========================================================================
+   HEADER (solo en la home; el del tema queda oculto en index)
+   ========================================================================== */
+
+.gn-header {
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+
+@supports (backdrop-filter: blur(12px)) {
+  .gn-header {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+  }
+}
+
+.gn-header__bar {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.gn-header__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gn-header__logo-img {
+  height: 30px;
+  width: auto;
+  display: block;
+}
+
+.gn-header__wordmark {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.gn-header__nav {
+  display: none;
+  align-items: center;
+  gap: 26px;
+  margin-right: auto;
+}
+
+.gn-header__link {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-soft);
+  transition: color 0.18s ease;
+}
+
+.gn-header__link:hover {
+  color: var(--accent);
+}
+
+.gn-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.gn-header__cta {
+  display: none;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.gn-header__toggle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.gn-header__toggle span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--text);
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.gn-header__toggle[aria-expanded='true'] span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.gn-header__toggle[aria-expanded='true'] span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+.gn-header__menu {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px var(--gutter) 22px;
+  border-top: 1px solid var(--rule);
+}
+
+.gn-header__menu.is-open {
+  display: flex;
+}
+
+.gn-header__menu-link {
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  border-bottom: 1px solid var(--rule);
+}
+
+.gn-header__menu .gn__btn {
+  margin-top: 14px;
+}
+
+@media (min-width: 860px) {
+  .gn-header__nav,
+  .gn-header__cta {
+    display: flex;
+  }
+
+  .gn-header__toggle {
+    display: none;
+  }
+
+  .gn-header__menu {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   FOOTER (solo en la home)
+   ========================================================================== */
+
+.gn-footer {
+  padding: clamp(56px, 6vw, 84px) 0 0;
+  border-top: 1px solid var(--rule);
+  background: var(--bg-alt);
+}
+
+.gn-footer__top {
+  display: grid;
+  gap: clamp(36px, 5vw, 64px);
+  padding-bottom: clamp(40px, 5vw, 60px);
+}
+
+@media (min-width: 780px) {
+  .gn-footer__top {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+.gn-footer__wordmark {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.gn-footer__logo-img {
+  height: 30px;
+  width: auto;
+}
+
+.gn-footer__tagline {
+  margin-top: 14px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-faint);
+  max-width: 34ch;
+}
+
+.gn-footer__cols {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+}
+
+.gn-footer__col-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 16px;
+}
+
+.gn-footer__col li {
+  padding: 6px 0;
+}
+
+.gn-footer__col a,
+.gn-footer__col span {
+  font-size: 14.5px;
+  color: var(--text-soft);
+  transition: color 0.18s ease;
+}
+
+.gn-footer__col a:hover {
+  color: var(--accent);
+}
+
+.gn-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.gn-footer__legal p {
+  font-size: 13px;
 }
 
 /* ==========================================================================

@@ -2,6 +2,11 @@
   GOnama landing 2026 — Global Checkout
 {% endcomment %}
 
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
 {{ 'gn-landing.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
 

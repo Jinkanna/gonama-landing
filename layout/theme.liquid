@@ -115,8 +115,14 @@
       {% endif %}
       {%- render 'umino-home' -%}
       <div class="bls__overlay d-none-overlay"></div>
-      {% section 'announcement' %}
-      {%- render 'header' -%}
+      {%- comment -%}
+        La home usa su propio header y footer (secciones gn-header / gn-footer,
+        en templates/index.json). El resto del sitio conserva los del tema.
+      {%- endcomment -%}
+      {%- unless template.name == 'index' -%}
+        {% section 'announcement' %}
+        {%- render 'header' -%}
+      {%- endunless -%}
       <main
         id="MainContent"
         class="content-for-layout focus-none{% if template == 'product' or template == 'page.wishlist' or template == "page.recently-viewed-products" %} skeleton-product-detail{% endif %}"
@@ -126,7 +132,9 @@
         {{ content_for_layout }}
       </main>
       {%- sections 'overlay-group' -%}
-      {%- render 'footer-layout' -%}
+      {%- unless template.name == 'index' -%}
+        {%- render 'footer-layout' -%}
+      {%- endunless -%}
       {%- section 'mobile-stickybar' -%}
       {%- section 'custom-colors' -%}
     </div>
