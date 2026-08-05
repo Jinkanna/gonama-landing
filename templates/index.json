@@ -433,7 +433,7 @@
         "copyright": "© GOnama Holdings Ltd."
       }
     },
-    "header": {
+    "gn_header": {
       "type": "gn-header",
       "blocks": {
         "l1": {
@@ -464,15 +464,16 @@
         "l3"
       ],
       "settings": {
-        "logo_text": "GOnama",
         "logo_link": "/",
         "cta_label": "Talk to GOnama",
         "cta_link": "#gn-contact",
         "nav_label": "Main",
-        "menu_label": "Menu"
+        "menu_label": "Menu",
+        "logo_go": "GO",
+        "logo_rest": "nama"
       }
     },
-    "footer": {
+    "gn_footer": {
       "type": "gn-footer",
       "blocks": {
         "c1": {
@@ -503,14 +504,15 @@
         "c3"
       ],
       "settings": {
-        "logo_text": "GOnama",
         "tagline": "Infrastructure for the autonomous economy.",
-        "copyright": "© {year} GOnama Holdings Ltd."
+        "copyright": "© {year} GOnama Holdings Ltd.",
+        "logo_go": "GO",
+        "logo_rest": "nama"
       }
     }
   },
   "order": [
-    "header",
+    "gn_header",
     "hero",
     "shift",
     "platform",
@@ -520,6 +522,6 @@
     "future",
     "cta",
     "holdings",
-    "footer"
+    "gn_footer"
   ]
 }

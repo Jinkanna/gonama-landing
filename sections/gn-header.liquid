@@ -38,7 +38,7 @@
           loading="eager"
         >
       {%- else -%}
-        <span class="gn-header__wordmark">{{ st.logo_text }}</span>
+        <span class="gn-header__wordmark gn-logo-word"><b>{{ st.logo_go | escape }}</b>{{ st.logo_rest | escape }}</span>
       {%- endif -%}
     </a>
 
@@ -103,9 +103,16 @@
     },
     {
       "type": "text",
-      "id": "logo_text",
-      "label": "Logo en texto",
-      "default": "GOnama"
+      "id": "logo_go",
+      "label": "Logo en texto · parte en color",
+      "info": "Solo se usa si no hay imagen de logo.",
+      "default": "GO"
+    },
+    {
+      "type": "text",
+      "id": "logo_rest",
+      "label": "Logo en texto · resto",
+      "default": "nama"
     },
     {
       "type": "url",

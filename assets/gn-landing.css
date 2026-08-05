@@ -426,11 +426,21 @@
   }
 }
 
-.gn-header__wordmark {
-  font-size: 20px;
-  font-weight: 700;
+/* Fallback en texto cuando no hay imagen de logo: respeta la construcción de
+   la marca — "GO" en GO blue, "nama" en el color de texto del tema. */
+.gn-logo-word {
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text);
+}
+
+.gn-logo-word b {
+  color: var(--go-blue);
+  font-weight: 600;
+}
+
+.gn-header__wordmark {
+  font-size: 22px;
 }
 
 .gn-header__nav {
@@ -555,10 +565,7 @@
 }
 
 .gn-footer__wordmark {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text);
+  font-size: 24px;
 }
 
 .gn-footer__logo-img {

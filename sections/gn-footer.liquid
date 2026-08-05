@@ -39,7 +39,7 @@
           loading="lazy"
         >
       {%- else -%}
-          <p class="gn-footer__wordmark">{{ st.logo_text }}</p>
+          <p class="gn-footer__wordmark gn-logo-word"><b>{{ st.logo_go | escape }}</b>{{ st.logo_rest | escape }}</p>
         {%- endif -%}
 
         {%- if st.tagline != blank -%}
@@ -108,9 +108,16 @@
     },
     {
       "type": "text",
-      "id": "logo_text",
-      "label": "Logo en texto",
-      "default": "GOnama"
+      "id": "logo_go",
+      "label": "Logo en texto · parte en color",
+      "info": "Solo se usa si no hay imagen de logo.",
+      "default": "GO"
+    },
+    {
+      "type": "text",
+      "id": "logo_rest",
+      "label": "Logo en texto · resto",
+      "default": "nama"
     },
     {
       "type": "textarea",
