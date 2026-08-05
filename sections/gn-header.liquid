@@ -17,6 +17,7 @@
 
   # Si no se elige un logo en la sección, se usa el del tema (Settings › Logo).
   assign logo = st.logo | default: settings.logo_image_desktop
+  assign nav_rows = st.links | newline_to_br | split: '<br />'
   # El logo del tema tiene "nama" en gris oscuro: sobre Panda 1 no se lee.
   assign logo_dark = st.logo_dark | default: st.logo | default: settings.logo_image_desktop
 -%}
@@ -43,10 +44,15 @@
     </a>
 
     <nav class="gn-header__nav" aria-label="{{ st.nav_label | escape }}">
-      {%- for block in section.blocks -%}
-        <a class="gn-header__link" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
-          {{- block.settings.label | escape -}}
-        </a>
+      {%- for row in nav_rows -%}
+        {%- liquid
+          assign parts = row | strip_html | strip | split: '|'
+          assign label = parts[0] | strip
+          assign href = parts[1] | strip
+        -%}
+        {%- if label != blank -%}
+          <a class="gn-header__link" href="{{ href }}">{{ label | escape }}</a>
+        {%- endif -%}
       {%- endfor -%}
     </nav>
 
@@ -71,10 +77,15 @@
   </div>
 
   <div class="gn-header__menu" id="gn-header-menu" data-gn-header-menu>
-    {%- for block in section.blocks -%}
-      <a class="gn-header__menu-link" href="{{ block.settings.link }}">
-        {{- block.settings.label | escape -}}
-      </a>
+    {%- for row in nav_rows -%}
+      {%- liquid
+        assign parts = row | strip_html | strip | split: '|'
+        assign label = parts[0] | strip
+        assign href = parts[1] | strip
+      -%}
+      {%- if label != blank -%}
+        <a class="gn-header__menu-link" href="{{ href }}">{{ label | escape }}</a>
+      {%- endif -%}
     {%- endfor -%}
     {%- if st.cta_label != blank -%}
       <a class="gn__btn gn__btn--primary" href="{{ st.cta_link | default: '#gn-contact' }}">
@@ -87,8 +98,14 @@
 {% schema %}
 {
   "name": "GN · Header",
-  "max_blocks": 6,
   "settings": [
+    {
+      "type": "textarea",
+      "id": "links",
+      "label": "Links de navegación",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "Platform | #section-platform\nImagine Code | #section-imagine\nCheckout | #section-checkout\nIndustries | #section-industries"
+    },
     {
       "type": "image_picker",
       "id": "logo",
@@ -149,52 +166,6 @@
       "id": "menu_label",
       "label": "Botón de menú",
       "default": "Menu"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "link",
-      "name": "Link",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Texto"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Destino"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "GN · Header",
-      "blocks": [
-        {
-          "type": "link",
-          "settings": {
-            "label": "Platform",
-            "link": "#section-platform"
-          }
-        },
-        {
-          "type": "link",
-          "settings": {
-            "label": "Checkout",
-            "link": "#section-checkout"
-          }
-        },
-        {
-          "type": "link",
-          "settings": {
-            "label": "Industries",
-            "link": "#section-industries"
-          }
-        }
-      ]
     }
   ]
 }

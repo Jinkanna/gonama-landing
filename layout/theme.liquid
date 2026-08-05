@@ -116,13 +116,17 @@
       {%- render 'umino-home' -%}
       <div class="bls__overlay d-none-overlay"></div>
       {%- comment -%}
-        La home usa su propio header y footer (secciones gn-header / gn-footer,
-        en templates/index.json). El resto del sitio conserva los del tema.
+        La home usa su propio header y footer. Se insertan con {% section %}
+        —el mismo mecanismo que el tema usa para 'announcement'— en vez de
+        listarlos en templates/index.json, porque desde el template JSON no
+        renderizaban. El resto del sitio conserva los del tema.
       {%- endcomment -%}
-      {%- unless template.name == 'index' -%}
+      {%- if template.name == 'index' -%}
+        {% section 'gn-header' %}
+      {%- else -%}
         {% section 'announcement' %}
         {%- render 'header' -%}
-      {%- endunless -%}
+      {%- endif -%}
       <main
         id="MainContent"
         class="content-for-layout focus-none{% if template == 'product' or template == 'page.wishlist' or template == "page.recently-viewed-products" %} skeleton-product-detail{% endif %}"
@@ -132,9 +136,11 @@
         {{ content_for_layout }}
       </main>
       {%- sections 'overlay-group' -%}
-      {%- unless template.name == 'index' -%}
+      {%- if template.name == 'index' -%}
+        {% section 'gn-footer' %}
+      {%- else -%}
         {%- render 'footer-layout' -%}
-      {%- endunless -%}
+      {%- endif -%}
       {%- section 'mobile-stickybar' -%}
       {%- section 'custom-colors' -%}
     </div>

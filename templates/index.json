@@ -420,87 +420,9 @@
         "policies_title": "Corporate Policies",
         "copyright": "© GOnama Holdings Ltd."
       }
-    },
-    "gn_header": {
-      "type": "gn-header",
-      "blocks": {
-        "l1": {
-          "type": "link",
-          "settings": {
-            "label": "Platform",
-            "link": "#section-platform"
-          }
-        },
-        "l2": {
-          "type": "link",
-          "settings": {
-            "label": "Checkout",
-            "link": "#section-checkout"
-          }
-        },
-        "l3": {
-          "type": "link",
-          "settings": {
-            "label": "Industries",
-            "link": "#section-industries"
-          }
-        }
-      },
-      "block_order": [
-        "l1",
-        "l2",
-        "l3"
-      ],
-      "settings": {
-        "logo_link": "/",
-        "cta_label": "Talk to GOnama",
-        "cta_link": "#gn-contact",
-        "nav_label": "Main",
-        "menu_label": "Menu",
-        "logo_go": "GO",
-        "logo_rest": "nama"
-      }
-    },
-    "gn_footer": {
-      "type": "gn-footer",
-      "blocks": {
-        "c1": {
-          "type": "column",
-          "settings": {
-            "title": "Platform",
-            "items": "AI Studio | #section-platform\nCommerce Infrastructure | #section-platform\nCommerce Intelligence | #section-platform\nGrowth & Retention | #section-platform\nDeveloper Platform | #section-platform"
-          }
-        },
-        "c2": {
-          "type": "column",
-          "settings": {
-            "title": "Solutions",
-            "items": "Global Checkout | #section-checkout\nImagine Code | #section-imagine\nIndustries | #section-industries"
-          }
-        },
-        "c3": {
-          "type": "column",
-          "settings": {
-            "title": "Company",
-            "items": "Principles & Policies | #section-holdings\nContact | #gn-contact"
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3"
-      ],
-      "settings": {
-        "tagline": "Infrastructure for the autonomous economy.",
-        "copyright": "© {year} GOnama Holdings Ltd.",
-        "logo_go": "GO",
-        "logo_rest": "nama"
-      }
     }
   },
   "order": [
-    "gn_header",
     "hero",
     "shift",
     "platform",
@@ -509,7 +431,6 @@
     "industries",
     "future",
     "cta",
-    "holdings",
-    "gn_footer"
+    "holdings"
   ]
 }
