@@ -1,0 +1,449 @@
+shop-the-look {
+    display: block;
+}
+
+shop-the-look .bls__grid .bls__product-item {
+    margin-bottom: 0;
+}
+
+.bls__section.has-bg .bls__lookbook-items {
+    align-self: stretch;
+}
+
+.bls__section.has-bg .bls__lookbook-items .bls__lookbook-image,
+.bls__section.has-bg .bls__lookbook-items .bls__lookbook-image .bls__responsive-image {
+    height: 100%;
+}
+
+shop-the-look .bls__shop-lookbook-content {
+    --bs-gutter-x: 0;
+}
+
+shop-the-look .bls__shop-lookbook-content .swiper .swiper-pagination {
+    margin-top: 3rem;
+}
+
+@media (min-width: 1200px) {
+
+    shop-the-look .full-width .bls__lookbook-products {
+        padding-left: 6.8%;
+        padding-right: 6.8%;
+    }
+
+    shop-the-look div:not(.full-width) .row:not(.row-reverse) .bls__lookbook-products {
+        padding-left: 6.8%;
+
+    }
+
+    shop-the-look div:not(.full-width) .row-reverse .bls__lookbook-products {
+        padding-right: 6.8%;
+
+    }
+
+}
+
+@media (max-width: 1199px) {
+
+    .bls__shop-lookbook-content .bls__lookbook-products {
+        order: -1;
+    }
+
+    shop-the-look .full-width .bls__lookbook-products {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    shop-the-look .bls__shop-lookbook-content .bls__lookbook-image {
+        margin-top: 3rem;
+    }
+}
+
+.bls__lookbook-items {
+    position: relative;
+}
+
+.lookbook-items-toggle {
+    display: block;
+    line-height: 1;
+}
+
+.bls__lookbook-items .icon-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    transition: all ease 0.3s;
+    background-color: var(--heading-color);
+    fill: var(--color-white);
+    font-family: var(--base-font-family) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bls__lookbook-items .icon-dot.number {
+    background-color: var(--color-white);
+}
+
+.bls__lookbook-items .icon-dot:not(.number):hover {
+    background: var(--primary-color);
+}
+
+.bls__lookbook-items .bls__product-item.active .icon-dot:not(.number) {
+    background: var(--primary-color);
+}
+
+.bls__lookbook-items .bls__lookbook-dot.active .icon-dot:not(.number) {
+    background: var(--primary-color);
+}
+
+.bls__lookbook-items .icon-dot::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+    display: block;
+    -webkit-animation: zoompin 2s ease infinite;
+    animation: zoompin 2s ease infinite;
+    border-radius: 50%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 800px;
+    perspective: 800px;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: -1;
+}
+
+.bls__lookbook-items .icon-dot.number span {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--heading-color);
+    font-family: var(--base-font-family) !important;
+    color: #fff;
+    font-size: 12px;
+    font-weight: var(--heading-font-weight);
+    z-index: 3;
+    transition: all ease 0.3s;
+}
+
+.bls__lookbook-items .icon-dot.number span:hover {
+    background: var(--primary-color);
+}
+
+.bls__lookbook-items .bls__lookbook-dot.active .icon-dot.number span {
+    background: var(--primary-color);
+}
+
+.lookbook__popup-items {
+    left: 50%;
+    margin: 0 auto;
+    transform: translateX(-50%);
+    transition: none;
+    width: 22rem;
+}
+
+.lookbook__popup-items .bls__product-item {
+    --base-body-bg-color: var(--color-white);
+    background: var(--base-body-bg-color);
+    box-shadow: var(--bls-box-shadow);
+    padding: 2rem;
+    border-radius: 5px;
+}
+
+.lookbook__popup-items .bls__product-action {
+    display: none !important;
+}
+
+.lookbook__popup-items .bls__product-item {
+    z-index: 3;
+}
+
+.bls__lookbook-click {
+    z-index: 3;
+}
+
+.bls__lookbook-click.active {
+    z-index: 4;
+}
+
+.bls__lookbook-click .lookbook__popup-items {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.bls__lookbook-click.active .lookbook__popup-items {
+    opacity: 1;
+    visibility: visible;
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@media (min-width: 767px) {
+    .bls__product-item.active.top.center .lookbook__popup-items {
+        bottom: 51px;
+    }
+
+    .bls__product-item.active.top.right .lookbook__popup-items {
+        bottom: 51px;
+        transform: translateX(0);
+    }
+
+    .bls__product-item.active.top.left .lookbook__popup-items {
+        transform: translateX(0);
+        left: auto;
+        right: 0;
+        bottom: 51px;
+    }
+
+    .bls__product-item.active.bottom.right .lookbook__popup-items {
+        transform: translateX(0);
+    }
+
+    .bls__product-item.active.bottom.left .lookbook__popup-items {
+        transform: translateX(0);
+        left: auto;
+        right: 0;
+    }
+
+    .bls__lookbook-click.bottom .lookbook__popup-items {
+        margin-top: 1.8rem;
+    }
+
+    .bls__lookbook-click.bottom:before {
+        border: solid transparent;
+        border-width: 10px;
+        content: "";
+        height: 0;
+        position: absolute;
+        width: 0;
+        top: 100%;
+        left: 50%;
+        margin-left: 0;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        transform-origin: 0;
+        border-bottom-color: var(--color-white);
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+        -webkit-animation-duration: 0.3s;
+        animation-duration: 0.3s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+    .bls__lookbook-click.top:before {
+        border: solid transparent;
+        border-width: 10px;
+        content: "";
+        height: 0;
+        position: absolute;
+        width: 0;
+        bottom: 100%;
+        left: 50%;
+        margin-left: 0;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        transform-origin: 0;
+        border-top-color: var(--color-white);
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+        -webkit-animation-duration: 0.3s;
+        animation-duration: 0.3s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+}
+
+@media (max-width: 767px) {
+    .lookbook__popup-items {
+        transition: var(--bls-transition);
+    }
+
+    .lookbook__popup-items {
+        width: 23rem;
+    }
+
+    .lookbook__popup-items .bls__product-item {
+        padding: 1.5rem;
+        margin: 1rem 0;
+    }
+}
+
+/* Instagram shop */
+.bls__lookbook-instagram .bls__lookbook-items {
+    cursor: pointer;
+}
+
+.bls__lookbook-instagram .bls__lookbook-items .text-on-hover {
+    z-index: 2;
+    color: var(--color-white);
+    flex-direction: column;
+    pointer-events: none;
+}
+
+.bls__lookbook-items .bls__lookbook-image.radius {
+    border-radius: var(--base-border-radius);
+    overflow: hidden;
+    position: relative;
+    display: block;
+    will-change: transform;
+}
+
+.bls__lookbook-items .bls__lookbook-image img,
+.bls__lookbook-items .bls__lookbook-image .bls__responsive-image svg {
+    transition: var(--bls-transition);
+}
+
+.bls__lookbook-instagram .bls__lookbook-items:hover .bls__lookbook-image img,
+.bls__lookbook-instagram .bls__lookbook-items:hover .bls__responsive-image svg {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+
+[id*="dlg-lookbook"] .dlg-message .bls__instagram-shop {
+    display: flex;
+    width: 90vw;
+    max-width: 1000px;
+    padding: 0;
+    flex-direction: column;
+}
+
+[id*="dlg-lookbook"] .dlg-message .bls__instagram-shop>div {
+    padding: 0;
+}
+
+[id*="dlg-lookbook"] .dlg-close-x {
+    top: .5rem;
+    right: .5rem;
+}
+
+.bls__instagram-shop::-webkit-scrollbar {
+    width: 3px;
+}
+
+.bls__instagram-shop::-webkit-scrollbar-thumb {
+    background-color: #c8c8c8;
+    border-radius: 10px;
+}
+
+.bls__instagram-shop>div {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.bls__instagram-shop .bls__lookbook-content .bls__lookbook-product {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+}
+
+.bls__instagram-shop .bls__lookbook-content .bls__lookbook-product .bls__lookbook-product-items {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.bls__instagram-shop .bls__lookbook-content .bls__lookbook-product .bls__lookbook-product-items {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: 9.5rem;
+}
+
+.bls__instagram-shop .bls__lookbook-content .bls__lookbook-product .bls__lookbook-product-items .bls__product-price s {
+    color: var(--grey-color);
+}
+
+.bls__instagram-shop .bls__lookbook-info {
+    padding: 0 2rem 2rem 2rem;
+}
+
+@media (max-width: 1199px) {
+    [id*="dlg-lookbook"] .dlg-message .bls__instagram-shop {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .bls__instagram-shop .bls__lookbook-content .bls__lookbook-product {
+        margin-top: 0;
+    }
+
+    [id*="dlg-lookbook"] .dlg-message .bls__instagram-shop {
+        flex-direction: row;
+        overflow: hidden;
+    }
+
+    .bls__instagram-shop .bls__lookbook-items {
+        flex: 1;
+    }
+
+    .bls__instagram-shop .bls__lookbook-content {
+        margin-top: 0;
+        flex: 1;
+        max-width: 460px;
+        position: relative;
+    }
+
+    .bls__instagram-shop .bls__lookbook-info {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        padding: 3rem 2rem;
+    }
+
+    .bls__instagram-shop .bls__lookbook-content:after {
+        content: "" !important;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(94%, rgba(255, 255, 255, 0)), to(#fff));
+        background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 94%, #fff 100%);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 94%, #fff 100%);
+    }
+}
+
+@media only screen and (max-width: 767px) and (min-width: 576px) {
+    .bls__instagram-shop .bls__lookbook-content .bls__lookbook-product .bls__lookbook-product-items {
+        flex: calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+}
+
+@media (max-width: 767px) {
+    [id*="dlg-lookbook"].dlg-disable-heading .dlg-close-x {
+        top: 0;
+        background: var(--heading-color);
+        color: var(--color-white);
+        min-width: 3.5rem;
+        min-height: 3.5rem;
+        display: inline-flex;
+        align-items: center;
+        right: 0;
+    }
+
+    [id*="dlg-lookbook"].dlg-disable-heading .dlg-close-x:before {
+        font-size: 2rem;
+    }
+
+}

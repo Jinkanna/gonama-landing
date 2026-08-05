@@ -1,0 +1,39 @@
+{%- liquid
+  assign st = section.settings
+-%}
+<div class="portfolio-heading section-full"></div>
+{% schema %}
+{
+  "name": "Portfolio heading",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "Default"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Fluid container"
+        },
+        {
+          "label": "Stretch width",
+          "value": "strecth-width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

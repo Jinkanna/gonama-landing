@@ -1,0 +1,188 @@
+{%- liquid
+  assign th_st = settings
+  assign option_name = 'Color'
+  if th_st.option_name_color != blank
+    assign option_name = th_st.option_name_color | split: ','
+  endif
+  assign color_swatches_size = th_st.color_swatches_size
+  assign color_swatches_style = th_st.color_swatches_style
+  assign hidden_button_add_to_cart = th_st.hidden_button_add_to_cart
+  assign hidden_price = th_st.hidden_price
+-%}
+<div id="product-form-quick-edit" data-template-quick-cart-edit>
+  <product-form-quick-edit class="product-form">
+    {%- assign product_form_id = 'product-form-quick-edit-' | append: section.id -%}
+    {%- form 'product',
+      product,
+      id: product_form_id,
+      class: 'form',
+      novalidate: 'novalidate',
+      data-type: 'add-to-cart-form'
+    -%}
+      <input
+        type="hidden"
+        name="id"
+        value="{{ product.selected_or_first_available_variant.id }}"
+        disabled
+      >
+      <div class="product-form-quick-edit">
+        <div class="product-quick-edit-left">
+          <div class="product__media">
+            {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+            {% if featured_media != null %}
+              {% render 'product-thumbnail', media: featured_media %}
+            {% else %}
+              {% assign first_image_found = false %}
+
+              {% for media in product.media %}
+                {% if media.media_type == 'image' and first_image_found == false %}
+                  {% render 'product-thumbnail', media: media %}
+                  {% assign first_image_found = true %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="product__info">
+            {%- if th_st.show_vendors -%}
+              <div class="bls__product-vendor fs-small mt-5 mb-5">
+                {{ product.vendor | link_to_vendor }}
+              </div>
+            {%- endif -%}
+            <h1 class="bls__product-title mb-5 fs-16 ">
+              {{ product.title }}
+            </h1>
+            {% if hidden_price == false %}
+              <div class="product__price price mb-15">
+                {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+              </div>
+            {% endif %}
+            {%- if hidden_button_add_to_cart == false -%}
+              <div class="product-form__input product-form__quantity mb-15">
+                <quantity-input class="quantity rounded-5 border bg-grey d-inline-flex align-items-center text-center mr-20">
+                  <button
+                    class="btn-reset flex justify-content-center align-items-center quantity__button no-js-hidden width-35"
+                    name="minus"
+                    type="button"
+                  >
+                    <svg
+                      width="11"
+                      height="12"
+                      viewBox="0 0 11 2"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M11 0.5L11 1.5L-4.37114e-08 1.5L0 0.5L11 0.5Z" fill="#111111"/>
+                    </svg>
+                  </button>
+                  <input
+                    class="quantity__input bg-unset border-none text-center width-50 appearance-none p-0-important"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-{{ section.id }}"
+                    min="1"
+                    value="1"
+                    form="{{ product_form_id }}"
+                  >
+                  <button
+                    class="btn-reset flex justify-content-center align-items-center quantity__button no-js-hidden width-35"
+                    name="plus"
+                    type="button"
+                  >
+                    <svg
+                      width="11"
+                      height="12"
+                      viewBox="0 0 11 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M5 11.5H6L6 6.5H11V5.5H6L6 0.5H5L5 5.5H0V6.5H5L5 11.5Z" fill="#111111"/>
+                    </svg>
+                  </button>
+                </quantity-input>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="product-quick-edit-right">
+          {%- unless product.has_only_default_variant -%}
+            <variant-radios-quick-edit
+              id="variant-radios"
+              class="no-js-hidden"
+              data-section="{{ section.id }}"
+              data-url="{{ product.url }}"
+            >
+              {%- for option in product.options_with_values -%}
+                {%- liquid
+                  assign isColorOption = false
+                  for colorItem in option_name
+                    if option.name == colorItem
+                      assign isColorOption = true
+                    endif
+                  endfor
+                -%}
+                <fieldset class="js product-form__input flex flex-wrap mb-10 {% if isColorOption %}color{% endif %}">
+                  <legend class="form__label mb-8">
+                    <span class="swatch-attribute-label">{{ option.name }}:</span>
+                    <span class="swatch-selected-value heading-weight heading-color">
+                      {{ option.selected_value }}
+                    </span>
+                  </legend>
+                  {%- for value in option.values -%}
+                    <div
+                      class="{% if isColorOption %}bls__product-color-swatches {% endif %}bls__option-swatch bls_tooltip relative mr-10 mb-5 {{ color_swatches_style }} {{ color_swatches_size }} bls__{{ value | downcase | replace: ' ', '-' }}{% if option.selected_value == value %} active{% endif %}"
+                      data-value="{% if isColorOption %}{{ value }}{% else %}{{ value | escape }}{% endif %}"
+                      data-color="{{ value | downcase }}"
+                      data-image="{{ product.variants[forloop.index0].featured_image | image_url: width: 100, height: 100 }}"
+                      style="background-color: {{ value | downcase }};"
+                    >
+                      {% if isColorOption %}
+                        <label
+                          class="bls__product-swatches"
+                        >
+                          <span class="bls_tooltip-content">{{ value }}</span>
+                        </label>
+                      {% else %}
+                        <label
+                          class="bls__product-swatches bls_tooltip bls__{{ value | escape }}"
+                        >
+                          <span class="bls_swatche-item">{{ value | escape }}</span>
+                          <span class="bls_tooltip-content">{{ value | escape }}</span>
+                        </label>
+                      {% endif %}
+                    </div>
+                  {%- endfor -%}
+                </fieldset>
+              {%- endfor -%}
+              <script type="application/json">
+                {{ product.variants | json }}
+              </script>
+            </variant-radios-quick-edit>
+          {%- endunless -%}
+        </div>
+      </div>
+      {%- if hidden_button_add_to_cart == false -%}
+        <div class="product-form__buttons flex flex-wrap">
+          <div class="bls__product-add-cart flex flex-1">
+            <button
+              type="submit"
+              name="add"
+              class="product-form__submit relative w-full whitespace-nowrap min-height-48 animation {{ block.settings.button_animation }}"
+              {% if product.selected_or_first_available_variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              <span class="hidden-loading">
+                {%- if product.selected_or_first_available_variant.available -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- endif -%}
+              </span>
+              <span class="loader-icon"></span>
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+  </product-form-quick-edit>
+</div>

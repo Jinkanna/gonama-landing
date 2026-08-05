@@ -1,0 +1,93 @@
+/* instagram */
+.bls__instagram-section {
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: var(--background-instagram-image);
+    background-attachment: unset;
+}
+
+.bls__instagram-item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.bls__instagram-item.ins-radius {
+    border-radius: var(--base-border-radius);
+}
+
+.bls__instagram-item.ins-rounded {
+    border-radius: 100%;
+}
+
+.bls_instagram-image {
+    position: relative;
+    overflow: hidden;
+    transition: var(--bls-transition);
+}
+
+.bls_instagram-image img,
+.bls_instagram-image svg {
+    transition: var(--bls-transition);
+}
+
+.bls__instagram-icon {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -27px;
+    margin-left: -27px;
+    -webkit-transform: scale(0.6);
+    transform: scale(0.6);
+    transition: var(--bls-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1;
+    font-size: 0;
+}
+
+.bls__instagram-icon::after {
+    content: "\e99c";
+    font-family: 'blueskytechco' !important;
+    font-size: 18px;
+    align-items: center;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    will-change: transform;
+    color: var(--heading-color);
+    font-weight: 400;
+    width: 54px;
+    height: 54px;
+    background-color: #fff;
+}
+
+.bls__instagram-item:hover .bls__instagram-icon {
+    opacity: 1;
+    visibility: visible;
+    transition: var(--bls-transition);
+    transform: scale(1);
+    -webkit-transform: scale(1);
+}
+
+.bls__instagram-item:hover .bls_instagram-image img,
+.bls__instagram-item:hover .bls_instagram-image svg {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+
+.swiper-local-video {
+    height: auto;
+}
+
+.swiper-local-video .bls__instagram-item {
+    height: 100%;
+}

@@ -1,0 +1,116 @@
+<div class="blogSidebar">
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'categories' -%}
+        <div {{ block.shopify_attributes }} class="widget mb-30 pb-30 mb-xl-40 pb-xl-40 border-bottom last-0">
+          <h4 class="widget-title fs-18 mb-20">{{ block.settings.title | escape }}</h4>
+          <div class="widget-content">
+            {%- if linklists[block.settings.menu].links.size > 0 -%}
+              <ul class="blogSidebar-items-categories list-none p-0 m-0">
+                {%- render 'menu-links', handle_menu: block.settings.menu -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- when 'tags' -%}
+        <div {{ block.shopify_attributes }} class="widget mb-30 pb-30 mb-xl-40 pb-xl-40 border-bottom last-0">
+          <h4 class="widget-title fs-18 mb-20">{{ block.settings.title | escape }}</h4>
+          <div class="widget-content">
+            <ul class="blogTagsList list-inline p-0 list-none my-0 d-flex flex-wrap">
+              {% for tag in blog.all_tags limit: 8 %}
+                {% if current_tags contains tag %}
+                  <li class="mr-10 mb-10 fs-small capitalize active">
+                    <span>{{ tag }}</span>
+                  </li>
+                {% else %}
+                  <li class="mr-10 mb-10 fs-small capitalize">{{ tag | link_to_tag: tag }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {%- when 'recent_post' -%}
+        <div {{ block.shopify_attributes }} class="widget mb-30 pb-30 mb-xl-40 pb-xl-40 border-bottom last-0">
+          <h4 class="widget-title fs-18 mb-20">{{ block.settings.title | escape }}</h4>
+          <div class="widget-content">
+            <div class="listSidebarBlog">
+              {% for article in blogs[blog.handle].articles limit: block.settings.maximum %}
+                <div class="flex flex-nowrap mb-20">
+                  <div class="bls__blog-posts-image width-75 mr-15">
+                    <div class="hover-effect {% if settings.image_style != blank and section.settings.column_gap != 0 and section.settings.container != "full-width" %} radius {% endif %}">
+                      <a href="{{ article.url }}">
+                        {% render 'responsive-image',
+                          image: article.image,
+                          aspect_ratio: block.settings.aspect_ratio,
+                          custom_ratio: block.settings.custom_ratio
+                        %}
+                      </a>
+                    </div>
+                  </div>
+                  <div class="post-info media-body flex-1">
+                    <a class="post-title d-block fw-500 mb-5" href="{{ article.url }}">
+                      {{ article.title }}
+                    </a>
+                    <span class="post-date fs-12 uppercase grey-color">
+                      <time datetime="{{ article.published_at | date: '%b %d %Y' }}">
+                        {{ article.published_at | date: '%b %d %Y' }}
+                      </time>
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {%- when 'image_banner' -%}
+        {%- liquid
+          assign featured_image = block.settings.image
+          assign url = block.settings.url
+          assign open_link = block.settings.open_link
+          if featured_image
+            assign ratio = featured_image.aspect_ratio
+          else
+            assign ratio = '1/1'
+          endif
+        -%}
+        <div {{ block.shopify_attributes }} class="banner mb-30 pb-30 mb-xl-40 pb-xl-40 last-0">
+          <a
+            href="{% if url == blank %}#{% else %}{{ url }}{% endif %}"
+            class="banner-link"
+            {%- if open_link != blank -%}
+              target="_blank"
+            {%- endif -%}
+          >
+            <div class="image" style="--aspect-ratio: {{ ratio }}">
+              {%- if featured_image != blank -%}
+                <img
+                  srcset="
+                    {%- if featured_image.width >= 165 -%}{{ featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if featured_image.width >= 330 -%}{{ featured_image | image_url: width: 330 }} 330w,{%- endif -%}
+                    {%- if featured_image.width >= 535 -%}{{ featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                    {%- if featured_image.width >= 750 -%}{{ featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if featured_image.width >= 1000 -%}{{ featured_image | image_url: width: 1000 }} 1000w,{%- endif -%}
+                    {%- if featured_image.width >= 1500 -%}{{ featured_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {%- if featured_image.width >= 3000 -%}{{ featured_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                    {{ featured_image | image_url }} {{ featured_image.width }}w
+                  "
+                  src="{{ featured_image | image_url: width: 1500 }}"
+                  sizes="
+                    (min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: columns }}px,
+                    (min-width: 750px) {% if columns > 1 %}calc((100vw - 10rem) / 2){% else %}calc(100vw - 10rem){% endif %},
+                    calc(100vw - 3rem)
+                  "
+                  alt="{{ featured_image.alt }}"
+                  height="{{ featured_image.height }}"
+                  width="{{ featured_image.width }}"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {%- render 'placeholder-render' | type: 'image' | cls: 'bls__collection-grid-plh' -%}
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+</div>

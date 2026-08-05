@@ -1,0 +1,32 @@
+{% assign active = product %}
+{% if product.metafields.bls.more_colors != blank %}
+  <div class="more-colors mb-25" {{ block.shopify_attributes }}>
+    <p class="mb-8 swatch-selected-value heading-weight heading-color">{{ block.heading }}</p>
+    <div class="more-colors-products d-flex gap-10 flex-wrap">
+      {%- for product in product.metafields.bls.more_colors.value -%}
+        <div class="more-colors-product_item">
+          <a
+            href="{{ product.url }}"
+            class="more-colors-product_link {% if product == active %}active{% endif %}"
+            style="--width: {{ block.image_width }}px"
+            data-sizes="auto"
+            data-parent-fit="contain"
+          >
+            {% if product.featured_image != blank %}
+              {{
+                product.featured_image
+                | image_url: width: 70
+                | image_tag:
+                  width: block.image_width,
+                  height: product.featured_image.height,
+                  title: product.featured_image.alt
+              }}
+            {% else %}
+              {%- render 'placeholder-render' | type: 'product' -%}
+            {% endif %}
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,128 @@
+{%- liquid
+  assign th_st = settings
+  assign money_format = shop.money_format
+  if settings.currency_code_enabled
+    assign money_format = shop.money_with_currency_format | strip_html
+  endif
+
+  assign show_newsletter = th_st.show_newsletter
+  assign show = false
+  if show_newsletter == 'show_newsletter_homepage'
+    if request.page_type == 'index'
+      assign show = true
+    endif
+  elsif show_newsletter == 'hide_newsletter'
+    assign show = false
+  else
+    assign show = true
+  endif
+
+  assign show_promotion_select = th_st.show_promotion_select
+
+  assign show_promotion = false
+  if show_promotion_select == 'show_promotion_homepage'
+    if request.page_type == 'index'
+      assign show_promotion = true
+    endif
+  elsif show_promotion_select == 'hide_promotion'
+    assign show_promotion = false
+      else
+    assign show_promotion = true
+  endif
+-%}
+<script>
+
+  window.shopUrl = '{{ request.origin }}';
+  window.routes = {
+    cart_add_url: '{{ routes.cart_add_url }}',
+    cart_change_url: '{{ routes.cart_change_url }}',
+    cart_update_url: '{{ routes.cart_update_url }}',
+    cart_url: '{{ routes.cart_url }}',
+    search_url: '{{ routes.search_url }}',
+    predictive_search_url: '{{ routes.predictive_search_url }}',
+  };
+  window.cartStrings = {
+    error: `{{ 'sections.cart.cart_error' | t }}`,
+    no_shipping: `{{ 'sections.cart.no_shipping' | t }}`,
+    shipping_rate: `{{ 'sections.cart.shipping_rate' | t }}`,
+    quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
+    money_format: {{ money_format | json }},
+    quick_edit: `{{ 'sections.cart.quick_edit' | t }}`,
+    cart_symbol: '{{ cart.currency.symbol }}'
+  }
+  window.variantStrings = {
+    addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+    soldOut: `{{ 'products.product.sold_out' | t }}`,
+    available: `{{ 'products.product.available' | t }}`,
+    unavailable: `{{ 'products.product.unavailable' | t }}`,
+    preOrder: `{{ 'products.product.pre_order' | t }}`,
+    outStock: `{{ 'products.product.outstock' | t }}`,
+    inStock: `{{ 'products.product.instock' | t }}`,
+    compare: `{{ 'products.product.compare' | t }}`,
+    sale: `{{ 'products.product.label.sale' | t }}`,
+    removeCompare: `{{ 'products.product.remove_compare' | t }}`
+  }
+  window.stringsTemplate = {
+    messageRemoveCompare: `{{ 'products.product.remove_compare' | t }}`,
+    messageRemoveWishlist: `{{ 'products.product.remove_wishlist' | t }}`
+  }
+  window.menuStrings = {
+    verticalTitle: `{{ 'main_menu.vertical.title' | t }}`,
+    hideMenus: `{{ 'main_menu.vertical.hide' | t }}`,
+    moreMenus: `{{ 'main_menu.vertical.more' | t }}`
+  }
+  window.popup = {
+    newsletterPopup: {{ show }},
+    promotionPopup: {{ show_promotion }}
+  }
+  window.productLabel = {
+    saleType: `{{ th_st.product_label_sale_type }}`,
+    saleLabel: `{{ 'products.product.label.sale' | t }}`
+  }
+  window.flashingBrowseTab = {
+    enable: {{ th_st.flashing_browser }},
+    firstNotification: `{{ th_st.first_notification }}`,
+    secondaryNotification: `{{ th_st.secondary_notification }}`
+  }
+  window.accessibilityStrings = {
+    recipientFormExpanded: `{{ 'recipient.form.expanded' | t }}`,
+    recipientFormCollapsed: `{{ 'recipient.form.collapsed' | t }}`,
+  };
+  window.action = {
+    show_all: `{{ 'general.show_all' | t }}`,
+    show_less: `{{ 'general.show_less' | t }}`
+  }
+</script>
+{%- if th_st.page_terms_conditions != blank -%}
+  <div
+    id="popup-terms-conditions"
+    class="d-none"
+    data-text="{{ 'general.cart.terms_conditions_text' | t }}">
+    <div class="terms-conditions-content bls_popup-content p-5">
+      {{ pages[th_st.page_terms_conditions].content }}
+    </div>
+  </div>
+{%- endif -%}
+{%- if th_st.enable_eu_cookie_bar_gdpr != blank -%}
+  <div id="bls_cookie" class="bls_cookie d-none text-center rounded-5 gradient">
+    <div class="cookie-message col fs-small">
+      {{- th_st.message_cookie }}
+    </div>
+      <div class="cookie-compliance col-auto w-full">
+        {%- if th_st.cookie_button_text != blank -%}
+            <button class="cookie-btn cookie-dismiss w-full btn-primary mt-15 mb-15" id="ba-cookie-dismiss">
+              {{ th_st.cookie_button_text }}
+            </button>
+        {%- endif -%}
+        {% if th_st.cookie_button_text_refuse != blank %}
+          <button class="cookie-btn cookie-dismiss w-full btn-secondary" id="ba-cookie-refuse">
+            {{ th_st.cookie_button_text_refuse }}
+          </button>
+        {% endif %}
+      </div>
+  </div>
+{%- endif -%}
+
+{%- render 'form-infor' -%}
+{%- render 'form-infor-product' -%}
+{%- render 'form-infor-stock-notify' -%}

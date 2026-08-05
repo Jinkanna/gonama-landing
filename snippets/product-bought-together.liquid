@@ -1,0 +1,13 @@
+{%- liquid
+    assign products_bought_together = product.metafields.bls.bought_together | split: ',' | uniq
+-%}
+{% if products_bought_together.size > 0 %}
+<div id="bls__product-bought-together">
+    <script type="application/json" class="productBoughTogether">
+        {%- liquid
+            assign bought_together = product.metafields.bls.bought_together | split: ','
+        -%}
+        [{{ product.id }},{%- for item in bought_together -%}{{ item | split: 'Product/' | last | split: '"' | first }}{%- unless forloop.last -%},{%- endunless forloop.last -%}{%- endfor -%}]
+    </script>
+</div>
+{% endif %}

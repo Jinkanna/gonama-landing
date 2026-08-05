@@ -1,0 +1,11 @@
+
+{%- if recommendations.products_count > 0 -%}
+    <div class="swiper-wrapper">
+    {%- for product in recommendations.products -%}
+        <div
+            class="swiper-slide">
+            {%- render 'cart-upsell-item-page' | product: product -%}
+            </div>
+    {%- endfor -%}
+</div>
+{%- endif -%} 

@@ -1,0 +1,170 @@
+{%- liquid
+  assign th_st = settings
+  assign container = th_st.general_layout
+  assign custom_container = th_st.custom_width_bd
+  assign container_width = ''
+   assign filtered_images = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+  assign ratio = '1/1'
+  if settings.product_aspect_ratio != 'custom'
+    assign ratio = settings.product_aspect_ratio
+  else
+    assign ratio = settings.product_aspect_ratio_custom | replace: ':', '/'
+  endif
+  if layout == 'mobile'
+    assign media_wrapper_id = media.id | append: '-mobile-wrapper'
+  else
+    assign media_wrapper_id = media.id | append: '-wrapper'
+  endif
+  assign image_first = false
+  assign media_position = 360
+-%}
+    {%- for image in product.images -%}
+        {%- if image_first == blank -%} 
+            
+        {%- endif -%}
+    {%- endfor -%}
+
+
+
+{% for image in product.images %}
+  {% if image.alt == 'image-360' %}
+    {% capture filtered_images %}{{ filtered_images }}{{ image.src | image_url }},{% endcapture %}
+    {%- assign image_first = image -%}
+  {% endif %}
+{% endfor %}
+{% assign filtered_images = filtered_images | split: ',' | compact %}
+{%- if gallery -%}
+  {% if design == 'grid-1' or design == 'grid-2' %}
+    <div
+      class="gallery-img image-360 swiper-slide"
+      data-position="{{ media_position }}"
+      data-alt="{{ image_first.alt }}"
+      data-pane-container
+    >
+  {% else %}
+    <div
+      class="swiper-slide slide-model"
+      data-media-id="{{ image_first.id }}"
+      data-position="{{ media_position }}"
+      data-alt="{{ image_first.alt }}"
+      data-group-thumb
+      data-pane-container
+    >
+      <div
+        class="gallery-img image-360"
+        data-position="{{ media_position }}"
+      >
+  {%- endif -%}
+  <div
+    id="{{ media_wrapper_id }}"
+    class="bls__prod-media bls__media-image relative product-single__media-wrapper image-360 js"
+    data-media-id="{{ media.id }}"
+    data-src="{{ image_first | image_url }}"
+    data-width="{{ image_first.width }}"
+    data-height="{{ image_first.height }}"
+    data-product-single-media-wrapper
+    data-product-media-id="{{ section.id }}-{{ image_first.id }}-{{ layout }}"
+    tabindex="-1"
+  >
+    <div class="bls__responsive-image product-single__media bls-image-js" style="--aspect-ratio: {{  ratio }}">
+      {% for image in filtered_images %}
+        {% capture image_json %}"{{ image }}"{%- unless forloop.last -%},{%- endunless -%}{% endcapture %}
+        {% capture image_list %}{{ image_list }}{{ image_json }}{% endcapture %}
+      {% endfor %}
+      <img
+        srcset="
+          {% if image_first.width >= 493 %}{{ image_first | image_url: width: 493 }} 493w,{% endif %}
+          {% if image_first.width >= 600 %}{{ image_first | image_url: width: 600 }} 600w,{% endif %}
+          {% if image_first.width >= 713 %}{{ image_first | image_url: width: 713 }} 713w,{% endif %}
+          {% if image_first.width >= 823 %}{{ image_first | image_url: width: 823 }} 823w,{% endif %}
+          {% if image_first.width >= 990 %}{{ image_first | image_url: width: 990 }} 990w,{% endif %}
+          {% if image_first.width >= 1100 %}{{ image_first | image_url: width: 1100 }} 1100w,{% endif %}
+          {% if image_first.width >= 1206 %}{{ image_first | image_url: width: 1206 }} 1206w,{% endif %}
+          {% if image_first.width >= 1346 %}{{ image_first | image_url: width: 1346 }} 1346w,{% endif %}
+          {% if image_first.width >= 1426 %}{{ image_first | image_url: width: 1426 }} 1426w,{% endif %}
+          {% if image_first.width >= 1646 %}{{ image_first | image_url: width: 1646 }} 1646w,{% endif %}
+          {% if image_first.width >= 1946 %}{{ image_first | image_url: width: 1946 }} 1946w,{% endif %}
+          {{ image_first | image_url }} {{ image_first.width }}w
+        "
+        src="{{ image_first | image_url: width: 1946 }}"
+        data-zoom="{{ image_first | image_url: width: 1946 }}"
+        sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+        loading="lazy"
+        width="1000"
+        height="{{ 1000 | divided_by: image_first.aspect_ratio | ceil }}"
+        alt="{{ image_first.alt | escape }}"
+      >
+      {% if image_list.size != 0 and image_list != null %}
+        <div class="absolute inset-0"> 
+        <div
+          class="cloudimage-360 rounded-5"
+          data-fullscreen="true"
+          {% comment %} product 360 will not work if use "" on data-image-list-x {% endcomment %}
+          data-image-list-x='[{{ image_list }}]'
+          data-autoplay="true"
+          data-play-once="true"
+        >
+          <div class="control_360">
+            <button class="cloudimage-360-left"></button>
+            <button class="cloudimage-360-right"></button>
+          </div>
+        </div>
+      </div>
+      
+      {% endif %}
+    </div>
+  </div>
+  {% if design == 'grid-1' or design == 'grid-2' %}
+    </div>
+  {% else %}
+    </div>
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <div class="swiper-slide" data-position="{{ media_position }}" data-group data-alt="{{ image_first.alt }}">
+    <div class="gallery-img" data-position="{{ media_position }}">
+      <div
+        class="bls__prod-media bls__media-image"
+        data-media-id="{{ image_first.id }}"
+        data-src="{{ image_first | image_url }}"
+        data-width="{{ image_first.width }}"
+        data-height="{{ image_first.height }}"
+      >
+        <div
+          class="bls__responsive-image bls-image-js"
+          style="--aspect-ratio: {% if st.image_action == 'show_zoom_hover' %}{{ image_first.aspect_ratio }}{% else %}{{ ratio }}{% endif %}"
+        >
+          <img
+            srcset="
+              {% if image_first.width >= 493 %}{{ image_first | image_url: width: 493 }} 493w,{% endif %}
+              {% if image_first.width >= 600 %}{{ image_first | image_url: width: 600 }} 600w,{% endif %}
+              {% if image_first.width >= 713 %}{{ image_first | image_url: width: 713 }} 713w,{% endif %}
+              {% if image_first.width >= 823 %}{{ image_first | image_url: width: 823 }} 823w,{% endif %}
+              {% if image_first.width >= 990 %}{{ image_first | image_url: width: 990 }} 990w,{% endif %}
+              {% if image_first.width >= 1100 %}{{ image_first | image_url: width: 1100 }} 1100w,{% endif %}
+              {% if image_first.width >= 1206 %}{{ image_first | image_url: width: 1206 }} 1206w,{% endif %}
+              {% if image_first.width >= 1346 %}{{ image_first | image_url: width: 1346 }} 1346w,{% endif %}
+              {% if image_first.width >= 1426 %}{{ image_first | image_url: width: 1426 }} 1426w,{% endif %}
+              {% if image_first.width >= 1646 %}{{ image_first | image_url: width: 1646 }} 1646w,{% endif %}
+              {% if image_first.width >= 1946 %}{{ image_first | image_url: width: 1946 }} 1946w,{% endif %}
+              {{ image_first | image_url }} {{ image_first.width }}w
+            "
+            src="{{ image_first | image_url: width: 1946 }}"
+            data-zoom="{{ image_first | image_url: width: 1946 }}"
+            sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+            loading="lazy"
+            width="1000"
+            height="{{ 1000 | divided_by: image_first.aspect_ratio | ceil }}"
+            alt="{{ image_first.alt | escape }}"
+          >
+          <span class="icon-360">360</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

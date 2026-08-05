@@ -1,0 +1,143 @@
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet">
+<!-- Geocoder plugin -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css"
+  type="text/css"
+>
+
+{% liquid
+  assign st = section.settings
+  assign container = st.container
+%}
+
+<div class="bls__section bls__location-page">
+  <div class="{{ container }} section-full">
+    <div class="d-flex store-wrapper">
+      <div class="store-infor">
+        {% for block in section.blocks %}
+          <div
+            {{ block.shopify_attributes }}
+            class="store-infor__items"
+            data-lng="{{ block.settings.store_lng }}"
+            data-lat="{{ block.settings.store_lat }}"
+            data-name="{{ block.settings.store_name }}"
+            data-address="{{ block.settings.store_address }}"
+            data-phone="{{ block.settings.store_phone }}"
+          >
+            {% if block.settings.store_name != blank %}
+              <a
+                href="#"
+                id="infor-store_{{ forloop.index | minus: 1 }}"
+                class="store-infor__name fs-18 fw-500"
+              >
+                {{ block.settings.store_name }}
+              </a>
+            {% endif %}
+            {% if block.settings.store_address != blank or block.settings.store_phone %}
+              <div class="store-infor__information">
+                {{ block.settings.store_address }}
+                <br>
+                {{ block.settings.store_phone }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="store-map">
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'page-store-location.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "t:sections.store-location-page.name",
+  "class": "bls-store-location-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.store-location-page.blocks.item.name",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.store-location-page.blocks.item.settings.header.content2"
+        },
+        {
+          "type": "text",
+          "id": "store_lng",
+          "label": "t:sections.store-location-page.blocks.item.settings.store_lng.label",
+          "info": "t:sections.store-location-page.blocks.item.settings.store_lng.info"
+        },
+        {
+          "type": "text",
+          "id": "store_lat",
+          "label": "t:sections.store-location-page.blocks.item.settings.store_lat.label",
+          "info": "t:sections.store-location-page.blocks.item.settings.store_lat.info"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.store-location-page.blocks.item.settings.paragraph.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.store-location-page.blocks.item.settings.header.content2"
+        },
+        {
+          "type": "text",
+          "id": "store_name",
+          "label": "t:sections.store-location-page.blocks.item.settings.store_name.label",
+          "default": "Umino"
+        },
+        {
+          "type": "textarea",
+          "id": "store_address",
+          "label": "t:sections.store-location-page.blocks.item.settings.store_address.label",
+          "default": "268 St, South New York/NY 98944, United States."
+        },
+        {
+          "type": "text",
+          "id": "store_phone",
+          "label": "t:sections.store-location-page.blocks.item.settings.store_phone.label",
+          "default": "+222-1800-2628"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,114 @@
+{%- liquid
+    assign th_st = settings
+    assign container = th_st.general_layout
+    assign custom_container = th_st.custom_width_bd
+    assign container_width = ''
+    if container == 'default'
+      assign container_width = '1260'
+    elsif container == custom_width
+      assign container_width = custom_container
+    endif
+    assign design_collection = st.design_collection
+  
+    if st.design_collection == 'design-1'
+      if st.hide_image_collection
+        assign design_collection = ''
+        else
+        assign design_collection = 'pointer-events-none absolute text-center'
+      endif
+    elsif st.design_collection == 'design-2'
+      assign design_collection = 'mt-15 text-center flex flex-column'
+    elsif st.design_collection == 'design-3'
+      assign design_collection = 'mt-20 text-center flex flex-nowrap'
+    endif
+    assign hover_effect = st.hover_effect
+    assign block_st = block.settings
+    assign ratio = '1/1'
+    assign featured_image = collection_item.featured_image
+    if media_aspect_ratio == 'square'
+      assign media_aspect_ratio = 'original'
+    endif
+    if featured_image != blank and media_aspect_ratio == 'original'
+      assign ratio = featured_image.aspect_ratio
+    elsif media_aspect_ratio == 'custom' and custom_ratio
+      assign ratio = custom_ratio | replace: ':', '/'
+    elsif media_aspect_ratio == 'original'
+      assign ratio = ratio
+    else
+      assign ratio = media_aspect_ratio | default: ratio
+    endif
+    assign count_product = collection_item.all_products_count | default: 0
+  -%}
+  <div class="collection-item relative">
+    <div class="bls__collection-image h-full mb-15 {% if st.hide_image_collection %}bls__hide-image{% endif %}">
+      <a
+        aria-label="Link detail"
+        href="{% if collection_item == blank %}#{% else %}{{ collection_item.url }}{% endif %}"
+        class="collection-item-link h-full hover-{{ hover_effect }} hover-effect"
+      >
+        <div
+          class="image bls__responsive-image h-full bls-image-js {% if featured_image != blank %}bls-loading-image{% endif %}"
+          style="--aspect-ratio: {{ ratio }}"
+        >
+          {%- if featured_image != blank -%}
+            <img
+              srcset="
+                {%- if featured_image.width >= 165 -%}{{ featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if featured_image.width >= 330 -%}{{ featured_image | image_url: width: 330 }} 330w,{%- endif -%}
+                {%- if featured_image.width >= 535 -%}{{ featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                {%- if featured_image.width >= 750 -%}{{ featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+                {%- if featured_image.width >= 1000 -%}{{ featured_image | image_url: width: 1000 }} 1000w,{%- endif -%}
+                {%- if featured_image.width >= 1500 -%}{{ featured_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                {%- if featured_image.width >= 3000 -%}{{ featured_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                {{ featured_image | image_url }} {{ featured_image.width }}w
+              "
+              src="{{ featured_image | image_url: width: 1500 }}"
+              sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ collection_item.title }}"
+              height="{{ featured_image.height }}"
+              width="{{ featured_image.width }}"
+              loading="lazy"
+              class="motion-reduce"
+            >
+          {%- else -%}
+            {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__placeholder border' -%}
+          {%- endif -%}
+        </div>
+      </a>
+    </div>
+    {%- liquid
+      assign title_collection = collection_item.title
+      assign show_count_product = st.show_count_product
+  
+      assign show_count_product = ''
+      if st.show_count_product
+        assign show_count_product = ' show-count'
+      else
+  
+      endif
+    -%}
+    <div class="bls__collection-infor {{ design_collection }}{{ show_count_product }} {% if st.hide_image_collection %}border postion-unset padding{% endif %}">
+      <h3 class="bls__collection-title m-0">
+        <a
+          href="{% if collection_item == blank %}#{% else %}{{ collection_item.url }}{% endif %}"
+          class="d-block text-transform"
+        >
+          {%- if title_collection != blank -%}
+            {{- title_collection | escape -}}
+          {%- else -%}
+            {{- 'onboarding.collection_title' | t -}}
+          {%- endif -%}
+        </a>
+      </h3>
+      {%- if show_count_product != blank and show_count_product != false -%}
+        <span class="bls__collection-count">
+          {%- if count_product > 1 -%}
+            {{- 'collection.counts_html' | t: count: count_product -}}
+          {%- else -%}
+            {{- 'collection.count_html' | t: count: count_product -}}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+  </div>
+  

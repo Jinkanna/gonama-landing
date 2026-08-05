@@ -1,0 +1,231 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "main": {
+      "type": "page-store",
+      "settings": {
+      }
+    },
+    "7967e97e-6a9d-4e1f-8a29-86e665d0e102": {
+      "type": "page-heading",
+      "blocks": {
+        "template--16584038023415__7967e97e-6a9d-4e1f-8a29-86e665d0e102-166566976155cc24d4-0": {
+          "type": "1",
+          "settings": {
+            "page_title": "Our Stores",
+            "text_fs": 45
+          }
+        }
+      },
+      "block_order": [
+        "template--16584038023415__7967e97e-6a9d-4e1f-8a29-86e665d0e102-166566976155cc24d4-0"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "show_banner": false,
+        "min_height": 200,
+        "parallax": false,
+        "show_overlay": false,
+        "overlay": 54,
+        "design": "text-overlay-image",
+        "text_postion": "text-center"
+      }
+    },
+    "5c5ca5d5-4127-4ddf-86e6-a682a7b310e8": {
+      "type": "banner-image",
+      "blocks": {
+        "template--16653840253175__5c5ca5d5-4127-4ddf-86e6-a682a7b310e8-167634302507823a6f-0": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st1.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "South Fulon",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        },
+        "template--16653840253175__5c5ca5d5-4127-4ddf-86e6-a682a7b310e8-167634302507823a6f-1": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st2.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Place Ste-Foy",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        },
+        "0e826a67-963f-4b7c-91c2-4be3800885c9": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st6.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Martin Place",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        }
+      },
+      "block_order": [
+        "template--16653840253175__5c5ca5d5-4127-4ddf-86e6-a682a7b310e8-167634302507823a6f-0",
+        "template--16653840253175__5c5ca5d5-4127-4ddf-86e6-a682a7b310e8-167634302507823a6f-1",
+        "0e826a67-963f-4b7c-91c2-4be3800885c9"
+      ],
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container-fluid",
+        "color_scheme": "",
+        "column_gap": 30,
+        "layout_on_mobile": false,
+        "design_banner": "text-below-image",
+        "design_content": "default",
+        "text_align": "text-left",
+        "hover_effect": "zoom",
+        "h_font_size": 24,
+        "h_font_weight": "default",
+        "h_spacing": 10,
+        "sub_font_size": 18,
+        "sub_font_weight": "default",
+        "sub_spacing": 10,
+        "des_font_size": 16,
+        "des_font_weight": "default",
+        "des_spacing": 0,
+        "text_position": "top",
+        "content_on_mobile": false,
+        "reset_color_mb": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": true
+      }
+    },
+    "bb079816-f4c5-45b5-ae90-2152055cd632": {
+      "type": "spacing",
+      "settings": {
+        "spacing_desktop": 20,
+        "spacing_moible": 10
+      }
+    },
+    "3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e": {
+      "type": "banner-image",
+      "blocks": {
+        "template--16653840253175__3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e-167634302507823a6f-0": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st4.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Martin Place",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        },
+        "template--16653840253175__3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e-167634302507823a6f-1": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st5.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Southland Park",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        },
+        "ee67caa8-3df7-4940-b71e-f71217fbc87a": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/st3.jpg",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "https://www.google.com/maps/place/184+Main+Rd+E,+St+Albans+VIC+3021,+Australia/@-37.7456374,144.8137714,16z/data=!4m19!1m12!4m11!1m3!2m2!1d144.8139001!2d-37.7452811!1m6!1m2!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!2s184+Main+Rd+E+St+Albans+VIC+3021+%C3%9Ac!2m2!1d144.8137714!2d-37.7456374!3m5!1s0x6ad65fa6debeb781:0xe1d23f5d1759961e!8m2!3d-37.7456374!4d144.8137714!16s%2Fg%2F11c2737npp",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Port Melbourne",
+            "content": "<p>268 St, South New York/NY 98944, United States<br/>+222-1800-2628<br/>Support@example.com</p><p>Mon - Friday:  9:00am - 6:00pm<br/>Saturday - Sunday:  10:00am - 5:00pm</p>",
+            "btn_content": "Get Directions",
+            "button_type": "secondary"
+          }
+        }
+      },
+      "block_order": [
+        "template--16653840253175__3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e-167634302507823a6f-0",
+        "template--16653840253175__3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e-167634302507823a6f-1",
+        "ee67caa8-3df7-4940-b71e-f71217fbc87a"
+      ],
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container-fluid",
+        "color_scheme": "",
+        "column_gap": 30,
+        "layout_on_mobile": false,
+        "design_banner": "text-below-image",
+        "design_content": "default",
+        "text_align": "text-left",
+        "hover_effect": "zoom",
+        "h_font_size": 24,
+        "h_font_weight": "default",
+        "h_spacing": 10,
+        "sub_font_size": 18,
+        "sub_font_weight": "default",
+        "sub_spacing": 10,
+        "des_font_size": 16,
+        "des_font_weight": "default",
+        "des_spacing": 0,
+        "text_position": "top",
+        "content_on_mobile": false,
+        "reset_color_mb": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "7967e97e-6a9d-4e1f-8a29-86e665d0e102",
+    "5c5ca5d5-4127-4ddf-86e6-a682a7b310e8",
+    "bb079816-f4c5-45b5-ae90-2152055cd632",
+    "3d3ef8aa-3ddb-4c55-ab2f-6304af610d9e"
+  ]
+}

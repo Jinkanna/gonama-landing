@@ -1,0 +1,7 @@
+{%- for link in linklists[handle_menu].links -%}
+  <li class="item relative level-1{% if link.active or link.child_active %} active{% endif %}">
+    <a href="{{ link.url }}" class="site-nav level-1">
+      <span>{{ link.title | split: '[label' | first }}</span>
+    </a>
+  </li>
+{%- endfor -%}

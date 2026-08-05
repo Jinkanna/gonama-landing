@@ -1,0 +1,209 @@
+{%- liquid
+  assign st = section.settings
+  assign enable_mobile_stickybar = st.enable_mobile_stickybar
+  assign show_home = st.show_home
+  assign show_products_all = st.show_products_all
+  assign show_wishlist = st.show_wishlist
+  assign show_my_account = st.show_my_account
+  assign show_cart = st.show_cart
+-%}
+{%- if enable_mobile_stickybar -%}
+  <div class="bls__mobile-stickybar fixed-bottom d-md-none">
+    <div class="link-on-bottom">
+      <ul class="mobile-bottom-link d-flex justify-content-between list-unstyled">
+        {%- if show_home -%}
+          <li>
+            <a href="{{ routes.root_url }}" class="bls_tooltip">
+              <span class="bls_tooltip-content">{{ shop.name }}</span>
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 17 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8.50129 13.283V10.9648"
+                  stroke="#212529"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path
+                  d="M7.00993 1.55299L1.65493 5.84163C1.0522 6.32072 0.665836 7.33299 0.7972 8.09027L1.82493 14.2412C2.01038 15.3384 3.06129 16.2271 4.17402 16.2271H12.8286C13.9336 16.2271 14.9922 15.3307 15.1777 14.2412L16.2054 8.09027C16.329 7.33299 15.9427 6.32072 15.3477 5.84163L9.99265 1.56072C9.16584 0.896174 7.82902 0.896174 7.00993 1.55299Z"
+                  stroke="#212529"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span class="quick-menu-mb">{{ 'general.breadcrumb.home' | t }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if show_my_account -%}
+          <li>
+            <div class="header_account-footer">
+              <a href="{{ routes.account_url }}" class="bls_tooltip header__icon header__icon--account {% if customer.email == blank %}action-login{% endif %}">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.8927 15.7682C16.0329 14.3137 14.8061 13.1078 13.3338 12.27C11.8614 11.4322 10.1946 10.9914 8.49845 10.9914C6.80225 10.9914 5.13546 11.4322 3.66314 12.27C2.19082 13.1078 0.964024 14.3137 0.104236 15.7682C-0.00102398 15.9568 -0.027822 16.179 0.0295835 16.387C0.0566587 16.493 0.106188 16.592 0.174854 16.6774C0.243521 16.7627 0.329737 16.8325 0.427728 16.8821C0.554141 16.9534 0.697158 16.9903 0.842462 16.9894C0.986554 16.9954 1.12952 16.9616 1.25545 16.8917C1.38138 16.8218 1.48536 16.7185 1.5558 16.5933C2.26752 15.3886 3.2833 14.3898 4.50251 13.6958C5.72172 13.0018 7.10204 12.6367 8.50674 12.6367C9.91144 12.6367 11.2918 13.0018 12.511 13.6958C13.7302 14.3898 14.746 15.3886 15.4577 16.5933C15.5685 16.7806 15.7491 16.9169 15.9603 16.9725C16.1715 17.0281 16.3963 16.9986 16.5858 16.8903C16.6801 16.8403 16.7628 16.7711 16.8285 16.6872C16.8943 16.6034 16.9415 16.5067 16.9673 16.4035C16.998 16.298 17.0072 16.1874 16.9944 16.0783C16.9816 15.9692 16.947 15.8638 16.8927 15.7682Z" />
+                  <path d="M8.49966 10.2C9.83622 10.2002 11.1195 9.67091 12.0732 8.72594C13.027 7.78097 13.5752 6.49588 13.5997 5.14718C13.5997 3.78206 13.0623 2.47286 12.1059 1.50757C11.1495 0.542291 9.85226 0 8.49966 0C7.14705 0 5.84985 0.542291 4.89341 1.50757C3.93698 2.47286 3.39966 3.78206 3.39966 5.14718C3.42416 6.49588 3.97228 7.78097 4.92607 8.72594C5.87987 9.67091 7.1631 10.2002 8.49966 10.2ZM5.09966 5.14718C5.09966 4.2371 5.45787 3.3643 6.09549 2.72078C6.73312 2.07725 7.59792 1.71573 8.49966 1.71573C9.40139 1.71573 10.2662 2.07725 10.9038 2.72078C11.5414 3.3643 11.8997 4.2371 11.8997 5.14718C11.8997 6.05726 11.5414 6.93006 10.9038 7.57359C10.2662 8.21711 9.40139 8.57864 8.49966 8.57864C7.59792 8.57864 6.73312 8.21711 6.09549 7.57359C5.45787 6.93006 5.09966 6.05726 5.09966 5.14718Z" />
+                </svg>
+                <span class="bls_tooltip-content">
+                  {%- liquid
+                    if customer
+                      echo 'customer.account_fallback' | t
+                    else
+                      echo 'customer.log_in' | t
+                    endif
+                  -%}
+                </span>
+                <span class="quick-menu-mb">{{ 'customer.account.title' | t }}</span>
+              </a>
+            </div>
+          </li>
+        {%- endif -%}
+
+        {%- if show_products_all -%}
+          <li>
+            <div class="collections-item">
+              <a href="{{ routes.all_products_collection_url }}" class="bls_tooltip">
+                <span class="bls_tooltip-content">{{ 'products.product.collections' | t }}</span>
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1.57253 7.89728V11.3668C1.57253 14.8364 2.96343 16.2273 6.43298 16.2273H10.598C14.0675 16.2273 15.4584 14.8364 15.4584 11.3668V7.89728"
+                    stroke="#111111"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M8.51934 8.49998C9.93343 8.49998 10.9766 7.34861 10.8375 5.93452L10.3275 0.772705H6.71888L6.20116 5.93452C6.06207 7.34861 7.10525 8.49998 8.51934 8.49998Z"
+                    stroke="#111111"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M13.3953 8.49998C14.9562 8.49998 16.0998 7.23271 15.9453 5.67952L15.7289 3.55452C15.4507 1.54543 14.678 0.772705 12.6534 0.772705H10.2966L10.8375 6.18952C10.9689 7.46452 12.1203 8.49998 13.3953 8.49998Z"
+                    stroke="#111111"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M3.60479 8.49998C4.87979 8.49998 6.03116 7.46452 6.15479 6.18952L6.32479 4.4818L6.6957 0.772705H4.33888C2.31434 0.772705 1.54161 1.54543 1.26343 3.55452L1.05479 5.67952C0.900247 7.23271 2.04388 8.49998 3.60479 8.49998Z"
+                    stroke="#111111"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path
+                    d="M8.51934 12.3636C7.22889 12.3636 6.58752 13.005 6.58752 14.2955V16.2273H10.4512V14.2955C10.4512 13.005 9.8098 12.3636 8.51934 12.3636Z"
+                    stroke="#111111"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span class="quick-menu-mb">{{ 'general.mobile_sticky.shop' | t }}</span>
+              </a>
+            </div>
+          </li>
+        {%- endif -%}
+        {%- if show_wishlist -%}
+          <li>
+            <div class="bls-header-wishlist">
+              <a href="/pages/wishlist" class="wishlist-icon-bubble bls_tooltip">
+                <span class="bls_tooltip-content">{{ 'templates.wishlist.wishlist' | t }}</span>
+                <svg
+                  width="21"
+                  height="17"
+                  viewBox="0 0 14 13"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.7441 2.26562C11.9993 2.52083 12.1908 2.8125 12.3184 3.14062C12.446 3.45964 12.5098 3.78776 12.5098 4.125C12.5098 4.46224 12.446 4.79492 12.3184 5.12305C12.1908 5.44206 11.9993 5.72917 11.7441 5.98438L7 10.7285L2.25586 5.98438C2.00065 5.72917 1.80924 5.44206 1.68164 5.12305C1.55404 4.79492 1.49023 4.46224 1.49023 4.125C1.49023 3.78776 1.55404 3.45964 1.68164 3.14062C1.80924 2.8125 2.00065 2.52083 2.25586 2.26562C2.51107 2.01042 2.79818 1.81901 3.11719 1.69141C3.44531 1.5638 3.77799 1.5 4.11523 1.5C4.45247 1.5 4.7806 1.5638 5.09961 1.69141C5.41862 1.81901 5.71029 2.01042 5.97461 2.26562L6.58984 2.88086C6.69922 2.99935 6.83594 3.05859 7 3.05859C7.16406 3.05859 7.30078 2.99935 7.41016 2.88086L8.02539 2.26562C8.28971 2.01042 8.58138 1.81901 8.90039 1.69141C9.2194 1.5638 9.54753 1.5 9.88477 1.5C10.222 1.5 10.5501 1.5638 10.8691 1.69141C11.1973 1.81901 11.4889 2.01042 11.7441 2.26562ZM12.5645 1.44531C12.1999 1.07161 11.7806 0.79362 11.3066 0.611328C10.8418 0.429036 10.3678 0.337891 9.88477 0.337891C9.40169 0.337891 8.92773 0.429036 8.46289 0.611328C7.99805 0.79362 7.57878 1.07161 7.20508 1.44531L7 1.65039L6.79492 1.44531C6.42122 1.07161 6.00195 0.79362 5.53711 0.611328C5.07227 0.429036 4.59831 0.337891 4.11523 0.337891C3.63216 0.337891 3.15365 0.429036 2.67969 0.611328C2.21484 0.79362 1.80013 1.07161 1.43555 1.44531C1.06185 1.8099 0.779297 2.22917 0.587891 2.70312C0.405599 3.16797 0.314453 3.64193 0.314453 4.125C0.314453 4.60807 0.405599 5.08659 0.587891 5.56055C0.779297 6.02539 1.06185 6.4401 1.43555 6.80469L6.58984 11.959C6.69922 12.0775 6.83594 12.1367 7 12.1367C7.16406 12.1367 7.30078 12.0775 7.41016 11.959L12.5645 6.80469C12.9382 6.4401 13.2161 6.02539 13.3984 5.56055C13.5898 5.08659 13.6855 4.60807 13.6855 4.125C13.6855 3.64193 13.5898 3.16797 13.3984 2.70312C13.2161 2.23828 12.9382 1.81901 12.5645 1.44531Z" />
+                </svg>
+                <span class="quick-menu-mb">{{ 'templates.wishlist.wishlist' | t }}</span>
+                <div class="wishlist-count h-count">0</div>
+              </a>
+            </div>
+          </li>
+        {%- endif -%}
+        {%- if show_cart and settings.hidden_button_add_to_cart == false -%}
+          <li>
+            <div class="bls__header_minicart">
+              <div class="header_minicart">
+                <a href="{{ routes.cart_url }}" class="{% if template != 'cart' %}bls-minicart-action{% endif %} bls_tooltip">
+                  <span class="bls_tooltip-content">{{ 'templates.cart.cart' | t }}</span>
+                  <svg
+                    width="21"
+                    height="17"
+                    viewBox="0 0 21 17"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.3699 15.3407C14.1509 15.3407 13.941 15.2535 13.7862 15.0982C13.6314 14.943 13.5444 14.7324 13.5444 14.5128H11.8936C11.8936 15.1715 12.1545 15.8032 12.6189 16.269C13.0832 16.7347 13.7131 16.9964 14.3699 16.9964C15.0266 16.9964 15.6565 16.7347 16.1209 16.269C16.5853 15.8032 16.8462 15.1715 16.8462 14.5128H15.1953C15.1953 14.7324 15.1083 14.943 14.9535 15.0982C14.7987 15.2535 14.5888 15.3407 14.3699 15.3407Z" />
+                    <path d="M8.5612 15.3407C8.34228 15.3407 8.13233 15.2535 7.97753 15.0982C7.82273 14.943 7.73576 14.7324 7.73576 14.5128H6.07715C6.07715 14.8395 6.14129 15.1629 6.26592 15.4646C6.39055 15.7664 6.57322 16.0406 6.8035 16.2715C7.03378 16.5025 7.30717 16.6857 7.60805 16.8107C7.90893 16.9357 8.23141 17 8.55707 17C8.88274 17 9.20522 16.9357 9.5061 16.8107C9.80698 16.6857 10.0804 16.5025 10.3106 16.2715C10.5409 16.0406 10.7236 15.7664 10.8482 15.4646C10.9729 15.1629 11.037 14.8395 11.037 14.5128H9.38612C9.38612 14.7323 9.29923 14.9428 9.14454 15.098C8.98985 15.2533 8.78003 15.3406 8.5612 15.3407Z" />
+                    <path d="M19.3299 1.64401C19.2849 1.63633 19.2393 1.63252 19.1937 1.63263H5.9867C5.76778 1.63263 5.55782 1.71985 5.40302 1.8751C5.24823 2.03035 5.16126 2.24092 5.16126 2.46047C5.16126 2.68003 5.24823 2.8906 5.40302 3.04585C5.55782 3.2011 5.76778 3.28832 5.9867 3.28832H18.2192L18.001 4.60149L16.8438 11.5668H6.07595L3.26946 4.60149L1.59537 0.482961C1.50684 0.289212 1.34721 0.13717 1.14972 0.0584856C0.952225 -0.020199 0.732083 -0.0194636 0.535118 0.0605389C0.338153 0.140541 0.179541 0.293646 0.0922992 0.487983C0.00505767 0.682319 -0.00409102 0.902913 0.0667575 1.10384L2.73963 7.68158L4.56385 12.5307C4.6985 12.9389 4.97657 13.2224 5.37794 13.2224H17.5428C17.7383 13.2225 17.9275 13.1531 18.0766 13.0264C18.2258 12.8997 18.3253 12.724 18.3574 12.5307L19.675 4.60149L20.0083 2.59655C20.0443 2.38002 19.993 2.15803 19.8658 1.9794C19.7386 1.80077 19.5458 1.68013 19.3299 1.64401Z" />
+                  </svg>
+                  <div class="cart-count h-count">
+                    {{ cart.item_count }}
+                  </div>
+                  <span class="quick-menu-mb">{{ 'templates.cart.cart' | t }}</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "t:sections.mobile-stickybar.name",
+    "class": "section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_mobile_stickybar",
+        "label": "t:sections.mobile-stickybar.settings.enable_mobile_stickybar.label",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:sections.mobile-stickybar.Addons"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_home",
+        "label": "t:sections.mobile-stickybar.settings.show_home.label",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart",
+        "label": "t:sections.mobile-stickybar.settings.show_cart.label",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_products_all",
+        "label": "t:sections.mobile-stickybar.settings.show_products_all.label",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_wishlist",
+        "label": "t:sections.mobile-stickybar.settings.show_wishlist.label",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_my_account",
+        "label": "t:sections.mobile-stickybar.settings.show_my_account.label",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

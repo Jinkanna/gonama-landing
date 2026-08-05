@@ -1,0 +1,20 @@
+{%- liquid
+  assign image_payment = section.settings.image_payment
+  assign image_payment_width = section.settings.payment_icons_width
+-%}
+
+{%- if image_payment != blank -%}
+  <div class="bls__footer_payment mb-10 mb-lg-0" style="width: {{ image_payment_width }}px;">
+    {%- render 'responsive-image', image: section.settings.image_payment -%}
+  </div>
+{%- else -%}
+{%- if shop.enabled_payment_types != empty -%}
+  <ul class="list-none d-flex m-0 p-0">
+      {%- for type in shop.enabled_payment_types -%}
+        <li class="px-5">
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        </li>
+      {%- endfor -%}
+  </ul>
+{%- endif -%}
+{%- endif -%}

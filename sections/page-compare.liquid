@@ -1,0 +1,348 @@
+<script src="{{ 'compare.js' | asset_url }}" defer="defer"></script>
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{{ 'compare.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign option_name = 'Color'
+  if th_st.option_name_color != blank
+    assign option_name = th_st.option_name_color | split: ','
+  endif
+
+  assign option_name_size = 'Size'
+  if th_st.option_name_size != blank
+    assign option_name_size = th_st.option_name_size | split: ','
+  endif
+
+  assign product_name_t_transfrom = th_st.product_name_t_transfrom
+  assign product_name_line = th_st.product_name_line
+  assign hidden_button_add_to_cart = th_st.hidden_button_add_to_cart
+  assign hidden_price = th_st.hidden_price
+  assign sale_type = th_st.product_label_sale_type
+-%}
+<section
+  class="bls__section bls__compare-page-section"
+  data-section-type="page-compare"
+  data-section-id="{{ section.id }}"
+  data-view="{{ template.name }}"
+>
+  {%- if search.results != blank -%}
+    {% paginate search.results by 50 %}
+      {%- for product in search.results -%}
+        {%- liquid
+          assign compare_at_price = product.compare_at_price
+          assign price = product.price
+          if compare_at_price > price and compare_at_price != blank
+          endif
+          if product.has_only_default_variant
+            assign action_add_cart = 'bls__js-addtocart'
+          else
+            assign action_add_cart = 'bls__js-addtocart bls__js-button-select-option'
+          endif
+        -%}
+        <div class="bls__product-compare">
+          <div class="bls__compare-row-basic">
+            <div
+              class="bls__compare-item-basic-{{ product.id }} bls__product-item bls__compare-value label-depend-on-button"
+              data-product-handle="{{ product.handle }}"
+            >
+              <div class="bls__product-img-compare overflow-hidden relative">
+                <a class="bls__compare-remove d-block bls__compare-remove-js">
+                  <i class="icon-x"></i>
+                </a>
+                <a class="bls__img-url" href="{{ product.url | within: collection }}">
+                  <div class="bls__product-main-img">
+                    {%- if product.featured_image != blank -%}
+                      {%- render 'responsive-image' | image: product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                    {%- else -%}
+                      {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                    {%- endif -%}
+                  </div>
+                </a>
+                {%- if compare_at_price > price and compare_at_price != blank -%}
+                  <div class="bls__product-label fs-12 pointer-events-none absolute">
+                    <div class="bls__sale-label">
+                      {%- assign p = compare_at_price | minus: price -%}
+                      {%- if sale_type == 'text' -%}
+                        {{- 'products.product.label.sale' | t -}}
+                      {% elsif sale_type == 'percent' %}
+                        {%- if p > 0 -%}
+                          {%- assign p = p | times: 100.0 | divided_by: compare_at_price | round -%}
+                        {%- endif -%}
+                        -
+                        {{- p -}}
+                        %
+                      {% elsif sale_type == 'price' %}
+                        - {{ p | money }}
+                      {% endif %}
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+              <h3 class="bls__product-name regular mb-0 pt-15">
+                <a
+                  class="limited-line {{ product_name_t_transfrom }}"
+                  style="--line-clamp: {{ product_name_line }}"
+                  href="{{ product.url | within: collection }}"
+                >
+                  {{ product.title }}
+                </a>
+              </h3>
+              {% if hidden_price == false %}
+                <div class="bls__product-price mb-7">
+                  {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+                </div>
+              {% endif %}
+              <quick-buy
+                class="bls__product-addtocart bls__product-addtocart-js"
+                data-product-variant-id="{{ product.selected_or_first_available_variant.id }}"
+              >
+                {%- if product.metafields.custom.external_affiliate == blank -%}
+                  {%- if hidden_button_add_to_cart == false -%}
+                    <button
+                      class="{{ action_add_cart }} btn-secondary border-none button button--full-width"
+                      type="submit"
+                      {% if product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                    >
+                      <span class="bls__product-icon">
+                        <svg
+                          width="15"
+                          height="13"
+                          viewBox="0 0 15 13"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M10.5454 11.3287C10.3922 11.3287 10.2452 11.2672 10.1369 11.1576C10.0285 11.048 9.96763 10.8994 9.96763 10.7444H8.81201C8.81201 11.2093 8.99464 11.6552 9.31972 11.984C9.6448 12.3128 10.0857 12.4975 10.5454 12.4975C11.0052 12.4975 11.4461 12.3128 11.7711 11.984C12.0962 11.6552 12.2789 11.2093 12.2789 10.7444H11.1232C11.1232 10.8994 11.0624 11.048 10.954 11.1576C10.8456 11.2672 10.6987 11.3287 10.5454 11.3287Z" fill="#111" />
+                          <path d="M6.47907 11.3287C6.32583 11.3287 6.17886 11.2672 6.0705 11.1576C5.96214 11.048 5.90127 10.8994 5.90127 10.7444H4.74023C4.74023 10.9749 4.78514 11.2032 4.87238 11.4162C4.95962 11.6292 5.08748 11.8228 5.24868 11.9858C5.40988 12.1488 5.60125 12.2782 5.81186 12.3664C6.02248 12.4546 6.24822 12.5 6.47618 12.5C6.70415 12.5 6.92989 12.4546 7.1405 12.3664C7.35112 12.2782 7.54249 12.1488 7.70368 11.9858C7.86488 11.8228 7.99275 11.6292 8.07999 11.4162C8.16723 11.2032 8.21213 10.9749 8.21213 10.7444H7.05652C7.05652 10.8993 6.99569 11.0479 6.88741 11.1575C6.77913 11.267 6.63225 11.3286 6.47907 11.3287Z" fill="#111" />
+                          <path d="M14.0173 1.66048C13.9858 1.65506 13.9539 1.65237 13.9219 1.65244H4.67702C4.52377 1.65244 4.37681 1.71401 4.26845 1.8236C4.16009 1.93319 4.09921 2.08182 4.09921 2.23681C4.09921 2.39179 4.16009 2.54042 4.26845 2.65001C4.37681 2.7596 4.52377 2.82117 4.67702 2.82117H13.2398L13.087 3.74811L12.277 8.66477H4.73949L2.77495 3.74811L1.60308 0.840914C1.54111 0.70415 1.42937 0.596826 1.29113 0.541284C1.15289 0.485742 0.998786 0.486261 0.860911 0.542733C0.723035 0.599206 0.612007 0.70728 0.550938 0.844458C0.489868 0.981637 0.483464 1.13735 0.533058 1.27918L2.40407 5.9223L3.68102 9.34519C3.77528 9.63335 3.96993 9.83349 4.25088 9.83349H12.7663C12.9031 9.83356 13.0355 9.78452 13.14 9.6951C13.2444 9.60568 13.314 9.48168 13.3365 9.34519L14.2589 3.74811L14.4921 2.33286C14.5173 2.18001 14.4814 2.02331 14.3924 1.89722C14.3033 1.77113 14.1684 1.68598 14.0173 1.66048Z" fill="#111" />
+                        </svg>
+                      </span>
+                      <span class="bls_tooltip-content">
+                        {% if product.selected_or_first_available_variant.available == false %}
+                          {{- 'products.product.sold_out' | t -}}
+                        {%- else -%}
+                          {{- 'products.product.add_to_cart' | t -}}
+                        {% endif -%}
+                      </span>
+                      <span class="add-cart bls__button-content hidden-loading">
+                        {% if product.selected_or_first_available_variant.available == false %}
+                          {{- 'products.product.sold_out' | t -}}
+                        {%- else -%}
+                          {{- 'products.product.add_to_cart' | t -}}
+                        {% endif %}
+                      </span>
+                    </button>
+                  {%- endif -%}
+                {%- else -%}
+                  <a
+                    href="{{ product.metafields.custom.external_affiliate.value.external_link }}"
+                    rel="nofollow"
+                    target="_blank"
+                    class="btn-secondary border-none button button--full-width text-center"
+                  >
+                    {{- product.metafields.custom.external_affiliate.value.button_text -}}
+                  </a>
+                {%- endif -%}
+              </quick-buy>
+              {%- unless product.has_only_default_variant -%}
+                <script type="application/json" class="productinfo">
+                  {{ product.variants | json }}
+                </script>
+                <script type="application/json" class="productOptions">
+                  {{ product.options | json }}
+                </script>
+              {%- endunless -%}
+            </div>
+          </div>
+          <div class="bls__compare-row-availability">
+            <div
+              class="bls__compare-item-availability-{{ product.id }} bls__compare-value"
+              data-product-handle="{{ product.handle }}"
+            >
+              {%- if product.available -%}
+                {{ 'products.product.available' | t }}
+              {%- else -%}
+                {{ 'products.product.unavailable' | t }}
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="bls__compare-row-vendor">
+            <div
+              class="bls__compare-item-vendor-{{ product.id }} bls__compare-value"
+              data-product-handle="{{ product.handle }}"
+            >
+              <span>
+                {%- if product.vendor -%}
+                  {{ product.vendor }}
+                {%- else -%}
+                  -
+                {%- endif -%}
+              </span>
+            </div>
+          </div>
+          <div class="bls__compare-row-review">
+            <div
+              class="bls__compare-item-review-{{ product.id }} bls__compare-value"
+              data-product-handle="{{ product.handle }}"
+            >
+              {% render 'product-review' | review_star: true | product: product %}
+            </div>
+          </div>
+          <div class="bls__compare-row-size">
+            <div
+              class="bls__compare-item-size-{{ product.id }} bls__compare-value"
+              data-product-handle="{{ product.handle }}"
+            >
+              {%- if product.has_only_default_variant -%}
+                <span>-</span>
+              {%- else -%}
+                {%- liquid
+                  assign sizeOption = false
+                  for option in product.options_with_values
+                    for sizeItem in option_name_size
+                      if option.name == sizeItem
+                        assign sizeOption = true
+                      endif
+                    endfor
+                  endfor
+                -%}
+                {%- if sizeOption -%}
+                  {%- for option in product.options_with_values -%}
+                    {%- liquid
+                      assign isSizeOption = false
+                      for sizeItem in option_name_size
+                        if option.name == sizeItem
+                          assign isSizeOption = true
+                        endif
+                      endfor
+                    -%}
+                    {%- if isSizeOption -%}
+                      {%- for value in option.values -%}
+                        <span class="bls_size-content">
+                          {{- value -}}
+                        </span>
+                        {%- if forloop.last != true %},{% endif %}
+                      {%- endfor -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <span>-</span>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="bls__compare-row-color">
+            <div
+              class="bls__compare-item-color-{{ product.id }} bls__compare-value"
+              data-product-handle="{{ product.handle }}"
+            >
+              {%- if product.has_only_default_variant -%}
+                <span>-</span>
+              {%- else -%}
+                {%- for option in product.options_with_values -%}
+                  {%- liquid
+                    assign isColorOption = false
+                    for colorItem in option_name
+                      if option.name == colorItem
+                        assign isColorOption = true
+                      endif
+                    endfor
+                  -%}
+                  {%- if isColorOption -%}
+                    {%- for value in option.values -%}
+                      <span class="bls_color-content">
+                        {{- value -}}
+                      </span>
+                      {%- if forloop.last != true %},{% endif %}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {% endpaginate %}
+  {%- endif -%}
+
+  <div class="{{ section.settings.container }} section-full bls__compare-page-main bls__product-preload-js">
+    <div class="bls__compare-table d-none">
+      <div class="bls__compare-row bls__compare-row-basic row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.product_title' | t }}
+        </div>
+      </div>
+      <div class="bls__compare-row bls__compare-row-vendor row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.vendor' | t }}
+        </div>
+      </div>
+      <div class="bls__compare-row bls__compare-row-availability row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.availability' | t }}
+        </div>
+      </div>
+      <div class="bls__compare-row bls__compare-row-size row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.size' | t }}
+        </div>
+      </div>
+      <div class="bls__compare-row bls__compare-row-color row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.color' | t }}
+        </div>
+      </div>
+      <div class="bls__compare-row bls__compare-row-review row-cols-lg-5 row-cols-md-4 row-cols-sm-3">
+        <div class="bls__compare-field">
+          {{ 'products.product.review' | t }}
+        </div>
+      </div>
+    </div>
+
+    <div class="bls__compare-no-product-js d-none">
+      <h3 class="bls__compare-no-product-text">
+        {{ 'templates.compare.no_product' | t }}
+        <a class="bls__compare-no-product-url" href="{{ routes.all_products_collection_url }}">
+          {{- 'templates.compare.redirect' | t -}}
+        </a>
+      </h3>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.page-compare.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.page-compare.content"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

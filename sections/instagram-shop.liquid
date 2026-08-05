@@ -1,0 +1,724 @@
+{{ 'lookbook.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign st = section.settings
+  assign th_st = settings
+  assign container = st.container
+  assign text_align = st.text_alignment
+  assign heading = st.heading
+  assign description = st.description
+  assign color_scheme = st.color_scheme
+  assign ds_layout = st.design_layout
+  assign custom_column = st.slider_lookbook_items
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign column_gap = st.column_gap
+  assign item_desktop = st.slider_lookbook_items
+  assign show_arrow = st.show_arrow
+  assign carousel_pagination = st.carousel_pagination
+  assign loop = st.loop
+  assign autoplay = st.autoplay
+  assign aspect_ratio = st.aspect_ratio
+  assign custom_ratio = st.custom_ratio
+  assign enabled_animations = settings.animations_enabled
+  assign responsive_column = ''
+  if custom_column == 1
+    assign responsive_column = 'col-12'
+  elsif custom_column == 2 or custom_column == 4
+    assign responsive_column = 'col-sm-6'
+  else
+    assign responsive_column = 'col-sm-4'
+  endif
+
+  assign column_gap_tablet = ''
+  if column_gap > 30
+    assign column_gap_tablet = ' gap-tablet'
+  endif
+  assign column_gap_mobile = ''
+  if column_gap > 15
+    assign column_gap_mobile = ' gap-mobile'
+  endif
+
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+
+  assign ins_images_style = ''
+  if settings.image_style != blank and section.settings.column_gap != 0 and section.settings.container != 'full-width'
+    assign ins_images_style = ' radius'
+  endif
+
+  assign ratio = ''
+  if th_st.product_aspect_ratio != 'custom'
+    assign ratio = th_st.product_aspect_ratio
+  else
+    assign ratio = th_st.product_aspect_ratio_custom | replace: ':', '/'
+  endif
+-%}
+{%- capture style -%}
+  {%- if bg_color != blank -%}
+    --section-bg-color: {{ bg_color }};
+  {%- endif -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px; --bls-gutter-x:
+  {{ column_gap }}px;
+{%- endcapture -%}
+<section
+  class="bls__section color-{{ color_scheme }} gradient {{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }}{{ column_gap_tablet }}{{ column_gap_mobile }} bls__lookbook-instagram {{ reset_spacing }}"
+  style="{{ style | strip | strip_newlines }};--bs-gutter-x: {{ column_gap }}px;"
+>
+  <instagram-shop
+    id="{{ section.id }}"
+    data-id="{{ section.id }}"
+  >
+    <div class="{{ container }} section-full">
+      {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+        <div class="bls__section-header {{ text_align }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+          {%- if heading_logo_svg != blank -%}
+            <div class="bls__section-logo bls__section-logo-svg">
+              {{ heading_logo_svg }}
+            </div>
+          {%- elsif heading_logo != blank -%}
+            <div class="bls__section-logo">
+              <img
+                srcset="
+                  {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                  {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                  {{ heading_logo | image_url }} {{ heading_logo.width }}w
+                "
+                src="{{ heading_logo | image_url: width: 533 }}"
+                alt="{{ heading_logo.alt | escape }}"
+                class="motion-reduce"
+                loading="lazy"
+                width="{{ heading_logo.width }}"
+                height="{{ heading_logo.height }}"
+              >
+            </div>
+          {%- endif -%}
+          {%- if heading != blank -%}
+            <h2 class="bls__section-heading mb-5">{{ heading }}</h2>
+          {%- endif -%}
+          {%- if description != blank -%}
+            <div class="bls__section-des">
+              {{ description }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="bls__lookbook-content">
+        {%- if ds_layout == 'slider' -%}
+          <div
+            class="swiper bls__swiper hover__show-nav"
+            id="bls__swiper-{{ section.id }}"
+            data-section-id="{{ section.id }}"
+            data-autoplay="{{ autoplay }}"
+            data-loop="{{ loop }}"
+            data-mobile="2"
+            data-tablet="3"
+            data-desktop="{{ item_desktop }}"
+            data-spacing="{{ column_gap }}"
+            data-pagination-progressbar="{% if carousel_pagination == 'carousel_pagination_progress' %}true{% else %}false{% endif %}"
+          >
+            <div class="swiper-wrapper">
+              {%- for block in section.blocks -%}
+                <div
+                  {{ block.shopify_attributes }}
+                  class="swiper-slide {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+                  style="transform: unset; {% if enabled_animations %}--animation-order: {{ forloop.index }};{% endif %}"
+                  {% if enabled_animations %}
+                    data-cascade
+                  {% endif %}
+                >
+                  {% render 'lookbook-card',
+                    block: block,
+                    aspect_ratio: aspect_ratio,
+                    custom_ratio: custom_ratio,
+                    type: 'ig_shop',
+                    ins_images_style: ins_images_style
+                  %}
+                </div>
+              {%- endfor -%}
+            </div>
+            {% render 'swiper-control', show_arrow: show_arrow, carousel_pagination: carousel_pagination %}
+          </div>
+        {%- else -%}
+          <div
+            class="row row-cols-lg-{{ custom_column }}{{ column_gap_tablet }}{{ column_gap_mobile }}"
+            style="--bs-gutter-x: {{ column_gap }}px;"
+          >
+            {%- for block in section.blocks -%}
+              <div
+                {{ block.shopify_attributes }}
+                class="{{ responsive_column }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+                {% if enabled_animations %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {% render 'lookbook-card',
+                  block: block,
+                  aspect_ratio: aspect_ratio,
+                  custom_ratio: custom_ratio,
+                  type: 'ig_shop',
+                  ins_images_style: ins_images_style
+                %}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <script type="application/json" class="igShopBlock">
+      [
+      {%- for block in section.blocks -%}
+          {%- liquid
+              assign id = '"id":"' | append: block.id | append: '"'
+              assign blst = block.settings
+              assign img = blst.image | image_url
+              assign bp1 = blst.product_1
+              assign bp2 = blst.product_2
+              assign bp3 = blst.product_3
+              assign bp4 = blst.product_4
+              assign bp5 = blst.product_5
+              assign pi_1 = bp1.media[0] | image_url: width: 240, height: 240
+              assign pi_2 = bp2.media[0] | image_url: width: 240, height: 240
+              assign pi_3 = bp3.media[0] | image_url: width: 240, height: 240
+              assign pi_4 = bp4.media[0] | image_url: width: 240, height: 240
+              assign pi_5 = bp5.media[0] | image_url: width: 240, height: 240
+              assign np_1 = bp1.price | money
+              assign np_2 = bp2.price | money
+              assign np_3 = bp3.price | money
+              assign np_4 = bp4.price | money
+              assign np_5 = bp5.price | money
+              if settings.currency_code_enabled
+                assign np_1 = bp1.price | money_with_currency
+                assign np_2 = bp2.price | money_with_currency
+                assign np_3 = bp3.price | money_with_currency
+                assign np_4 = bp4.price | money_with_currency
+                assign np_5 = bp5.price | money_with_currency
+              endif
+              assign cp_1 = bp1.compare_at_price | money
+              assign cp_2 = bp2.compare_at_price | money
+              assign cp_3 = bp3.compare_at_price | money
+              assign cp_4 = bp4.compare_at_price | money
+              assign cp_5 = bp5.compare_at_price | money
+              if settings.currency_code_enabled
+              assign cp_1 = bp1.compare_at_price | money_with_currency
+              assign cp_2 = bp2.compare_at_price | money_with_currency
+              assign cp_3 = bp3.compare_at_price | money_with_currency
+              assign cp_4 = bp4.compare_at_price | money_with_currency
+              assign cp_5 = bp5.compare_at_price | money_with_currency
+              endif
+              assign des_1 = blst.ig_caption | json
+              assign des_2 = blst.photographer | json
+              assign des_3 = blst.ig_text | json
+              assign des_4 = blst.ig_link | json
+              assign bl_img = '"bl_img":"' | append: img | append: '"'
+              assign ot_1 = '"ot_1":"' | append: blst.position_top_1 | append: '"'
+              assign ot_2 = '"ot_2":"' | append: blst.position_top_2 | append: '"'
+              assign ot_3 = '"ot_3":"' | append: blst.position_top_3 | append: '"'
+              assign ot_4 = '"ot_4":"' | append: blst.position_top_4 | append: '"'
+              assign ot_5 = '"ot_5":"' | append: blst.position_top_5 | append: '"'
+              assign ol_1 = '"ol_1":"' | append: blst.position_left_1 | append: '"'
+              assign ol_2 = '"ol_2":"' | append: blst.position_left_2 | append: '"'
+              assign ol_3 = '"ol_3":"' | append: blst.position_left_3 | append: '"'
+              assign ol_4 = '"ol_4":"' | append: blst.position_left_4 | append: '"'
+              assign ol_5 = '"ol_5":"' | append: blst.position_left_5 | append: '"'
+              assign p_1 = '"p_1":"' | append: bp1.url | append: '"'
+              assign p_2 = '"p_2":"' | append: bp2.url | append: '"'
+              assign p_3 = '"p_3":"' | append: bp3.url | append: '"'
+              assign p_4 = '"p_4":"' | append: bp4.url | append: '"'
+              assign p_5 = '"p_5":"' | append: bp5.url | append: '"'
+              assign p_img_1 = '"p_img_1":"' | append: pi_1 | append: '"'
+              assign p_img_2 = '"p_img_2":"' | append: pi_2 | append: '"'
+              assign p_img_3 = '"p_img_3":"' | append: pi_3 | append: '"'
+              assign p_img_4 = '"p_img_4":"' | append: pi_4 | append: '"'
+              assign p_img_5 = '"p_img_5":"' | append: pi_5 | append: '"'
+              assign cap_1 = '"cap_1":' | append: des_1
+              assign cap_2 = '"cap_2":' | append: des_2
+              assign cap_3 = '"cap_3":' | append: des_3
+              assign cap_4 = '"cap_4":' | append: des_4
+              assign pn_1 = '"pn_1":"' | append: bp1.title | append: '"'
+              assign pn_2 = '"pn_2":"' | append: bp2.title | append: '"'
+              assign pn_3 = '"pn_3":"' | append: bp3.title | append: '"'
+              assign pn_4 = '"pn_4":"' | append: bp4.title | append: '"'
+              assign pn_5 = '"pn_5":"' | append: bp5.title | append: '"'
+              assign pp_1 = '"pp_1":"' | append: np_1 | append: '"'
+              assign pp_2 = '"pp_2":"' | append: np_2 | append: '"'
+              assign pp_3 = '"pp_3":"' | append: np_3 | append: '"'
+              assign pp_4 = '"pp_4":"' | append: np_4 | append: '"'
+              assign pp_5 = '"pp_5":"' | append: np_5 | append: '"'
+              assign pcp_1 = '"pcp_1":"' | append: cp_1 | append: '"'
+              assign pcp_2 = '"pcp_2":"' | append: cp_2 | append: '"'
+              assign pcp_3 = '"pcp_3":"' | append: cp_3 | append: '"'
+              assign pcp_4 = '"pcp_4":"' | append: cp_4 | append: '"'
+              assign pcp_5 = '"pcp_5":"' | append: cp_5 | append: '"'
+              assign ar = '"ar":"' | append: st.aspect_ratio | append: '"'
+              assign cr = '"cr":"' | append: st.custom_ratio | append: '"'
+              assign pr = '"pr":"' | append: ratio | append: '"'
+          -%}
+          { {{ id }}, {{ bl_img }}, {{ ot_1 }} , {{ ot_2 }} , {{ ot_3 }} , {{ ot_4 }} , {{ ot_5 }} , {{ ol_1 }}, {{ ol_2 }}, {{ ol_3 }}, {{ ol_4 }}, {{ ol_5 }}, {{ p_1 }}, {{ p_2 }}, {{ p_3 }}, {{ p_4 }}, {{ p_5 }}, {{ cap_1 }}, {{ cap_2 }}, {{ cap_3 }}, {{ cap_4 }}, {{ p_img_1 }}, {{ p_img_2 }}, {{ p_img_3 }}, {{ p_img_4 }}, {{ p_img_5 }}, {{ pn_1 }}, {{ pn_2 }}, {{ pn_3 }}, {{ pn_4 }}, {{ pn_5 }}, {{ pp_1 }}, {{ pp_2 }}, {{ pp_3 }}, {{ pp_4 }}, {{ pp_5 }}, {{ pcp_1 }}, {{ pcp_2 }}, {{ pcp_3 }}, {{ pcp_4 }}, {{ pcp_5 }}, {{ ar }}, {{ cr }}, {{ pr }}}
+          {%- unless forloop.last -%},{%- endunless forloop.last -%}
+      {%- endfor -%}
+      ]
+    </script>
+  </instagram-shop>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.instagram-shop.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg",
+      "info": "t:sections.all.section_header.info_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.section_header.heading",
+      "default": "Shop by gram"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.lookbook_settings"
+    },
+    {
+      "type": "select",
+      "id": "design_layout",
+      "label": "t:sections.all.design_layout.lookbook_type",
+      "options": [
+        {
+          "value": "grid",
+          "label": "t:sections.all.design_layout.options__1.grid"
+        },
+        {
+          "value": "slider",
+          "label": "t:sections.all.design_layout.options__2.carousel"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "t:sections.all.aspect_ratio.label",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "original",
+          "label": "t:sections.all.aspect_ratio.options__1.label"
+        },
+        {
+          "value": "16/9",
+          "label": "16:9"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "4:3"
+        },
+        {
+          "value": "1/1",
+          "label": "1:1"
+        },
+        {
+          "value": "custom",
+          "label": "t:sections.all.aspect_ratio.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "custom_ratio",
+      "label": "t:sections.all.custom_ratio.label",
+      "default": "21:9"
+    },
+    {
+      "type": "range",
+      "min": 0,
+      "max": 50,
+      "unit": "px",
+      "step": 5,
+      "default": 30,
+      "label": "t:sections.all.padding.column_gap",
+      "id": "column_gap"
+    },
+    {
+      "type": "range",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 3,
+      "label": "t:sections.all.custom_column.per_row",
+      "id": "slider_lookbook_items"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.setting_carousel.carousel_title"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.all.setting_carousel.autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.all.setting_carousel.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "t:sections.all.setting_carousel.show_arrow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "carousel_pagination",
+      "label": "t:sections.all.setting_carousel.carousel_pagination.label",
+      "options": [
+        {
+          "value": "carousel_none",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__none.label"
+        },
+        {
+          "value": "carousel_bullets",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__bullets.label"
+        },
+        {
+          "value": "show_bullet_mobile",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.bullet__mobile.label"
+        },
+        {
+          "value": "carousel_pagination_progress",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__progress.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lookbook",
+      "name": "t:sections.instagram-shop.blocks.lookbook.name",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.instagram-shop.blocks.lookbook.settings.image.label",
+          "info": "t:sections.instagram-shop.blocks.lookbook.settings.image.info"
+        },
+        {
+          "type": "textarea",
+          "id": "ig_caption",
+          "label": "t:sections.instagram-shop.blocks.lookbook.settings.ig_caption.label"
+        },
+        {
+          "type": "text",
+          "id": "photographer",
+          "label": "t:sections.instagram-shop.blocks.lookbook.settings.photographer.label"
+        },
+        {
+          "type": "text",
+          "id": "ig_text",
+          "label": "t:sections.instagram-shop.blocks.lookbook.settings.ig_text.label"
+        },
+        {
+          "type": "text",
+          "id": "ig_link",
+          "label": "t:sections.instagram-shop.blocks.lookbook.settings.ig_link.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.header.product__1"
+        },
+        {
+          "type": "range",
+          "id": "position_top_1",
+          "label": "t:sections.all.position_product.offset_top",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 9
+        },
+        {
+          "type": "range",
+          "id": "position_left_1",
+          "label": "t:sections.all.position_product.offset_left",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 63
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "t:sections.all.position_product.select_product"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.header.product__2"
+        },
+        {
+          "type": "range",
+          "id": "position_top_2",
+          "label": "t:sections.all.position_product.offset_top",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 26
+        },
+        {
+          "type": "range",
+          "id": "position_left_2",
+          "label": "t:sections.all.position_product.offset_left",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 50
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "t:sections.all.position_product.select_product"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.header.product__3"
+        },
+        {
+          "type": "range",
+          "id": "position_top_3",
+          "label": "t:sections.all.position_product.offset_top",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 61
+        },
+        {
+          "type": "range",
+          "id": "position_left_3",
+          "label": "t:sections.all.position_product.offset_left",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 48
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "t:sections.all.position_product.select_product"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.header.product__4"
+        },
+        {
+          "type": "range",
+          "id": "position_top_4",
+          "label": "t:sections.all.position_product.offset_top",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "position_left_4",
+          "label": "t:sections.all.position_product.offset_left",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "product",
+          "id": "product_4",
+          "label": "t:sections.all.position_product.select_product"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.header.product__5"
+        },
+        {
+          "type": "range",
+          "id": "position_top_5",
+          "label": "t:sections.all.position_product.offset_top",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "position_left_5",
+          "label": "t:sections.all.position_product.offset_left",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "product",
+          "id": "product_5",
+          "label": "t:sections.all.position_product.select_product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.instagram-shop.name",
+      "blocks": [
+        {
+          "type": "lookbook"
+        },
+        {
+          "type": "lookbook"
+        },
+        {
+          "type": "lookbook"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

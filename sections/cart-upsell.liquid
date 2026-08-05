@@ -1,0 +1,19 @@
+
+{%- if recommendations.products_count > 0 -%}
+    <div class="swiper-wrapper">
+        {%- for product in recommendations.products -%}
+            <div
+                class="swiper-slide">
+                {%- render 'product-popular-list-item' | product: product | template_cart: true -%}
+                </div>
+        {%- endfor -%}
+    </div>
+    <div class="bls-cart-upsell-wrapper">
+        {%- for product in recommendations.products -%}
+            <div
+                class="bls-cart-upsell-item" product-handle="{{ product.handle }}">
+                {%- render 'product-popular-list-item' | product: product | template_cart: true -%}
+                </div>
+        {%- endfor -%}
+    </div>
+{%- endif -%} 

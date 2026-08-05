@@ -1,0 +1,77 @@
+{%- liquid
+  assign th_st = settings
+  assign show_promotion_mobile = th_st.show_promotion_mobile
+  assign code = th_st.promotion_code
+  assign width = th_st.promotion_width
+  assign heading = th_st.promotion_title
+  assign sub_title = th_st.promotion_sub_title
+  assign background_image = th_st.promotion_banner
+  assign promotion_content = th_st.promotion_content
+  assign show_promotion_select = th_st.show_promotion_select
+
+  assign show = 'hidden'
+  if show_promotion_select == 'show_promotion_homepage'
+    if request.page_type == 'index'
+      assign show = 'show-on-homepage'
+    endif
+  elsif show_promotion_select == 'hide_promotion'
+  assign show = 'hidden'
+    else
+   assign show = 'show-on-all-pages'
+  endif
+-%}
+{% style %}
+  .w-36 {
+    width: 360px;
+  }
+  .h-45 {
+    height: 450px;
+  }
+  .btn-promotion {
+    width: 100%;
+    text-align: center;
+  }
+  .promotion-code {
+    padding: 5px 8px;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 18px;
+    border: 1px dashed var(--border-color-base);
+    text-align: center;
+    margin-bottom: 15px;
+  }
+{% endstyle %}
+<div id="bls__promotion-popup" data-show="{{ show }}" data-show-mb="{{ show_promotion_mobile }}">
+  <div
+    class="bls__promotion-popup gradient"
+    style="--promotion-width: {{ width }}px;{%- if background_image != blank -%}background-image: url({{ background_image | image_url }});{%- endif -%}"
+  >
+    <div class="promotion__popup-content">
+      <div class="content-promotion text-center">
+        <div class="bls__section-header">
+          {%- if sub_title != blank -%}
+            <div class="bls__section-des mb-10 lh-1 fs-16">
+              {{ sub_title }}
+            </div>
+          {%- endif -%}
+          {%- if heading != blank -%}
+            <h3 class="bls__section-heading mb-15">{{ heading }}</h3>
+          {%- endif -%}
+        </div>
+        {%- if promotion_content != blank -%}
+          <div class="bls__promotion-content">
+            {{ promotion_content | replace: '[promotion_code]', code }}
+          </div>
+        {%- endif -%}
+        <a href="#" class="button button-login btn btn-primary discount btn-promotion mt-20" data-code="{{ code }}">
+          <span class="copied-action" style="display: block;">{{ 'popup.copy' | t }}</span>
+          <span class="copied-success" style="display: none;">{{ 'popup.copied' | t }}</span>
+        </a>
+        <div class="do-not-show-again checkbox clearfix">
+          <input id="doNotShowPromotion" name="do-not-show" type="checkbox">
+          <label for="doNotShowPromotion">{{ 'popup.do_not' | t }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,371 @@
+{%- liquid
+  assign st = section.settings
+  assign sec_blocks = section.blocks
+  assign container = st.container
+  assign show_announcement = st.show_announcement
+  assign homepage_only = st.homepage_only
+  assign s_text_time = st.s_text_time
+  assign s_text_spacing = st.s_text_spacing
+  assign show_close = st.show_close
+  assign bar_text_color = st.bar_text_color
+  assign bar_link_color = st.bar_link_color
+  assign bar_link_hover_color = st.bar_link_hover_color
+  assign bar_countdown_color = st.bar_countdown_color
+  assign bar_background_color = st.bar_background_color
+  assign close_btn_color = st.close_btn_color
+  assign bar_font_size = st.bar_font_size
+  assign bar_font_weight = st.bar_font_weight
+  assign bar_uppercase = st.bar_uppercase
+  assign show_mobile = st.show_mobile
+  assign enabled_animations = settings.animations_enabled
+
+  assign show = false
+  if homepage_only
+    if request.page_type == 'index'
+      assign show = true
+    endif
+  else
+    assign show = true
+  endif
+-%}
+{%- capture style -%}
+  --announcement-bar-font-size : {{ bar_font_size }}px;
+  --announcement-bar-font-weight : {{ bar_font_weight }};
+  --s-text-time: {{ s_text_time }}s;
+  --s-text-spacing: {{ s_text_spacing }}px;
+{%- endcapture -%}
+{% if show_announcement %}
+  {% if show %}
+    <section
+      data-section-id="{{ section.id }}"
+      id="announcement-bar"
+      class="color-{{ section.settings.color_scheme }} gradient announcement-bar relative active{% if show_mobile == blank %} d-none d-sm-block {% endif %}"
+      style="{{ style | strip | strip_newlines }}"
+    >
+      <div class="{{ container }} section-full">
+        {% if sec_blocks.size > 1 and st.text_action == 'marquee' %}
+          <div class="marquee d-flex overflow-hidden">
+        {% endif %}
+        {%- if sec_blocks.size > 1 -%}
+          {%- if st.text_action != 'marquee' -%}
+            <div class="slider-announcementBar ">
+              <div class="swiper-announcementBar relative overflow-hidden">
+                <div class="swiper-wrapper">
+                  {%- for i in (0..5) -%}
+                    {%- for block in sec_blocks -%}
+                      {%- case block.type -%}
+                        {%- when 'announcement' -%}
+                          {%- liquid
+                            assign blo_settings = block.settings
+                          -%}
+                          {%- if blo_settings.text != blank -%}
+                            <div {{ block.shopify_attributes }} class="swiper-slide">
+                              <div class="d-flex flex-wrap align-items-center announcement-bar-content justify-content-center text-center py-10 px-15 {% if bar_uppercase %}uppercase{% endif %}">
+                                {{ blo_settings.text }}
+                                {% if blo_settings.countdown_deadline != blank %}
+                                  <div
+                                    class="countdown-announcementBar d-flex align-items-center"
+                                    data-block-id="{{ block.id }}"
+                                    data-block-deadline="{{ blo_settings.countdown_deadline }}"
+                                  >
+                                    <div class="countdown-container d-flex align-items-center">
+                                      <span class="days_announcementBar">00</span>
+                                      <span class="timer-announcementbar-text">
+                                        {{ 'sections.times_bn.days' | t -}}
+                                      </span>
+                                    </div>
+                                    <div class="countdown-container d-flex align-items-center">
+                                      <span class="hours_announcementBar">00</span>
+                                      <span class="timer-announcementbar-text">
+                                        {{ 'sections.times_bn.hour' | t -}}
+                                      </span>
+                                    </div>
+                                    <div class="countdown-container d-flex align-items-center">
+                                      <span class="minutes_announcementBar">00</span>
+                                      <span class="timer-announcementbar-text">
+                                        {{ 'sections.times_bn.mins' | t -}}
+                                      </span>
+                                    </div>
+                                    <div class="countdown-container d-flex align-items-center">
+                                      <span class="seconds_announcementBar">00</span>
+                                      <span class="timer-announcementbar-text">
+                                        {{ 'sections.times_bn.secs' | t -}}
+                                      </span>
+                                    </div>
+                                  </div>
+                                {% endif %}
+                              </div>
+                            </div>
+                          {%- endif -%}
+                      {%- endcase -%}
+                    {%- endfor -%}
+                  {%- endfor -%}
+                </div>
+                <div class="swiper-arrow swiper-button-prev">
+                  <i class="icon-chevron-left"></i>
+                </div>
+                <div class="swiper-arrow swiper-button-next">
+                  <i class="icon-chevron-right"></i>
+                </div>
+              </div>
+            </div>
+          {%- else -%}
+            {%- for i in (0..5) -%}
+              <div class="d-flex announcement-scroll">
+                {%- for block in sec_blocks -%}
+                  {%- case block.type -%}
+                    {%- when 'announcement' -%}
+                      {%- liquid
+                        assign blo_settings = block.settings
+                      -%}
+                      {%- if blo_settings.text != blank -%}
+                        <div
+                          {{ block.shopify_attributes }}
+                          class="d-flex flex-wrap align-items-center announcement-bar-content justify-content-center text-center py-10 px-15 {% if bar_uppercase %}uppercase{% endif %}"
+                        >
+                          {{ blo_settings.text }}
+                          {% if blo_settings.countdown_deadline != blank %}
+                            <div
+                              class="countdown-announcementBar d-flex align-items-center"
+                              data-block-id="{{ block.id }}"
+                              data-block-deadline="{{ blo_settings.countdown_deadline }}"
+                            >
+                              <div class="countdown-container">
+                                <span class="days_announcementBar">00</span>
+                                <span class="timer-announcementbar-text">{{ 'sections.times_bn.days' | t }}</span>
+                              </div>
+                              <div class="countdown-container">
+                                <span class="hours_announcementBar">00</span>
+                                <span class="timer-announcementbar-text">{{ 'sections.times_bn.hour' | t }}</span>
+                              </div>
+                              <div class="countdown-container">
+                                <span class="minutes_announcementBar">00</span>
+                                <span class="timer-announcementbar-text">{{ 'sections.times_bn.mins' | t }}</span>
+                              </div>
+                              <div class="countdown-container">
+                                <span class="seconds_announcementBar">00</span>
+                                <span class="timer-announcementbar-text">{{ 'sections.times_bn.secs' | t }}</span>
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {%- endif -%}
+                  {%- endcase -%}
+                {%- endfor -%}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- for block in sec_blocks -%}
+            {%- case block.type -%}
+              {%- when 'announcement' -%}
+                {%- liquid
+                  assign blo_settings = block.settings
+                -%}
+                {%- if blo_settings.text != blank -%}
+                  <div
+                    {{ block.shopify_attributes }}
+                    class="d-flex flex-wrap align-items-center justify-content-center announcement-bar-content text-center py-10 px-15  {% if bar_uppercase %}uppercase{% endif %}"
+                  >
+                    {{ blo_settings.text }}
+                    {% if blo_settings.countdown_deadline != blank %}
+                      <div
+                        class="countdown-announcementBar d-flex align-items-center"
+                        data-block-id="{{ block.id }}"
+                        data-block-deadline="{{ blo_settings.countdown_deadline }}"
+                      >
+                        <div class="countdown-container">
+                          <span class="days_announcementBar">00</span>
+                          <span class="timer-announcementbar-text">{{ 'sections.times_bn.days' | t }}</span>
+                        </div>
+                        <div class="countdown-container">
+                          <span class="hours_announcementBar">00</span>
+                          <span class="timer-announcementbar-text">{{ 'sections.times_bn.hour' | t }}</span>
+                        </div>
+                        <div class="countdown-container">
+                          <span class="minutes_announcementBar">00</span>
+                          <span class="timer-announcementbar-text">{{ 'sections.times_bn.mins' | t }}</span>
+                        </div>
+                        <div class="countdown-container">
+                          <span class="seconds_announcementBar">00</span>
+                          <span class="timer-announcementbar-text">{{ 'sections.times_bn.secs' | t }}</span>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {% if sec_blocks.size > 1 and st.text_action == 'marquee' %}
+          </div>
+        {% endif %}
+        {% if show_close %}
+          <a
+            rel="nofollow"
+            href="#"
+            class="announcement-close absolute right-15 position-center-y"
+            aria-label="close"
+          >
+            <i class="icon-x"></i>
+          </a>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.announment-bar.name",
+  "class": "announcement_bar",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "t:sections.announment-bar.settings.show_announcement.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "homepage_only",
+      "label": "t:sections.announment-bar.settings.homepage_only.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "t:sections.announment-bar.settings.show_close.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile",
+      "label": "t:sections.announment-bar.settings.show_mobile.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_action",
+      "label": "t:sections.announment-bar.settings.text_action.label",
+      "default": "marquee",
+      "options": [
+        {
+          "value": "marquee",
+          "label": "t:sections.announment-bar.settings.text_action.options__1.label"
+        },
+        {
+          "value": "slider",
+          "label": "t:sections.announment-bar.settings.text_action.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "bar_font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "label": "t:sections.all.typography.default_size",
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "bar_font_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "t:sections.all.typography.default_weight",
+      "default": 500
+    },
+    {
+      "type": "checkbox",
+      "id": "bar_uppercase",
+      "label": "t:sections.announment-bar.settings.bar_uppercase.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "s_text_time",
+      "min": 3,
+      "max": 30,
+      "step": 1,
+      "label": "t:sections.announment-bar.settings.s_text_time.label",
+      "unit": "s",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "s_text_spacing",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.announment-bar.settings.s_text_spacing.label",
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announment-bar.text_color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.announment-bar.color_scheme"
+    }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announment-bar.blocks.Announcement.name",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Welcome to our store</p>",
+          "label": "t:sections.announment-bar.blocks.Announcement.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "countdown_deadline",
+          "label": "t:sections.announment-bar.blocks.Announcement.settings.countdown_deadline.label",
+          "info": "t:sections.announment-bar.blocks.Announcement.settings.countdown_deadline.info"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

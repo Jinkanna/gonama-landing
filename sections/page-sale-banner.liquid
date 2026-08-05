@@ -1,0 +1,324 @@
+{% liquid
+  assign st = section.settings
+  assign container = st.container
+  assign heading = st.heading
+  assign description = st.description
+  assign text_alignment = st.text_alignment
+  assign bg_color = st.bg_color
+  assign text_size = st.text_size
+  assign text_color = st.text_color
+  assign text_transform = st.text_transform
+  assign heading_fw = st.heading_fw
+
+  assign heading_size = ''
+  if text_size == 'medium'
+    assign heading_size = 'fs-60'
+  elsif text_size == 'large'
+    assign heading_size = 'fs-80'
+  endif
+
+  assign desc_size = ''
+  if text_size == 'medium'
+    assign desc_size = 'fs-14'
+  elsif text_size == 'large'
+    assign desc_size = 'fs-16'
+  elsif text_size == 'small'
+    assign desc_size = 'fs-12'
+  endif
+
+  assign has_bg = ''
+  if bg_color != blank
+    assign has_bg = ' has-bg'
+  endif
+
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+%}
+
+{%- capture style -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px;
+{%- endcapture -%}
+
+<div
+  class="{{ has_bg }} color-{{ st.color_scheme }} gradient bls__section {{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }} bls__banner {{ reset_spacing }}"
+  style="{{ style | strip | strip_newlines }}"
+>
+  <div class="{{ container }} section-full">
+    {%- if heading != blank or description != blank -%}
+      <div class="bls__section-header {{ text_alignment }}" style="--text-color: {{ text_color }}">
+        {%- if heading != blank -%}
+          <h2
+            class="bls__section-heading mb-20 {{ heading_size }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %} {{ text_transform }}"
+            style="--bls__section-heading-weight: {{ heading_fw }};--heading-line-height: 1;"
+          >
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des {{ desc_size }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="row" style="--bs-gutter-x: 30px;">
+      {% for block in section.blocks %}
+        <div
+          {{ block.shopify_attributes }}
+          class="banner-sale-items col-md-{{ block.settings.banner_width }} col-sm-6 col-12 text-center"
+        >
+          {% if block.settings.sale_label != blank
+            or block.settings.sale_title != blank
+            or block.settings.sale_desc != blank
+          %}
+            <div class="banner-sale-content relative">
+              {% if block.settings.sale_label != blank %}
+                <span class="banner-sale-label {% if block.settings.eb_animation_label %}sale-blink{% endif %}">
+                  {{- block.settings.sale_label -}}
+                </span>
+              {% endif %}
+              {% if block.settings.sale_title != blank %}
+                <h4 class="banner-sale-title">{{ block.settings.sale_title }}</h4>
+              {% endif %}
+              {% if block.settings.sale_desc != blank %}
+                <p class="banner-sale-desc">{{ block.settings.sale_desc }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if block.settings.sale_code != blank %}
+            <div class="banner-sale-code d-flex flex-column">
+              <div class="banner-sale-code__title">{{ 'page_sale.use_code' | t }}</div>
+              <div class="banner-sale-code__label">{{ block.settings.sale_code }}</div>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.page-sale-banner.name",
+  "class": "bls-sales-banner-page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.page-sale-banner.settings.color_scheme.label"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Our Timelines"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p>Here’s some of our most popular products people are in love with.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:sections.page-sale-banner.settings.text_size.label",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.page-sale-banner.settings.text_size.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.page-sale-banner.settings.text_size.options__2.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.page-sale-banner.settings.text_size.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "t:sections.page-sale-banner.settings.text_transform.label",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.page-sale-banner.settings.text_transform.options__1.label"
+        },
+        {
+          "value": "capitalize",
+          "label": "t:sections.page-sale-banner.settings.text_transform.options__2.label"
+        },
+        {
+          "value": "uppercase",
+          "label": "t:sections.page-sale-banner.settings.text_transform.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_fw",
+      "label": "t:sections.page-sale-banner.settings.heading_fw.label",
+      "default": 600,
+      "min": 500,
+      "max": 800,
+      "step": 100
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.page-sale-banner.blocks.item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sale_label",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.sale_label.label",
+          "default": "Sale off"
+        },
+        {
+          "type": "checkbox",
+          "id": "eb_animation_label",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.eb_animation_label.label",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "sale_title",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.sale_title.label",
+          "default": "Sale title"
+        },
+        {
+          "type": "textarea",
+          "id": "sale_desc",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.sale_desc.label",
+          "default": "Sale description"
+        },
+        {
+          "type": "text",
+          "id": "sale_code",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.sale_code.label",
+          "default": "uminosale2023"
+        },
+        {
+          "type": "select",
+          "id": "banner_width",
+          "label": "t:sections.page-sale-banner.blocks.item.settings.banner_width.label",
+          "default": "3",
+          "options": [
+            {
+              "value": "3",
+              "label": "25%"
+            },
+            {
+              "value": "4",
+              "label": "33%"
+            },
+            {
+              "value": "6",
+              "label": "50%"
+            },
+            {
+              "value": "8",
+              "label": "66%"
+            },
+            {
+              "value": "9",
+              "label": "75%"
+            },
+            {
+              "value": "12",
+              "label": "100%"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

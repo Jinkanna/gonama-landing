@@ -1,0 +1,182 @@
+{%- unless template == 'index' or template == 'list-collections' or template == '404' -%}
+  {%- assign t = template | split: '.' | first -%}
+  <nav
+    class="breadcrumbs{% if t == 'product' and next_prev %} d-flex flex-nowrap gap-10 space-between align-center{% endif %}"
+    role="navigation"
+    aria-label="breadcrumbs"
+  >
+    <ol class="bls__breadcrumb-list p-0 list-none my-0">
+      <li class="bls__breadcrumb-item d-inline">
+        <a class="bls__breadcrumb-link" href="/">{{ 'general.breadcrumb.home' | t }}</a>
+        <span aria-hidden="true" class="bls__breadcrumb-separator pr-4">/</span>
+      </li>
+      {%- case t -%}
+        {%- when 'page' -%}
+          <li class="bls__breadcrumb-item d-inline">
+            <span class="bls__breadcrumb-link" aria-current="page">{{ page.title }}</span>
+          </li>
+        {%- when 'product' -%}
+          {%- if collection.url -%}
+            <li class="bls__breadcrumb-item d-inline">
+              {{ collection.title | link_to: collection.url }}
+              <span aria-hidden="true" class="bls__breadcrumb-separator pr-4">/</span>
+            </li>
+          {%- endif -%}
+          <li class="bls__breadcrumb-item d-inline">
+            <span class="bls__breadcrumb-link" aria-current="page">{{ product.title }}</span>
+          </li>
+        {%- when 'collection' and collection.handle -%}
+          {%- if current_tags -%}
+            <li class="bls__breadcrumb-item d-inline">
+              {{ collection.title | link_to: collection.url }}
+            </li>
+            <li class="bls__breadcrumb-item d-inline">
+              {%- capture tag_url -%}{{ collection.url }}/{{ current_tags | join: '+' }}{%- endcapture -%}
+              <span aria-hidden="true" class="bls__breadcrumb-separator px-4">/</span>
+              <span class="bls__breadcrumb-link" aria-current="page">
+                {{- current_tags | join: ' + ' -}}
+              </span>
+            </li>
+          {%- else -%}
+            <li class="bls__breadcrumb-item d-inline">
+              <span class="bls__breadcrumb-link" aria-current="page">
+                {{- collection.title -}}
+              </span>
+            </li>
+          {%- endif -%}
+        {%- when 'blog' -%}
+          {%- if current_tags -%}
+            <li class="bls__breadcrumb-item d-inline">
+              {{ blog.title | link_to: blog.url }}
+            </li>
+            <li class="bls__breadcrumb-item d-inline">
+              {%- capture tag_url -%}{{ blog.url }}/tagged/{{ current_tags | join: '+' }}{%- endcapture -%}
+              <span aria-hidden="true" class="bls__breadcrumb-separator px-4">/</span>
+              <span class="bls__breadcrumb-link" aria-current="page">
+                {{- current_tags | join: ' + ' -}}
+              </span>
+            </li>
+          {%- else -%}
+            <li class="bls__breadcrumb-item d-inline">
+              <span class="bls__breadcrumb-link" aria-current="page">{{ blog.title }}</span>
+            </li>
+          {%- endif -%}
+        {%- when 'article' -%}
+          <li class="bls__breadcrumb-item d-inline">
+            {{ blog.title | link_to: blog.url }}
+          </li>
+          <li class="bls__breadcrumb-item d-inline">
+            <span aria-hidden="true" class="bls__breadcrumb-separator px-4">/</span>
+            <span class="bls__breadcrumb-link" aria-current="page">{{ article.title }}</span>
+          </li>
+        {%- else -%}
+          <li class="bls__breadcrumb-item d-inline">
+            <span class="bls__breadcrumb-link" aria-current="page">{{ page_title }}</span>
+          </li>
+      {%- endcase -%}
+    </ol>
+    {%- if t == 'product' and next_prev -%}
+      <div class="bls-product-next-prev">
+        <div class="next-prev d-flex gap-10 relative align-center">
+          {%- liquid
+            assign previous_product = collection.previous_product
+            assign next_product = collection.next_product
+            assign collection_list = collection
+            if previous_product or next_product
+            else
+              assign collection_list = product.collections[0]
+              assign collectionList = collection_list.handle
+              assign previous_product = null
+              assign next_product = null
+              assign last = collections[collectionList].products_count
+              for p in collections[collectionList].products
+                if p.handle == product.handle
+                  assign prev = forloop.index | minus: 2
+                  assign next = forloop.index
+                  if prev >= 0
+                    assign previous_product = collections[collectionList].products[prev]
+                  endif
+                  if last >= next
+                    assign next_product = collections[collectionList].products[next]
+                  endif
+                  break
+                endif
+              endfor
+            endif
+          -%}
+          {%- if previous_product -%}
+            <div class="hover-event lh-1">
+              <a href="{{ previous_product.url }}" class="bls-nav-pr previous-product lh-1 text-color">
+                <i class="icon-chevron-left fs-18"></i>
+              </a>
+              <div class="bls__product-item list-view-item d-none-mb flex flex-nowrap bg-white p-10 absolute top-100 right-0 z-4 min-w-260 opacity-0">
+                <div class="bls__product-img overflow-hidden relative col-3 mr-10 mw-50">
+                  {%- assign img = previous_product.media -%}
+                  <a href="{{ previous_product.url | within: collection }}">
+                    <div class="bls__product-image">
+                      {%- if previous_product.featured_image != blank -%}
+                        {%- render 'responsive-image' | image: previous_product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                      {%- else -%}
+                        {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                      {%- endif -%}
+                    </div>
+                  </a>
+                </div>
+                <div class="bls__product-details">
+                  <h3 class="bls__product-name regular mb-0">
+                    <a href="{{ previous_product.url | within: collection }}">
+                      {{ previous_product.title }}
+                    </a>
+                  </h3>
+                  <div class="bls__product-price mb-7 mt-5">
+                    {%- render 'price', product: previous_product, use_variant: true, price_class: 'price--large' -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+          <a href="{{ collection_list.url }}" class="bls-nav-back lh-1 text-color bls_tooltip relative">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.8019 7.43638H10.7669C9.27167 7.43638 8.54639 6.76644 8.54639 5.40422V2.03217C8.54639 0.669945 9.27167 0 10.7669 0H13.7684C15.2636 0 15.9889 0.669945 15.9889 2.03217V5.41539C15.9889 6.07416 15.8215 6.56546 15.4756 6.90043C15.1074 7.2689 14.5718 7.43638 13.8019 7.43638ZM10.7669 1.11657C9.77379 1.11657 9.66221 1.40688 9.66221 2.03217V5.40422C9.66221 6.04067 9.76263 6.31981 10.7669 6.31981H13.7684C14.2482 6.33098 14.5495 6.25282 14.6946 6.10766C14.8173 5.98484 14.8731 5.75036 14.8731 5.41539V2.03217C14.8731 1.40688 14.7615 1.11657 13.7684 1.11657H10.7669Z" fill="#111111"/>
+              <path d="M13.7794 16.0003H10.7779C9.28266 16.0003 8.55737 15.2745 8.55737 13.7783V10.7747C8.55737 9.27851 9.28266 8.55273 10.7779 8.55273H13.7794C15.2746 8.55273 15.9999 9.27851 15.9999 10.7747V13.7783C15.9999 15.2745 15.2746 16.0003 13.7794 16.0003ZM10.7779 9.66931C9.90751 9.66931 9.67319 9.89262 9.67319 10.7747V13.7783C9.67319 14.6492 9.89636 14.8837 10.7779 14.8837H13.7794C14.6498 14.8837 14.8841 14.6604 14.8841 13.7783V10.7747C14.8841 9.90379 14.6609 9.66931 13.7794 9.66931H10.7779Z" fill="#111111"/>
+              <path d="M5.25478 7.43638H2.21975C0.72455 7.43638 -0.000732422 6.76644 -0.000732422 5.40422V2.03217C-0.000732422 0.669945 0.72455 0 2.21975 0H5.2213C6.7165 0 7.44179 0.669945 7.44179 2.03217V5.41539C7.44179 6.07416 7.27441 6.56546 6.92851 6.90043C6.56029 7.2689 6.0247 7.43638 5.25478 7.43638ZM2.21975 1.11657C1.22667 1.11657 1.11509 1.40688 1.11509 2.03217V5.40422C1.11509 6.04067 1.21551 6.31981 2.21975 6.31981H5.2213C5.68995 6.33098 6.00238 6.25282 6.13628 6.10766C6.25902 5.98484 6.31481 5.75036 6.31481 5.41539V2.03217C6.31481 1.40688 6.20323 1.11657 5.21015 1.11657H2.21975Z" fill="#111111"/>
+              <path d="M5.2213 16.0003H2.21975C0.72455 16.0003 -0.000732422 15.2745 -0.000732422 13.7783V10.7747C-0.000732422 9.27851 0.72455 8.55273 2.21975 8.55273H5.2213C6.7165 8.55273 7.44179 9.27851 7.44179 10.7747V13.7783C7.44179 15.2745 6.7165 16.0003 5.2213 16.0003ZM2.21975 9.66931C1.34941 9.66931 1.11509 9.89262 1.11509 10.7747V13.7783C1.11509 14.6492 1.33825 14.8837 2.21975 14.8837H5.2213C6.09164 14.8837 6.32597 14.6604 6.32597 13.7783V10.7747C6.32597 9.90379 6.1028 9.66931 5.2213 9.66931H2.21975Z" fill="#111111"/>
+            </svg>
+            <span class="bls_tooltip-content z-5">{{ 'products.product.back_to_product' | t }}</span>
+          </a>
+          {%- if next_product -%}
+            <div class="hover-event lh-1">
+              <a href="{{ next_product.url }}" class="bls-nav-pr next-product lh-1 text-color">
+                <i class="icon-chevron-right fs-18"></i>
+              </a>
+              <div class="bls__product-item list-view-item d-none-mb flex flex-nowrap bg-white p-10 absolute top-100 right-0 z-4 min-w-260 opacity-0">
+                <div class="bls__product-img overflow-hidden relative col-3 mr-10 mw-50">
+                  {%- assign img = next_product.media -%}
+                  <a href="{{ next_product.url | within: collection }}">
+                    <div class="bls__product-image">
+                      {%- if next_product.featured_image != blank -%}
+                        {%- render 'responsive-image' | image: next_product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                      {%- else -%}
+                        {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                      {%- endif -%}
+                    </div>
+                  </a>
+                </div>
+                <div class="bls__product-details flex-1">
+                  <h3 class="bls__product-name regular mb-0">
+                    <a href="{{ next_product.url | within: collection }}">
+                      {{ next_product.title }}
+                    </a>
+                  </h3>
+                  <div class="bls__product-price mb-7 mt-5">
+                    {%- render 'price', product: next_product, use_variant: true, price_class: 'price--large' -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </nav>
+{%- endunless -%}

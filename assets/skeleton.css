@@ -1,0 +1,261 @@
+.skeleton-product-detail .product-notify-stock::before,
+.skeleton-product-detail .bls__template-product .des-countdown-p-p-c .message::before,
+.skeleton-product-detail .bls__template-product .bls__product-countdown::before,
+.skeleton-product-detail .bls__template-product .bls__single-shortdes::before,
+.skeleton-product-detail .bls__template-product .product-input-property .form-label::before,
+.skeleton-product-detail .bls__template-product .product-input-property .control::before,
+.skeleton-product-detail .bls__template-product .bls__custom-html::before,
+.skeleton-product-detail .bls__template-product .bls__custom-liquid::before,
+.skeleton-product-detail .bls__template-product .bls__custom-text::before,
+.skeleton-product-detail .bls__template-product .bls__product-meta li::before,
+.skeleton-product-detail .bls__template-product .col_thumb .product__media-list::before,
+.skeleton-product-detail .bls__template-product .bls__product-title::before,
+.skeleton-product-detail .bls__template-product .price__regular::before,
+.skeleton-product-detail .bls__template-product .price__sale::before,
+.skeleton-product-detail .bls__template-product .bls__sale-label::before,
+.skeleton-product-detail .bls__template-produc .appstle_sub_widget::before,
+.skeleton-product-detail .bls__template-product .bls__selling_plan-label::before,
+.skeleton-product-detail .bls__template-product .quantity__label::before,
+.skeleton-product-detail .bls__template-product .bls__visitors::before,
+.skeleton-product-detail .bls__template-product #variant-radios .form__label::before,
+.skeleton-product-detail .bls__template-product .bls__option-swatch::before,
+.skeleton-product-detail .bls__template-product .bls__product-addons::before,
+.skeleton-product-detail .bls__template-product .product-form__submit::before,
+.skeleton-product-detail .bls__template-product .bls__product-wishlist::before,
+.skeleton-product-detail .bls__template-product .bls__product-compare::before,
+.skeleton-product-detail .bls__template-product .bls__terms-conditions::before,
+.skeleton-product-detail .bls__template-product .bls__delivery::before,
+.skeleton-product-detail .bls__template-product .bls__return::before,
+.skeleton-product-detail .bls__template-product .bls__trust_badge::before,
+.skeleton-product-detail .bls__template-product ul.justify-content-center::before,
+.skeleton-product-detail .bls__template-product .bls__product-stock-countdow::before,
+.skeleton-product-detail .bls__template-product .bls__product-tabs::before,
+.skeleton-product-detail .bls__template-product .bls__section-header::before,
+.skeleton-product-detail .bls__template-product .bls__product-item::before,
+.skeleton-product-detail .bls__template-product quantity-input::before,
+.skeleton-product-detail .bls__template-product pickup-availability-preview::before,
+.skeleton-product-detail .bls__template-product .shopify-payment-button__button--unbranded::before,
+.skeleton-product-detail .bls__template-product .bls__product-review-sold::before,
+.skeleton-product-detail .bls__template-product .product__media-list .gallery-img::before,
+.skeleton-product-detail skeleton-page .bls__product-img::before,
+.skeleton-product-detail skeleton-page .bls__product-name::before,
+.skeleton-product-detail skeleton-page .bls__product-color-swatches::before,
+.skeleton-product-detail .bls__template-product .bls__color-dropdown::before,
+.skeleton-product-detail .bls__template-product .bls__product-vendors a::before,
+.skeleton-product-detail .bls__template-product .more-colors .swatch-selected-value::before,
+.skeleton-product-detail .bls__template-product .more-colors .more-colors-product_link::before {
+  content: '';
+  position: absolute;
+  inset: -2px !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  z-index: 3;
+  border-radius: 3px;
+  box-shadow: none !important;
+  border: none !important;
+  opacity: 1 !important;
+  background: #f5f5f5;
+}
+
+.skeleton-product-detail skeleton-page .bls__product-name {
+  height: 40px;
+}
+
+.skeleton-product-detail .product-notify-stock::after,
+.skeleton-product-detail .bls__template-product .des-countdown-p-p-c .message::after,
+.skeleton-product-detail .bls__template-product .bls__product-countdown::after,
+.skeleton-product-detail .bls__template-product .bls__single-shortdes::after,
+.skeleton-product-detail .bls__template-product .product-input-property .form-label::after,
+.skeleton-product-detail .bls__template-product .product-input-property .control::after,
+.skeleton-product-detail .bls__template-product .bls__custom-html::after,
+.skeleton-product-detail .bls__template-product .bls__custom-liquid::after,
+.skeleton-product-detail .bls__template-product .bls__custom-text::after,
+.skeleton-product-detail .bls__template-product .bls__product-meta li::after,
+.skeleton-product-detail .bls__template-product .col_thumb .product__media-list::after,
+.skeleton-product-detail .bls__template-product .bls__product-title::after,
+.skeleton-product-detail .bls__template-product .price__regular::after,
+.skeleton-product-detail .bls__template-product .price__sale::after,
+.skeleton-product-detail .bls__template-product .bls__sale-label::after,
+.skeleton-product-detail .bls__template-produc .appstle_sub_widget::after,
+.skeleton-product-detail .bls__template-product .bls__selling_plan-label::after,
+.skeleton-product-detail .bls__template-product .quantity__label::after,
+.skeleton-product-detail .bls__template-product .bls__visitors::after,
+.skeleton-product-detail .bls__template-product #variant-radios .form__label:after,
+.skeleton-product-detail .bls__template-product .bls__product-addons::after,
+.skeleton-product-detail .bls__template-product .product-form__submit::after,
+.skeleton-product-detail .bls__template-product .bls__product-wishlist::after,
+.skeleton-product-detail .bls__template-product .bls__product-compare::after,
+.skeleton-product-detail .bls__template-product .bls__terms-conditions::after,
+.skeleton-product-detail .bls__template-product .bls__delivery::after,
+.skeleton-product-detail .bls__template-product .bls__return::after,
+.skeleton-product-detail .bls__template-product .bls__trust_badge::after,
+.skeleton-product-detail .bls__template-product ul.justify-content-center::after,
+.skeleton-product-detail .bls__template-product .bls__product-stock-countdow::after,
+.skeleton-product-detail .bls__template-product .bls__product-tabs::after,
+.skeleton-product-detail .bls__template-product .bls__section-header::after,
+.skeleton-product-detail .bls__template-product .bls__product-item::after,
+.skeleton-product-detail .bls__template-product quantity-input::after,
+.skeleton-product-detail .bls__template-product pickup-availability-preview::after,
+.skeleton-product-detail .bls__template-product .shopify-payment-button__button--unbranded::after,
+.skeleton-product-detail .bls__template-product .bls__product-review-sold::after,
+.skeleton-product-detail .bls__template-product .product__media-list .gallery-img::after,
+.skeleton-product-detail skeleton-page .bls__product-img::after,
+.skeleton-product-detail skeleton-page .bls__product-name::after,
+.skeleton-product-detail .bls__template-product .bls__color-dropdown::after,
+.skeleton-product-detail .bls__template-product .bls__product-vendors a:after,
+.skeleton-product-detail .bls__template-product .more-colors .swatch-selected-value::after,
+.skeleton-product-detail .bls__template-product .more-colors .more-colors-product_link::after {
+  content: '';
+  position: absolute;
+  inset: -2px !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  border-radius: 3px;
+  z-index: 4;
+  box-shadow: none !important;
+  border: none !important;
+  opacity: 1 !important;
+  background-image: linear-gradient(90deg, rgba(22, 24, 35, 0) 0, rgba(22, 24, 35, .04) 50%, rgba(22, 24, 35, 0) 100%);
+  -webkit-background-size: 200% 100%;
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  -webkit-animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images;
+  animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images;
+}
+
+.skeleton-product-detail .bls__rvp-page-section skeleton-page .bls__product-name::after,
+.skeleton-product-detail .bls__rvp-page-section skeleton-page .bls__product-name:before,
+.skeleton-product-detail .bls__wishlist-page-section skeleton-page .bls__product-name:before,
+.skeleton-product-detail .bls__wishlist-page-section skeleton-page .bls__product-name:after,
+.skeleton-product-detail .bls__template-product .col_thumb .product__media-list:after,
+.skeleton-product-detail .bls__template-product .col_thumb .product__media-list:before {
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.skeleton-product-detail skeleton-page .bls__product-color-swatches.rounded::before {
+  border-radius: 50%;
+}
+
+.skeleton-product-detail .bls__template-product .flash-move::after {
+  transform: none;
+  width: auto;
+  height: auto;
+}
+
+.skeleton-product-detail .bls__template-product .des-countdown-p-p-c .message {
+  animation: none;
+}
+
+.skeleton-product-detail .product__media-list .gallery-img.video {
+  display: none;
+  overflow: hidden;
+  position: relative;
+  visibility: hidden;
+}
+
+.skeleton-product-detail .bls__template-product quantity-input::after,
+.skeleton-product-detail .bls__template-product .product-form__submit::after,
+.skeleton-product-detail .bls__template-product quantity-input::before,
+.skeleton-product-detail .bls__template-product .product-form__submit::before {
+  border-radius: var(--btn-border-radius);
+}
+
+.skeleton-product-detail .bls__template-product .bls__product-wishlist::after,
+.skeleton-product-detail .bls__template-product .bls__product-compare::after,
+.skeleton-product-detail .bls__template-product .bls__product-wishlist::before,
+.skeleton-product-detail .bls__template-product .bls__product-compare::before {
+  border-radius: var(--bls__product-icon-radius, 50%);
+}
+
+.skeleton-product-detail .product-notify-stock,
+.skeleton-product-detail .bls__template-product .col_thumb>.product__media-list,
+.skeleton-product-detail .bls__template-product .gallery-img,
+.skeleton-product-detail .bls__template-product .des-countdown-p-p-c .message,
+.skeleton-product-detail .bls__template-product .bls__product-countdown,
+.skeleton-product-detail .bls__template-product .bls__single-shortdes,
+.skeleton-product-detail .bls__template-product .product-input-property .form-label,
+.skeleton-product-detail .bls__template-product .product-input-property .control,
+.skeleton-product-detail .bls__template-product .bls__custom-html,
+.skeleton-product-detail .bls__template-product .bls__custom-liquid,
+.skeleton-product-detail .bls__template-product .bls__custom-text,
+.skeleton-product-detail .bls__template-product .bls__product-meta li,
+.skeleton-product-detail .bls__template-product .bls__product-review-sold,
+.skeleton-product-detail .bls__template-product .shopify-payment-button__button--unbranded,
+.skeleton-product-detail .bls__template-product .bls__product-title,
+.skeleton-product-detail .bls__template-product .bls__product-review-sold,
+.skeleton-product-detail .bls__template-product .price__regular,
+.skeleton-product-detail .bls__template-product .price__sale,
+.skeleton-product-detail .bls__template-product .bls__sale-label,
+.skeleton-product-detail .bls__template-produc .appstle_sub_widget,
+.skeleton-product-detail .bls__template-product .bls__selling_plan-label,
+.skeleton-product-detail .bls__template-product .quantity__label,
+.skeleton-product-detail .bls__template-product .bls__visitors,
+.skeleton-product-detail .bls__template-product #variant-radios .form__label,
+.skeleton-product-detail .bls__template-product .bls__option-swatch,
+.skeleton-product-detail .bls__template-product .bls__product-addons,
+.skeleton-product-detail .bls__template-product quantity-input,
+.skeleton-product-detail .bls__template-product pickup-availability-preview,
+.skeleton-product-detail .bls__template-product .product-form__submit,
+.skeleton-product-detail .bls__template-product .bls__product-wishlist,
+.skeleton-product-detail .bls__template-product .bls__product-compare,
+.skeleton-product-detail .bls__template-product .bls__terms-conditions,
+.skeleton-product-detail .bls__template-product .bls__delivery,
+.skeleton-product-detail .bls__template-product .bls__return,
+.skeleton-product-detail .bls__template-product .trust_badge-text,
+.skeleton-product-detail .bls__template-product .bls__product-tabs,
+.skeleton-product-detail .bls__template-product .bls__product-stock-countdow,
+.skeleton-product-detail .bls__template-product .bls__section-header,
+.skeleton-product-detail .bls__template-product .bls__product-item,
+.skeleton-product-detail skeleton-page .bls__product-img,
+.skeleton-product-detail skeleton-page .bls__product-name,
+.skeleton-product-detail .bls__template-product .bls__color-dropdown,
+.skeleton-product-detail .bls__template-product .bls__product-vendors a,
+.skeleton-product-detail .bls__template-product .more-colors .swatch-selected-value,
+.skeleton-product-detail .bls__template-product .more-colors .more-colors-product_link {
+  position: relative;
+}
+
+.skeleton-product-detail .bls__template-product .bls__product-vendors a,
+.skeleton-product-detail .bls__template-product .more-colors .swatch-selected-value,
+.skeleton-product-detail .bls__template-product .quantity__label {
+  display: inline-block;
+}
+
+.skeleton-product-detail .bls__template-product .shopify-payment-button__button--unbranded {
+  opacity: 1 !important;
+}
+
+.skeleton-product-detail .bls__template-product .bls__single-shortdes {
+  margin-top: 6px;
+}
+
+.skeleton-product-detail .bls__template-product .product-input-property .form-label,
+.skeleton-product-detail .bls__template-product .bls__product-meta li {
+  margin-bottom: 6px;
+}
+
+.skeleton-product-detail .bls__template-product .price__sale {
+  margin: 0 6px;
+}
+
+.skeleton-product-detail .bls__template-product .bls__sale-label {
+  overflow: visible !important;
+}
+
+.skeleton-product-detail .bls__template-product .bls__product-color-swatches {
+  background: transparent !important;
+}
+
+.skeleton-product-detail .bls__template-product .col_thumb>.product__media-list,
+.skeleton-product-detail .bls__template-product .gallery-img {
+  border-radius: 3px;
+  overflow: hidden;
+}

@@ -1,0 +1,577 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign st = section.settings
+  assign show_product_type = th_st.show_product_type
+  assign show_review = th_st.show_review
+  assign hidden_price = th_st.hidden_price
+  assign sale_type = th_st.product_label_sale_type
+  assign container = st.container
+  assign color_scheme = st.color_scheme
+  assign text_align = st.text_alignment
+  assign heading = st.heading
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign description = st.description
+  assign view_all_enable = st.view_all_enable
+  assign text_view_all = st.text_view_all
+  assign cls = st.collection
+  if bl != blank
+    assign cls = bl
+  endif
+  assign item_desktop = st.item_desktop
+  assign item_row = st.item_row
+  assign limit_products = st.limit_products | plus: 0
+  assign carousel_autoplay = st.carousel_autoplay
+  assign carousel_loop = st.carousel_loop
+  assign carousel_arrows = st.carousel_arrows
+  assign carousel_pagination = st.carousel_pagination
+  assign column_gap = st.column_gap
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+
+  assign has_bg = ''
+  if bg_color != blank
+    assign has_bg = ' has-bg'
+  endif
+  assign collection = collections[cls]
+-%}
+
+{%- capture style -%}
+{%- if bg_color != blank -%}
+    --section-bg-color: {{ bg_color }};
+{%- endif -%}
+--section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px; --bls_product-item-vertical-space: 0px;
+{%- endcapture -%}
+<section
+  class="color-{{ color_scheme }} gradient bls__section bls__section-list-products {{ has_bg }}{{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }} bls__product{{ reset_spacing }} {% if section.settings.container == "full-width" %} not-radius {% endif %}"
+  style="{{ style | strip | strip_newlines }}"
+  data-id="{{ section.id }}"
+  data-type="product_list_carousel"
+>
+  <div class=" {{ container }} section-full">
+    {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+      <div class="bls__section-header {{ text_align }} {% if text_view_all -%}text-view-all{% endif %}">
+        {%- if heading_logo_svg != blank -%}
+          <div class="bls__section-logo bls__section-logo-svg">
+            {{ heading_logo_svg }}
+          </div>
+        {%- elsif heading_logo != blank -%}
+          <div class="bls__section-logo">
+            <img
+              srcset="
+                {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ heading_logo | image_url }} {{ heading_logo.width }}w
+              "
+              src="{{ heading_logo | image_url: width: 533 }}"
+              alt="{{ heading_logo.alt | escape }}"
+              class="motion-reduce"
+              loading="lazy"
+              width="{{ heading_logo.width }}"
+              height="{{ heading_logo.height }}"
+            >
+          </div>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5">{{ heading }}</h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des">
+            {{ description }}
+          </div>
+        {%- endif -%}
+        {%- if view_all_enable -%}
+          {%- if text_view_all != blank -%}
+            <div class="links-view-all">
+              <a aria-label="Link detail" href="{% if collection == blank %}#{% else %}{{ collection.url }}{% endif %}">
+                {{ text_view_all }}
+                <i class="icon-chevrons-right fs-18 ml-5"></i>
+              </a>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div
+      class="swiper bls__swiper hover__show-nav"
+      id="bls__swiper-{{ section.id }}"
+      data-section-id="{{ section.id }}"
+      data-autoplay="{{ carousel_autoplay }}"
+      data-loop="{{ carousel_loop }}"
+      data-mobile="1"
+      data-tablet="2"
+      data-desktop="{{ item_desktop }}"
+      data-spacing="{{ column_gap }}"
+      data-row="{{ item_row }}"
+      data-pagination-progressbar="{% if carousel_pagination == 'carousel_pagination_progress' %}true{% else %}false{% endif %}"
+    >
+      {%- if carousel_arrows != false -%}
+        <div class="swipper-next-back">
+          <div class="swiper-arrow swiper-next swiper-button-next box-shadow">
+            <i class="icon-chevron-right"></i>
+          </div>
+          <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow">
+            <i class="icon-chevron-left"></i>
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="swiper-wrapper" style="--perload-gap: {{ column_gap }}px">
+        {%- if collection.products.size == 0 -%}
+          {%- for i in (1..limit_products) -%}
+            <div class="swiper-slide">
+              <div class="bls__product-item item-product-list flex flex-nowrap mb-15">
+                <div class="bls__product-img overflow-hidden relative col-3 mr-15 mw-100">
+                  <a role="link" aria-disabled="true">
+                    {%- render 'placeholder-render' | type: 'product' -%}
+                  </a>
+                </div>
+                <div class="bls__product-details flex-1">
+                  <a role="link" aria-disabled="true">{{ 'products.product.product_placeholder' | t }}</a>
+                  <div class="bls__product-price mb-7">{%- render 'price' -%}</div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for product in collection.products limit: limit_products -%}
+            {%- if product.available -%}
+            {%- endif -%}
+            {%- liquid
+              assign sold_out = false
+              assign compare_at_price = product.compare_at_price
+              assign price = product.price
+              assign sale = false
+              if compare_at_price > price and compare_at_price != blank
+                assign sale = true
+              endif
+              assign product_avail = false
+              assign product_qty = 0
+              assign pre_order = false
+              if product.has_only_default_variant == false
+                if product.options_with_values.size < 2
+                  for variant in product.variants limit: 1
+                    assign product_qty = product_qty | plus: variant.inventory_quantity
+                    assign product_avail = variant.available
+                    assign product_management = variant.inventory_management
+                    assign compare_at_price = variant.compare_at_price
+                    assign price = variant.price
+                  endfor
+                  if product_management != null
+                    if product_qty < 1
+                      if product_avail == true
+                        assign pre_order = true
+                        assign sold_out = false
+                      else
+                        assign pre_order = false
+                        assign sold_out = true
+                      endif
+                    else
+                      assign pre_order = false
+                      assign sold_out = false
+                    endif
+                  else
+                    assign pre_order = false
+                    assign sold_out = false
+                  endif
+                else
+                  assign product_management = 'shopify'
+                  for variant in product.variants
+                    assign product_qty = product_qty | plus: variant.inventory_quantity
+                    if variant.available == true
+                      assign product_avail = true
+                    endif
+                    if variant.inventory_management == null
+                      assign product_management = 'null'
+                    endif
+                  endfor
+                  assign compare_at_price = product.variants[0].compare_at_price
+                  assign price = product.variants[0].price
+                  if product_management != 'null'
+                    if product_qty < 1
+                      if product_avail == true
+                        assign pre_order = true
+                        assign sold_out = false
+                      else
+                        assign pre_order = false
+                        assign sold_out = true
+                      endif
+                    else
+                      assign pre_order = false
+                      assign sold_out = false
+                    endif
+                  else
+                    assign pre_order = false
+                    assign sold_out = false
+                  endif
+                endif
+              else
+                if product.available != true
+                  assign sold_out = true
+                endif
+                assign qty = 0
+                for v in product.variants
+                  if v.inventory_quantity
+                    assign qty = qty | plus: v.inventory_quantity
+                  endif
+                endfor
+                if qty < 1 and product.available == true
+                  assign pre_order = true
+                  assign sold_out = false
+                endif
+                for v in product.variants
+                  if v.inventory_management == null
+                    assign pre_order = false
+                    assign sold_out = false
+                  endif
+                endfor
+              endif
+
+              assign label = false
+              assign subscription = product.selling_plan_groups.size
+              if sold_out == true or sale == true or pre_order == true or subscription > 0
+                assign label = true
+              endif
+              assign p = compare_at_price | minus: price
+            -%}
+            <div class="swiper-slide">
+              <div class="bls__product-item item-product-list flex flex-nowrap mb-20 last-0">
+                <div class="bls__product-img overflow-hidden relative col-3 mr-15">
+                  <a href="{{ product.url | within: collection }}">
+                    {%- if product.featured_image != blank -%}
+                      {%- render 'responsive-image' | image: product.featured_image | type: 'product' -%}
+                    {%- else -%}
+                      {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-list-plh' -%}
+                    {%- endif -%}
+                  </a>
+                </div>
+                <div class="bls__product-details flex-1 d-flex flex-column justify-content-center">
+                  {%- if label -%}
+                    <div class="bls__product-label fs-12 pointer-events-none absolute">
+                      {% if subscription > 0 %}
+                        <div class="bls__selling_plan-label">
+                          {{- 'products.product.label.subscription' | t -}}
+                        </div>
+                      {% endif %}
+                      {%- if compare_at_price > price and compare_at_price != blank -%}
+                        <div class="bls__sale-label">
+                          {%- if sale_type == 'text' -%}
+                            {{- 'products.product.label.sale' | t -}}
+                          {% elsif sale_type == 'percent' %}
+                            {%- if p > 0 -%}
+                              {%- assign p = p | times: 100.0 | divided_by: compare_at_price | round -%}
+                            {%- endif -%}
+                            -
+                            {{- p -}}
+                            %
+                          {% elsif sale_type == 'price' %}
+                            - {{ p | money }}
+                          {% endif %}
+                        </div>
+                      {%- endif -%}
+                      {%- if sold_out -%}
+                        <div class="bls__sold-out-label">
+                          {{ 'products.product.sold_out' | t }}
+                        </div>
+                      {%- else -%}
+                        {%- if pre_order -%}
+                          <div class="bls__pre-order-label">
+                            {{ 'products.product.pre_order' | t }}
+                          </div>
+                        {%- endif -%}
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if show_product_type -%}
+                    <div class="bls__product-type fs-small mt-5 mb-5">
+                      {{ product.type }}
+                    </div>
+                  {%- endif -%}
+                  {%- if th_st.show_vendors -%}
+                    <div class="bls__product-vendor fs-small mt-5 mb-5">
+                      {{ product.vendor | link_to_vendor }}
+                    </div>
+                  {%- endif -%}
+                  <h3 class="bls__product-name regular mb-0">
+                    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+                  </h3>
+                  {%- if show_review -%}
+                    {% render 'product-review' | review_star: true | product: product %}
+                  {%- endif -%}
+                  {% if hidden_price == false %}
+                    <div class="bls__product-price mt-7">
+                      {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      {%- if carousel_pagination == 'carousel_bullets'
+        or carousel_pagination == 'show_bullet_mobile'
+        or carousel_pagination == 'carousel_pagination_progress'
+      -%}
+        <div
+          class="swiper-pagination {% if carousel_pagination == 'show_bullet_mobile' %} show-on-mobile {% endif %}"
+        ></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.products-list-carousel.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Top Selling Products"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-list-carousel.Product-settings"
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "t:sections.products-list-carousel.settings.collection.label"
+    },
+    {
+      "type": "range",
+      "id": "limit_products",
+      "label": "t:sections.products-list-carousel.settings.limit_products.label",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "item_desktop",
+      "label": "t:sections.products-list-carousel.settings.item_desktop.label",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "item_row",
+      "label": "t:sections.products-list-carousel.settings.item_row.label",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "t:sections.products-list-carousel.settings.column_gap.label",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.setting_carousel.carousel_title"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_autoplay",
+      "label": "t:sections.all.setting_carousel.autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_loop",
+      "label": "t:sections.all.setting_carousel.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_arrows",
+      "label": "t:sections.all.setting_carousel.show_arrow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "carousel_pagination",
+      "label": "t:sections.all.setting_carousel.carousel_pagination.label",
+      "options": [
+        {
+          "value": "carousel_none",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__none.label"
+        },
+        {
+          "value": "carousel_bullets",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__bullets.label"
+        },
+        {
+          "value": "show_bullet_mobile",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.bullet__mobile.label"
+        },
+        {
+          "value": "carousel_pagination_progress",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__progress.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-list-carousel.View-all"
+    },
+    {
+      "type": "checkbox",
+      "id": "view_all_enable",
+      "label": "t:sections.products-list-carousel.settings.view_all_enable.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "text_view_all",
+      "label": "t:sections.products-list-carousel.settings.text_view_all.label",
+      "default": "View All"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.products-list-carousel.name"
+    }
+  ]
+}
+{% endschema %}

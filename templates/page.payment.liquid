@@ -1,0 +1,191 @@
+{% layout none %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Pantalla de pago -
+      {{ shop.name }}
+    </title>
+
+    {% if settings.favicon %}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {% endif %}
+    {{ content_for_header }}
+  </head>
+  <body>
+    <style type="text/css">
+      html, body, div, iframe { margin:0; padding:0; height:100%; }
+      iframe { display:block; width:100%; border:none; }
+    </style>
+    <iframe
+      id="checkout-iframe"
+      style="border:none;"
+    ></iframe>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      let url;
+
+      //console.log(window.location.search);
+
+      if (urlParams.has('localhost')) {
+        url = "http://localhost:8080";
+      } else {
+        url = "https://{{ shop.permanent_domain | split: '.' | first }}.jinkanna.com";
+      }
+
+            const postMessage = (type, payload) => {
+              const origin = url;
+              document.getElementById("checkout-iframe").contentWindow.postMessage({ type, payload }, origin);
+            }
+
+            // change url pages/payment -> /payments
+            window.addEventListener("DOMContentLoaded", (event) => {
+              window.history.replaceState(null, '', "/payments" + window.location.search);
+              if({{cart.item_count}} === 0) {
+                window.href = '/';
+              }
+            });
+
+            // send information to iframe
+            const iframe = document.getElementById("checkout-iframe");
+
+            iframe.src = url;
+
+            window.addEventListener("DOMContentLoaded", () => {
+              let logoUrl = null;
+              let shopName = "{{ shop.name }}"
+              let search = `/checkout?shopName="${shopName}"`;
+              if (urlParams.has('orderid')) {
+                const orderId = urlParams.get('orderid');
+                search += `&orderid=${orderId}`;
+              }
+              {% if settings.logo %}
+                logoUrl = "{{ settings.logo | image_url: ‘200x’ }}"
+                search += `&logoUrl="${logoUrl}"`
+              {% endif %}
+              createCart().then(res => {
+                search += `&cartId="${res}"`
+                if({{customer | json }}) {
+                  search += `&customerId="{{ customer.id | json }}"`
+                }
+                iframe.src = url + search;
+              }).catch(error => console.error('Error al obtener el carrito:', error));
+            })
+
+            // get information about checkout status
+            window.addEventListener('message', function(event) {
+              if(event.origin !== url) return;
+              const { type, payload } = event.data;
+              switch(type) {
+                  case "navigate":
+                    window.location.href = payload;
+                    break;
+                  case "emptyCart":
+                    fetch('/cart/clear.js', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      // console.log('El carrito ha sido vaciado:', data);
+                      // window.location.reload(); // Recarga la página para reflejar el carrito vacío
+                    })
+                    .catch((error) => {
+                      console.error('Error al vaciar el carrito:', error);
+                    });
+                    break;
+              }
+            }, false);
+
+
+  async function cartMutation(cart) {
+    const storefrontAccessToken = '4c39f421f0bd99a4346ad54a54eeee12';
+    const mutation = `
+      mutation {
+        cartCreate(input: {
+          lines: [
+            ${cart.items.map(item => `{ quantity: ${item.quantity}, merchandiseId: "gid://shopify/ProductVariant/${item.variant_id}" }`).join(", ")}
+          ]
+        }) {
+          cart {
+            id
+          }
+        }
+      }
+    `;
+
+  const response = await fetch('/api/2024-01/graphql.json', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+    },
+    body: JSON.stringify({ query: mutation }),
+  });
+
+    const data = await response.json();
+    const cartData = data.data.cartCreate.cart;
+
+    return cartData;
+  }
+
+  async function createCart() {
+    const cart = {{ cart | json }};
+
+    //console.log(cart);
+
+    const variants_id = cart.items.filter(item => item.taxable == true).map(itemm => {
+      return { productId: `${itemm.product_id}`, variantId: `${itemm.variant_id}`}
+    })
+
+    if(variants_id.length > 0) {
+      const res2 = await fetch(url+'/api/shopify/tax', {
+          method: 'POST',
+          body: JSON.stringify({products_id: variants_id})
+        })
+    }
+
+    let cartData = await cartMutation(cart);
+
+    if(cartData === null) {
+  
+      const products_id = cart.items.map(item => `${item.product_id}`);
+    
+        const res = await fetch(url+'/api/shopify', {
+          method: 'POST',
+          body: JSON.stringify({products_id: products_id})
+        })
+
+      cartData = await cartMutation(cart);
+    }
+      
+      const gid = cartData.id.split('/');
+      return gid[gid.length-1];
+  }
+    </script>
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+          // Crear un observador para detectar cambios en el DOM
+          const observer = new MutationObserver(() => {
+              // Eliminar elementos no deseados
+              document.querySelectorAll('.shopify-block, .amo-button-holder, #pop-convert-app, #loom-companion-mv3, .compare-bar').forEach(element => {
+                  element.remove();
+              });
+          });
+
+          // Iniciar observador en el cuerpo de la página
+          observer.observe(document.body, { childList: true, subtree: true });
+
+          // Llamada inicial para eliminar cualquier elemento que ya esté en la página
+          document.querySelectorAll('.shopify-block, .amo-button-holder, #pop-convert-app, #loom-companion-mv3, .compare-bar').forEach(element => {
+              element.remove();
+          });
+      });
+    </script>
+  </body>
+</html>

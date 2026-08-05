@@ -1,0 +1,712 @@
+{%- liquid
+  assign st = section.settings
+  assign container = st.container
+  assign color_scheme = st.color_scheme
+  assign heading = st.heading
+  assign description = st.description
+  assign text_align = st.text_align
+  assign img_position = st.ib_img_position
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign autoplay = st.autoplay
+  assign loop = st.loop
+  assign item_desktop = st.carousel_item_desktop
+  assign gap_carousel = st.car_gap
+  assign content_width = st.content_width
+  assign reset_spacing = ''
+  assign enabled_animations = settings.animations_enabled
+  assign pagination_style = st.pagination_style
+  assign reveal_on_scroll = st.reveal_on_scroll
+
+  assign design = st.design
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+
+  assign img_view = ''
+  if st.img_view == 'framed'
+    assign img_view = ' border p-30 p-xl-40 rounded-10'
+  endif
+
+  assign img_position = ''
+  if st.img_position == 'position-left'
+    assign img_position = ' flex-row'
+  elsif st.img_position == 'position-right'
+    assign img_position = ' flex-row-reverse'
+  elsif st.img_position == 'position-top'
+    assign img_position = ' flex-column align-items-center text-center'
+  elsif st.img_position == 'position-bottom'
+    assign img_position = ' flex-column-reverse align-items-center text-center'
+  endif
+
+  assign bls_tes-content = ''
+  if st.img_position == 'position-bottom'
+    assign bls_tes-content = ' flex flex-column mb-15'
+  elsif st.img_position == 'position-right'
+    assign bls_tes-content = ' mr-15 flex-1'
+  elsif st.img_position == 'position-left'
+    assign bls_tes-content = ' ml-15 flex-1'
+  endif
+
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+
+  assign has_bg = ''
+  if background_color != blank
+    assign has_bg = ' has-bg'
+  endif
+
+  assign desc_text_size = ''
+  assign title_text_size = ''
+  assign mb_svg = ''
+  assign size_svg = ''
+  if st.testi_text_size == 'smallest'
+    assign title_text_size = 'fs-16'
+    assign desc_text_size = 'fs-14'
+    assign mb_svg = 'mb-15'
+    assign size_svg = 'width="41" height="31"'
+  elsif st.testi_text_size == 'small'
+    assign title_text_size = 'fs-18'
+    assign desc_text_size = 'fs-16'
+    assign mb_svg = 'mb-15'
+    assign size_svg = 'width="41" height="31"'
+  elsif st.testi_text_size == 'normal'
+    assign title_text_size = 'fs-26 lh-15'
+    assign desc_text_size = 'fs-24 lh-15'
+    assign mb_svg = 'mb-20'
+    assign size_svg = 'width="56" height="42"'
+  elsif st.testi_text_size == 'bigger'
+    assign title_text_size = 'fs-32 lh-15'
+    assign desc_text_size = 'fs-32 lh-15 mb-15'
+    assign mb_svg = 'mb-30'
+    assign size_svg = 'width="56" height="42"'
+  endif
+-%}
+
+{%- capture style -%}
+  {%- if background_color != blank -%}
+    --section-bg-color: {{ background_color }};
+  {%- endif -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px;--bls-gutter-x:
+  {{ gap_carousel }}px;
+{%- endcapture -%}
+
+<section
+  class="color-{{ color_scheme }} gradient bls__section {{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }} bls__testimonial{{ reset_spacing }}{{ has_bg }} {% if reveal_on_scroll %}reveal_on_scroll{% endif %}"
+  style="{{ style | strip | strip_newlines }}"
+  data-type="bls_swiper"
+  data-id="{{ section.id }}"
+  id="{{ section.id }}"
+>
+  <div class="{{ container }} section-full">
+    {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+      <div class="bls__section-header {{ text_align }}">
+        {%- if heading_logo_svg != blank -%}
+          <div class="bls__section-logo bls__section-logo-svg">
+            {{ heading_logo_svg }}
+          </div>
+        {%- elsif heading_logo != blank -%}
+          <div class="bls__section-logo">
+            <img
+              srcset="
+                {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ heading_logo | image_url }} {{ heading_logo.width }}w
+              "
+              src="{{ heading_logo | image_url: width: 533 }}"
+              alt="{{ heading_logo.alt | escape }}"
+              class="motion-reduce"
+              loading="lazy"
+              width="{{ heading_logo.width }}"
+              height="{{ heading_logo.height }}"
+            >
+          </div>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5 {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="bls__tes-content {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %} {{ design }}">
+      <div
+        class="swiper bls__swiper bls__testimonial hover__show-nav {% if reveal_on_scroll %}reveal_on_scroll{% endif %}"
+        id="bls__testimonial-{{ section.id }}"
+        data-section-id="{{ section.id }}"
+        data-autoplay="{{ autoplay }}"
+        data-loop="{{ loop }}"
+        data-mobile="1"
+        data-tablet="{%- if item_desktop > 1 -%}2{%- else -%}1{%- endif -%}"
+        data-desktop="{{ item_desktop }}"
+        data-spacing="{{ gap_carousel }}"
+        data-thumb="{% if pagination_style == 'logo' %}true{% else %}false{% endif %}"
+        data-pagination-progressbar="{% if pagination_style == 'progressbar' %}true{% else %}false{% endif %}"
+      >
+        <div class="swiper-wrapper {% if carousel_pagination_progress %}mb-45{% endif %}">
+          {%- for block in section.blocks -%}
+            <div
+              {{ block.shopify_attributes }}
+              class="swiper-slide {% if design == 'design_3' %}bls__tes-slide-3{% endif %}"
+            >
+              <div
+                class="bls__tes-item {{ img_view }} flex{{ img_position }}  {% if design == 'design_3' %}flex-wrap  bls__tes-item-3 flex-column{% endif %}"
+                style="--content-width:{{ content_width }}%;"
+              >
+                {% if design == 'design_3' %}
+                  <div
+                    class="bls__tes-content-design3 w-full d-flex align-items-center align-self-start {{ img_position }}"
+                  >
+                {% endif %}
+                {%- if block.settings.image != blank -%}
+                  <div class="bls__tes-img bls_img-ratio mb-15" style="width: {{ block.settings.testimonial_width }}px">
+                    {% render 'responsive-image', image: block.settings.image %}
+                  </div>
+                {%- endif -%}
+                <div class="bls__tes-content {{ bls_tes-content }}  {% if design == 'design_3' %}mb-15{%- endif -%}">
+                  {% if design == 'design_1' %}
+                    <div class="desc-quote-info {{ desc_text_size }}">
+                      {%- if block.settings.image == blank -%}
+                        <svg
+                          class="{{ mb_svg }} {% if st.img_view == 'framed' %} mt-10 {% endif %}"
+                          {{ size_svg }}
+                          viewBox="0 0 56 42"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M53.1087 1H31.587C30.2684 1 29.1957 2.07144 29.1957 3.3884V23.6898C29.1957 25.0068 30.2684 26.0782 31.587 26.0782H41.75V40.4085C41.75 40.9705 42.488 41.2171 42.8261 40.7669L55.3804 24.0481C55.458 23.9448 55.5 23.819 55.5 23.6898V3.3884C55.5 2.07144 54.4274 1 53.1087 1ZM54.3043 23.4907L42.9457 38.6173V25.4811C42.9457 25.1513 42.6781 24.884 42.3478 24.884H31.587C30.9277 24.884 30.3913 24.3483 30.3913 23.6898V3.3884C30.3913 2.72992 30.9277 2.1942 31.587 2.1942H53.1087C53.768 2.1942 54.3043 2.72992 54.3043 3.3884V23.4907ZM24.413 1H2.8913C1.57274 1 0.5 2.07144 0.5 3.3884V23.6898C0.5 25.0068 1.57274 26.0782 2.8913 26.0782H13.0543V40.4086C13.0543 40.9674 13.7921 41.2175 14.1304 40.7669L26.6848 24.0481C26.7624 23.9448 26.8043 23.819 26.8043 23.6898V3.3884C26.8043 2.07144 25.7316 1 24.413 1ZM25.6087 23.4907L14.25 38.6173V25.4811C14.25 25.1513 13.9823 24.884 13.6522 24.884H2.8913C2.23202 24.884 1.69565 24.3483 1.69565 23.6898V3.3884C1.69565 2.72992 2.23202 2.1942 2.8913 2.1942H24.413C25.0723 2.1942 25.6087 2.72992 25.6087 3.3884V23.4907Z" fill="#111111" stroke="#111111" stroke-width="0.5"/>
+                        </svg>
+                      {%- endif -%}
+                      {%- if block.settings.title_text != blank -%}
+                        <div class="h4 bls__tes-title title-name heading-color heading-weight mb-0-important {{ title_text_size }}">
+                          {{ block.settings.title_text }}
+                        </div>
+                      {%- endif -%}
+                      {{ block.settings.description }}
+                    </div>
+                    <div class="bls__quote-info">
+                      {%- if section.settings.show_rating -%}
+                        <div class="bls__tes-rate stars mb-10 mt-10">
+                          {%- for i in (1..5) -%}
+                            <span class="star inline-flex">
+                              <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.9674 4.53771C12.0065 4.66002 12.0104 4.78641 11.9792 4.91687C11.9479 5.04734 11.8815 5.15742 11.7799 5.24711L9.16544 7.64439L9.93921 11.1914C9.96266 11.3219 9.95093 11.4482 9.90404 11.5706C9.86496 11.6929 9.79461 11.7948 9.69301 11.8763C9.58359 11.9579 9.46635 11.9986 9.34129 11.9986C9.21624 12.0068 9.099 11.9783 8.98958 11.913L6 10.0417L3.01042 11.913C2.96353 11.9375 2.90881 11.9579 2.84629 11.9742C2.79158 11.9905 2.73686 11.9986 2.68215 11.9986C2.61963 11.9986 2.55319 11.9864 2.48285 11.9619C2.42032 11.9456 2.3617 11.9171 2.30699 11.8763C2.20538 11.7948 2.13113 11.6929 2.08424 11.5706C2.04516 11.4482 2.03734 11.3219 2.06079 11.1914L2.83456 7.64439L0.220148 5.24711C0.118541 5.15742 0.0521059 5.04734 0.0208424 4.91687C-0.0104212 4.78641 -0.00651324 4.66002 0.0325662 4.53771C0.0716457 4.40725 0.138081 4.30125 0.231871 4.21971C0.333478 4.13817 0.446808 4.08924 0.571863 4.07293L4.04212 3.75493L5.41381 0.403624C5.4607 0.281314 5.53886 0.183465 5.64828 0.110079C5.75771 0.0366931 5.87495 0 6 0C6.12505 0 6.24229 0.0366931 6.35172 0.110079C6.46114 0.183465 6.5393 0.281314 6.58619 0.403624L7.95788 3.75493L11.4281 4.07293C11.5532 4.08924 11.6626 4.13817 11.7564 4.21971C11.858 4.30125 11.9284 4.40725 11.9674 4.53771Z" fill="#111111"/>
+                              </svg>
+                            </span>
+                          {%- endfor -%}
+                        </div>
+                      {%- endif -%}
+                      <p class="bls__tes-author author-name heading-color title-heading-weight mb-0">
+                        {{ block.settings.author }}
+                      </p>
+                      <div class="bls__tes-job">
+                        <span class="author-job">{{ block.settings.job }}</span>
+                      </div>
+                    </div>
+                  {% elsif design == 'design_2' %}
+                    {%- if section.settings.show_rating -%}
+                      <div class="bls__tes-rate stars mb-10 mt-10">
+                        {%- for i in (1..5) -%}
+                          <span class="star inline-flex">
+                            <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11.9674 4.53771C12.0065 4.66002 12.0104 4.78641 11.9792 4.91687C11.9479 5.04734 11.8815 5.15742 11.7799 5.24711L9.16544 7.64439L9.93921 11.1914C9.96266 11.3219 9.95093 11.4482 9.90404 11.5706C9.86496 11.6929 9.79461 11.7948 9.69301 11.8763C9.58359 11.9579 9.46635 11.9986 9.34129 11.9986C9.21624 12.0068 9.099 11.9783 8.98958 11.913L6 10.0417L3.01042 11.913C2.96353 11.9375 2.90881 11.9579 2.84629 11.9742C2.79158 11.9905 2.73686 11.9986 2.68215 11.9986C2.61963 11.9986 2.55319 11.9864 2.48285 11.9619C2.42032 11.9456 2.3617 11.9171 2.30699 11.8763C2.20538 11.7948 2.13113 11.6929 2.08424 11.5706C2.04516 11.4482 2.03734 11.3219 2.06079 11.1914L2.83456 7.64439L0.220148 5.24711C0.118541 5.15742 0.0521059 5.04734 0.0208424 4.91687C-0.0104212 4.78641 -0.00651324 4.66002 0.0325662 4.53771C0.0716457 4.40725 0.138081 4.30125 0.231871 4.21971C0.333478 4.13817 0.446808 4.08924 0.571863 4.07293L4.04212 3.75493L5.41381 0.403624C5.4607 0.281314 5.53886 0.183465 5.64828 0.110079C5.75771 0.0366931 5.87495 0 6 0C6.12505 0 6.24229 0.0366931 6.35172 0.110079C6.46114 0.183465 6.5393 0.281314 6.58619 0.403624L7.95788 3.75493L11.4281 4.07293C11.5532 4.08924 11.6626 4.13817 11.7564 4.21971C11.858 4.30125 11.9284 4.40725 11.9674 4.53771Z" fill="#111111"/>
+                            </svg>
+                          </span>
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                    <div class="desc-quote-info {{ desc_text_size }}">
+                      {%- if block.settings.title_text != blank -%}
+                        <div class="h4 bls__tes-title title-name heading-color heading-weight mb-0-important {{ title_text_size }}">
+                          {{ block.settings.title_text }}
+                        </div>
+                      {%- endif -%}
+                      {{ block.settings.description }}
+                    </div>
+                    <div class="bls__quote-info d-flex align-items-center justify-content-center">
+                      <p class="bls__tes-author author-name heading-color title-heading-weight mb-0">
+                        {{ block.settings.author }}
+                      </p>
+                      <span>-</span>
+                      <div class="bls__tes-job">
+                        <span class="author-job">{{ block.settings.job }}</span>
+                      </div>
+                    </div>
+                  {% else %}
+                    {%- if block.settings.title_text != blank -%}
+                      <div class="h4 bls__tes-title title-name heading-color heading-weight mb-0-important {{ title_text_size }}">
+                        {{ block.settings.title_text }}
+                      </div>
+                    {%- endif -%}
+                    {%- if section.settings.show_rating -%}
+                      <div class="bls__tes-rate stars">
+                        {%- for i in (1..5) -%}
+                          <span class="star inline-flex">
+                            <svg
+                              class=""
+                              fill="#000000"
+                              stroke="#000000"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 576 512"
+                            >
+                              <path d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path>
+                            </svg>
+                          </span>
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                  {% endif %}
+                </div>
+                {% if design == 'design_3' %}</div>{% endif %}
+                {% if design == 'design_3' %}
+                  <div class="bls__tes-content-bottom  d-flex flex-column flex-1">
+                    <div class="desc-quote-info {{ desc_text_size }} flex-1">
+                      {{ block.settings.description }}
+                    </div>
+                    <div class="bls__quote-info d-flex align-items-center border-top justify-content-between  mt-25 pt-20">
+                      <p class="bls__tes-author author-name heading-color heading-weight mb-0">
+                        {{ block.settings.author }}
+                      </p>
+                      <div class="bls__tes-job">
+                        <span class="author-job">{{ block.settings.job }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if st.show_arrow != false -%}
+          <div class="swiper-arrow swiper-next swiper-button-next box-shadow"><i class="icon-chevron-right"></i></div>
+          <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow"><i class="icon-chevron-left"></i></div>
+        {%- endif -%}
+        {%- if pagination_style == 'dots' or pagination_style == 'progressbar' -%}
+          <div class="swiper-pagination"></div>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if pagination_style == 'logo' -%}
+      <div
+        class="swiper testimonial-thumb testimonial-thumb-{{ section.id }}"
+        data-section-id="{{ section.id }}"
+        data-loop="false"
+        data-mobile="1"
+        data-tablet="{%- if item_desktop > 1 -%}2{%- else -%}1{%- endif -%}"
+        data-desktop="3"
+        data-thumb="{% if pagination_style == 'logo' %}true{% else %}false{% endif %}"
+      >
+        <div class="swiper-wrapper" style="--perload-gap: 10px">
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }} class="swiper-slide">
+              <div class="testimonial-thumb-img text-center">
+                <img
+                  data-src="{{ block.settings.logo | image_url }}"
+                  srcset="
+                    {%- if block.settings.logo.width >= 550 -%}{{ block.settings.logo | image_url: width: 550 }} 550w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 1100 -%}{{ block.settings.logo | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 1445 -%}{{ block.settings.logo | image_url: width: 1445 }} 1445w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 1680 -%}{{ block.settings.logo | image_url: width: 1680 }} 1680w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 2048 -%}{{ block.settings.logo | image_url: width: 2048 }} 2048w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 2200 -%}{{ block.settings.logo | image_url: width: 2200 }} 2200w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 2890 -%}{{ block.settings.logo | image_url: width: 2890 }} 2890w,{%- endif -%}
+                    {%- if block.settings.logo.width >= 4096 -%}{{ block.settings.logo | image_url: width: 4096 }} 4096w,{%- endif -%}
+                    {{ block.settings.logo | image_url }} {{ block.settings.logo.width }}w
+                  "
+                  sizes="100vw"
+                  src="{{ block.settings.logo | image_url }}"
+                  alt="{{ image.alt | escape }}"
+                  loading="lazy"
+                  width="140"
+                  height="{{ 140 | divided_by: block.settings.logo.aspect_ratio | ceil }}"
+                >
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.testimonials.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "What People Are Saying"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "t:sections.testimonials.settings.content_width.label",
+      "min": 30,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "t:sections.testimonials.content"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "t:sections.testimonials.settings.design.label",
+      "default": "design_1",
+      "options": [
+        {
+          "value": "design_1",
+          "label": "t:sections.testimonials.settings.design.options__1.label"
+        },
+        {
+          "value": "design_2",
+          "label": "t:sections.testimonials.settings.design.options__2.label"
+        },
+        {
+          "value": "design_3",
+          "label": "t:sections.testimonials.settings.design.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "testi_text_size",
+      "label": "t:sections.testimonials.settings.testi_text_size.label",
+      "default": "small",
+      "options": [
+        {
+          "value": "smallest",
+          "label": "t:sections.testimonials.settings.testi_text_size.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.testimonials.settings.testi_text_size.options__2.label"
+        },
+        {
+          "value": "normal",
+          "label": "t:sections.testimonials.settings.testi_text_size.options__3.label"
+        },
+        {
+          "value": "bigger",
+          "label": "t:sections.testimonials.settings.testi_text_size.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "t:sections.testimonials.settings.show_rating.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "img_view",
+      "label": "t:sections.testimonials.settings.img_view.label",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.testimonials.settings.img_view.options__1.label"
+        },
+        {
+          "value": "framed",
+          "label": "t:sections.testimonials.settings.img_view.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "img_position",
+      "label": "t:sections.testimonials.settings.img_position.label",
+      "default": "position-top",
+      "options": [
+        {
+          "value": "position-left",
+          "label": "t:sections.testimonials.settings.img_position.options__1.label"
+        },
+        {
+          "value": "position-top",
+          "label": "t:sections.testimonials.settings.img_position.options__2.label"
+        },
+        {
+          "value": "position-right",
+          "label": "t:sections.testimonials.settings.img_position.options__3.label"
+        },
+        {
+          "value": "position-bottom",
+          "label": "t:sections.testimonials.settings.img_position.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.setting_carousel.carousel_title"
+    },
+    {
+      "type": "range",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 30,
+      "id": "car_gap",
+      "label": "t:sections.testimonials.settings.car_gap.label"
+    },
+    {
+      "type": "range",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "id": "carousel_item_desktop",
+      "default": 3,
+      "label": "t:sections.testimonials.settings.carousel_item_desktop.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.all.setting_carousel.autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.all.setting_carousel.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "t:sections.testimonials.settings.show_arrow.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "reveal_on_scroll",
+      "label": "t:sections.testimonials.settings.reveal_on_scroll.label",
+      "info": "t:sections.testimonials.settings.reveal_on_scroll.info",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "t:sections.testimonials.settings.pagination_style.label",
+      "default": "dots",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.testimonials.settings.pagination_style.options__1.label"
+        },
+        {
+          "value": "dots",
+          "label": "t:sections.testimonials.settings.pagination_style.options__2.label"
+        },
+        {
+          "value": "logo",
+          "label": "t:sections.testimonials.settings.pagination_style.options__3.label"
+        },
+        {
+          "value": "progressbar",
+          "label": "t:sections.testimonials.settings.pagination_style.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonials",
+      "name": "t:sections.testimonials.blocks.Testimonials.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title_text",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.title_text.label"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.description.label",
+          "default": "<p>You can add text content from press comments, reviews, or testimonials here.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.author.label",
+          "default": "Siarhei Dzenisenka"
+        },
+        {
+          "type": "text",
+          "id": "job",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.job.label",
+          "default": "Founder/CEO"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.image.label",
+          "info": "t:sections.testimonials.blocks.Testimonials.settings.image.info"
+        },
+        {
+          "type": "number",
+          "id": "testimonial_width",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.testimonial_width.label",
+          "default": 100
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "t:sections.testimonials.blocks.Testimonials.settings.logo.label",
+          "info": "t:sections.testimonials.blocks.Testimonials.settings.logo.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.testimonials.name",
+      "blocks": [
+        {
+          "type": "testimonials"
+        },
+        {
+          "type": "testimonials"
+        },
+        {
+          "type": "testimonials"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

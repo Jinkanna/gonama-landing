@@ -1,0 +1,126 @@
+{% liquid
+  assign ar = settings.product_aspect_ratio
+  assign ratio = '3/4'
+  if ar != 'custom'
+    assign ratio = ar | replace: ':', '/'
+  else
+    assign ratio = settings.product_aspect_ratio_custom | replace: ':', '/'
+  endif
+%}
+<section
+  id="bls__skeleton">
+  <div
+    class="container bls__grid bls__product-style-1">
+    <div
+      class="row">
+      <div
+        class="col-6 col-md-4 col-lg-3 bls__product-load bls__wl-product-js bls__product-preload-js bls__wishlist-list">
+        <div
+          class="bls__product-item label-rounded-2 rounded">
+          <div
+            class="bls__product-img overflow-hidden relative">
+            <div
+              class="bls__product-main-img">
+              <div
+                class="bls__responsive-image bls-image-js bls__product-grid bls__product-img-sw"
+                style="--aspect-ratio: {{ratio}};"></div>
+            </div>
+          </div>
+          <div
+            class="bls__product-details pt-15">
+            <h3
+              class="bls__product-name regular mb-0"></h3>
+            <div
+              class="bls__product-option option_color flex mt-4">
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__green active"></div>
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__blue"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-6 col-md-4 col-lg-3 bls__product-load bls__wl-product-js bls__product-preload-js bls__wishlist-list">
+        <div
+          class="bls__product-item label-rounded-2 rounded">
+          <div
+            class="bls__product-img overflow-hidden relative">
+            <div
+              class="bls__product-main-img">
+              <div
+                class="bls__responsive-image bls-image-js bls__product-grid bls__product-img-sw"
+                style="--aspect-ratio: {{ratio}};"></div>
+            </div>
+          </div>
+          <div
+            class="bls__product-details pt-15">
+            <h3
+              class="bls__product-name regular mb-0"></h3>
+            <div
+              class="bls__product-option option_color flex mt-4">
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__green active"></div>
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__blue"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-6 col-md-4 col-lg-3 bls__product-load bls__wl-product-js bls__product-preload-js bls__wishlist-list">
+        <div
+          class="bls__product-item label-rounded-2 rounded">
+          <div
+            class="bls__product-img overflow-hidden relative">
+            <div
+              class="bls__product-main-img">
+              <div
+                class="bls__responsive-image bls-image-js bls__product-grid bls__product-img-sw"
+                style="--aspect-ratio: {{ratio}};"></div>
+            </div>
+          </div>
+          <div
+            class="bls__product-details pt-15">
+            <h3
+              class="bls__product-name regular mb-0"></h3>
+            <div
+              class="bls__product-option option_color flex mt-4">
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__green active"></div>
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__blue"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-6 col-md-4 col-lg-3 bls__product-load bls__wl-product-js bls__product-preload-js bls__wishlist-list">
+        <div
+          class="bls__product-item label-rounded-2 rounded">
+          <div
+            class="bls__product-img overflow-hidden relative">
+            <div
+              class="bls__product-main-img">
+              <div
+                class="bls__responsive-image bls-image-js bls__product-grid bls__product-img-sw"
+                style="--aspect-ratio: {{ratio}};"></div>
+            </div>
+          </div>
+          <div
+            class="bls__product-details pt-15">
+            <h3
+              class="bls__product-name regular mb-0"></h3>
+            <div
+              class="bls__product-option option_color flex mt-4">
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__green active"></div>
+              <div
+                class="bls__product-color-swatches bls__option-swatch-js rounded large bls_tooltip mr-5 bls__blue"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

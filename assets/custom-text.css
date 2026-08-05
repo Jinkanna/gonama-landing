@@ -1,0 +1,89 @@
+.bls__section-custom-text .bls__section-image {
+    margin-top: var(--image_mt);
+    margin-bottom: var(--image_mb);
+}
+
+.bls__section-custom-text .bls__section-sub-heading {
+    font-size: var(--sub-font-size);
+    font-weight: var(--sub-font-weight, var(--heading-font-weight));
+    color: var(--heading-color);
+    text-transform: var(--sub-transform);
+    margin-top: var(--sub-mt);
+    margin-bottom: var(--sub-mb);
+}
+
+.bls__section-custom-text .bls__section-heading {
+    font-size: clamp(2.5rem, 7.5vw, var(--heading-font-size));
+    font-weight: var(--cutsom-heading-font-weight, var(--bls__section-heading-weight));
+    color: var(--heading-color);
+    text-transform: var(--heading-transform);
+    margin-top: var(--heading-mt);
+    margin-bottom: var(--heading-mb);
+    line-height: 1.1;
+}
+
+.bls__section-custom-text .bls__section-des {
+    font-size: var(--desc-font-size);
+    font-weight: var(--desc-font-weight, var(--base-font-weight));
+    color: rgb(var(--base-color));
+    text-transform: var(--desc-transform);
+    margin-top: var(--desc-mt);
+    margin-bottom: var(--desc-mb);
+}
+
+.bls__section-custom-text .bls__section-button {
+    margin-top: var(--b-mt);
+    margin-bottom: var(--b-mb);
+}
+
+@media (min-width: 768px) {
+    .bls__section-custom-text .bls__section-des {
+        width: var(--content_width);
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.bls__section-image {
+    width: 13.5rem;
+    height: 13.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    position: relative;
+}
+
+.bls__section-image text {
+    color: #111111;
+}
+
+svg.circle-text {
+    fill: currentColor;
+    transform-origin: center;
+    height: 100%;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 0.84rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: absolute;
+    top: 0;
+}
+
+@keyframes circTxt-rotating {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+.circle-text {
+    -webkit-animation: 8s linear 0s infinite normal none running circTxt-rotating;
+    animation: 8s linear 0s infinite normal none running circTxt-rotating;
+}

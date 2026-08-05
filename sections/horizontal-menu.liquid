@@ -1,0 +1,1433 @@
+{%- liquid
+  assign th_st = settings
+  assign show_my_account = th_st.show_my_account
+  assign recently_viewed = th_st.show_recently_viewed
+  assign wishlist = th_st.show_wishlist_icon
+  assign product_style = th_st.product_style
+  assign show_country = th_st.show_country
+  assign show_language = th_st.show_language
+-%}
+{%- if section.blocks.size > 0 -%}
+  <nav
+    class="navigation horizontal main-nav nav-sections bls__canvas-mb-menu bls__canvas-mb-left color-default-color-scheme"
+    data-width-sub-center="{{ section.settings.width_sub_menu_center }}"
+    data-action-mobile="{{ section.settings.menu_mb_action }}"
+    style="--hot-cl: {{ section.settings.color_hot }};--hot-bg-cl: {{ section.settings.color_bg_hot }};
+    --new-cl: {{ section.settings.color_new }};--new-bg-cl: {{ section.settings.color_bg_new }};--sale-cl: {{ section.settings.color_sale }};;--sale-bg-cl: {{ section.settings.color_bg_sale }};">
+
+    <div class="close-menu-mobile absolute">
+      <a href="#" class="close-menu">{{ 'main_menu.horizontal.close' | t }}
+        <i class="icon-x"></i>
+      </a>
+    </div>
+    <div class="mobile-menu-content color-{{ settings.color_scheme_header }} reset-color-on-menu">
+      <div class="menu-mobile-title fw-600">
+        <a
+          class="active"
+          data-menu="horizontal-list"
+          href="#">
+          {{ 'main_menu.horizontal.title' | t }}
+        </a>
+        {% if section.settings.menu_mb_category %}
+          <a data-menu="categories-list" href="#">
+            {{ 'main_menu.categories.title' | t }}
+          </a>
+        {% endif %}
+      </div>
+      <ul class="horizontal-list {% if show_language or show_country %}show-localization{% endif %} menu p-0 list-none my-0 {{ section.settings.m_animation }}">
+        {%- assign splits_main = 1 -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign block_st = block.settings
+
+            assign menu_custom_width = ''
+            if block_st.custom_width > 1000
+              assign menu_custom_width = 'menu-custom-width-center'
+            endif
+          -%}
+          {%- capture menuLevel0 -%}
+            {%- liquid
+                assign width = block_st.width
+                assign label = block_st.label
+                assign icon_image = block_st.icon_image
+                assign icon_font = block_st.icon_font
+                assign label_bg = section.settings[label] | downcase | split: 'label' | last | prepend: "color_scheme_"
+            -%}
+            <a
+              class="relative {% if block_st.url == blank %}not-links {% endif %}"
+              {%- if block_st.url != blank -%} href="{{ block_st.url }}"{%- else -%}role="link"{%- endif -%}
+              {% if block_st.open_link != blank %}
+              target="_blank"
+              {% endif %}>
+              {%- if icon_image != blank -%}
+                {%- liquid
+                    assign icon_width = block_st.icon_width_image
+                    assign icon_height = icon_width | divided_by: icon_image.aspect_ratio | round
+                -%}
+                <img
+                  loading="lazy"
+                  class="menu-thumb-icon mr-10"
+                  src="{{ icon_image | image_url: width: icon_width }}"
+                  alt="{{ block_st.title }}"
+                  width="{{ icon_width }}"
+                  height="{{ icon_height }}" />
+              {%- elsif icon_font != blank -%}
+                <em
+                  class="mr-10 menu-thumb-icon {{ icon_font }}"></em>
+              {%- endif -%}
+              <span>{{ block_st.title }}
+              </span>
+              {%- if label != blank -%}
+                <span
+                  class="label {{label}} color-{{ section.settings[label_bg] }} gradient fw-500 px-6 d-inline-block">{{ section.settings[label] }}
+                </span>
+              {%- endif -%}
+            </a>
+            {%- if block.type != 'single_link' -%}
+              <div
+                class="open-children-toggle"></div>
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- case block.type -%}
+            {%- when 'menu_item' -%}
+              {%- if block_st.title != blank -%}
+                <li
+                  {{ block.shopify_attributes }}
+                  class="level0 bls__menu-parent multicolumn_dropdown menu-width-{{ block_st.width }}"
+                  {{ block.shopify_attributes }}>{{ menuLevel0 }}
+                  <div class=" submenu absolute gradient {{ menu_custom_width }}" style="--submenu-custom-width:{{ block_st.custom_width }}px;">
+                    <div class="fw-600 submenu-mobile-title justify-content-between">
+                      <a role="link" class="back-main-menu pointer">
+                        <i class="icon-chevron-left"></i>
+                        {%- if block_st.title != blank %}
+                          {{ block_st.title }}
+                        {%- else -%}
+                          {{ menu_title }}
+                        {%- endif -%}
+                      </a>
+                      <i class="icon-x close-menu pointer"></i>
+                    </div>
+                    {%- if width == 'full-width' -%}
+                      <div class="container-fluid">
+                    {%- endif -%}
+                    <div class="row">
+                      {%- render 'menu-splits'
+                        , count_menu_item: splits_main -%}
+                      {%- assign splits_main = splits_main | plus: 1 -%}
+                    </div>
+                    {%- if shop.domain == 'umino-demo.myshopify.com' or shop.domain == 'demo-umino.myshopify.com' or shop.domain == 'umino-demo-v2.myshopify.com' or shop.domain == 'test-unsen-dev.myshopify.com' -%}
+                      <feature-button class="extent-loadmore-button"></feature-button>
+                    {%- endif -%}
+                    {%- if width == 'full-width' -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- when 'advanced' -%}
+              {%- if block_st.title != blank -%}
+                <li
+                  {{ block.shopify_attributes }}
+                  class="level0 bls__menu-parent advanced menu-width-{{ block_st.width }}"
+                  {{ block.shopify_attributes }}>{{ menuLevel0 }}
+                  <div class="submenu absolute gradient {{ menu_custom_width }}" style="--submenu-custom-width:{{ block_st.custom_width }}px;">
+                    {%- if width == 'full-width' -%}
+                      <div class="container-fluid">
+                    {%- endif -%}
+                    <ul class="submenu-wrapper p-0 list-none d-flex">
+                      <li class="fw-600 submenu-mobile-title justify-content-between">
+                        <a role="link" class="back-main-menu pointer">
+                          <i class="icon-chevron-left"></i>
+                          {%- if block_st.title != blank %}
+                            {{ block_st.title }}
+                          {%- else -%}
+                            {{ menu_title }}
+                          {%- endif -%}
+                        </a>
+                        <i class="icon-x close-menu pointer"></i>
+                      </li>
+                      <li class="advanced-main">
+                        {%- for link in linklists[block.settings.menu].links -%}
+                          <a
+                            href="{{ link.url }}"
+                            class="py-10 d-block site-nav level-1{%- if link.links != blank -%} hasSub{%- endif -%}"
+                            data-link="{{ block.id }}-nv{{ link.title | handleize }}">
+                            {{ link.title | split: '[label' | first }}
+                          </a>
+                        {%- endfor -%}
+                      </li>
+                      <li class="advanced-content level-1 flex-fill">
+                        {% for link in linklists[block_st.menu].links %}
+                          {% assign index = forloop.index %}
+                          <div id="{{ block.id }}-nv{{ link.title | handleize }}" class="sub{% if forloop.first %} active{% endif %}">
+
+                            {%- liquid
+                              assign label1 = link.title | split: '[label' | last | split: ']' | first | prepend: "label"
+                              assign label_bg1 = section.settings[label1] | downcase | split: 'label' | last | prepend: "color_scheme_"
+                            -%}
+                            <a href="{{ link.url }}" class="py-10 d-block site-nav level-1 d-xl-none">
+                              {{ link.title | split: '[label' | first }}
+                              {%- if link.title contains '[label' -%}
+                                <span class="px-6 d-inline-block label {{ label1 }} color-{{ section.settings[label_bg1] }} gradient">{{ section.settings[label1] }}</span>
+                              {%- endif -%}
+                            </a>
+                            {%- if link.links != blank -%}
+                              <div class="open-children-toggle" data-menu-level2></div>
+                            {%- endif -%}
+                            <div class="d-flex">
+                              {%- if link.links != blank -%}
+                                <ul class="subchildmenu subLinks p-0 list-none flex-fill gradient">
+                                  <li class="fw-600 submenu-mobile-title justify-content-between">
+                                    <a role="link" class="back-main-menu-lv1 pointer">
+                                      <i class="icon-chevron-left"></i>
+                                      {{ link.title }}
+                                    </a>
+                                    <i class="icon-x close-menu pointer"></i>
+                                  </li>
+                                  <li class="level-2{%- if childlink.active or childlink.child_active -%} active{% endif %}" style="column-count:{{ block_st.columns }};">
+                                    {%- for childlink in link.links -%}
+                                      {%- liquid
+                                        assign label2 = childlink.title | split: '[label' | last | split: ']' | first | prepend: "label"
+                                        assign label_bg2 = section.settings[label2] | downcase | split: 'label' | last | prepend: "color_scheme_"
+                                      -%}
+                                      <a href="{{ childlink.url }}" class="site-nav level-2">
+                                        {{ childlink.title | split: '[label' | first }}
+                                        {%- if childlink.title contains '[label' -%}
+                                          <span class="px-6 d-inline-block label {{ label2 }} color-{{ section.settings[label_bg2] }} gradient">{{ section.settings[label2] }}</span>
+                                        {%- endif -%}
+                                      </a>
+                                    {%- endfor -%}
+                                  </li>
+                                </ul>
+                              {%- endif -%}
+                              {% liquid
+                                assign collection_index = 'collection' | append: index
+                                assign lkclect = block_st[collection_index]
+                                assign collection = collections[lkclect]
+                                assign show_item = block.settings.show_item
+                              %}
+
+                              {%- if collection.products.size > 0 -%}
+                                <div class="level-1 type-memu-product" style="width:{{ block_st.column_width }}%">
+                                  <div class="products-grid bls__grid {{ product_style }}">
+                                    <div
+                                      class="swiper bls__swiper hover__show-nav"
+                                      id="bls__swiper-{{ section.id }}"
+                                      data-section-id="{{ section.id }}"
+                                      data-mobile="1"
+                                      data-tablet="1"
+                                      data-desktop="{{ show_item }}"
+                                      data-autoplay="false"
+                                      data-loop="false"
+                                      data-spacing="30">
+                                      <div class="swiper-wrapper">
+                                        {%- for product in collection.products limit: block_st.limit -%}
+                                          <div class="swiper-slide">
+                                            {%- render 'product-item'
+                                              , product: product -%}
+                                          </div>
+                                        {%- endfor -%}
+                                      </div>
+                                      {%- render 'swiper-control'
+                                        , show_bullet: false
+                                        , show_arrow: true -%}
+                                    </div>
+                                  </div>
+                                </div>
+                              {%- endif -%}
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </li>
+                    </ul>
+                    {%- if width == 'full-width' -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- when 'dropdown' -%}
+              {%- if block_st.title != blank -%}
+                <li
+                  {{ block.shopify_attributes }}
+                  class="level0 bls__menu-parent default_dropdown"
+                  {{ block.shopify_attributes }}>
+                  {{ menuLevel0 }}
+                  {%- if linklists[block_st.menu].links.size > 0 -%}
+                    <div class="submenu absolute gradient">
+                      <div class="fw-600 submenu-mobile-title justify-content-between">
+                        <a role="link" class="back-main-menu pointer">
+                          <i class="icon-chevron-left"></i>
+                          {%- if block_st.title != blank %}
+                            {{ block_st.title }}
+                          {%- else -%}
+                            {{ menu_title }}
+                          {%- endif -%}
+                        </a>
+                        <i class="icon-x close-menu pointer"></i>
+                      </div>
+                      <ul class="dropdown p-0 list-none my-0">
+                        {%- render 'menu-dropdown'
+                          , handle_menu: block_st.menu -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- when 'single_link' -%}
+              <li
+                {{ block.shopify_attributes }}
+                class="level0 single"
+                {{ block.shopify_attributes }}>{{ menuLevel0 }}</li>
+          {%- endcase -%}
+        {%- endfor -%}
+        {%- if recently_viewed -%}
+          <li class="level0 d-none-desktop">
+            <a href="/pages/recently-viewed-products">
+              <svg
+                width="17"
+                height="18"
+                viewBox="0 0 17 18"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.99 8.495C16.99 7.91538 16.9357 7.34784 16.827 6.79238C16.7062 6.23691 16.5372 5.7056 16.3198 5.19843C16.1145 4.69127 15.8549 4.20826 15.541 3.74939C15.2391 3.29053 14.8949 2.86789 14.5085 2.48148C14.1221 2.10715 13.6995 1.763 13.2406 1.44904C12.7938 1.14716 12.3168 0.887537 11.8097 0.670181C11.3025 0.452825 10.7712 0.289808 10.2157 0.18113C9.66027 0.0603767 9.08669 0 8.495 0C7.90331 0 7.32973 0.0603767 6.77426 0.18113C6.2188 0.289808 5.68748 0.452825 5.18032 0.670181C4.67316 0.887537 4.19618 1.14716 3.74939 1.44904C3.29053 1.763 2.86789 2.10715 2.48148 2.48148C2.09507 2.86789 1.75092 3.29053 1.44904 3.74939C1.13508 4.20826 0.869424 4.69127 0.652068 5.19843C0.446787 5.7056 0.28377 6.23691 0.163017 6.79238C0.054339 7.34784 0 7.91538 0 8.495C0 9.08669 0.054339 9.66027 0.163017 10.2157C0.28377 10.7712 0.446787 11.3025 0.652068 11.8097C0.869424 12.3168 1.13508 12.7999 1.44904 13.2587C1.75092 13.7055 2.09507 14.1221 2.48148 14.5085C2.86789 14.8949 3.29053 15.2391 3.74939 15.541C4.19618 15.8549 4.67316 16.1206 5.18032 16.3379C5.68748 16.5553 6.2188 16.7183 6.77426 16.827C7.32973 16.9477 7.90331 17.0081 8.495 17.0081C9.08669 17.0081 9.66027 16.9477 10.2157 16.827C10.7712 16.7183 11.3025 16.5553 11.8097 16.3379C12.3168 16.1206 12.7938 15.8549 13.2406 15.541C13.6995 15.2391 14.1221 14.8949 14.5085 14.5085C14.8949 14.1221 15.2391 13.7055 15.541 13.2587C15.8549 12.7999 16.1145 12.3168 16.3198 11.8097C16.5372 11.3025 16.7062 10.7712 16.827 10.2157C16.9357 9.66027 16.99 9.08669 16.99 8.495ZM15.4504 8.495C15.4504 9.46103 15.2693 10.3667 14.907 11.212C14.5447 12.0572 14.0497 12.7938 13.4217 13.4217C12.7817 14.0497 12.0391 14.5447 11.1938 14.907C10.3606 15.2693 9.46103 15.4504 8.495 15.4504C7.52897 15.4504 6.62332 15.2693 5.77805 14.907C4.94485 14.5447 4.20826 14.0497 3.56826 13.4217C2.94034 12.7938 2.44526 12.0572 2.083 11.212C1.72074 10.3667 1.53961 9.46103 1.53961 8.495C1.53961 7.54105 1.72074 6.64144 2.083 5.79616C2.44526 4.95089 2.94034 4.21429 3.56826 3.58638C4.20826 2.95846 4.94485 2.46337 5.77805 2.10111C6.62332 1.72677 7.52897 1.53961 8.495 1.53961C9.46103 1.53961 10.3606 1.72677 11.1938 2.10111C12.0391 2.46337 12.7817 2.95846 13.4217 3.58638C14.0497 4.21429 14.5447 4.95089 14.907 5.79616C15.2693 6.64144 15.4504 7.54105 15.4504 8.495ZM7.71614 3.85807V8.495C7.71614 8.65198 7.75237 8.79085 7.82482 8.9116C7.90935 9.03235 8.01802 9.12292 8.15085 9.1833L11.2482 10.741C11.4293 10.8376 11.6225 10.8557 11.8278 10.7954C12.0331 10.7229 12.184 10.5901 12.2806 10.3969C12.3772 10.2037 12.3893 10.0044 12.3168 9.79914C12.2565 9.59386 12.1297 9.44291 11.9365 9.34631L9.27386 8.02406V3.85807C9.27386 3.65279 9.19537 3.4777 9.03839 3.33279C8.89349 3.17581 8.71236 3.09732 8.495 3.09732C8.27764 3.09732 8.09048 3.17581 7.9335 3.33279C7.78859 3.4777 7.71614 3.65279 7.71614 3.85807Z" />
+              </svg>
+              <span>
+                {{ 'templates.rvp.title' | t }}
+              </span>
+            </a>
+          </li>
+        {% endif %}
+        {%- if wishlist -%}
+          <li class="level0 d-none-desktop">
+            <a href="/pages/wishlist">
+              <svg
+                width="21"
+                height="17"
+                viewBox="0 0 14 13"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.7441 2.26562C11.9993 2.52083 12.1908 2.8125 12.3184 3.14062C12.446 3.45964 12.5098 3.78776 12.5098 4.125C12.5098 4.46224 12.446 4.79492 12.3184 5.12305C12.1908 5.44206 11.9993 5.72917 11.7441 5.98438L7 10.7285L2.25586 5.98438C2.00065 5.72917 1.80924 5.44206 1.68164 5.12305C1.55404 4.79492 1.49023 4.46224 1.49023 4.125C1.49023 3.78776 1.55404 3.45964 1.68164 3.14062C1.80924 2.8125 2.00065 2.52083 2.25586 2.26562C2.51107 2.01042 2.79818 1.81901 3.11719 1.69141C3.44531 1.5638 3.77799 1.5 4.11523 1.5C4.45247 1.5 4.7806 1.5638 5.09961 1.69141C5.41862 1.81901 5.71029 2.01042 5.97461 2.26562L6.58984 2.88086C6.69922 2.99935 6.83594 3.05859 7 3.05859C7.16406 3.05859 7.30078 2.99935 7.41016 2.88086L8.02539 2.26562C8.28971 2.01042 8.58138 1.81901 8.90039 1.69141C9.2194 1.5638 9.54753 1.5 9.88477 1.5C10.222 1.5 10.5501 1.5638 10.8691 1.69141C11.1973 1.81901 11.4889 2.01042 11.7441 2.26562ZM12.5645 1.44531C12.1999 1.07161 11.7806 0.79362 11.3066 0.611328C10.8418 0.429036 10.3678 0.337891 9.88477 0.337891C9.40169 0.337891 8.92773 0.429036 8.46289 0.611328C7.99805 0.79362 7.57878 1.07161 7.20508 1.44531L7 1.65039L6.79492 1.44531C6.42122 1.07161 6.00195 0.79362 5.53711 0.611328C5.07227 0.429036 4.59831 0.337891 4.11523 0.337891C3.63216 0.337891 3.15365 0.429036 2.67969 0.611328C2.21484 0.79362 1.80013 1.07161 1.43555 1.44531C1.06185 1.8099 0.779297 2.22917 0.587891 2.70312C0.405599 3.16797 0.314453 3.64193 0.314453 4.125C0.314453 4.60807 0.405599 5.08659 0.587891 5.56055C0.779297 6.02539 1.06185 6.4401 1.43555 6.80469L6.58984 11.959C6.69922 12.0775 6.83594 12.1367 7 12.1367C7.16406 12.1367 7.30078 12.0775 7.41016 11.959L12.5645 6.80469C12.9382 6.4401 13.2161 6.02539 13.3984 5.56055C13.5898 5.08659 13.6855 4.60807 13.6855 4.125C13.6855 3.64193 13.5898 3.16797 13.3984 2.70312C13.2161 2.23828 12.9382 1.81901 12.5645 1.44531Z" />
+              </svg>
+              <span>
+                {{ 'templates.wishlist.wishlist' | t }}
+              </span>
+            </a>
+          </li>
+        {% endif %}
+        {%- if show_my_account -%}
+          {% if customer %}
+            <li class="level0 d-none-desktop">
+              <a href="{{ routes.account_url }}" class="account-url">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 17 17"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.8927 15.7682C16.0329 14.3137 14.8061 13.1078 13.3338 12.27C11.8614 11.4322 10.1946 10.9914 8.49845 10.9914C6.80225 10.9914 5.13546 11.4322 3.66314 12.27C2.19082 13.1078 0.964024 14.3137 0.104236 15.7682C-0.00102398 15.9568 -0.027822 16.179 0.0295835 16.387C0.0566587 16.493 0.106188 16.592 0.174854 16.6774C0.243521 16.7627 0.329737 16.8325 0.427728 16.8821C0.554141 16.9534 0.697158 16.9903 0.842462 16.9894C0.986554 16.9954 1.12952 16.9616 1.25545 16.8917C1.38138 16.8218 1.48536 16.7185 1.5558 16.5933C2.26752 15.3886 3.2833 14.3898 4.50251 13.6958C5.72172 13.0018 7.10204 12.6367 8.50674 12.6367C9.91144 12.6367 11.2918 13.0018 12.511 13.6958C13.7302 14.3898 14.746 15.3886 15.4577 16.5933C15.5685 16.7806 15.7491 16.9169 15.9603 16.9725C16.1715 17.0281 16.3963 16.9986 16.5858 16.8903C16.6801 16.8403 16.7628 16.7711 16.8285 16.6872C16.8943 16.6034 16.9415 16.5067 16.9673 16.4035C16.998 16.298 17.0072 16.1874 16.9944 16.0783C16.9816 15.9692 16.947 15.8638 16.8927 15.7682Z" />
+                  <path d="M8.49966 10.2C9.83622 10.2002 11.1195 9.67091 12.0732 8.72594C13.027 7.78097 13.5752 6.49588 13.5997 5.14718C13.5997 3.78206 13.0623 2.47286 12.1059 1.50757C11.1495 0.542291 9.85226 0 8.49966 0C7.14705 0 5.84985 0.542291 4.89341 1.50757C3.93698 2.47286 3.39966 3.78206 3.39966 5.14718C3.42416 6.49588 3.97228 7.78097 4.92607 8.72594C5.87987 9.67091 7.1631 10.2002 8.49966 10.2ZM5.09966 5.14718C5.09966 4.2371 5.45787 3.3643 6.09549 2.72078C6.73312 2.07725 7.59792 1.71573 8.49966 1.71573C9.40139 1.71573 10.2662 2.07725 10.9038 2.72078C11.5414 3.3643 11.8997 4.2371 11.8997 5.14718C11.8997 6.05726 11.5414 6.93006 10.9038 7.57359C10.2662 8.21711 9.40139 8.57864 8.49966 8.57864C7.59792 8.57864 6.73312 8.21711 6.09549 7.57359C5.45787 6.93006 5.09966 6.05726 5.09966 5.14718Z" />
+                </svg>
+                <span class="px-10">{{ customer.name }}</span>
+              </a>
+            </li>
+            <li class="level0 d-none-desktop">
+              <a href="{{ routes.account_logout_url }}" class="account-logout">{{ 'customer.log_out' | t }}</a>
+            </li>
+          {% else %}
+            <li class="level0 d-none-desktop">
+              <a href="{{ routes.account_login_url }}" class="account-login">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.8927 15.7682C16.0329 14.3137 14.8061 13.1078 13.3338 12.27C11.8614 11.4322 10.1946 10.9915 8.49845 10.9915C6.80225 10.9915 5.13546 11.4322 3.66314 12.27C2.19082 13.1078 0.964024 14.3137 0.104236 15.7682C-0.00102398 15.9568 -0.027822 16.179 0.0295835 16.387C0.0566587 16.493 0.106188 16.592 0.174854 16.6774C0.243521 16.7628 0.329737 16.8326 0.427728 16.8821C0.554141 16.9534 0.697158 16.9904 0.842462 16.9894C0.986554 16.9955 1.12952 16.9616 1.25545 16.8917C1.38138 16.8218 1.48536 16.7185 1.5558 16.5933C2.26752 15.3886 3.2833 14.3898 4.50251 13.6958C5.72172 13.0018 7.10204 12.6367 8.50674 12.6367C9.91144 12.6367 11.2918 13.0018 12.511 13.6958C13.7302 14.3898 14.746 15.3886 15.4577 16.5933C15.5685 16.7807 15.7491 16.9169 15.9603 16.9725C16.1715 17.0282 16.3963 16.9986 16.5858 16.8904C16.6801 16.8403 16.7628 16.7711 16.8285 16.6873C16.8943 16.6034 16.9415 16.5067 16.9673 16.4035C16.998 16.298 17.0072 16.1875 16.9944 16.0784C16.9816 15.9693 16.947 15.8638 16.8927 15.7682Z" fill="#111111" />
+                  <path d="M8.4997 10.2C9.83626 10.2002 11.1195 9.67091 12.0733 8.72594C13.0271 7.78097 13.5752 6.49588 13.5997 5.14718C13.5997 3.78206 13.0624 2.47286 12.1059 1.50757C11.1495 0.542291 9.85231 0 8.4997 0C7.1471 0 5.8499 0.542291 4.89346 1.50757C3.93702 2.47286 3.3997 3.78206 3.3997 5.14718C3.42421 6.49588 3.97233 7.78097 4.92612 8.72594C5.87991 9.67091 7.16314 10.2002 8.4997 10.2ZM5.0997 5.14718C5.0997 4.2371 5.45792 3.3643 6.09554 2.72078C6.73316 2.07725 7.59797 1.71573 8.4997 1.71573C9.40144 1.71573 10.2662 2.07725 10.9039 2.72078C11.5415 3.3643 11.8997 4.2371 11.8997 5.14718C11.8997 6.05726 11.5415 6.93006 10.9039 7.57359C10.2662 8.21711 9.40144 8.57864 8.4997 8.57864C7.59797 8.57864 6.73316 8.21711 6.09554 7.57359C5.45792 6.93006 5.0997 6.05726 5.0997 5.14718Z" fill="#111111" />
+                </svg>
+                <span>
+                  {{ 'customer.login_menu_mobile' | t }}
+                </span>
+              </a>
+            </li>
+          {% endif %}
+        {%- endif -%}
+        {% if show_language %}
+          {% render 'language-switcher' %}
+        {% endif %}
+        {% if show_country %}
+          {% render 'country-switcher' %}
+        {% endif %}
+      </ul>
+      {% if section.settings.menu_mb_category %}
+        {%- render 'categories-menu-mobile' | st: section.settings -%}
+      {% endif %}
+    </div>
+  </nav>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "t:sections.main-menu.name",
+    "tag": "section",
+    "class": "bls_main_menu",
+    "settings": [
+      {
+        "type": "select",
+        "id": "m_animation",
+        "options": [
+          {
+            "value": "fading",
+            "label": "t:sections.main-menu.settings.m_animation.options__1.label"
+          }, {
+            "value": "down_to_up",
+            "label": "t:sections.main-menu.settings.m_animation.options__2.label"
+          }, {
+            "value": "up_to_down",
+            "label": "t:sections.main-menu.settings.m_animation.options__3.label"
+          }
+        ],
+        "label": "t:sections.main-menu.settings.m_animation.label",
+        "default": "down_to_up"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.main-menu.Menu-label"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:sections.main-menu.settings.paragraph__1.content"
+      },
+      {
+        "type": "text",
+        "id": "label1",
+        "label": "t:sections.main-menu.settings.label1.label",
+        "default": "Hot"
+      }, {
+        "type": "color",
+        "id": "color_hot",
+        "label": "t:sections.main-menu.settings.color_hot.label",
+        "default": "#ffffff"
+      }, {
+        "type": "color",
+        "id": "color_bg_hot",
+        "label": "t:sections.main-menu.settings.color_bg_hot.label",
+        "default": "#D0473E"
+      }, {
+        "type": "paragraph",
+        "content": "t:sections.main-menu.settings.paragraph__2.content"
+      }, {
+        "type": "text",
+        "id": "label2",
+        "label": "t:sections.main-menu.settings.label2.label",
+        "default": "New"
+      }, {
+        "type": "color",
+        "id": "color_new",
+        "label": "t:sections.main-menu.settings.color_new.label",
+        "default": "#ffffff"
+      }, {
+        "type": "color",
+        "id": "color_bg_new",
+        "label": "t:sections.main-menu.settings.color_bg_new.label",
+        "default": "#516cf4"
+      }, {
+        "type": "paragraph",
+        "content": "t:sections.main-menu.settings.paragraph__3.content"
+      }, {
+        "type": "text",
+        "id": "label3",
+        "label": "t:sections.main-menu.settings.label3.label",
+        "default": "Sale"
+      }, {
+        "type": "color",
+        "id": "color_sale",
+        "label": "t:sections.main-menu.settings.color_sale.label",
+        "default": "#ffffff"
+      }, {
+        "type": "color",
+        "id": "color_bg_sale",
+        "label": "t:sections.main-menu.settings.color_bg_sale.label",
+        "default": "#d73f0f"
+      }, {
+        "type": "number",
+        "id": "width_sub_menu_center",
+        "label": "t:sections.main-menu.settings.width_sub_menu_center.label",
+        "default": 800
+      }, {
+        "type": "header",
+        "content": "t:sections.main-menu.Menu-action-on-mobile"
+      }, {
+        "type": "checkbox",
+        "id": "menu_mb_action",
+        "label": "t:sections.main-menu.settings.menu_mb_action.label",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "t:sections.main-menu.Categories-mobile-setting.content",
+        "info": "t:sections.main-menu.Categories-mobile-setting.info"
+      }, {
+        "type": "checkbox",
+        "id": "menu_mb_category",
+        "label": "t:sections.main-menu.settings.menu_mb_category.label",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "collection_list_all",
+        "label": "t:sections.main-menu.settings.collection_list_all.label",
+        "default": true
+      }, {
+        "type": "collection_list",
+        "id": "collection_list_custom",
+        "label": "t:sections.main-menu.settings.collection_list_custom.label"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "menu_item",
+        "name": "t:sections.main-menu.blocks.menu_item.name",
+        "limit": 10,
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Multi-column"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.url.label"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.open_link.label",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.label.options__1.label"
+              }, {
+                "value": "label1",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.label.options__2.label"
+              }, {
+                "value": "label2",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.label.options__3.label"
+              }, {
+                "value": "label3",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.label.options__4.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.menu_item.settings.label.label"
+          }, {
+            "type": "text",
+            "id": "icon_font",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.icon_font.label",
+            "info": "t:sections.main-menu.blocks.menu_item.settings.icon_font.info"
+          }, {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.icon_image.label",
+            "info": "t:sections.main-menu.blocks.menu_item.settings.icon_image.info"
+          }, {
+            "type": "range",
+            "id": "icon_width_image",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.icon_width_image.label",
+            "min": 10,
+            "max": 50,
+            "step": 5,
+            "unit": "px",
+            "default": 20
+          }, {
+            "type": "header",
+            "content": "t:sections.main-menu.blocks.menu_item.settings.Sub-menu"
+          }, {
+            "type": "select",
+            "id": "width",
+            "options": [
+              {
+                "value": "custom",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.width.options__1.label"
+              }, {
+                "value": "full-width",
+                "label": "t:sections.main-menu.blocks.menu_item.settings.width.options__2.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.menu_item.settings.width.label"
+          }, {
+            "type": "range",
+            "id": "custom_width",
+            "label": "t:sections.main-menu.blocks.menu_item.settings.custom_width.label",
+            "min": 350,
+            "max": 1200,
+            "step": 50,
+            "unit": "px",
+            "default": 1200
+          }
+        ]
+      },
+      {
+        "type": "link",
+        "name": "t:sections.main-menu.blocks.link.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.link.paragraph"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:sections.main-menu.blocks.link.settings.url.label"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.link.settings.open_link.label",
+            "default": false
+          }, {
+            "type": "link_list",
+            "id": "menu",
+            "label": "t:sections.main-menu.blocks.link.settings.menu.label"
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              },
+              {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "10",
+                "label": "84%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.link.settings.col.label"
+          }
+        ]
+      },
+      {
+        "type": "products",
+        "name": "t:sections.main-menu.blocks.products.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.products.paragraph"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Product"
+          },
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "t:sections.main-menu.blocks.products.settings.collection.label"
+          },
+          {
+            "type": "range",
+            "id": "limit",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.products.settings.limit.label",
+            "default": 3
+          }, {
+            "type": "range",
+            "id": "show_item",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.products.settings.show_item.label",
+            "default": 1
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              },
+              {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "10",
+                "label": "84%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.products.settings.col.label"
+          }
+        ]
+      },
+      {
+        "type": "collection",
+        "name": "t:sections.main-menu.blocks.collection.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.collection.paragraph"
+          },
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "t:sections.main-menu.blocks.collection.settings.collection.label"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.main-menu.blocks.collection.settings.image.label"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_count",
+            "label": "t:sections.main-menu.blocks.collection.settings.show_count.label",
+            "default": false
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.collection.settings.open_link.label",
+            "default": false
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              },
+              {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "10",
+                "label": "84%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.collection.settings.col.label"
+          }
+        ]
+      }, {
+        "type": "banner",
+        "name": "t:sections.main-menu.blocks.banner.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.banner.paragraph"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "description",
+            "label": "t:sections.all.section_header.description",
+            "default": "Description"
+          },
+          {
+            "type": "select",
+            "id": "heading_text_align",
+            "default": "text-left",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "t:sections.main-menu.blocks.banner.settings.heading_text_align.options__1.label"
+              }, {
+                "value": "desktop-text-center",
+                "label": "t:sections.main-menu.blocks.banner.settings.heading_text_align.options__2.label"
+              }, {
+                "value": "text-right",
+                "label": "t:sections.main-menu.blocks.banner.settings.heading_text_align.options__3.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.banner.settings.heading_text_align.label"
+          }, {
+            "type": "checkbox",
+            "id": "column_reverse",
+            "label": "t:sections.main-menu.blocks.banner.settings.column_reverse.label",
+            "default": false
+          }, {
+            "type": "checkbox",
+            "id": "box_shadow",
+            "label": "t:sections.main-menu.blocks.banner.settings.box_shadow.label",
+            "default": false
+          }, {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.main-menu.blocks.banner.settings.image.label",
+            "info": "t:sections.main-menu.blocks.banner.settings.image.info"
+          }, {
+            "type": "text",
+            "id": "button_title",
+            "label": "t:sections.main-menu.blocks.banner.settings.button_title.label"
+          }, {
+            "type": "url",
+            "id": "banner_link",
+            "label": "t:sections.main-menu.blocks.banner.settings.banner_link.label"
+          }, {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.banner.settings.open_link.label",
+            "default": false
+          }, {
+            "type": "checkbox",
+            "id": "overlap_top",
+            "label": "t:sections.main-menu.blocks.banner.settings.overlap_top.label",
+            "default": false
+          }, {
+            "type": "range",
+            "id": "space_banner",
+            "label": "t:sections.main-menu.blocks.banner.settings.space_banner.label",
+            "default": 0,
+            "min": -120,
+            "max": 0,
+            "step": 5,
+            "unit": "px"
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "2-5",
+                "label": "20%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              }, {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.banner.settings.col.label"
+          }
+        ]
+      }, {
+        "type": "html",
+        "name": "t:sections.main-menu.blocks.html.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.html.paragraph"
+          }, {
+            "type": "html",
+            "id": "html",
+            "label": "t:sections.main-menu.blocks.html.settings.html.label",
+            "default": "HTML custom code"
+          }, {
+            "type": "page",
+            "id": "page",
+            "label": "t:sections.main-menu.blocks.html.settings.page.label",
+            "info": "t:sections.main-menu.blocks.html.settings.page.info"
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              },
+              {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "10",
+                "label": "84%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.html.settings.col.label"
+          }
+        ]
+      }, {
+        "type": "blogs",
+        "name": "t:sections.main-menu.blocks.blogs.name",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-menu.blocks.blogs.paragraph"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Blogs"
+          },
+          {
+            "id": "blog",
+            "type": "blog",
+            "label": "t:sections.main-menu.blocks.blogs.settings.blog.label"
+          },
+          {
+            "type": "header",
+            "content": "t:sections.main-menu.blocks.blogs.Posts-settings"
+          }, {
+            "type": "select",
+            "id": "aspect_ratio",
+            "label": "t:sections.main-menu.blocks.blogs.settings.aspect_ratio.label",
+            "default": "original",
+            "options": [
+              {
+                "value": "original",
+                "label": "t:sections.main-menu.blocks.blogs.settings.aspect_ratio.options__1.label"
+              },
+              {
+                "value": "16/9",
+                "label": "16:9"
+              },
+              {
+                "value": "3/4",
+                "label": "3:4"
+              },
+              {
+                "value": "4/3",
+                "label": "4:3"
+              }, {
+                "value": "1/1",
+                "label": "1:1"
+              }, {
+                "value": "custom",
+                "label": "t:sections.main-menu.blocks.blogs.settings.aspect_ratio.options__2.label"
+              }
+            ]
+          }, {
+            "type": "text",
+            "id": "custom_ratio",
+            "label": "t:sections.main-menu.blocks.blogs.settings.custom_ratio.label",
+            "default": "21:9"
+          }, {
+            "type": "select",
+            "id": "hover_effect",
+            "label": "t:sections.main-menu.blocks.blogs.settings.hover_effect.label",
+            "default": "zoom",
+            "options": [
+              {
+                "value": "zoom",
+                "label": "t:sections.main-menu.blocks.blogs.settings.hover_effect.options__1.label"
+              }, {
+                "value": "fade-in",
+                "label": "t:sections.main-menu.blocks.blogs.settings.hover_effect.options__2.label"
+              }, {
+                "value": "none",
+                "label": "t:sections.main-menu.blocks.blogs.settings.hover_effect.options__3.label"
+              }
+            ]
+          }, {
+            "type": "checkbox",
+            "id": "post_show_author",
+            "label": "t:sections.main-menu.blocks.blogs.settings.post_show_author.label",
+            "default": true
+          }, {
+            "type": "checkbox",
+            "id": "post_show_tags",
+            "label": "t:sections.main-menu.blocks.blogs.settings.post_show_tags.label",
+            "default": true
+          }, {
+            "type": "checkbox",
+            "id": "post_show_date",
+            "label": "t:sections.main-menu.blocks.blogs.settings.post_show_date.label",
+            "default": true
+          }, {
+            "type": "checkbox",
+            "id": "post_show_excerpt",
+            "label": "t:sections.main-menu.blocks.blogs.settings.post_show_excerpt.label",
+            "default": true
+          }, {
+            "type": "checkbox",
+            "id": "post_show_button",
+            "label": "t:sections.main-menu.blocks.blogs.settings.post_show_button.label",
+            "default": true
+          }, {
+            "type": "range",
+            "id": "limit",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.blogs.settings.limit.label",
+            "default": 3
+          }, {
+            "type": "range",
+            "id": "show_item",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.blogs.settings.show_item.label",
+            "default": 2
+          }, {
+            "type": "select",
+            "id": "col",
+            "default": "4",
+            "options": [
+              {
+                "value": "2",
+                "label": "16%"
+              },
+              {
+                "value": "3",
+                "label": "25%"
+              },
+              {
+                "value": "4",
+                "label": "33%"
+              },
+              {
+                "value": "5",
+                "label": "42%"
+              }, {
+                "value": "6",
+                "label": "50%"
+              }, {
+                "value": "7",
+                "label": "58%"
+              }, {
+                "value": "8",
+                "label": "66%"
+              }, {
+                "value": "9",
+                "label": "75%"
+              }, {
+                "value": "10",
+                "label": "84%"
+              }, {
+                "value": "12",
+                "label": "100%"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.blogs.settings.col.label"
+          }
+        ]
+      }, {
+        "type": "advanced",
+        "name": "t:sections.main-menu.blocks.advanced.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Advanced"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:sections.main-menu.blocks.advanced.settings.url.label"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.advanced.settings.open_link.label",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "t:sections.main-menu.blocks.advanced.settings.label.options__1.label"
+              }, {
+                "value": "label1",
+                "label": "t:sections.main-menu.blocks.advanced.settings.label.options__2.label"
+              }, {
+                "value": "label2",
+                "label": "t:sections.main-menu.blocks.advanced.settings.label.options__3.label"
+              }, {
+                "value": "label3",
+                "label": "t:sections.main-menu.blocks.advanced.settings.label.options__4.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.advanced.settings.label.label"
+          }, {
+            "type": "link_list",
+            "id": "menu",
+            "label": "t:sections.main-menu.blocks.advanced.settings.menu.label",
+            "default": "main-menu"
+          }, {
+            "type": "range",
+            "id": "columns",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.advanced.settings.columns.label",
+            "default": 2
+          }, {
+            "type": "text",
+            "id": "icon_font",
+            "label": "t:sections.main-menu.blocks.advanced.settings.icon_font.label",
+            "info": "t:sections.main-menu.blocks.advanced.settings.icon_font.info"
+          }, {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "t:sections.main-menu.blocks.advanced.settings.icon_image.label",
+            "info": "t:sections.main-menu.blocks.advanced.settings.icon_image.info"
+          }, {
+            "type": "range",
+            "id": "icon_width_image",
+            "label": "t:sections.main-menu.blocks.advanced.settings.icon_width_image.label",
+            "min": 20,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 50
+          }, {
+            "type": "header",
+            "content": "t:sections.main-menu.blocks.advanced.settings.Sub-menu"
+          }, {
+            "type": "select",
+            "id": "width",
+            "default": "full-width",
+            "options": [
+              {
+                "value": "custom",
+                "label": "t:sections.main-menu.blocks.advanced.settings.width.options__1.label"
+              }, {
+                "value": "full-width",
+                "label": "t:sections.main-menu.blocks.advanced.settings.width.options__2.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.advanced.settings.width.label"
+          }, {
+            "type": "range",
+            "id": "custom_width",
+            "label": "t:sections.main-menu.blocks.advanced.settings.custom_width.label",
+            "min": 350,
+            "max": 1200,
+            "step": 50,
+            "unit": "px",
+            "default": 1200
+          }, {
+            "type": "header",
+            "content": "t:sections.main-menu.blocks.advanced.settings.Products-block"
+          }, {
+            "type": "collection",
+            "id": "collection1",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection1.label"
+          }, {
+            "type": "collection",
+            "id": "collection2",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection2.label"
+          }, {
+            "type": "collection",
+            "id": "collection3",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection3.label"
+          }, {
+            "type": "collection",
+            "id": "collection4",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection4.label"
+          }, {
+            "type": "collection",
+            "id": "collection5",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection5.label"
+          }, {
+            "type": "collection",
+            "id": "collection6",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection6.label"
+          }, {
+            "type": "collection",
+            "id": "collection7",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection7.label"
+          }, {
+            "type": "collection",
+            "id": "collection8",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection8.label"
+          }, {
+            "type": "collection",
+            "id": "collection9",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection9.label"
+          }, {
+            "type": "collection",
+            "id": "collection10",
+            "label": "t:sections.main-menu.blocks.advanced.settings.collection10.label"
+          }, {
+            "type": "range",
+            "id": "limit",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.advanced.settings.limit.label",
+            "default": 3
+          }, {
+            "type": "range",
+            "id": "show_item",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "label": "t:sections.main-menu.blocks.advanced.settings.show_item.label",
+            "default": 2
+          }, {
+            "type": "range",
+            "id": "column_width",
+            "label": "t:sections.main-menu.blocks.advanced.settings.column_width.label",
+            "min": 30,
+            "max": 100,
+            "step": 5,
+            "unit": "%",
+            "default": 50
+          }
+        ]
+      }, {
+        "type": "dropdown",
+        "name": "t:sections.main-menu.blocks.dropdown.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Dropdown"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.url.label"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.menu.label",
+            "default": "main-menu"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.open_link.label",
+            "default": false
+          }, {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "t:sections.main-menu.blocks.dropdown.settings.label.options__1.label"
+              }, {
+                "value": "label1",
+                "label": "t:sections.main-menu.blocks.dropdown.settings.label.options__2.label"
+              }, {
+                "value": "label2",
+                "label": "t:sections.main-menu.blocks.dropdown.settings.label.options__3.label"
+              }, {
+                "value": "label3",
+                "label": "t:sections.main-menu.blocks.dropdown.settings.label.options__4.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.dropdown.settings.label.label"
+          }, {
+            "type": "text",
+            "id": "icon_font",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.icon_font.label",
+            "info": "t:sections.main-menu.blocks.dropdown.settings.icon_font.info"
+          }, {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.icon_image.label",
+            "info": "t:sections.main-menu.blocks.dropdown.settings.icon_image.info"
+          }, {
+            "type": "range",
+            "id": "icon_width_image",
+            "label": "t:sections.main-menu.blocks.dropdown.settings.icon_width_image.label",
+            "min": 20,
+            "max": 100,
+            "step": 5,
+            "unit": "px",
+            "default": 50
+          }
+        ]
+      }, {
+        "type": "single_link",
+        "name": "t:sections.main-menu.blocks.single_link.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.content_text.heading",
+            "default": "Single link"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:sections.main-menu.blocks.single_link.settings.url.label"
+          },
+          {
+            "type": "checkbox",
+            "id": "open_link",
+            "label": "t:sections.main-menu.blocks.single_link.settings.open_link.label",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "label",
+            "options": [
+              {
+                "value": "",
+                "label": "t:sections.main-menu.blocks.single_link.settings.label.options__1.label"
+              }, {
+                "value": "label1",
+                "label": "t:sections.main-menu.blocks.single_link.settings.label.options__2.label"
+              }, {
+                "value": "label2",
+                "label": "t:sections.main-menu.blocks.single_link.settings.label.options__3.label"
+              }, {
+                "value": "label3",
+                "label": "t:sections.main-menu.blocks.single_link.settings.label.options__4.label"
+              }
+            ],
+            "label": "t:sections.main-menu.blocks.single_link.settings.label.label"
+          }, {
+            "type": "text",
+            "id": "icon_font",
+            "label": "t:sections.main-menu.blocks.single_link.settings.icon_font.label",
+            "info": "t:sections.main-menu.blocks.single_link.settings.icon_font.info"
+          }, {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "t:sections.main-menu.blocks.single_link.settings.icon_image.label",
+            "info": "t:sections.main-menu.blocks.single_link.settings.icon_image.info"
+          }, {
+            "type": "range",
+            "id": "icon_width_image",
+            "label": "t:sections.main-menu.blocks.single_link.settings.icon_width_image.label",
+            "min": 20,
+            "max": 50,
+            "step": 5,
+            "unit": "px",
+            "default": 50
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

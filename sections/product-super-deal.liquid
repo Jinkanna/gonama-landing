@@ -1,0 +1,513 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign product_style = th_st.product_style
+  assign st = section.settings
+  assign container = st.container
+  assign color_scheme = st.color_scheme
+  assign text_align = st.text_alignment
+  assign heading = st.heading
+  assign description = st.description
+  assign text_as_title = st.text_as_title
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign enable_banner = st.enable_banner
+  assign banner_img = st.banner_img
+  assign banner_position = st.banner_position
+  assign banner_width = st.banner_width
+  assign end_time = st.end_time
+  assign video_local = st.video_local
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+  assign enabled_animations = th_st.animations_enabled
+  assign show_banner = ''
+  if st.enable_banner
+    assign show_banner = ' show-banner'
+  endif
+
+  assign banner_url = ''
+  if st.banner_link != blank
+    assign banner_url = st.banner_link
+  else
+    assign banner_url = '#'
+  endif
+
+  assign banner_position = ''
+  if st.banner_position == 'position-right'
+    assign banner_position = ' flex-row-reverse'
+  endif
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+
+  assign has_bg = ''
+  if bg_color != blank
+    assign has_bg = ' has-bg'
+  endif
+  assign video_url = st.video_url
+
+  assign video_id = ''
+  if video_url.type == 'youtube'
+    assign video_id = video_url | replace: 'https://www.youtube.com/watch?v=', ''
+  elsif video_url.type == 'vimeo'
+    assign video_id = video_url | replace: 'https://vimeo.com/', ''
+  endif
+-%}
+
+{%- capture style -%}
+  {%- if bg_color != blank -%}
+    --section-bg-color:{{ bg_color }};
+  {%- endif -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom:{{ st.padding_bottom }}px;
+  --bls_product-item-vertical-space: 0px;
+{%- endcapture -%}
+<section
+  class="color-{{ color_scheme }} gradient bls__section {{ has_bg }}{{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }} bls__product{{ reset_spacing }} {% if section.settings.container == "full-width" or section.settings.column_gap == 0 %} not-radius {% endif %}"
+  style="{{ style | strip | strip_newlines }}"
+  data-id="{{ section.id }}"
+  data-type="product_deal"
+>
+  <div class=" {{ container }} section-full">
+    {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+      <div class="bls__section-header {{ text_align }}">
+        {%- if heading_logo_svg != blank -%}
+          <div class="bls__section-logo bls__section-logo-svg">
+            {{ heading_logo_svg }}
+          </div>
+        {%- elsif heading_logo != blank -%}
+          <div class="bls__section-logo">
+            <img
+              srcset="
+                {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ heading_logo | image_url }} {{ heading_logo.width }}w
+              "
+              src="{{ heading_logo | image_url: width: 533 }}"
+              alt="{{ heading_logo.alt | escape }}"
+              class="motion-reduce"
+              loading="lazy"
+              width="{{ heading_logo.width }}"
+              height="{{ heading_logo.height }}"
+            >
+          </div>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5 {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="bls__grid {{ product_style }}">
+      <div class="{% if enabled_animations %}scroll-trigger animate--slide-in{% endif %} bls__super-deal-header bls__section-header flex flex-wrap align-items-center justify-content-between {% if text_as_title %}text-as-title{% endif %}">
+        {%- if text_as_title -%}
+          <h2 class="bls__section-heading mb-0">{{ st.super_deal_text }}</h2>
+        {%- else -%}
+          <div class="heading-color heading-weight">{{ st.super_deal_text }}</div>
+        {%- endif -%}
+        <div class="bls__superdeal-countdown flex flex-wrap align-items-center {% if text_as_title %}mb-5{% endif %}">
+          {{ st.super_deal_message }}
+          {% if end_time != blank %}
+            <div class="bls__timer " data-timer="{{ end_time }}">
+              <div class="timer-display flex">
+                <div class="timer-block">
+                  <span class="timer-block__num js-timer-days">00</span>
+                </div>
+                <div class="timer-block">
+                  <span class="timer-block__num js-timer-hours">00</span>
+                </div>
+                <div class="timer-block">
+                  <span class="timer-block__num js-timer-minutes">00</span>
+                </div>
+                <div class="timer-block">
+                  <span class="timer-block__num js-timer-seconds">00</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row flex-nowrap {{ banner_position }}" style="--product-banner-width: {{ banner_width }}%">
+        {%- if enable_banner -%}
+          <div class="bls__product-banner d-none d-xl-block {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {%- case st.banner_type -%}
+              {%- when 'video' -%}
+                {%- if video_local == blank -%}
+                  <div class="video-container h-full">
+                    <div class="video-foreground">
+                      {%- if video_url.type == 'youtube' -%}
+                        <video-youtube data-id="{{ block.id }}">
+                          <iframe
+                            src="https://www.youtube.com/embed/{{ video_id }}?controls=0&autoplay=1&mute=1&playsinline=1&loop=1&playlist={{ video_id }}"
+                          ></iframe>
+                        </video-youtube>
+                      {%- elsif video_url.type == 'vimeo' -%}
+                        <iframe
+                          src="https://player.vimeo.com/video/{{ video_id }}?controls=0background=1&autoplay=1&muted=1&loop=1"
+                          frameborder="0"
+                          allowfullscreen
+                        ></iframe>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- else -%}
+                  <div class="local-video h-full">
+                    {{ video_local | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+                  </div>
+                {%- endif -%}
+              {%- else -%}
+                <a
+                  class="h-full w-full d-block"
+                  href="{{ banner_url }}"
+                  aria-label="Link detail"
+                >
+                  {% if banner_img != blank %}
+                    {%- render 'responsive-image', image: banner_img -%}
+                  {% else %}
+                    {%- render 'placeholder-render' | type: 'image' -%}
+                  {% endif %}
+                </a>
+            {%- endcase -%}
+          </div>
+        {%- endif -%}
+        <div class="bls__product-with-banner{{ show_banner }}">
+          {%- render 'product-carousel-layout' | st: st -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.products-deal.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Bestseller Product"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-deal.super-deal-settings"
+    },
+    {
+      "type": "richtext",
+      "id": "super_deal_text",
+      "label": "t:sections.products-deal.settings.super_deal_text.label",
+      "default": "<p>HOT DEAL! GET THE BEST PRICES</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_as_title",
+      "label": "t:sections.products-deal.settings.text_as_title.label",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "super_deal_message",
+      "label": "t:sections.products-deal.settings.super_deal_message.label",
+      "default": "<p>Hurry up! Offer ends in:</p>"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "t:sections.products-deal.settings.end_time.label",
+      "default": "12-24-2025",
+      "info": "t:sections.products-deal.settings.end_time.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-deal.Product-settings"
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "t:sections.products-deal.settings.collection.label"
+    },
+    {
+      "type": "range",
+      "id": "limit_products",
+      "label": "t:sections.products-deal.settings.limit_products.label",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "item_desktop",
+      "label": "t:sections.products-deal.settings.item_desktop.label",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "t:sections.products-deal.settings.column_gap.label",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-deal.Carousel-settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_autoplay",
+      "label": "t:sections.all.setting_carousel.autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_loop",
+      "label": "t:sections.all.setting_carousel.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_arrows",
+      "label": "t:sections.all.setting_carousel.show_arrow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "carousel_pagination",
+      "label": "t:sections.all.setting_carousel.carousel_pagination.label",
+      "options": [
+        {
+          "value": "carousel_none",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__none.label"
+        },
+        {
+          "value": "carousel_bullets",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__bullets.label"
+        },
+        {
+          "value": "show_bullet_mobile",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.bullet__mobile.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-deal.Banner-settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_banner",
+      "label": "t:sections.products-deal.settings.Show-banner.label",
+      "info": "t:sections.all.images_banner.info_show_banner",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "banner_type",
+      "label": "t:sections.products-deal.settings.banner_type.label",
+      "default": "image",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:sections.products-deal.settings.banner_type.options__1.label"
+        },
+        {
+          "value": "video",
+          "label": "t:sections.products-deal.settings.banner_type.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_img",
+      "label": "t:sections.products-deal.settings.banner_img.label",
+      "info": "t:sections.products-deal.settings.banner_img.info"
+    },
+    {
+      "id": "video_url",
+      "type": "video_url",
+      "label": "t:sections.products-deal.settings.video_url.label",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "id": "video_local",
+      "type": "video",
+      "label": "t:sections.products-deal.settings.video_local.label",
+      "info": "t:sections.products-deal.settings.video_local.info"
+    },
+    {
+      "type": "select",
+      "id": "banner_position",
+      "label": "t:sections.products-deal.settings.banner_position.label",
+      "default": "position-left",
+      "options": [
+        {
+          "value": "position-left",
+          "label": "t:sections.products-deal.settings.banner_position.options__1.label"
+        },
+        {
+          "value": "position-right",
+          "label": "t:sections.products-deal.settings.banner_position.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "t:sections.products-deal.settings.banner_link.label"
+    },
+    {
+      "type": "range",
+      "id": "banner_width",
+      "label": "t:sections.products-deal.settings.banner_width.label",
+      "min": 15,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.products-deal.name"
+    }
+  ]
+}
+{% endschema %}

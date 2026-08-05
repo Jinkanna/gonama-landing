@@ -1,0 +1,279 @@
+{%- liquid
+  assign st = section.settings
+  assign gg_map = st.iframe
+  assign show_map = st.show_map
+  assign container = st.container
+  assign contact_form_heading = st.contact_form_heading
+  assign contact_form_sub_heading = st.contact_form_sub_heading
+  assign contact_info_heading = st.contact_info_heading
+  assign contact_info_sub_heading = st.contact_info_sub_heading
+  assign contact_info_content = st.contact_info_content
+  assign contact_info_content_2 = st.contact_info_content_2
+  assign contact_info_content_3 = st.contact_info_content_3
+  assign store_1 = st.store_1
+  assign store_2 = st.store_2
+  assign store_3 = st.store_3
+-%}
+
+<section class="bls__section bls__contact-page">
+  <div class="section-full">
+    <div class="page-content">
+      {%- if show_map != false -%}
+        <div class="bls__section bls_map">
+          <div class="contact-map mb-40">
+            {{ gg_map }}
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="{{ container }} section-full">
+        <div class="bls__section bls__contact-header" style="--bls-gutter-x: 30px">
+          <div class="contact-header">
+            <h3 class=" m-0">
+              {{ contact_info_heading }}
+            </h3>
+            <p>{{ contact_info_sub_heading }}</p>
+          </div>
+          <div class="contact-info-content mt-30 row">
+            {%- if contact_info_content != blank or store_1 != blank -%}
+              <div class="flex-xs-1 col-12">
+                <div class="bs__store-info pt-xs-0 border-xs-0 pt-30 border-top">
+                  <h5 class="mb-15">
+                    {{ store_1 }}
+                  </h5>
+                  {{ contact_info_content }}
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if contact_info_content_2 != blank or store_2 != blank -%}
+              <div class="flex-xs-1 col-12">
+                <div class="bs__store-info pt-xs-0 border-xs-0 pt-30 border-top">
+                  <h5 class="mb-15">
+                    {{ store_2 }}
+                  </h5>
+                  {{ contact_info_content_2 }}
+                </div>
+              </div>
+            {%- endif -%}
+            {%- if contact_info_content_3 != blank or store_2 != blank -%}
+              <div class="flex-xs-1 col-12">
+                <div class="bs__store-info pt-xs-0 border-xs-0 pt-30 border-top">
+                  <h5 class="mb-15">
+                    {{ store_3 }}
+                  </h5>
+                  {{ contact_info_content_3 }}
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+        <div class=" bls__contact-header bls__contact-form">
+          <div class="contact-header mb-25">
+            <h3 class=" m-0">
+              {{ contact_form_heading }}
+            </h3>
+            <p>{{ contact_form_sub_heading }}</p>
+          </div>
+          <div class="contact-form">
+            {% form 'contact' %}
+              {% if form.posted_successfully? %}
+                <p class="success">
+                  {{ 'templates.contact.form.page_contact_successs' | t }}
+                </p>
+              {% else %}
+                {{ form.errors | default_errors }}
+              {% endif %}
+              <div class="form-field form-group row row-cols-md-2" style="--bs-gutter-x: 2rem">
+                <div class="field-contact-name">
+                  <input
+                    type="text"
+                    class="form-input form-input-placeholder w-full"
+                    name="contact[name]"
+                    value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                    id="inputName"
+                    placeholder="{{ 'templates.contact.form.name' | t }}"
+                  >
+                </div>
+                <div class="field-contact-email">
+                  <input
+                    type="email"
+                    class="form-input form-input-placeholder w-full"
+                    class=""
+                    name="contact[email]"
+                    required
+                    autocorrect="off"
+                    autocapitalize="off"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    id="inputEmail"
+                    placeholder="{{ 'templates.contact.form.email' | t }}"
+                  >
+                </div>
+              </div>
+              <div class="form-field form-group">
+                <textarea
+                  name="contact[body]"
+                  class="form-input form-input-placeholder w-full"
+                  id="message"
+                  rows="8"
+                  placeholder="{{ 'templates.contact.form.comment' | t }}"
+                ></textarea>
+              </div>
+              <div class="save-info mt-20 flex ">
+                <div class="checkbox-group relative">
+                  <input
+                    type="checkbox"
+                    class="input m-0 opacity-0 absolute inset-0 pointer inset-0"
+                    name="contact[saveInfo]"
+                    id="save-info"
+                  >
+                  <span class="checkmark"></span>
+                </div>
+                <label for="save-info" class="pointer">
+                  {{- 'templates.contact.form.save_info' | t -}}
+                </label>
+              </div>
+              <div class="form-actions mt-30">
+                <input
+                  type="submit"
+                  class="button btn btn-primary"
+                  value="{{ 'templates.contact.form.send_message' | t }}"
+                >
+              </div>
+            {% endform %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.contact-page.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Maps"
+    },
+    {
+      "type": "textarea",
+      "id": "iframe",
+      "label": "t:sections.contact-page.settings.iframe.label",
+      "default": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3154.8939060848147!2d144.81158271584684!3d-37.74563313792195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65fa6debeb781%3A0xe1d23f5d1759961e!2s184%20Main%20Rd%20E%2C%20St%20Albans%20VIC%203021%2C%20%C3%9Ac!5e0!3m2!1svi!2s!4v1618277125252!5m2!1svi!2s\" width=\"100%\" height=\"500\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "t:sections.contact-page.settings.show_map.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Contact-form"
+    },
+    {
+      "type": "text",
+      "id": "contact_form_heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_form_sub_heading",
+      "label": "t:sections.contact-page.settings.contact_form_sub_heading.label",
+      "default": "<p>We'd love to hear from you about our entire service. Your comments and suggestions will be highly appreciated. Please complete the form below.</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Contact-form-info"
+    },
+    {
+      "type": "text",
+      "id": "contact_info_heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Here to Help"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_info_sub_heading",
+      "label": "t:sections.contact-page.settings.contact_info_sub_heading.label",
+      "default": "<p>68 St, South New York/NY 98944, United States. blueskytechcompany@gmail.comm</p><p>+222-1800-262</p><p>Opening Hours: Everyday 9:00 am - 6:00 pm</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Store-1"
+    },
+    {
+      "type": "text",
+      "id": "store_1",
+      "label": "t:sections.contact-page.settings.store_1.label",
+      "default": "Umino - United States"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_info_content",
+      "label": "t:sections.contact-page.settings.contact_info_content.label",
+      "default": "<p>Opening Hours: Everyday 9:00 am - 6:00 pm</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Store-2"
+    },
+    {
+      "type": "text",
+      "id": "store_2",
+      "label": "t:sections.contact-page.settings.store_2.label",
+      "default": "Umino - India"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_info_content_2",
+      "label": "t:sections.contact-page.settings.contact_info_content_2.label",
+      "default": "<p>68 St, South New York/NY 98944, United States. blueskytechcompany@gmail.comm</p><p>+222-1800-262</p><p>Opening Hours: Everyday 9:00 am - 6:00 pm</p>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.contact-page.settings.header.Store-3"
+    },
+    {
+      "type": "text",
+      "id": "store_3",
+      "label": "t:sections.contact-page.settings.store_3.label",
+      "default": "Umino - French"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_info_content_3",
+      "label": "t:sections.contact-page.settings.contact_info_content_3.label",
+      "default": "<p>68 St, South New York/NY 98944, United States. blueskytechcompany@gmail.comm</p><p>+222-1800-262</p><p>Opening Hours: Everyday 9:00 am - 6:00 pm</p>"
+    }
+  ]
+}
+{% endschema %}

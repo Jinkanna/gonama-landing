@@ -1,0 +1,61 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "1e9494ce-85e4-407b-bad6-4b92914909c8": {
+      "type": "page-heading",
+      "blocks": {
+        "template--16567751901431__1e9494ce-85e4-407b-bad6-4b92914909c8-16669322783778144b-0": {
+          "type": "1",
+          "disabled": true,
+          "settings": {
+            "page_title": "",
+            "text_fs": 36
+          }
+        }
+      },
+      "block_order": [
+        "template--16567751901431__1e9494ce-85e4-407b-bad6-4b92914909c8-16669322783778144b-0"
+      ],
+      "settings": {
+        "show_banner": false,
+        "min_height": 200,
+        "parallax": false,
+        "show_overlay": false,
+        "overlay": 54,
+        "design": "text-overlay-image",
+        "text_postion": "text-left"
+      }
+    },
+    "main": {
+      "type": "main-article-portfolio",
+      "settings": {
+        "container": "container",
+        "post_show_author": true,
+        "post_show_date": true,
+        "post_show_tags": true,
+        "post_show_share": true,
+        "post_next_previous": true,
+        "aspect_ratio_detail": "original",
+        "custom_ratio_detail": "21:9",
+        "show_related_articles": true,
+        "related_articles_title": "Related articles",
+        "aspect_ratio": "1/1",
+        "custom_ratio": "21:9",
+        "hover_effect": "zoom",
+        "hover_effect_infor": "none"
+      }
+    }
+  },
+  "order": [
+    "1e9494ce-85e4-407b-bad6-4b92914909c8",
+    "main"
+  ]
+}

@@ -1,0 +1,45 @@
+{%- liquid
+  if show_tags == null
+    assign show_tags = show_tags
+  endif
+  assign layout = layout
+  assign column_gap = column_gap
+-%}
+
+<div
+  class="bls__blog-posts-item {% if layout == 'list' %}blog-posts-item-list row align-items-center row-cols-1 row-cols-md-2{% endif %}"
+  {% if layout == 'list' %}
+    style="--bs-gutter-x: {{ column_gap }}px;"
+  {% endif %}
+>
+  <div class="bls__blog-posts-image hover-effect hover-{{ hover_effect }} {% if settings.image_style != blank and section.settings.container != "full-width" and section.settings.column_gap != 0 %} radius {% endif %}">
+    <a href="{{ article.url }}">
+      {% render 'responsive-image', image: article.image, aspect_ratio: aspect_ratio, custom_ratio: custom_ratio %}
+    </a>
+  </div>
+  <div class="blos__blog-posts-info">
+    {%- if show_tags -%}
+      <ul class="list-unstyled d-flex flex-wrap tags-portfolio">
+        {% for tag in article.tags limit: 8 %}
+          {% if current_tags contains tag %}
+            <li class="bls__blog-posts-category fs-12 fw-500 uppercase mb-5">{{ tag }}</li>
+          {% else %}
+            <li class="bls__blog-posts-category fs-12 fw-500 uppercase mb-5">
+              <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="uppercase">
+                {{- tag }}
+                {%- unless forloop.last %}, {% endunless -%}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {%- endif -%}
+    {%- if article.title != blank -%}
+      <h3 class="bls__blog-posts-title mb-5  fs-24">
+        <a href="{{ article.url }}">
+          {{ article.title }}
+        </a>
+      </h3>
+    {%- endif -%}
+  </div>
+</div>

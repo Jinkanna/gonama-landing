@@ -1,0 +1,33 @@
+<section class="custom-contact-form">    
+  <p>Agendemos una llamada o chat :), te daremos un análisis gratuito de tu sitio actual, compartiremos tendencias y posibilidades  para escalar tu estrategia online.</p>
+
+    {% if form.posted_successfully? %}
+        <p class="success-message">✅ Tu mensaje fue enviado con éxito. Te contactaremos pronto.</p>
+    {% endif %}
+
+    {% form 'contact' %}
+        <div class="form-container">
+            <div class="form-group">
+                <label class="contact-label" for="name">Nombre*</label>
+                <input class="contact-input" type="text" name="contact[name]" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label class="contact-label" for="website">Sitio web</label>
+                <input class="contact-input" type="text" name="contact[website]" id="website">
+            </div>
+
+            <div class="form-group">
+                <label class="contact-label" for="phone">Celular*</label>
+                <input class="contact-input" type="tel" name="contact[phone]" id="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label class="contact-label" for="email">Email</label>
+                <input class="contact-input" type="email" name="contact[email]" id="email">
+            </div>
+        </div>
+
+        <button type="submit" class="contact-btn">Enviar</button>
+    {% endform %}
+</section>

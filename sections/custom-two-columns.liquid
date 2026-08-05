@@ -1,0 +1,75 @@
+{% schema %}
+{
+  "name": "Two Columns Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_picker",
+      "name": "Imagen",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texto",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Contenido"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Two Columns Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .custom-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .custom-columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .custom-column {
+    text-align: center;
+  }
+</style>
+
+<div class="custom-columns">
+  {% for block in section.blocks %}
+    <div class="custom-column">
+      {% if block.type == "image_picker" %}
+        {% if block.settings.image %}
+          <img src="{{ block.settings.image | img_url: 'large' }}" alt="Custom Image">
+        {% endif %}
+      {% elsif block.type == "text" %}
+        <div>{{ block.settings.text }}</div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

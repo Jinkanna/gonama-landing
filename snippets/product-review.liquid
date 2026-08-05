@@ -1,0 +1,11 @@
+    {% if review_star %}
+        {%- if product.metafields.judgeme.badge -%}
+            <div id="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">{{ product.metafields.judgeme.badge }}</div>
+        {%- endif -%}
+        {%- if product.metafields.spr.reviews -%}
+            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        {%- endif -%}
+    {% endif %}
+    {% if review_widget %}
+        <div id="shopify-product-reviews" data-id="{{ product.id }}">{{ product.metafields.spr.reviews }}</div>
+    {% endif %}

@@ -1,0 +1,364 @@
+{{ 'collections-item.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign container = th_st.general_layout
+  if container == 'default'
+  elsif container == custom_width
+
+  endif
+  assign count_m = count_menu_item | times: 1
+  assign count_item = 0
+-%}
+{%- for block in section.blocks -%}
+  {%- liquid
+    assign block_st = block.settings
+  -%}
+  {%- case block.type -%}
+    {%- when 'link' -%}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      {%- assign linkl = linklists[block_st.menu].links -%}
+      {%- if linkl.size == 0 -%}{% continue %}{%- endif -%}
+      <div id="{{ block.id }}" class="bls-menu-item type_link col-sm-{{ block_st.col }}" {{ block.shopify_attributes }}>
+              <div class="subchildmenu-title relative pointer" data-menu-level2>
+          {%- if block_st.title != blank %}
+            {%- liquid
+              assign link_heading = block_st.url | default: '#'
+            -%}
+            <a
+              class="bls__menu_level1-heading fw-500 mb-10 d-block"
+              href="{{ link_heading }}"
+            >
+              {{ block_st.title | split: '[label' | first }}
+              {%- if block_st.title contains '[label' -%}
+                {%- liquid
+                  assign label1 = link.title | split: '[label' | last | split: ']' | first | prepend: 'label'
+                  assign label_bg1 = section.settings[label1] | downcase | split: 'label' | last | prepend: "color_scheme_"
+                  -%}
+                <span
+                  class="px-6 d-inline-block label {{ label1 }} color-{{ section.settings[label_bg1] }} gradient"
+                  style="--navigation-bg-label:{{ section.settings[label_bg1] }};"
+                >
+                  {{ section.settings[label1] }}
+                </span>
+              {%- endif -%}
+            </a>
+          {% else -%}
+            {%- assign menu_title = linklists[block_st.menu].title -%}
+              <a class="fw-500 mb-10 d-block toggle-submenu-mb capitalize not-links" role="link" >
+              {{ menu_title }}
+            </a>
+          {% endif -%}
+        </div>
+        <ul class="subchildmenu sub-column pl-0 list-none">
+          {%- assign menu_title = linklists[block_st.menu].title -%}
+          <li class="fw-600 submenu-mobile-title justify-content-between">
+            <a role="link" class="back-main-menu-lv1 pointer">
+              <i class="icon-chevron-left"></i>
+              {%- if block_st.title != blank %}
+                {{ block_st.title }}
+                {%- else -%}
+              {{ menu_title }}
+              {%- endif -%}
+            </a>
+            <i class="icon-x close-menu pointer"></i>
+          </li>
+          {%- for link in linkl -%}
+            <li class="menu-item">
+              <a href="{{ link.url }}">
+                {{ link.title | split: '[label' | first }}
+                {%- if link.title contains '[label' -%}
+                  {%- liquid
+                    assign label1 = link.title | split: '[label' | last | split: ']' | first | prepend: 'label'
+                    assign label_bg1 = section.settings[label1] | downcase | split: 'label' | last | prepend: "color_scheme_"
+                    -%}
+                  <span
+                    class="px-6 d-inline-block label {{ label1 }} color-{{ section.settings[label_bg1] }} gradient"
+                  >
+                    {{ section.settings[label1] }}
+                  </span>
+                {%- endif -%}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- when 'html' -%}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      <div id="{{ block.id }}" class="bls-menu-item type_html col-sm-{{ block_st.col }}" {{ block.shopify_attributes }}>
+        {%- if block_st.html != blank -%}
+          <div class="content html-custom">
+            {{ block_st.html }}
+          </div>
+        {%- endif -%}
+        {%- if block_st.page != blank -%}
+          <div class="content content-page">
+            {{ pages[block_st.page].content }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- when 'banner' %}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      <div
+        {{ block.shopify_attributes }}
+        id="{{ block.id }}"
+        class="col-sm-{{ block_st.col }}"
+        style="--space-banner:{{ block_st.space_banner }}px"
+      >
+        <div
+          class="{% if block_st.box_shadow %}box-shadow-menu-item{% endif %} bls-menu-item {% if block_st.overlap_top %} {% if block_st.space_banner <= 0 %}space-banner{% endif %}{% endif %} {% if block_st.column_reverse %}flex-column-reverse{% else %}flex-column{% endif %}  type_banner"
+          style="--space-banner:{{ block_st.space_banner }}px"
+        >
+          {% if block_st.title != blank%}
+          <a
+            class="{{ block_st.heading_text_align }}"
+            {% if block_st.banner_link != blank %}
+              href="{{ block_st.banner_link }}"
+              {% else %}
+              role="link"
+              {% endif %}  
+            {%- if block_st.open_link != blank -%}
+              target="_blank"
+            {%- endif -%}
+          >
+            <div class="bls__menu_banner-heading fw-500 d-block ">
+              {{ block_st.title }}
+            </div>
+          {% endif %}
+          {% if block_st.description != blank%}
+            <div class="d-none-mb  grey-color">
+              {{ block_st.description }}
+            </div>
+          {% endif %}
+          </a>
+          <div class="bls-banner-inner relative collection-item design-1 hover-effect hover-zoom">
+            {%- liquid
+              assign image = block_st.image
+              assign button_title = block_st.button_title
+            -%}
+            {%- if image != blank -%}
+              <a
+                {% if block_st.banner_link != blank %}
+                  href="{{ block_st.banner_link }}"
+                  {% else %}
+                  role="link"
+                  {% endif %}  
+                {%- if block_st.open_link != blank -%}
+                  target="_blank"
+                {%- endif -%}
+                class="menu-banner-loaded"
+                data-image-banner="{{ image | image_url }}"
+                data-width="{{ image.width }}"
+                data-height="{{ image.height }}"
+              >
+              </a>
+            {%- else -%}
+              {%- render 'placeholder-render' | type: 'product' | cls: 'bls__collection-grid-plh' -%}
+            {%- endif -%}
+            {%- if button_title != blank -%}
+              <div class="bls-banner-button bls__collection-infor pointer-events-none absolute text-center">
+                <div class="h3 bls__collection-title m-0">
+                  <a
+                    class="d-block text-transform"
+                    {% if block_st.banner_link != blank %}
+                      href="{{ block_st.banner_link }}"
+                      {% else %}
+                      role="link"
+                      {% endif %}  
+                    {%- if block_st.open_link != blank -%}
+                      target="_blank"
+                    {%- endif -%}
+                    aria-label="link detail"
+                    ><span>{{ block_st.button_title }}</span></a
+                  >
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- when 'collection' %}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      <div
+        id="{{ block.id }}"
+        class="bls-menu-item type_collection col-sm-{{ block_st.col }}"
+        {{ block.shopify_attributes }}
+      >
+        {%- liquid
+          assign collection = collections[block_st.collection]
+          assign collection_name = collection.title
+          assign collection_link = collection.url
+          assign image_col = block_st.image | default: collection.image
+          assign show_count = block_st.show_count
+        -%}
+        <a
+          class="fw-500 d-block d-none-desktop d-none-mb"
+          {% if collection_link != blank %}
+            href="{{ collection_link }}"
+            {% else %}
+            role="link"
+            {% endif %}  
+          {%- if block_st.open_link != blank -%}
+            target="_blank"
+          {%- endif -%}
+          aria-label="link detail"
+        >
+          <span class="text">{{ collection_name }}</span>
+          {%- if show_count -%}
+            <span class="ml-5 count  fs-13">({{ collection.all_products_count | default: 0 }} Products)</span>
+          {%- endif -%}
+        </a>
+        <div class="collection-item relative">
+          <div class="bls-collection-content design-1">
+            <div class="collection-img hover-effect hover-zoom">
+              <a
+                class="d-block text-transform menu-banner-loaded"
+                {% if collection_link != blank %}
+                  href="{{ collection_link }}"
+                  {% else %}
+                  role="link"
+                  {% endif %}        
+                {%- if block_st.open_link != blank -%}
+                  target="_blank"
+                {%- endif -%}
+                {%- if image_col != blank -%}
+                  data-image-banner="{{ image_col | image_url }}"
+                  data-width="{{ image_col.width }}"
+                  data-height="{{ image_col.height }}"
+                {%- endif -%}
+                aria-label="link detail"
+              >
+                {%- if image_col != blank -%}
+                {%- else -%}
+                  {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__collection-grid-plh' -%}
+                {%- endif -%}
+              </a>
+            </div>
+            <div class="bls__collection-infor pointer-events-none absolute text-center">
+              {% if collection_link != blank %}
+              <div class="h3 bls__collection-title m-0">
+                <a
+                  class="d-block text-transform"
+                  {% if collection_link != blank %}
+                    href="{{ collection_link }}"
+                    {% else %}
+                    role="link"
+                    {% endif %}          
+                  {%- if block_st.open_link != blank -%}
+                    target="_blank"
+                  {%- endif -%}
+                  aria-label="link detail"
+                >
+                  <span class="text">{{ collection_name }}</span>
+                  {%- if show_count -%}
+                    <span class="ml-5 count  fs-13">({{ collection.all_products_count | default: 0 }} Products)</span>
+                  {%- endif -%}
+                </a>
+              </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- when 'products' %}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      <div
+        id="{{ block.id }}"
+        class="bls-menu-item type_products col-sm-{{ block_st.col }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="bls-menu-products">
+          {%- if block_st.title != blank %}
+            <div class="bls__menu_level1-heading fw-500 mb-15 d-block">{{ block_st.title }}</div>
+          {%- endif -%}
+          {%- liquid
+            assign collection = collections[block.settings.collection]
+            assign show_item = block.settings.show_item
+            assign limit = block.settings.limit
+          -%}
+          <div class="products-grid">
+            <div
+              class="swiper bls__swiper hover__show-nav"
+              id="bls__swiper-{{ section.id }}"
+              data-section-id="{{ section.id }}"
+              data-mobile="1"
+              data-tablet="1"
+              data-desktop="{{ show_item }}"
+              data-autoplay="false"
+              data-loop="false"
+              data-spacing="30"
+            >
+              <div class="swiper-wrapper">
+                {%- for product in collection.products limit: limit -%}
+                  <div class="swiper-slide">
+                    {%- render 'product-item', product: product -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+              {%- render 'swiper-control', show_bullet: false, show_arrow: true -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- when 'blogs' %}
+      {{ 'blog-item.css' | asset_url | stylesheet_tag }}
+      {%- if count_item != count_m -%}{%- continue -%}{%- endif -%}
+      <div
+        id="{{ block.id }}"
+        class="bls-menu-item type_blogs d-none-mb col-sm-{{ block_st.col }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="bls-menu-blogs">
+          {%- if block_st.title != blank %}
+            <div class="bls__menu_level1-heading fw-500 mb-15 d-block">{{ block_st.title }}</div>
+          {%- endif -%}
+          {%- liquid
+            assign blogs = blogs[block_st.blog]
+            assign show_item = block_st.show_item
+            assign limit = block_st.limit
+            assign show_author = block_st.post_show_author
+            assign show_tag = block_st.post_show_tags
+            assign show_date = block_st.post_show_date
+            assign show_excerpt = block_st.post_show_excerpt
+            assign show_readmore = block_st.post_show_button
+            assign custom_ratio = block_st.custom_ratio
+            assign aspect_ratio = block_st.aspect_ratio
+            assign hover_effect = block_st.hover_effect
+          -%}
+          <div class="blogs-grid">
+            <div
+              class="swiper bls__swiper hover__show-nav"
+              id="bls__swiper-{{ block_st.id }}"
+              data-section-id="{{ block_st.id }}"
+              data-autoplay="false"
+              data-loop="false"
+              data-mobile="1"
+              data-tablet="1"
+              data-desktop="{{ show_item }}"
+              data-spacing="30"
+            >
+              <div class="swiper-wrapper">
+                {%- for article in blogs.articles limit: limit -%}
+                  <div class="swiper-slide">
+                    {%- render 'article-card',
+                      article: article,
+                      show_tag: show_tag,
+                      show_date: show_date,
+                      show_excerpt: show_excerpt,
+                      show_readmore: show_readmore,
+                      show_author: show_author,
+                      aspect_ratio: aspect_ratio,
+                      custom_ratio: custom_ratio,
+                      hover_effect: hover_effect
+                    -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+              {% render 'swiper-control', show_bullet: false, show_arrow: true %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- when 'menu_item' -%}
+      {%- assign count_item = count_item | plus: 1 -%}
+  {%- endcase -%}
+{%- endfor -%}

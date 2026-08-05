@@ -1,0 +1,52 @@
+{%- liquid
+  assign st = settings
+  assign option_name = 'Color'
+  if st.option_name_color != blank
+    assign option_name = st.option_name_color | split: ','
+  endif
+  assign color_swatches_size = st.color_swatches_size
+  assign color_swatches_style = st.color_swatches_style
+  assign has_color = false
+  for opt in product.options_with_values
+    for itemColor in option_name
+      if opt.name == itemColor
+        assign has_color = true
+      endif
+    endfor
+  endfor
+-%}
+{% if product.has_only_default_variant == false and has_color == true %}
+  <div
+    class="bls__product-option option_color flex mt-4"
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid 
+        assign isColorOption = false
+        for colorItem in option_name
+          if option.name == colorItem
+            assign isColorOption = true
+          endif
+        endfor
+      -%}
+      {%- if isColorOption -%}
+        {%- for value in option.values -%}
+          {%- liquid
+            assign active = ''
+            if forloop.first == true
+              assign active = 'active'
+            endif
+          -%}
+          <div
+            class="bls__product-color-swatches bls__option-swatch-js {{ color_swatches_style }} {{ color_swatches_size }} bls_tooltip mr-5 bls__{{ value | downcase | replace: ' ', '-' }} {{ active }}"
+            data-value="{{ value }}"
+            data-color="{{ value | downcase }}"
+            data-position="{{ option.position }}"
+          >
+            <span class="bls_tooltip-content">{{ value }}</span> <!-- Mostramos el texto directamente -->
+            <span class="swatch-text">{{ value }}</span> <!-- Texto visible como el swatch -->
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{% endif %}

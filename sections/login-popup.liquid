@@ -1,0 +1,84 @@
+{{ 'custormer.css' | asset_url | stylesheet_tag }}
+<div id="login-popup">
+    <div class="bls__tab-wrapper">
+        <div id="tab_login" class="bls-login bls-login-popup" data-title-default="{{ 'customer.login_page.title' | t }}" data-login-hidden="{{ 'customer.login_page.title' | t }}" aria-hidden="false">
+            <form accept-charset="UTF-8" action="{{ routes.account_login_url }}" method="post" class="auth-form auth-form-2">
+                <input name="form_type" type="hidden" value="customer_login" />
+                <input name="utf8" type="hidden" value="✓" />
+                <div class="form-field form-group  mb-15 d-flex flex-column">
+                    <input id="customer_email" class="form-input form-input-placeholder" type="email" value="" name="customer[email]" required placeholder="{{ 'customer.login_page.placeholder_email' | t }}">
+                </div>
+                <div class="form-field form-group  mb-15 d-flex flex-column">
+                    <input id="customer_password" class="form-input form-input-placeholder" type="password" value="" required placeholder="{{ 'customer.login_page.placeholder_pass' | t }}" name="customer[password]">
+                </div>
+                <a class="link-forgot" href="" data-login-show="{{ 'customer.recover_password.title' | t }}">
+                    <span class="text">{{ 'customer.login_page.forgot_password' | t }}</span>
+                </a>
+                <div class="form-actions auth-actions mt-30 d-flex flex-column text-center">
+                    <button type="submit" class="button button-login btn btn-primary" value="{{ 'customer.login_page.title' | t }}">{{ 'customer.login_page.title' | t }}</button>
+                    <a class="button button-account btn btn-secondary mt-20" data-login-show="{{ 'customer.register.title' | t }}">{{ 'customer.register.title' | t }}</a>
+                </div>
+            </form>
+        </div>
+        <div id="tab_register" class="bls-register bls-login-popup" data-login-hidden="{{ 'customer.register.title' | t }}" aria-hidden="true">
+            {% form 'create_customer' %}
+                {{ form.errors | default_errors }}
+    
+                <div class="first-name form-group  mb-15 d-flex flex-column">
+                    <input type="text" placeholder="{{ 'customer.register.first_name' | t }}" name="customer[first_name]">
+                </div>
+    
+                <div class="last-name form-group  mb-15 d-flex flex-column">
+                    <input type="text" placeholder="{{ 'customer.register.last_name' | t }}" name="customer[last_name]">
+                </div>
+    
+                <div class="email form-group  mb-15 d-flex flex-column">
+                    <input type="email" placeholder="{{ 'customer.login_page.placeholder_email' | t }}" name="customer[email]">
+                </div>
+    
+                <div class="password form-group  mb-15 d-flex flex-column">
+                    <input type="password" placeholder="{{ 'customer.login_page.placeholder_pass' | t }}" name="customer[password]">
+                </div>
+                <p class="lable-policy pt-10">
+                    {{ 'customer.register.content_form' | t }}
+                </p>
+                <div class="submit mt-30 d-flex flex-column text-center">
+                    <a class="button button-login btn btn-primary" data-login-show="{{ 'customer.login_page.title' | t }}">{{ 'customer.login_page.title' | t }}</a>
+                    <button class="button btn btn-secondary mt-20" type="submit" value="{{ 'customer.register.submit' | t }}">{{ 'customer.register.submit' | t }}</button>
+                </div>
+            {% endform %}
+    
+        </div>
+        <div id="forgot-password" data-login-hidden="{{ 'customer.recover_password.title' | t }}" aria-hidden="true" class="bls-forgot-password bls-login-popup">
+            {%- form 'recover_customer_password' -%}
+                
+                {%- if form.errors -%}
+                {%- assign message = form.errors | default_errors | strip_html -%}
+                    <p class="message">
+                        {{ message }}
+                    </p>
+                {%- endif -%}
+                <div class="email form-group  mb-15 d-flex flex-column">
+                    <p class="text-center mb-30 lable-forgot">{{ 'customer.recover_password.subtext' | t }}</p>
+                    <input
+                        type="email"
+                        value=""
+                        name="email"
+                        id="RecoverEmail"
+                        autocomplete="email"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        placeholder="{{ 'customer.login_page.placeholder_email' | t }}"
+                        aria-required="true"
+                        aria-invalid="true"
+                        required
+                    >
+                </div>
+                <div class="form-actions mt-30 d-flex flex-column text-center">
+                    <button type="submit" class="button btn btn-primary" value="{{ 'customer.recover_password.submit' | t }}">{{ 'customer.recover_password.submit' | t }}</button>
+                    <a class="button button-login btn btn-secondary mt-20" data-login-show="{{ 'customer.login_page.title' | t }}">{{ 'customer.login_page.title' | t }}</a>
+                </div>
+            {%- endform -%}
+        </div>
+    </div>
+</div>

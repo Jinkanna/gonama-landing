@@ -1,0 +1,20 @@
+{%- liquid
+  assign footer_layout = settings.footer_layout
+-%}
+
+{%- case footer_layout -%}
+  {%- when 'footer-1' -%}
+    {%- section 'footer-1' -%}
+  {%- when 'footer-2' -%}
+    {%- section 'footer-2' -%}
+  {%- else -%}
+{%- endcase -%}
+<div class="custom-footer">
+  <div></div>
+ <div class="powered">   
+     <div class="copy"> GOnama © {{ 'now' | date: '%Y' }} - Todos los derechos reservados.</div>
+</div>
+ 
+</div>
+
+

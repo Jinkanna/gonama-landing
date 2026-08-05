@@ -1,0 +1,182 @@
+{%- liquid
+  assign search_type = settings.search_type
+  assign quick_search = settings.quick_search
+  assign search_terms = search.terms
+  assign key_terms = search_terms
+  assign search_suggest = settings.search_suggest
+
+  if search_terms contains 'product_type:'
+    assign arr_terms = search_terms | remove: 'product_type:' | split: ' AND '
+    assign product_type = arr_terms[0] | strip
+    assign search_terms = arr_terms[1] | strip
+    if search_terms == blank
+      assign key_terms = key_terms | remove: ' AND '
+      assign search_terms = product_type
+    endif
+  endif
+  assign predictive_search_type = settings.predictive_search_type
+  if predictive_search_type == 'search_suggest'
+    assign predictive_type = 'predictive_search_suggest'
+  else
+    assign predictive_type = 'predictive_search'
+  endif
+-%}
+<div class="header_search">
+  <div class="block block-quick-search block-search {{ predictive_type }}{% if layout4 or layout5  or layout6 %} search_type_popup {% else %} search_type_{{ search_type }}{% endif %}">
+    {%- if layout4 or layout5 or layout6 -%}
+      <div class="block-search-full search-layout-form color-default-color-scheme">
+        <div class="search-modal search-full {% if layout4 %}mr-20{% endif %}">
+          <div class="search-modal__content">
+            <form
+              action="{{ routes.search_url }}"
+              id="search_mini_form"
+              method="get"
+              role="search"
+              class="search search-modal__form"
+            >
+              <input type="hidden" name="type" value="product">
+              <div class="field field-icon-input">
+                {% if layout4 %}
+                  <svg
+                    class="icon-input"
+                    width="17"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M11.9 11.731C11.8 11.731 11.8 11.731 11.9 11.731C11.8 11.8304 11.8 11.8304 11.8 11.8304C11.3 12.3275 10.7 12.7251 9.9 13.0234C9.2 13.3216 8.4 13.4211 7.6 13.4211C6.8 13.4211 6 13.2222 5.3 12.924C4.6 12.6257 4 12.2281 3.4 11.6316C2.9 11.1345 2.4 10.4386 2.1 9.74269C1.8 9.1462 1.7 8.45029 1.7 7.65497C1.7 6.85965 1.9 6.06433 2.2 5.36842C2.5 4.5731 2.9 3.97661 3.4 3.38012C4 2.88304 4.6 2.48538 5.3 2.18713C6 1.88889 6.8 1.69006 7.6 1.69006C8.4 1.69006 9.2 1.88889 9.9 2.18713C10.6 2.48538 11.3 2.88304 11.8 3.47953C12.3 3.97661 12.7 4.67251 13.1 5.36842C13.4 6.06433 13.6 6.76023 13.6 7.65497C13.6 8.45029 13.4 9.24561 13.1 9.94152C12.8 10.538 12.4 11.1345 11.9 11.731ZM16.7 15.4094L13.6 12.3275C14.1 11.6316 14.5 10.9357 14.8 10.1404C15.1 9.34503 15.2 8.45029 15.2 7.55556C15.2 6.46199 15 5.46784 14.6 4.5731C14.2 3.67836 13.7 2.88304 13 2.18713C12.3 1.49123 11.5 0.994152 10.6 0.596491C9.7 0.19883 8.7 0 7.6 0C6.6 0 5.6 0.19883 4.6 0.596491C3.7 0.994152 2.9 1.49123 2.2 2.18713C1.5 2.88304 1 3.67836 0.6 4.67251C0.2 5.56725 0 6.5614 0 7.65497C0 8.64912 0.2 9.64327 0.6 10.6374C1 11.5322 1.6 12.3275 2.3 13.0234C3 13.7193 3.8 14.2164 4.7 14.7134C5.6 15.0117 6.6 15.2105 7.6 15.2105C8.5 15.2105 9.4 15.1111 10.2 14.8129C11 14.5146 11.8 14.117 12.4 13.6199L15.5 16.7018C15.7 16.9006 15.9 17 16.1 17C16.3 17 16.5 16.9006 16.7 16.7018C16.9 16.5029 17 16.3041 17 16.1053C17 15.807 16.9 15.6082 16.7 15.4094Z" fill="#999999"/>
+                  </svg>
+                {% endif %}
+                <input
+                  class="search__input field__input"
+                  type="search"
+                  name="q"
+                  value="{{ search.terms | escape }}"
+                  placeholder="{{ 'general.search.search' | t }}"
+                  maxlength="128"
+                  {%- if settings.predictive_search_type == 'search_suggest' -%}
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-owns="predictive-search-results"
+                    aria-controls="predictive-search-results"
+                    aria-haspopup="listbox"
+                    aria-autocomplete="list"
+                    autocorrect="off"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                  {%- endif -%}
+                >
+                <input type="hidden" name="options[unavailable_products]" value="{{ settings.unavailable_pr }}">
+                <input type="hidden" name="options[prefix]" value="last">
+                <input type="hidden" name="options[fields]" value="title,vendor,product_type,variants.title">
+                <input type="hidden" name="type" value="{% if settings.search_for == 'search_for_all' %}all{% else %}product{% endif %}">
+                <button
+                  class="search__button field__button {% if layout4 %}search-button-text{% endif %}"
+                  aria-label="{{ 'general.search.search' | t }}"
+                >
+                  {% if layout4 %}
+                    {{ 'templates.search.tooltip' | t }}
+                  {% else %}
+                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11.9 11.731C11.8 11.731 11.8 11.731 11.9 11.731C11.8 11.8304 11.8 11.8304 11.8 11.8304C11.3 12.3275 10.7 12.7251 9.9 13.0234C9.2 13.3216 8.4 13.4211 7.6 13.4211C6.8 13.4211 6 13.2222 5.3 12.924C4.6 12.6257 4 12.2281 3.4 11.6316C2.9 11.1345 2.4 10.4386 2.1 9.74269C1.8 9.1462 1.7 8.45029 1.7 7.65497C1.7 6.85965 1.9 6.06433 2.2 5.36842C2.5 4.5731 2.9 3.97661 3.4 3.38012C4 2.88304 4.6 2.48538 5.3 2.18713C6 1.88889 6.8 1.69006 7.6 1.69006C8.4 1.69006 9.2 1.88889 9.9 2.18713C10.6 2.48538 11.3 2.88304 11.8 3.47953C12.3 3.97661 12.7 4.67251 13.1 5.36842C13.4 6.06433 13.6 6.76023 13.6 7.65497C13.6 8.45029 13.4 9.24561 13.1 9.94152C12.8 10.538 12.4 11.1345 11.9 11.731ZM16.7 15.4094L13.6 12.3275C14.1 11.6316 14.5 10.9357 14.8 10.1404C15.1 9.34503 15.2 8.45029 15.2 7.55556C15.2 6.46199 15 5.46784 14.6 4.5731C14.2 3.67836 13.7 2.88304 13 2.18713C12.3 1.49123 11.5 0.994152 10.6 0.596491C9.7 0.19883 8.7 0 7.6 0C6.6 0 5.6 0.19883 4.6 0.596491C3.7 0.994152 2.9 1.49123 2.2 2.18713C1.5 2.88304 1 3.67836 0.6 4.67251C0.2 5.56725 0 6.5614 0 7.65497C0 8.64912 0.2 9.64327 0.6 10.6374C1 11.5322 1.6 12.3275 2.3 13.0234C3 13.7193 3.8 14.2164 4.7 14.7134C5.6 15.0117 6.6 15.2105 7.6 15.2105C8.5 15.2105 9.4 15.1111 10.2 14.8129C11 14.5146 11.8 14.117 12.4 13.6199L15.5 16.7018C15.7 16.9006 15.9 17 16.1 17C16.3 17 16.5 16.9006 16.7 16.7018C16.9 16.5029 17 16.3041 17 16.1053C17 15.807 16.9 15.6082 16.7 15.4094Z" fill="#111111"/>
+                    </svg>
+                  {% endif %}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="popup-search popup-search-form">
+          <div class="content-search-form">
+            <div class="container-fluid">
+              {%- if quick_search != blank -%}
+                {%- capture link_quick_search -%}
+                  {{ routes.search_url }}?type=product&options%5Bfields%5D=title,tag,vendor,product_type,variants.title,variants.sku&options%5Bunavailable_products%5D=
+                  {{- settings.unavailable_pr -}}
+                  &options%5Bprefix%5D=last&q=
+                {%- endcapture -%}
+                <div
+                  id="quick-search"
+                  class="quick-search mt-10 d-flex align-items-center justify-content-center flex-wrap"
+                >
+                  <p class="quick-search-title m-0">{{ 'general.search.quick_search' | t }}</p>
+                  <ul class="quick-search-list p-0 pl-10 my-0 list-none d-flex">
+                    {%- assign quick_search = quick_search | replace: ' ,', ',' | replace: ', ', ',' | split: ',' -%}
+                    {%- for qr in quick_search -%}
+                      {%- assign quick_text = qr | strip -%}
+                      {%- if quick_text -%}
+                        <li>
+                          <a class="quick-url" href="{{ link_quick_search }}{{ quick_text }}">
+                            {{ quick_text }}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+              {%- if settings.predictive_search -%}
+                <div id="predictive-search" class="predictive-search--header">
+                  <div class="predictive-search" data-predictive-search>
+                  
+                    {%- if search_suggest -%}
+                    
+                      {%- assign collection = collections[search_suggest] -%}
+
+                    
+                      {%- if collection.products.size > 0 -%}
+                        <div class="search-suggest search-list-item">
+                          <div class="h5 m-0 mt-20 fs-20">
+                            {{ 'general.search.popular_products' | t }}
+                          </div>
+                          <div id="search-results">
+                            <div class="bls__grid {{ product_style }}">
+                              <div id="search-results-list" class="search-results-list list list-view-items">
+                                {%- for product in collection.products limit: 6 -%}
+                                  {%- render 'product-item' | product: product -%}
+                                {%- endfor -%}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    {%- endif -%}
+                    <div class="search__loading-state mt-15">
+                      <div class="loading-search"></div>
+                    </div>
+                  </div>
+                  <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+                  <p class="presiona">Presiona enter o en buscar una vez encuentres lo que buscabas...</p>  
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="dropdown-toggle">
+        <button
+          class="btn-reset top-search-toggle bls_tooltip header-icon"
+          aria-label="{{ 'templates.search.tooltip' | t }}"
+        >
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.9 11.731C11.8 11.731 11.8 11.731 11.9 11.731C11.8 11.8304 11.8 11.8304 11.8 11.8304C11.3 12.3275 10.7 12.7251 9.9 13.0234C9.2 13.3216 8.4 13.4211 7.6 13.4211C6.8 13.4211 6 13.2222 5.3 12.924C4.6 12.6257 4 12.2281 3.4 11.6316C2.9 11.1345 2.4 10.4386 2.1 9.74269C1.8 9.1462 1.7 8.45029 1.7 7.65497C1.7 6.85965 1.9 6.06433 2.2 5.36842C2.5 4.5731 2.9 3.97661 3.4 3.38012C4 2.88304 4.6 2.48538 5.3 2.18713C6 1.88889 6.8 1.69006 7.6 1.69006C8.4 1.69006 9.2 1.88889 9.9 2.18713C10.6 2.48538 11.3 2.88304 11.8 3.47953C12.3 3.97661 12.7 4.67251 13.1 5.36842C13.4 6.06433 13.6 6.76023 13.6 7.65497C13.6 8.45029 13.4 9.24561 13.1 9.94152C12.8 10.538 12.4 11.1345 11.9 11.731ZM16.7 15.4094L13.6 12.3275C14.1 11.6316 14.5 10.9357 14.8 10.1404C15.1 9.34503 15.2 8.45029 15.2 7.55556C15.2 6.46199 15 5.46784 14.6 4.5731C14.2 3.67836 13.7 2.88304 13 2.18713C12.3 1.49123 11.5 0.994152 10.6 0.596491C9.7 0.19883 8.7 0 7.6 0C6.6 0 5.6 0.19883 4.6 0.596491C3.7 0.994152 2.9 1.49123 2.2 2.18713C1.5 2.88304 1 3.67836 0.6 4.67251C0.2 5.56725 0 6.5614 0 7.65497C0 8.64912 0.2 9.64327 0.6 10.6374C1 11.5322 1.6 12.3275 2.3 13.0234C3 13.7193 3.8 14.2164 4.7 14.7134C5.6 15.0117 6.6 15.2105 7.6 15.2105C8.5 15.2105 9.4 15.1111 10.2 14.8129C11 14.5146 11.8 14.117 12.4 13.6199L15.5 16.7018C15.7 16.9006 15.9 17 16.1 17C16.3 17 16.5 16.9006 16.7 16.7018C16.9 16.5029 17 16.3041 17 16.1053C17 15.807 16.9 15.6082 16.7 15.4094Z"/>
+          </svg>
+          <span class="bls_tooltip-content-bottom">{{ 'templates.search.tooltip' | t }}</span>
+        </button>
+      </div>
+    {%- endif -%}
+    <div id="search-form">
+      {% unless layout4 %}
+        {%- case search_type -%}
+          {%- when 'popup' -%}
+            {%- render 'search-popup' -%}
+          {%- when 'canvas' -%}
+            {%- render 'search-canvas' -%}
+        {%- endcase -%}
+      {% endunless %}
+    </div>
+  </div>
+</div>

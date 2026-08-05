@@ -1,0 +1,431 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{{ 'scrolling-text.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign product_style = th_st.product_style
+  assign st = section.settings
+  assign container = st.container
+  assign color_scheme = st.color_scheme
+  assign text_align = st.text_alignment
+  assign heading = st.heading
+  assign description = st.description
+  assign item_desktop = st.item_desktop
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign carousel_autoplay = st.carousel_autoplay
+  assign carousel_loop = st.carousel_loop
+  assign carousel_arrows = st.carousel_arrows
+  assign carousel_pagination = st.carousel_pagination
+  assign column_gap = st.column_gap
+  assign enabled_animations = settings.animations_enabled
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+  assign has_bg = ''
+  if bg_color != blank
+    assign has_bg = ' has-bg'
+  endif
+-%}
+{%- capture style -%}
+  {%- if bg_color != blank -%}
+    --section-bg-color: {{ bg_color }};
+  {%- endif -%}
+  --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px;--bls_product-item-vertical-space: 0px;
+{%- endcapture -%}
+<section
+  class="color-{{ color_scheme }} gradient bls__section {{ has_bg }}{{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }} bls__product bls__product-recently-viewed-section{{ reset_spacing }} {% if section.settings.container == "full-width" or section.settings.column_gap == 0 %} not-radius {% endif %}"
+  style="{{ style | strip | strip_newlines }}"
+  id="{{ section.id }}"
+  data-id="{{ section.id }}"
+  data-type="recently_viewed_products"
+  data-limit="{{ section.settings.limit_products }}"
+  data-url="{{ routes.search_url }}?section_id={{ section.id }}"
+>
+  <div class="{{ container }} section-full">
+    {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+      <div class="bls__section-header {{ text_align }}">
+        {%- if heading_logo_svg != blank -%}
+          <div class="bls__section-logo bls__section-logo-svg">
+            {{ heading_logo_svg }}
+          </div>
+        {%- elsif heading_logo != blank -%}
+          <div class="bls__section-logo">
+            <img
+              srcset="
+                {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ heading_logo | image_url }} {{ heading_logo.width }}w
+              "
+              src="{{ heading_logo | image_url: width: 533 }}"
+              alt="{{ heading_logo.alt | escape }}"
+              class="motion-reduce"
+              loading="lazy"
+              width="{{ heading_logo.width }}"
+              height="{{ heading_logo.height }}"
+            >
+          </div>
+        {%- endif -%}
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5 {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="bls__product-recently-viewed bls__grid  {{ product_style }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+      <div
+        class="swiper bls__swiper {{ product_style }} hover__show-nav"
+        id="bls__swiper-{{ section.id }}"
+        data-section-id="{{ section.id }}"
+        data-autoplay="{{ carousel_autoplay }}"
+        data-loop="{{ carousel_loop }}"
+        data-mobile="2"
+        data-tablet="3"
+        data-desktop="{{ item_desktop }}"
+        data-spacing="{{ column_gap }}"
+        data-pagination-progressbar="{% if carousel_pagination == 'carousel_pagination_progress' %}true{% else %}false{% endif %}"
+      >
+        {%- if carousel_arrows != false -%}
+          <div class="swipper-next-back">
+            <div class="swiper-arrow swiper-next swiper-button-next box-shadow">
+              <i class="icon-chevron-right"></i>
+            </div>
+            <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow">
+              <i class="icon-chevron-left"></i>
+            </div>
+          </div>
+        {%- endif -%}
+        <div class="swiper-wrapper" style="--perload-gap: {{ column_gap }}px">
+          {%- if search.results != blank -%}
+            {%- for item in search.results -%}
+              {%- render 'product-item' | product: item -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if carousel_pagination == 'carousel_bullets'
+          or carousel_pagination == 'show_bullet_mobile'
+          or carousel_pagination == 'carousel_pagination_progress'
+        -%}
+          <div
+            class="swiper-pagination {% if carousel_pagination == 'show_bullet_mobile' %} show-on-mobile {% endif %}"
+          ></div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  var BlsRVProductsShopify = (function () {
+    return {
+      init: function () {
+        this.initRVProducts();
+      },
+
+      initRVProducts: function () {
+        const _this = this;
+        var elem = document.querySelectorAll('.bls__product-recently-viewed-section');
+        var limit, url;
+
+        if (elem) {
+          var savedProductsArr = JSON.parse(localStorage.getItem('bls__recently-viewed-products'));
+          elem.forEach((e) => {
+            limit = e.dataset?.limit;
+            url = e.dataset.url;
+          });
+          if (savedProductsArr === null) {
+            elem.forEach((e) => {
+              e.closest('.shopify-section').remove();
+            });
+          } else {
+            _this.getStoredProducts(savedProductsArr.reverse(), limit, url);
+          }
+        }
+      },
+
+      getStoredProducts: function (product, limit, url) {
+        var query = '';
+        var productAjaxURL = '';
+        if (product) {
+          product.forEach((e, key, product) => {
+            if (limit > key + 1) {
+              if (!Object.is(product.length - 1, key)) {
+                query += e.id + '%20OR%20id:';
+              } else {
+                query += e.id;
+              }
+            }
+          });
+          productAjaxURL = '&q=id:' + query;
+        }
+        fetch(`${url}${productAjaxURL}`)
+          .then((response) => response.text())
+          .then(async (responseText) => {
+            document.querySelectorAll('.bls__product-recently-viewed').forEach((ele) => {
+              const html = parser.parseFromString(responseText, 'text/html');
+              let item_html = html.querySelectorAll('.bls__product-item');
+              let arr = [];
+              product.forEach((item) => {
+                item_html.forEach((e) => {
+                  const itemId = e?.dataset.productHandle;
+                  if (itemId) {
+                    if (item.handle == itemId) {
+                      arr.push(e);
+                    }
+                  }
+                });
+              });
+              arr.forEach((n) => {
+                var node = document.createElement('div');
+                node.classList.add('swiper-slide', 'bls__product-preload-js', 'bls__rv-product-js', 'bls__grid');
+                node.appendChild(n);
+                ele.querySelector('.swiper-wrapper').appendChild(node);
+              });
+              const blsswiper = ele.querySelector('.bls__swiper');
+              if (blsswiper) {
+                BlsSettingsSwiper.BlsCarousel(blsswiper);
+              }
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+          })
+          .finally((e) => {
+            BlsColorSwatchesShopify.init();
+            BlsSubActionProduct.init();
+            BlsLazyloadImg.init();
+          });
+      },
+    };
+  })();
+  BlsRVProductsShopify.init();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.products-recently-viewed.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Recently viewed products"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p>The best quality products are waiting for you. Choose it now!</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-recently-viewed.Product-settings"
+    },
+    {
+      "type": "range",
+      "id": "limit_products",
+      "label": "t:sections.products-recently-viewed.settings.limit_products.label",
+      "min": 2,
+      "max": 25,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "item_desktop",
+      "label": "t:sections.products-recently-viewed.settings.item_desktop.label",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "t:sections.products-recently-viewed.settings.column_gap.label",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.products-carousel.Carousel-settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_autoplay",
+      "label": "t:sections.all.setting_carousel.autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_loop",
+      "label": "t:sections.all.setting_carousel.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_arrows",
+      "label": "t:sections.all.setting_carousel.show_arrow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "carousel_pagination",
+      "label": "t:sections.all.setting_carousel.carousel_pagination.label",
+      "options": [
+        {
+          "value": "carousel_none",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__none.label"
+        },
+        {
+          "value": "carousel_bullets",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__bullets.label"
+        },
+        {
+          "value": "show_bullet_mobile",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.bullet__mobile.label"
+        },
+        {
+          "value": "carousel_pagination_progress",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__progress.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.products-recently-viewed.name"
+    }
+  ]
+}
+{% endschema %}

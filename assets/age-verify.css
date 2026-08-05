@@ -1,0 +1,46 @@
+/* Age verify popup */
+body age-verifier {
+    z-index: 90000;
+    display: none !important;
+}
+
+age-verifier[open] {
+    animation: fadeIn .3s forwards ease;
+    display: flex !important;
+}
+
+age-verifier[closing] {
+    animation: fadeOut .3s forwards ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+age-verifier .age-banner img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.banner_blur.age-banner img {
+    filter: blur(4px);
+}
+
+.age-outline-focus-none {
+    background: var(--content-bg);
+    border: 2px solid var(--border-color-base);
+    box-shadow: 4px 4px 0px 0px var(--border-color-base);
+    padding: clamp(30px, 7vh, 50px) clamp(30px, 3vw, 40px);
+    max-height: 90vh;
+    max-width: 500px;
+    width: 90%;
+    animation-delay: 0.3s;
+    animation: slideInUp .35s ease;
+}
+
+.age-button-wrapper:not(:last-of-type) {
+    margin-bottom: 2rem;
+}
+
+.product-images-style-radius .age-outline-focus-none {
+    border-radius: var(--base-border-radius);
+}

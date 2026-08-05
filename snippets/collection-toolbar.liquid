@@ -1,0 +1,212 @@
+{%- liquid
+  assign enable_sidebar = enable_sidebar
+  assign sidebar_ps = sidebar_ps
+  assign page_count = st.product_page_count
+  assign sort_options = st.product_sort_options
+  assign progress_bar = st.progress_bar
+  assign products_column = products_column
+-%}
+
+{%- if request.query.sort_by != 'best-selling' -%}
+  <script>
+    if (!window.location.search.includes("sort_by=best-selling")) {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("sort_by", "best-selling");
+      window.location.href = currentUrl.toString();
+    }
+  </script>
+{%- endif -%}
+<div class="toolbar toolbar-products">
+  {%- if enable_sidebar -%}
+    <div class="collection-filter {{ sidebar_ps }}">
+      <a href="#" class="btn-filter">
+        {{ 'collections.toolbar.filter' | t }}
+      </a>
+    </div>
+  {%- endif -%}
+  {%- if sort_options -%}
+    {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+    <div class="toolbar-sorter-mb sorter ml-10">
+      <h4 class="facet-filters__label caption-large text-body m-0-important">
+        <label>{{ 'products.facets.sort_by_label_mb' | t }}</label>
+        <span class="icon-chevron-down"></span>
+      </h4>
+      <div class="toolbar-sorter-mb__option py-20">
+        <div class="select-custom-mb">
+          <span class="close-select absolute right-15 top-15 fs-20 heading-color">
+            <i class="icon-x"></i>
+          </span>
+          <div class="select-title mb-30 fs-16 heading-color fw-600 border-bottom px-20 pb-10 uppercase">
+            {{ 'products.facets.sort_by_label_mb' | t }}
+          </div>
+          <ul
+            class="facet-filters__sort select__select caption-large  px-20 list-none my-0"
+            id="SortBy"
+            aria-describedby="a11y-refresh-page-message"
+          >
+            {%- for option in collection.sort_options -%}
+              <li
+                value="{{ option.value | escape }}"
+                {% if option.value == sort_by %}
+                  class="selected"
+                {% endif %}
+              >
+                {{ option.name | escape }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  {%- if page_count -%}
+    <div class="toolbar-amount" id="toolbar-amount">
+      {%- if collection.results_count -%}
+        {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
+      {%- elsif collection.products_count == collection.all_products_count -%}
+        {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+      {%- else -%}
+        {{
+          'products.facets.product_count'
+          | t: product_count: collection.products_count, count: collection.all_products_count
+        }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if progress_bar -%}
+    <div class="grid-mode-show-type-products">
+      {%- if pageurl == 'list' -%}
+        <a class="view-mode bls_tooltip" href="#" data-view="grid">
+          <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.07422 4C3.17879 4 4.07422 3.10457 4.07422 2C4.07422 0.89543 3.17879 0 2.07422 0C0.969649 0 0.0742188 0.89543 0.0742188 2C0.0742188 3.10457 0.969649 4 2.07422 4Z" fill="#DDDDDD"/>
+            <path d="M2.07422 9C3.17879 9 4.07422 8.10457 4.07422 7C4.07422 5.89543 3.17879 5 2.07422 5C0.969649 5 0.0742188 5.89543 0.0742188 7C0.0742188 8.10457 0.969649 9 2.07422 9Z" fill="#DDDDDD"/>
+            <path d="M2.07422 14C3.17879 14 4.07422 13.1046 4.07422 12C4.07422 10.8954 3.17879 10 2.07422 10C0.969649 10 0.0742188 10.8954 0.0742188 12C0.0742188 13.1046 0.969649 14 2.07422 14Z" fill="#DDDDDD"/>
+            <path d="M7.07422 4C8.17879 4 9.07422 3.10457 9.07422 2C9.07422 0.89543 8.17879 0 7.07422 0C5.96965 0 5.07422 0.89543 5.07422 2C5.07422 3.10457 5.96965 4 7.07422 4Z" fill="#DDDDDD"/>
+            <path d="M7.07422 9C8.17879 9 9.07422 8.10457 9.07422 7C9.07422 5.89543 8.17879 5 7.07422 5C5.96965 5 5.07422 5.89543 5.07422 7C5.07422 8.10457 5.96965 9 7.07422 9Z" fill="#DDDDDD"/>
+            <path d="M7.07422 14C8.17879 14 9.07422 13.1046 9.07422 12C9.07422 10.8954 8.17879 10 7.07422 10C5.96965 10 5.07422 10.8954 5.07422 12C5.07422 13.1046 5.96965 14 7.07422 14Z" fill="#DDDDDD"/>
+            <path d="M12.0742 4C13.1788 4 14.0742 3.10457 14.0742 2C14.0742 0.89543 13.1788 0 12.0742 0C10.9696 0 10.0742 0.89543 10.0742 2C10.0742 3.10457 10.9696 4 12.0742 4Z" fill="#DDDDDD"/>
+            <path d="M12.0742 9C13.1788 9 14.0742 8.10457 14.0742 7C14.0742 5.89543 13.1788 5 12.0742 5C10.9696 5 10.0742 5.89543 10.0742 7C10.0742 8.10457 10.9696 9 12.0742 9Z" fill="#DDDDDD"/>
+            <path d="M12.0742 14C13.1788 14 14.0742 13.1046 14.0742 12C14.0742 10.8954 13.1788 10 12.0742 10C10.9696 10 10.0742 10.8954 10.0742 12C10.0742 13.1046 10.9696 14 12.0742 14Z" fill="#DDDDDD"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.grid' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.grid' | t }}</span>
+        </a>
+        <a class="view-mode actived bls_tooltip" href="#" data-view="list">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.07422 4C3.17879 4 4.07422 3.10457 4.07422 2C4.07422 0.89543 3.17879 0 2.07422 0C0.969649 0 0.0742188 0.89543 0.0742188 2C0.0742188 3.10457 0.969649 4 2.07422 4Z" fill="#111111"/>
+            <path d="M2.07422 9C3.17879 9 4.07422 8.10457 4.07422 7C4.07422 5.89543 3.17879 5 2.07422 5C0.969649 5 0.0742188 5.89543 0.0742188 7C0.0742188 8.10457 0.969649 9 2.07422 9Z" fill="#111111"/>
+            <path d="M2.07422 14C3.17879 14 4.07422 13.1046 4.07422 12C4.07422 10.8954 3.17879 10 2.07422 10C0.969649 10 0.0742188 10.8954 0.0742188 12C0.0742188 13.1046 0.969649 14 2.07422 14Z" fill="#111111"/>
+            <path d="M19.0742 2C19.0742 2.552 18.6272 3 18.0742 3H6.07422C5.52222 3 5.07422 2.552 5.07422 2C5.07422 1.448 5.52222 1 6.07422 1H18.0742C18.6272 1 19.0742 1.447 19.0742 2Z" fill="#111111"/>
+            <path d="M19.0742 7C19.0742 7.552 18.6272 8 18.0742 8H6.07422C5.52222 8 5.07422 7.552 5.07422 7C5.07422 6.448 5.52222 6 6.07422 6H18.0742C18.6272 6 19.0742 6.447 19.0742 7Z" fill="#111111"/>
+            <path d="M19.0742 12C19.0742 12.552 18.6272 13 18.0742 13H6.07422C5.52222 13 5.07422 12.552 5.07422 12C5.07422 11.447 5.52222 11 6.07422 11H18.0742C18.6272 11 19.0742 11.447 19.0742 12Z" fill="#111111"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+        </a>
+
+      {%- else -%}
+        <a
+          class="grid-mode bls_tooltip grid-mode-2{% if products_column == 2 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="2"
+        >
+          <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.0742 6C12.7311 6 14.0742 4.65685 14.0742 3C14.0742 1.34315 12.7311 0 11.0742 0C9.41736 0 8.07422 1.34315 8.07422 3C8.07422 4.65685 9.41736 6 11.0742 6Z" fill="#DDDDDD"/>
+            <path d="M4.07031 6C5.72717 6 7.07031 4.65685 7.07031 3C7.07031 1.34315 5.72717 0 4.07031 0C2.41346 0 1.07031 1.34315 1.07031 3C1.07031 4.65685 2.41346 6 4.07031 6Z" fill="#DDDDDD"/>
+            <path d="M11.0742 14C12.7311 14 14.0742 12.6569 14.0742 11C14.0742 9.34315 12.7311 8 11.0742 8C9.41736 8 8.07422 9.34315 8.07422 11C8.07422 12.6569 9.41736 14 11.0742 14Z" fill="#DDDDDD"/>
+            <path d="M3.92773 14C5.58459 14 6.92773 12.6569 6.92773 11C6.92773 9.34315 5.58459 8 3.92773 8C2.27088 8 0.927734 9.34315 0.927734 11C0.927734 12.6569 2.27088 14 3.92773 14Z" fill="#DDDDDD"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 2 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 2 }}</span>
+        </a>
+        <a
+          class="grid-mode bls_tooltip grid-mode-3{% if products_column == 3 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="3"
+        >
+          <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.07422 4C3.17879 4 4.07422 3.10457 4.07422 2C4.07422 0.89543 3.17879 0 2.07422 0C0.969649 0 0.0742188 0.89543 0.0742188 2C0.0742188 3.10457 0.969649 4 2.07422 4Z" fill="#DDDDDD"/>
+            <path d="M2.07422 9C3.17879 9 4.07422 8.10457 4.07422 7C4.07422 5.89543 3.17879 5 2.07422 5C0.969649 5 0.0742188 5.89543 0.0742188 7C0.0742188 8.10457 0.969649 9 2.07422 9Z" fill="#DDDDDD"/>
+            <path d="M2.07422 14C3.17879 14 4.07422 13.1046 4.07422 12C4.07422 10.8954 3.17879 10 2.07422 10C0.969649 10 0.0742188 10.8954 0.0742188 12C0.0742188 13.1046 0.969649 14 2.07422 14Z" fill="#DDDDDD"/>
+            <path d="M7.07422 4C8.17879 4 9.07422 3.10457 9.07422 2C9.07422 0.89543 8.17879 0 7.07422 0C5.96965 0 5.07422 0.89543 5.07422 2C5.07422 3.10457 5.96965 4 7.07422 4Z" fill="#DDDDDD"/>
+            <path d="M7.07422 9C8.17879 9 9.07422 8.10457 9.07422 7C9.07422 5.89543 8.17879 5 7.07422 5C5.96965 5 5.07422 5.89543 5.07422 7C5.07422 8.10457 5.96965 9 7.07422 9Z" fill="#DDDDDD"/>
+            <path d="M7.07422 14C8.17879 14 9.07422 13.1046 9.07422 12C9.07422 10.8954 8.17879 10 7.07422 10C5.96965 10 5.07422 10.8954 5.07422 12C5.07422 13.1046 5.96965 14 7.07422 14Z" fill="#DDDDDD"/>
+            <path d="M12.0742 4C13.1788 4 14.0742 3.10457 14.0742 2C14.0742 0.89543 13.1788 0 12.0742 0C10.9696 0 10.0742 0.89543 10.0742 2C10.0742 3.10457 10.9696 4 12.0742 4Z" fill="#DDDDDD"/>
+            <path d="M12.0742 9C13.1788 9 14.0742 8.10457 14.0742 7C14.0742 5.89543 13.1788 5 12.0742 5C10.9696 5 10.0742 5.89543 10.0742 7C10.0742 8.10457 10.9696 9 12.0742 9Z" fill="#DDDDDD"/>
+            <path d="M12.0742 14C13.1788 14 14.0742 13.1046 14.0742 12C14.0742 10.8954 13.1788 10 12.0742 10C10.9696 10 10.0742 10.8954 10.0742 12C10.0742 13.1046 10.9696 14 12.0742 14Z" fill="#DDDDDD"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 3 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 3 }}</span>
+        </a>
+        <a
+          class="grid-mode bls_tooltip grid-mode-4{% if products_column == 4 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="4"
+        >
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.07422 4C3.17879 4 4.07422 3.10457 4.07422 2C4.07422 0.89543 3.17879 0 2.07422 0C0.969649 0 0.0742188 0.89543 0.0742188 2C0.0742188 3.10457 0.969649 4 2.07422 4Z" fill="#DDDDDD"/>
+            <path d="M2.07422 9C3.17879 9 4.07422 8.10457 4.07422 7C4.07422 5.89543 3.17879 5 2.07422 5C0.969649 5 0.0742188 5.89543 0.0742188 7C0.0742188 8.10457 0.969649 9 2.07422 9Z" fill="#DDDDDD"/>
+            <path d="M2.07422 14C3.17879 14 4.07422 13.1046 4.07422 12C4.07422 10.8954 3.17879 10 2.07422 10C0.969649 10 0.0742188 10.8954 0.0742188 12C0.0742188 13.1046 0.969649 14 2.07422 14Z" fill="#DDDDDD"/>
+            <path d="M7.07422 4C8.17879 4 9.07422 3.10457 9.07422 2C9.07422 0.89543 8.17879 0 7.07422 0C5.96965 0 5.07422 0.89543 5.07422 2C5.07422 3.10457 5.96965 4 7.07422 4Z" fill="#DDDDDD"/>
+            <path d="M7.07422 9C8.17879 9 9.07422 8.10457 9.07422 7C9.07422 5.89543 8.17879 5 7.07422 5C5.96965 5 5.07422 5.89543 5.07422 7C5.07422 8.10457 5.96965 9 7.07422 9Z" fill="#DDDDDD"/>
+            <path d="M7.07422 14C8.17879 14 9.07422 13.1046 9.07422 12C9.07422 10.8954 8.17879 10 7.07422 10C5.96965 10 5.07422 10.8954 5.07422 12C5.07422 13.1046 5.96965 14 7.07422 14Z" fill="#DDDDDD"/>
+            <path d="M12.0742 4C13.1788 4 14.0742 3.10457 14.0742 2C14.0742 0.89543 13.1788 0 12.0742 0C10.9696 0 10.0742 0.89543 10.0742 2C10.0742 3.10457 10.9696 4 12.0742 4Z" fill="#DDDDDD"/>
+            <path d="M12.0742 9C13.1788 9 14.0742 8.10457 14.0742 7C14.0742 5.89543 13.1788 5 12.0742 5C10.9696 5 10.0742 5.89543 10.0742 7C10.0742 8.10457 10.9696 9 12.0742 9Z" fill="#DDDDDD"/>
+            <path d="M12.0742 14C13.1788 14 14.0742 13.1046 14.0742 12C14.0742 10.8954 13.1788 10 12.0742 10C10.9696 10 10.0742 10.8954 10.0742 12C10.0742 13.1046 10.9696 14 12.0742 14Z" fill="#DDDDDD"/>
+            <path d="M17.0742 4C18.1788 4 19.0742 3.10457 19.0742 2C19.0742 0.89543 18.1788 0 17.0742 0C15.9696 0 15.0742 0.89543 15.0742 2C15.0742 3.10457 15.9696 4 17.0742 4Z" fill="#DDDDDD"/>
+            <path d="M17.0742 9C18.1788 9 19.0742 8.10457 19.0742 7C19.0742 5.89543 18.1788 5 17.0742 5C15.9696 5 15.0742 5.89543 15.0742 7C15.0742 8.10457 15.9696 9 17.0742 9Z" fill="#DDDDDD"/>
+            <path d="M17.0742 14C18.1788 14 19.0742 13.1046 19.0742 12C19.0742 10.8954 18.1788 10 17.0742 10C15.9696 10 15.0742 10.8954 15.0742 12C15.0742 13.1046 15.9696 14 17.0742 14Z" fill="#DDDDDD"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 4 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 4 }}</span>
+        </a>
+        <a class="view-mode bls_tooltip" href="#" data-view="list">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.07422 4C3.17879 4 4.07422 3.10457 4.07422 2C4.07422 0.89543 3.17879 0 2.07422 0C0.969649 0 0.0742188 0.89543 0.0742188 2C0.0742188 3.10457 0.969649 4 2.07422 4Z" fill="#111111"/>
+            <path d="M2.07422 9C3.17879 9 4.07422 8.10457 4.07422 7C4.07422 5.89543 3.17879 5 2.07422 5C0.969649 5 0.0742188 5.89543 0.0742188 7C0.0742188 8.10457 0.969649 9 2.07422 9Z" fill="#111111"/>
+            <path d="M2.07422 14C3.17879 14 4.07422 13.1046 4.07422 12C4.07422 10.8954 3.17879 10 2.07422 10C0.969649 10 0.0742188 10.8954 0.0742188 12C0.0742188 13.1046 0.969649 14 2.07422 14Z" fill="#111111"/>
+            <path d="M19.0742 2C19.0742 2.552 18.6272 3 18.0742 3H6.07422C5.52222 3 5.07422 2.552 5.07422 2C5.07422 1.448 5.52222 1 6.07422 1H18.0742C18.6272 1 19.0742 1.447 19.0742 2Z" fill="#111111"/>
+            <path d="M19.0742 7C19.0742 7.552 18.6272 8 18.0742 8H6.07422C5.52222 8 5.07422 7.552 5.07422 7C5.07422 6.448 5.52222 6 6.07422 6H18.0742C18.6272 6 19.0742 6.447 19.0742 7Z" fill="#111111"/>
+            <path d="M19.0742 12C19.0742 12.552 18.6272 13 18.0742 13H6.07422C5.52222 13 5.07422 12.552 5.07422 12C5.07422 11.447 5.52222 11 6.07422 11H18.0742C18.6272 11 19.0742 11.447 19.0742 12Z" fill="#111111"/>
+          </svg>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if sort_options -%}
+    <div class="toolbar-sorter sorter">
+      <h4 class="facet-filters__label caption-large text-body">
+        <label>{{ 'products.facets.sort_by_label' | t }}</label>
+      </h4>
+      <div class="select-custom">
+        
+        {%- assign sort_by = collection.sort_by | default: 'best-selling' -%}
+        <div class="select-selected">
+          <span>
+            {%- for option in collection.sort_options -%}
+              {% if option.value == sort_by %}{{ option.name | escape }}{% endif %}
+            {%- endfor -%}</span
+          ><span class="icon-chevron-down"></span>
+        </div>
+        <ul
+          class="facet-filters__sort select__select caption-large"
+          id="SortBy"
+          aria-describedby="a11y-refresh-page-message"
+        >
+          {%- for option in collection.sort_options -%}
+            <li
+              value="{{ option.value | escape }}"
+              {% if option.value == sort_by %}
+                selected="selected"
+              {% endif %}
+            >
+              {{ option.name | escape }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+</div>

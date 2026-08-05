@@ -1,0 +1,237 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign show_popup = th_st.show_before
+  assign bf_show_time = th_st.bf_show_time
+  assign bf_logo = th_st.bf_logo
+  assign bn_image = th_st.bf_banner
+  assign collection = th_st.bf_collection
+  assign limit = th_st.bf_limit_product
+  assign heading = th_st.bf_heading
+  assign sub_heading = th_st.bf_sub_heading
+  assign desc = th_st.bf_desc
+  assign discount = th_st.bf_code
+  assign show_bf_bottom = th_st.bf_show_bb
+  assign label_bottom = th_st.bf_label_bb
+  assign link_bottom = th_st.bf_link_bb
+
+  assign container = th_st.general_layout
+  assign custom_container = th_st.custom_width_bd
+  assign container_width = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+-%}
+{%- if show_popup == true -%}
+  <div class="bls__before-you-leave gradient" id="BlsBefore" data-time-delay="{{ bf_show_time | times: 60 }}">
+    <a href="#close-before" class="close-before"><i class="icon-x fs-22"></i></a>
+    <div class="custom-scrollbar">
+      <div class="bls__before-content">
+        {%- if bf_logo != blank -%}
+          <div class="bls__before-header bls-image-js {% if bf_logo != blank %}bls-loading-image{% endif %}">
+            <img
+              srcset="
+                {%- if bf_logo.width >= 165 -%}{{ bf_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if bf_logo.width >= 330 -%}{{ bf_logo | image_url: width: 330 }} 330w,{%- endif -%}
+                {%- if bf_logo.width >= 535 -%}{{ bf_logo | image_url: width: 535 }} 535w,{%- endif -%}
+                {%- if bf_logo.width >= 750 -%}{{ bf_logo | image_url: width: 750 }} 750w,{%- endif -%}
+                {%- if bf_logo.width >= 1000 -%}{{ bf_logo | image_url: width: 1000 }} 1000w,{%- endif -%}
+                {%- if bf_logo.width >= 1500 -%}{{ bf_logo | image_url: width: 1500 }} 1500w,{%- endif -%}
+                {%- if bf_logo.width >= 3000 -%}{{ bf_logo | image_url: width: 3000 }} 3000w,{%- endif -%}
+                {{ bf_logo | image_url }} {{ bf_logo.width }}w
+              "
+              src="{{ bf_logo | image_url: '80x' }}"
+              loading="lazy"
+              sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ bf_logo.alt | default: shop.name | escape }}"
+              width="{{ bf_logo.width }}"
+              height="{{ bf_logo.height }}"
+            >
+          </div>
+        {%- endif -%}
+        <div class="bls__before-banner">
+          {%- if bn_image != blank -%}
+            <div class="image bls-image-js {% if bn_image != blank %}bls-loading-image{% endif %}">
+              <img
+                srcset="
+                  {%- if bn_image.width >= 165 -%}{{ bn_image | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if bn_image.width >= 330 -%}{{ bn_image | image_url: width: 330 }} 330w,{%- endif -%}
+                  {%- if bn_image.width >= 535 -%}{{ bn_image | image_url: width: 535 }} 535w,{%- endif -%}
+                  {%- if bn_image.width >= 750 -%}{{ bn_image | image_url: width: 750 }} 750w,{%- endif -%}
+                  {%- if bn_image.width >= 1000 -%}{{ bn_image | image_url: width: 1000 }} 1000w,{%- endif -%}
+                  {%- if bn_image.width >= 1500 -%}{{ bn_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {%- if bn_image.width >= 3000 -%}{{ bn_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                  {{ bn_image | image_url }} {{ bn_image.width }}w
+                "
+                src="{{ bn_image | image_url: '470x' }}"
+                loading="lazy"
+                sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt="{{ bn_image.alt | default: shop.name | escape }}"
+                width="{{ bn_image.width }}"
+                height="{{ bn_image.height }}"
+              >
+            </div>
+          {%- else -%}
+            {%- render 'responsive-image', cls: 'h-470' -%}
+          {%- endif -%}
+          <div class="bls__before-banner-content">
+            {%- if heading != blank -%}
+              <h3 class="bls__before-heading heading-weight mb-5">
+                {{ heading }}
+              </h3>
+            {%- endif -%}
+            {%- if sub_heading != blank -%}
+              <div class="bls__before-sub-heading heading-weight uppercase">
+                {{ sub_heading }}
+              </div>
+            {%- endif -%}
+            {%- if desc != blank -%}
+              <div class="bls__before-desc fs-16 heading-color mb-20">
+                {{ desc | replace: '[discount_code]', discount }}
+              </div>
+            {%- endif -%}
+            <a href="#" class="btn btn-secondary discount" data-code="{{ discount }}">
+              <span class="copied-action" style="display: block;">{{ 'popup.copy' | t }}</span>
+              <span class="copied-success" style="display: none;">{{ 'popup.copied' | t }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      {%- if collection != blank -%}
+        {%- liquid
+          assign collection = collections[collection]
+          assign count = collection.products_count
+        -%}
+        {%- if count > limit -%}
+          {% assign count = limit %}
+        {%- endif -%}
+        <div class="bls__before-product">
+          <h6 class="bls__before-product-title">
+            {{ 'before_you_leave.recommended' | t }}
+            <span class="count-product">{{ count }}</span>
+          </h6>
+          <div class="bls__before-product-content">
+            {% for product in collection.products limit: limit %}
+              <div class="product-before-items">
+                {%- render 'product-popular-list-item' | product: product -%}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {%- if show_bf_bottom != false -%}
+          <div class="bls__before-product-bottom">
+            <a
+              href="{%- if link_bottom != blank -%}{{ link_bottom }}{%- else -%}/collections{%- endif -%}"
+              class="btn btn-primary btn-before-bottom"
+            >
+              {%- if label_bottom != blank -%}
+                {{ label_bottom }}
+              {%- else -%}
+                {{ 'general.continue_shopping' | t }}
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <h6 class="bls__before-product-title">
+          {{ 'before_you_leave.recommended' | t }}
+        </h6>
+        <div class="bls__before-product-content">
+          {%- for i in (1..3) -%}
+            <div class="bls__product-item list-view-item flex flex-nowrap mb-15 pb-15 border-bottom">
+              <div class="bls__product-img overflow-hidden relative col-3 mr-15 border mw-100">
+                <div class="bls__product-main-img">
+                  {%- render 'responsive-image' -%}
+                </div>
+              </div>
+              <div class="bls__product-details flex-1">
+                <h3 class="bls__product-name regular mb-0">
+                  {{ 'general.product_name' | t }}
+                </h3>
+                <div class="bls__product-price mb-7">
+                  <span class="price">$15.00</span>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="bls__before-product-bottom">
+          <a href="{{ routes.collections_url }}" class="btn btn-primary btn-before-bottom">
+            {{ 'general.continue_shopping' | t }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  <script>
+    var BlsBeforeYouLeave = (function () {
+      return {
+        init: function () {
+          this.showPopup();
+        },
+        showPopup: function () {
+          const id = document.querySelector("#BlsBefore");
+          const delay = id?.dataset.timeDelay;
+          var action = 0;
+    
+          if (id !== null) {
+            var getPopup = setTimeout(() => {
+              getTimeOut();
+            }, delay * 1000);
+    
+            const addMultipleListeners = (
+              el,
+              types,
+              listener,
+              options,
+              useCapture
+            ) => {
+              types.forEach((type) =>
+                el.addEventListener(type, listener, options, useCapture)
+              );
+            };
+    
+            addMultipleListeners(
+              document.querySelector("body"),
+              ["scroll", "click", "mousemove", "keydown"],
+              () => {
+                setAction();
+              }
+            );
+            const closeBefore = document.querySelector(".close-before");
+            if (closeBefore) {
+              closeBefore.addEventListener("click", () => {
+                clearTimeout(getPopup);
+                const bov = document.querySelector(".bls__overlay");
+                if (bov) {
+                  bov.classList.add("d-none-overlay");
+                }
+                document.documentElement.classList.remove("hside_opened");
+                id.classList.remove("bls__opend-popup");
+              });
+            }
+    
+            function getTimeOut() {
+              action = action + 1;
+              if (action >= 1) {
+                const bov = document.querySelector(".bls__overlay");
+                if (bov) {
+                  bov.classList.remove("d-none-overlay");
+                }
+                document.documentElement.classList.add("hside_opened");
+                id.classList.add("bls__opend-popup");
+                BlsPopup.copyPromotion();
+              }
+            }
+            function setAction() {
+              action = action - 1;
+            }
+          }
+        },
+      };
+    })();
+    BlsBeforeYouLeave.init();
+  </script>
+{%- endif -%}

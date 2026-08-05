@@ -1,0 +1,41 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "6444a863-5ece-4b46-87e7-cfa83ed28286": {
+      "type": "custom-html",
+      "settings": {
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "content_html": "",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "main": {
+      "type": "page-404",
+      "settings": {
+        "container": "container",
+        "custom_width": "440",
+         "heading": "Ups...Ese enlace está roto.",
+        "sub_heading": "Lo sentimos por los inconvenientes. Visita nuestra página de inicio o revisa nuestras últimas colecciones.",
+        "label": "Volver a la página de inicio",
+        "link": ""
+      }
+    }
+  },
+  "order": [
+    "6444a863-5ece-4b46-87e7-cfa83ed28286",
+    "main"
+  ]
+}

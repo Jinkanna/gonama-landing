@@ -1,0 +1,87 @@
+{%- liquid
+  if show_category == null
+    assign show_category = show_category
+  endif
+  if show_date == null
+    assign show_date = show_date
+  endif
+  if show_excerpt == null
+    assign show_excerpt = show_excerpt
+  endif
+  if show_readmore == null
+    assign show_readmore = show_readmore
+  endif
+  if show_author == null
+    assign show_author = show_author
+  endif
+  if post_content_center == null
+    assign post_content_center = st.post_content_center
+  endif
+  assign layout = layout
+  assign column_gap = column_gap
+-%}
+
+<div
+  class="bls__blog-posts-item {% if layout == 'list' %}blog-posts-item-list row align-items-center row-cols-1 row-cols-md-2{% endif %}"
+  {% if layout == 'list' %}
+    style="--bs-gutter-x: {{ column_gap }}px;"
+  {% endif %}
+>
+  <div class="bls__blog-posts-image hover-effect hover-{{ hover_effect }} {% if settings.image_style != blank and section.settings.column_gap != 0 and section.settings.container != "full-width" %} radius {% endif %}">
+    <a href="{{ article.url }}">
+      {% render 'responsive-image', image: article.image, aspect_ratio: aspect_ratio, custom_ratio: custom_ratio %}
+    </a>
+  </div>
+  <div class="blos__blog-posts-info {% if post_content_center %} post-content-center {% endif %}">
+    {%- if show_category -%}
+      {% assign blog_name = article.handle | split: '/' | first %}
+      {% if blog_name != blank %}
+        <div class="bls__blog-posts-category fs-12 fw-500 uppercase mb-5">
+          <a href="{{ blog.url }}">
+            <span>{{ blog_name | capitalize }}</span>
+          </a>
+        </div>
+      {% endif %}
+    {%- endif -%}
+    {%- if article.title != blank -%}
+      <h3 class="bls__blog-posts-title mb-5  fs-24">
+        <a href="{{ article.url }}">
+          {{ article.title }}
+        </a>
+      </h3>
+    {%- endif -%}
+    {%- if show_excerpt -%}
+      <div class="bls__blog-posts-content mb-15">
+        <p>
+          {{ article.content | strip_html | truncatewords: 26, '...' }}
+        </p>
+      </div>
+    {%- endif -%}
+    <div class="bls__blog-posts-bottom d-flex flex-wrap justify-content-between align-items-center">
+      {%- if show_date or show_author -%}
+        <div class="bls__blog-posts-bottom d-flex flex-wrap align-items-center">
+          {%- if show_date -%}
+            <div class="bls__blog-posts-date mt-5 mr-15 fw-500 fs-12 uppercase">
+              <span>
+                {{ article.published_at | date: '%b %d %Y' }}
+              </span>
+            </div>
+          {%- endif -%}
+          {%- if show_author -%}
+            <div class="bls__blog-posts-author mt-5 mr-15 fw-500 fs-12 uppercase">
+              <span>
+                {{- 'blog_post.post_by' | t }}
+                {{ article.author }}
+              </span>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if show_readmore -%}
+        <a class="mt-5 fw-500 fs-12 uppercase blog-posts-readmore" href="{{ article.url }}">
+          {{- 'blog_post.read_more' | t -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

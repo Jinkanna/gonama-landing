@@ -1,0 +1,44 @@
+  /* Fixed background */
+  .animate-fixed-parent {
+    display: initial !important;
+  }
+
+  .animate--fixed {
+    clip-path: inset(0);
+  }
+
+  .animate--fixed img,
+  .animate--fixed svg {
+    position: fixed;
+    height: 100vh;
+  }
+
+  /* Zoom in image on scroll */
+  .animate--zoom-in {
+    --zoom-in-ratio: 1;
+    --duration-short: 100ms;
+  }
+
+  .animate--zoom-in img,
+  .animate--zoom-in svg {
+    transition: scale var(--duration-short) linear;
+    scale: var(--zoom-in-ratio);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+
+    html .shopify-section .animate--ambient img,
+    html .shopify-section .animate--ambient svg {
+      animation: animateAmbient 30s linear infinite;
+    }
+
+    @keyframes animateAmbient {
+      0% {
+        transform: rotate(0deg) translateX(1em) rotate(0deg) scale(1.2);
+      }
+
+      100% {
+        transform: rotate(360deg) translateX(1em) rotate(-360deg) scale(1.2);
+      }
+    }
+  }

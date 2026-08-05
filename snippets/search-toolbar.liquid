@@ -1,0 +1,149 @@
+{%- liquid
+  assign enable_sidebar = enable_sidebar
+  assign sidebar_ps = sidebar_ps
+  assign page_count = st.number_products_per_page
+  assign sort_options = st.sorting
+  assign progress_bar = st.progress_bar
+  assign products_column = products_column
+-%}
+<div class="toolbar toolbar-products">
+  {%- if enable_sidebar -%}
+    <div class="collection-filter {{ sidebar_ps }}">
+      <a href="#" class="btn-filter">
+        {{ 'collections.toolbar.filter' | t }}
+      </a>
+    </div>
+  {%- endif -%}
+  {%- if sort_options -%}
+    {%- assign sort_by = search.sort_by | default: search.default_sort_by -%}
+    <div class="toolbar-sorter-mb sorter ml-10">
+      <h4 class="facet-filters__label caption-large text-body m-0-important">
+        <label>{{ 'products.facets.sort_by_label_mb' | t }}</label>
+        <span class="lnr lnr-chevron-down fs-10 ml-5"></span>
+      </h4>
+      <div class="toolbar-sorter-mb__option py-20">
+        <div class="select-custom-mb">
+          <span class="close-select absolute right-15 top-15 fs-20 heading-color">
+            <i class="lnr lnr-cross"></i>
+          </span>
+          <div class="select-title mb-30 fs-16 heading-color fw-600 border-bottom px-20 pb-10 uppercase">
+            {{ 'products.facets.sort_by_label_mb' | t }}
+          </div>
+          <ul
+            class="facet-filters__sort select__select caption-large  px-20 list-none my-0"
+            id="SortBy"
+            aria-describedby="a11y-refresh-page-message"
+          >
+            {%- for option in search.sort_options -%}
+              <li
+                value="{{ option.value | escape }}"
+                {% if option.value == sort_by %}
+                  class="selected"
+                {% endif %}
+              >
+                {{ option.name | escape }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  {%- if page_count -%}
+    <div class="toolbar-amount" id="toolbar-amount">
+      {%- if search.results_count -%}
+        {{ 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+      {%- elsif search.products_count == search.all_products_count -%}
+        {{ 'products.facets.product_count_simple' | t: count: search.products_count }}
+      {%- else -%}
+        {{
+          'products.facets.product_count'
+          | t: product_count: search.products_count, count: search.all_products_count
+        }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if sort_options -%}
+    <div class="toolbar-sorter sorter">
+      <h4 class="facet-filters__label caption-large text-body">
+        <label>{{ 'products.facets.sort_by_label' | t }}</label>
+      </h4>
+      <div class="select-custom">
+        {%- assign sort_by = search.sort_by | default: search.default_sort_by -%}
+        <div class="select-selected">
+          <span>
+            {%- for option in search.sort_options -%}
+              {% if option.value == sort_by %}{{ option.name | escape }}{% endif %}
+            {%- endfor -%}</span
+          ><span class="icon-chevron-down"></span>
+        </div>
+        <ul
+          class="facet-filters__sort select__select caption-large"
+          id="SortBy"
+          aria-describedby="a11y-refresh-page-message"
+        >
+          {%- for option in search.sort_options -%}
+            <li
+              value="{{ option.value | escape }}"
+              {% if option.value == sort_by %}
+                selected="selected"
+              {% endif %}
+            >
+              {{ option.name | escape }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+  {%- if progress_bar -%}
+    <div class="grid-mode-show-type-products">
+      {%- if pageurl == 'list' -%}
+        <a class="view-mode bls_tooltip" href="#" data-view="grid">
+          <i class="picon-grid-square fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.grid' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.grid' | t }}</span>
+        </a>
+        <a class="view-mode actived bls_tooltip" href="#" data-view="list">
+          <i class="picon-list-square fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+        </a>
+
+      {%- else -%}
+        <a
+          class="grid-mode bls_tooltip grid-mode-2{% if products_column == 2 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="2"
+        >
+          <i class="picon-grid fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 2 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 2 }}</span>
+        </a>
+        <a
+          class="grid-mode bls_tooltip grid-mode-3{% if products_column == 3 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="3"
+        >
+          <i class="picon-grid-square fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 3 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 3 }}</span>
+        </a>
+        <a
+          class="grid-mode bls_tooltip grid-mode-4{% if products_column == 4 %} actived{% endif %}"
+          href="#"
+          data-grid-mode="4"
+        >
+          <i class="picon-grid-four-square fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 4 }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.columns' | t: amount: 4 }}</span>
+        </a>
+        <a class="view-mode bls_tooltip" href="#" data-view="list">
+          <i class="picon-list-square fs-18 fw-500"></i>
+          <span class="visually-hidden">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+          <span class="bls_tooltip-content">{{ 'collections.toolbar.progress_bar.list' | t }}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

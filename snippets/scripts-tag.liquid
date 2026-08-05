@@ -1,0 +1,31 @@
+{%- assign t = template | split: '.' | first -%}
+{%- assign admin_vi = request.design_mode -%}
+<script defer="defer">
+  var umino_app = {
+  shop: '{{ shop.permanent_domain }}',
+  domain: '{{ shop.domain }}',
+  {%- if admin_vi == true -%}
+    lic: '{{ settings.purchase_code }}',
+    action: '{{ settings.purchase_code_action }}',
+  {%- endif -%}
+  mode: '{%- if admin_vi == true -%}admin{% else %}front{%- endif -%}',
+  };
+</script>
+<script src="{{ 'shopify.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'theme.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product.min.js' | asset_url }}" defer="defer"></script>
+{%- case t -%}
+  {%- when 'product' -%}
+    <script src="{{ 'drift.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'main-product.min.js' | asset_url }}" defer="defer" type="module"></script>
+  {%- when 'collection' and collection.handle -%}
+    <script src="{{ 'collection.min.js' | asset_url }}" defer="defer"></script>
+  {%- when 'search' -%}
+      <script src="{{ 'collection.min.js' | asset_url }}" defer="defer"></script>
+{%- endcase -%}
+{% if template contains 'customers' %}
+  <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+{% endif %}
+{% if settings.animations_enabled %}
+  <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+{% endif %}

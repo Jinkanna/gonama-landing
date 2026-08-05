@@ -1,0 +1,52 @@
+{{ 'custormer.css' | asset_url | stylesheet_tag }}
+<div class="customer-active">
+  <div class="container">
+    <div class="customer-form active-form col-md-6 col-sm-8 m-auto">
+      {%- form 'activate_customer_password' -%}
+        {%- if form.errors -%}
+          <ul>
+            {%- for field in form.errors -%}
+              <li class="error error-list">
+                {%- if field == 'form' -%}
+                  {{ form.errors.messages[field] }}
+                {%- else -%}
+                  <a href="#{{ field }}">
+                    {{ form.errors.translated_fields[field] | capitalize }}
+                    {{ form.errors.messages[field] }}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        <div class="form-field form-group  mb-15 d-flex flex-column">
+          	<label class="pb-5" for="password">{{ 'customer.activate_account.password' | t }} <span class="required">*</span></label>
+            <input 
+              type="password"
+              name="customer[password]" 
+              aria-required="true"
+              placeholder=""
+              required  
+              id="password"
+            >
+        </div>
+        <div class="form-field form-group  mb-15 d-flex flex-column">
+          	<label class="pb-5" for="password_confirmation">{{ 'customer.activate_account.password_confirm' | t }} <span class="required">*</span></label>
+            <input 
+            type="password" 
+            name="customer[password_confirmation]"
+            aria-required="true"
+            placeholder=""
+            required  
+            id="password_confirmation"
+          >
+        </div>
+        	<div class="form-actions mt-30 d-flex justify-content-center flex-column text-center ">
+            <input type="submit" value="{{ 'customer.activate_account.submit' | t }}" class="btn-primary mb-5">
+            <span>{{ 'customer.activate_account.or' | t }}</span>
+            <input type="submit" name="decline" value="{{ 'customer.activate_account.cancel' | t }}" class="btn-secondary mt-5">
+          </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>

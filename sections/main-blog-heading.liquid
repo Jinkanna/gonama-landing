@@ -1,0 +1,229 @@
+{{ 'page-heading.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign st = section.settings
+  assign se_block = section.blocks
+  assign show_banner = st.show_banner
+  assign image_bg = st.image
+  assign show_overlay = st.show_overlay
+  assign overlay = st.overlay
+  assign parallax = st.parallax
+  assign design = st.design
+  assign text_postion = st.text_postion
+  assign min_height = st.min_height
+-%}
+<div class="page-heading not-bg {% if se_block == blank %}not-info{% endif %} {% if design != 'text-overlay-image' %}show-beside{% endif %} {% if show_banner != blank and image_bg != blank %} show-banner{% endif %} ">
+  {%- capture style -%}
+    --background-image:{% if show_banner != blank and image_bg != blank %}url({{ image_bg | image_url }}){% endif %}; 
+    --min-height:{{ min_height }}px;
+    --overlay-image:{{ overlay }}%;
+  {%- endcapture -%}
+  {%- if se_block.size > 0 -%}
+    <div class="color-{{ st.color_scheme }} gradient page-head {{ text_postion }} {% if design != 'text-overlay-image' %} beside-image d-flex flex-column{% endif %}">
+      {%- if show_banner != blank and image_bg != blank -%}
+        {%- if design == 'text-overlay-image' -%}
+          <div
+            class="relative d-flex flex-column justify-content-center py-25  heading-banner{% if parallax %} bls-parallax{% endif %}{% if show_overlay %} show-overlay{% endif %}"
+            style="{{ style }}"
+          >
+        {%- else -%}
+          <div
+            class="relative heading-banner{% if parallax %} bls-parallax{% endif %}{% if show_overlay %} show-overlay{% endif %}"
+            style="{{ style }}"
+          ></div>
+        {%- endif -%}
+      {%- endif -%}
+      <div class="{{ st.container }} {% if design != 'text-overlay-image' %} content-beside{% endif %} section-full">
+        <div class="heading-content relative">
+          {%- assign blocks = section.blocks -%}
+          {%- for block in blocks -%}
+            <h1 class="heading-title" style="--text-fs: {{ block.settings.text_fs }}px;">
+              {{ blog.title }}
+            </h1>
+          {%- endfor -%}
+        </div>
+        {%- render 'breadcrumbs' -%}
+      </div>
+      {%- if show_banner != blank and image_bg != blank -%}
+        {%- if design == 'text-overlay-image' -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="not-show-heading page-head {{ text_postion }} {% if design != 'text-overlay-image' %} beside-image d-flex flex-column{% endif %}">
+      {%- if show_banner != blank and image_bg != blank -%}
+        {%- if design == 'text-overlay-image' -%}
+          <div
+            class="relative d-flex flex-column justify-content-center py-25  heading-banner{% if parallax %} bls-parallax{% endif %}{% if show_overlay %} show-overlay{% endif %}"
+            style="{{ style }}"
+          >
+        {%- else -%}
+          <div
+            class="relative mb-25 heading-banner{% if parallax %} bls-parallax{% endif %}{% if show_overlay %} show-overlay{% endif %}"
+            style="{{ style }}"
+          ></div>
+        {%- endif -%}
+      {%- endif -%}
+      <div class="{{ st.container }}">
+        {%- render 'breadcrumbs' -%}
+      </div>
+      {%- if show_banner != blank and image_bg != blank -%}
+        {%- if design == 'text-overlay-image' -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-blog-heading.name",
+  "class": "section",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main-blog-heading.settings.color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-blog-heading.Images-banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner",
+      "label": "t:sections.main-blog-heading.settings.show_banner.label",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.main-blog-heading.settings.image.label",
+      "info": "t:sections.main-blog-heading.settings.image.info"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "t:sections.main-blog-heading.settings.min_height.label",
+      "default": 200,
+      "min": 0,
+      "max": 500,
+      "step": 5,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "t:sections.main-blog-heading.settings.parallax.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "t:sections.main-blog-heading.settings.show_overlay.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "overlay",
+      "label": "t:sections.main-blog-heading.settings.overlay.label",
+      "default": 54,
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-blog-heading.Design"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "t:sections.main-blog-heading.settings.design.label",
+      "default": "text-overlay-image",
+      "options": [
+        {
+          "label": "t:sections.main-blog-heading.settings.design.options__1.label",
+          "value": "text-overlay-image"
+        },
+        {
+          "label": "t:sections.main-blog-heading.settings.design.options__2.label",
+          "value": "text-bellow-image"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_postion",
+      "label": "t:sections.main-blog-heading.settings.text_postion.label",
+      "default": "text-center",
+      "options": [
+        {
+          "label": "t:sections.main-blog-heading.settings.text_postion.options__1.label",
+          "value": "text-left"
+        },
+        {
+          "label": "t:sections.main-blog-heading.settings.text_postion.options__2.label",
+          "value": "text-center"
+        },
+        {
+          "label": "t:sections.main-blog-heading.settings.text_postion.options__3.label",
+          "value": "text-right"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "1",
+      "name": "t:sections.main-blog-heading.blocks.Title.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "text_fs",
+          "label": "t:sections.main-blog-heading.blocks.Title.settings.text_fs.label",
+          "max": 60,
+          "min": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 36
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "1"
+      }
+    ]
+  }
+}
+{% endschema %}

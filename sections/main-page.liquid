@@ -1,0 +1,17 @@
+<div class="page-width page-width--narrow section-{{ section.id }}-padding">
+  <div class="container">
+    <div class="page-title text-center">
+      <h1>{{ page.title | escape }}</h1>
+      {%- render 'breadcrumbs' -%}
+    </div>
+    <div class="rte">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.main-page.name"
+  }
+{% endschema %}

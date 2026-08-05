@@ -1,0 +1,307 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "344a9c26-e259-4d02-90b2-57095574b89f": {
+      "type": "banner-with-text",
+      "blocks": {
+        "319586ed-7c6c-4052-b484-bdad701631b5": {
+          "type": "subheading",
+          "settings": {
+            "sub_title": "Our Timeline",
+            "subheading_fs": 14,
+            "subheading_fw": "500",
+            "subheading_tf": "uppercase",
+            "subheading_mt": 0,
+            "subheading_mb": 10
+          }
+        },
+        "template--16777408020727__344a9c26-e259-4d02-90b2-57095574b89f-168834717871ffe393-0": {
+          "type": "heading",
+          "settings": {
+            "title": "Explore The",
+            "heading_fs": 45,
+            "heading_fw": "400",
+            "heading_tf": "capitalize",
+            "heading_mt": 0,
+            "heading_mb": 10
+          }
+        },
+        "45f6c6d7-2e33-47f0-8cc8-1f6969f3e62d": {
+          "type": "heading",
+          "settings": {
+            "title": "History Of Umino's Store",
+            "heading_fs": 45,
+            "heading_fw": "400",
+            "heading_tf": "capitalize",
+            "heading_mt": 0,
+            "heading_mb": 10
+          }
+        },
+        "template--16777408020727__344a9c26-e259-4d02-90b2-57095574b89f-168834717871ffe393-1": {
+          "type": "text",
+          "settings": {
+            "txt_content": "<p>In the 19th century, the concept of fashion retail began with general stores that offered a range of goods, including clothing. Umino stores typically catered to local communities and provided essential garments such as basic dresses, shirts, and workwear.</p>",
+            "txt_fs": 16,
+            "txt_fw": "400",
+            "txt_tf": "unset",
+            "txt_mt": 0,
+            "txt_mb": 25
+          }
+        },
+        "3f63c634-66f6-48f2-8091-b424bfd6f575": {
+          "type": "image_picker",
+          "settings": {
+            "image_block": "shopify://shop_images/signature.png",
+            "icon_width_block": 280,
+            "icon_max_width_block": 25,
+            "text_img_mt": 1,
+            "text_img_mb": 25
+          }
+        }
+      },
+      "block_order": [
+        "319586ed-7c6c-4052-b484-bdad701631b5",
+        "template--16777408020727__344a9c26-e259-4d02-90b2-57095574b89f-168834717871ffe393-0",
+        "45f6c6d7-2e33-47f0-8cc8-1f6969f3e62d",
+        "template--16777408020727__344a9c26-e259-4d02-90b2-57095574b89f-168834717871ffe393-1",
+        "3f63c634-66f6-48f2-8091-b424bfd6f575"
+      ],
+      "settings": {
+        "container": "full-width",
+        "color_scheme": "scheme-d127e173-a562-42f4-a41e-3483b672d918",
+        "banner_type": "image",
+        "image": "shopify://shop_images/img_1_e7705861-d340-4d51-bdd8-66a4ce540208.jpg",
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "link": "",
+        "open_link": "_blank",
+        "bn_design": "text_overlay",
+        "text_align": "text-center",
+        "text_horizontal_position": "center",
+        "text_position": "center",
+        "content_bg_color": "",
+        "content_width": 65,
+        "banner_height": "depend-image",
+        "height_dk": 800,
+        "height_tb": 600,
+        "height_mb": 360,
+        "height_full": false,
+        "content_box": "content_in_container",
+        "bg_opacity": 100,
+        "text_bellow_mobile": false,
+        "img_position": "left",
+        "banner_width": "col-md-6",
+        "column_gap": 30,
+        "hover_effect": "zoom",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "11edf716-8077-4eaf-90ac-e643cb9742cc": {
+      "type": "banner-image",
+      "blocks": {
+        "template--16777408020727__11edf716-8077-4eaf-90ac-e643cb9742cc-1688348035dd387978-0": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/bg.png",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Who We Are",
+            "content": "<p>Adipisicing elit sed do eiusmod tempor labore et dolore dignissimos cumque. Excepteur sint occaecat cupidatat proident.</p>",
+            "btn_content": "",
+            "button_type": "primary"
+          }
+        },
+        "template--16777408020727__11edf716-8077-4eaf-90ac-e643cb9742cc-1688348035dd387978-1": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/bg_1.png",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "Our Products",
+            "content": "<p>Adipisicing elit sed do eiusmod tempor labore et dolore dignissimos cumque. Excepteur sint occaecat cupidatat proident.</p>",
+            "btn_content": "",
+            "button_type": "primary"
+          }
+        },
+        "6e1e95ec-5ea0-4f59-b6c8-4a3566aa5c82": {
+          "type": "image_banner",
+          "settings": {
+            "banner_width": "4",
+            "banner_type": "image",
+            "image": "shopify://shop_images/bg_2.png",
+            "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "link": "",
+            "open_link": "_blank",
+            "subtext": "",
+            "title": "How We Work",
+            "content": "<p>Adipisicing elit sed do eiusmod tempor labore et dolore dignissimos cumque. Excepteur sint occaecat cupidatat proident.</p>",
+            "btn_content": "",
+            "button_type": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "template--16777408020727__11edf716-8077-4eaf-90ac-e643cb9742cc-1688348035dd387978-0",
+        "template--16777408020727__11edf716-8077-4eaf-90ac-e643cb9742cc-1688348035dd387978-1",
+        "6e1e95ec-5ea0-4f59-b6c8-4a3566aa5c82"
+      ],
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "column_gap": 30,
+        "layout_on_mobile": false,
+        "design_banner": "text-below-image",
+        "design_content": "default",
+        "text_align": "text-left",
+        "hover_effect": "none",
+        "h_font_size": 18,
+        "h_font_weight": "500",
+        "h_spacing": 10,
+        "sub_font_size": 18,
+        "sub_font_weight": "default",
+        "sub_spacing": 10,
+        "des_font_size": 16,
+        "des_font_weight": "default",
+        "des_spacing": 0,
+        "text_position": "top",
+        "content_on_mobile": false,
+        "reset_color_mb": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "a24ab2c0-02da-46d0-96dc-a82dea076296": {
+      "type": "divider",
+      "settings": {
+        "container": "container",
+        "border_height": 1,
+        "border_color": "#ebebeb",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "main": {
+      "type": "page-timeline",
+      "blocks": {
+        "fa39e932-c292-4a52-acc7-381eeaf8643f": {
+          "type": "item",
+          "settings": {
+            "time": "1975",
+            "timeline_title": "1975s / Umino’s Founding:",
+            "timeline_content": "Umino was founded in 1975 by Blueskytechco in La Coruña, Spain. Initially, the store was named \"Mino’s\" but so that progress is user-oriented, it was later renamed Umino."
+          }
+        },
+        "efa2b85d-0ecc-42b4-a275-040359b0d10e": {
+          "type": "item",
+          "settings": {
+            "time": "1980",
+            "timeline_title": "1980s / Unique Business Model:",
+            "timeline_content": "During the 1980s, Umino expanded its retail presence within Spain. It developed a unique business model that focused on reducing the time between design and product availability. Umino pioneered the concept of \"fast fashion\"."
+          }
+        },
+        "1b78b35e-c893-4d99-9b0a-a0b81df17279": {
+          "type": "item",
+          "settings": {
+            "time": "1990",
+            "timeline_title": "1990s / International Expansion:",
+            "timeline_content": "Umino ventured beyond Spain and began its international expansion in the early 1990s. It opened stores in Portugal, the United States, Mexico, Greece, France,... Marked the beginning of Umino's global presence."
+          }
+        },
+        "1739cb85-d13d-4511-974f-2f4d6daeb0ce": {
+          "type": "item",
+          "settings": {
+            "time": "2000",
+            "timeline_title": "2000s / Continued Growth:",
+            "timeline_content": "In the early 2000s, Uminp experienced significant growth and became part of the Uza Group, a Spanish multinational fashion company founded by Blueskytechco. Uza is the parent company of several fashion brands, and Umino is its flagship brand."
+          }
+        },
+        "94b52a76-9a5f-4e57-8461-e06b7aa44a91": {
+          "type": "item",
+          "settings": {
+            "time": "2010",
+            "timeline_title": "2010s / Strong development of E-commerce:",
+            "timeline_content": "In the 2010s, Umino embraced the digital era by expanding its online presence and launching e-commerce platforms. Customers could now shop for Umino products from the comfort of their homes, further increasing the brand's accessibility and global reach."
+          }
+        },
+        "3ad09198-1864-43aa-84eb-f85f77a5499e": {
+          "type": "item",
+          "settings": {
+            "time": "2020",
+            "timeline_title": "2020s / For the green environment:",
+            "timeline_content": "During the 1980s, Umino expanded its retail presence within Spain. It developed a unique business model that focused on reducing the time between design and product availability. Umino pioneered the concept of \"fast fashion\"."
+          }
+        },
+        "77842781-7a95-4e5e-ba77-9d19762e22c2": {
+          "type": "item",
+          "settings": {
+            "time": "2023",
+            "timeline_title": "2023s / Continued Innovation:",
+            "timeline_content": "Umino's history is characterized by its ability to combine fast-fashion strategies, market responsiveness, and global expansion to establish itself as a prominent player in the fashion industry."
+          }
+        },
+        "2a7e3f38-3a7f-422e-892f-a92459961ca0": {
+          "type": "item",
+          "settings": {
+            "time": "Present",
+            "timeline_title": "Present / Global Influence:",
+            "timeline_content": "Umino’s has expanded its retail footprint to over 5,000 stores in more than 90 countries, making it one of the largest and most influential fashion retailers worldwide."
+          }
+        },
+        "41c92a21-7fd6-4c35-9fcc-1bed1712c261": {
+          "type": "item",
+          "settings": {
+            "time": "2029",
+            "timeline_title": "2029s / IPO launch:",
+            "timeline_content": "We are starting the long-term corporate fundraising, preparing to complete and test the IPO. Create opportunities for employees to own shares, create motivation and commitment to accompany the company."
+          }
+        }
+      },
+      "block_order": [
+        "fa39e932-c292-4a52-acc7-381eeaf8643f",
+        "efa2b85d-0ecc-42b4-a275-040359b0d10e",
+        "1b78b35e-c893-4d99-9b0a-a0b81df17279",
+        "1739cb85-d13d-4511-974f-2f4d6daeb0ce",
+        "94b52a76-9a5f-4e57-8461-e06b7aa44a91",
+        "3ad09198-1864-43aa-84eb-f85f77a5499e",
+        "77842781-7a95-4e5e-ba77-9d19762e22c2",
+        "2a7e3f38-3a7f-422e-892f-a92459961ca0",
+        "41c92a21-7fd6-4c35-9fcc-1bed1712c261"
+      ],
+      "settings": {
+        "container": "container",
+        "heading": "Our Timelines",
+        "description": "<p>Here’s some of our most popular products people are in love with.</p>",
+        "text_alignment": "text-center"
+      }
+    }
+  },
+  "order": [
+    "344a9c26-e259-4d02-90b2-57095574b89f",
+    "11edf716-8077-4eaf-90ac-e643cb9742cc",
+    "a24ab2c0-02da-46d0-96dc-a82dea076296",
+    "main"
+  ]
+}

@@ -1,0 +1,225 @@
+{%- liquid
+  assign st = section.settings
+  assign container = st.container
+-%}
+
+<section class="bls__section bls__brands-page mt-lg-30">
+  <page-brands>
+    <div class="{{ container }} section-full">
+      {% assign array = 'A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|#' | split: '|' %}
+      <div class="wrapper-brands">
+        <ul id="brandsCode" class="brands-list-code list-unstyled d-flex flex-wrap uppercase">
+          <li data-code="all" class="all-brands brand-filter is-active">
+            <a href="#" role="button">{{ 'brands.all' | t }}</a>
+          </li>
+          {%- for item in array -%}
+            <li
+              data-code="{{ item | downcase }}"
+              class="brand-filter"
+              data-href="{{ item | downcase }}"
+            >
+              <a
+                href="#brands-hex-{{ item | downcase }}"
+                data-href="{{ item | downcase }}"
+                role="button"
+              >
+                {{- item | downcase -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+      <div id="brandsWrap" class="active-all">
+        {%- for item in array -%}
+          <div
+            class="brands-group d-none"
+            data-code="{{ item | downcase }}"
+            id="brands-code-{{ item | downcase }}"
+          >
+            <h3 class="brands-group-title text-left">{{ item | downcase }}</h3>
+            <ul class="brands-group-list list-unstyled" role="list"></ul>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+    <script type="application/json" class="brandsVendor">
+        [
+        {%- for vendor in shop.vendors -%}
+          {%- liquid
+            assign text_reduce = vendor | strip_html | downcase | truncate: 1, ''
+          assign title = '"title":' | append: '"' | append: vendor | append: '"'
+          assign letter = '"letter":' | append: '"' | append: text_reduce | append: '"'
+      -%}
+          { {{ title }}, {{ letter }} }
+          {%- unless forloop.last -%},{%- endunless forloop.last -%}
+        {%- endfor -%}
+        ]
+    </script>
+  </page-brands>
+</section>
+<script>
+  let newParserBrands = new DOMParser();
+  class PageBrands extends HTMLElement {
+    constructor() {
+      super();
+      this.getAllBrands();
+      this.loadContent();
+      this.brandsCode = this.querySelector('#brandsCode');
+      const navigation = document.querySelector('#brandsCode');
+      this.brandsCode.querySelectorAll('.brand-filter').forEach((brands) => {
+        brands.addEventListener('click', this.actionFilter.bind(this));
+      });
+      this.brandGroup = this.querySelectorAll('.brands-group').forEach((element) => {
+        const letter = element?.dataset.code;
+        if (element.querySelector('.brand') == null) {
+          element.closest('.brands-group').classList.add('d-none');
+          navigation.querySelector(`[data-code="${letter}"]`).classList.add('disable');
+        } else {
+          element.closest('.brands-group').classList.remove('d-none');
+          element.closest('.brands-group').classList.add('brands-active');
+          navigation.querySelector(`[data-code="${letter}"]`).classList.remove('disable');
+          navigation.querySelector(`[data-code="${letter}"]`).classList.add('has-class');
+        }
+      });
+    }
+
+    getAllBrands() {
+      let brandGroup, brandLink;
+      const wrapper = document.querySelector('#brandsWrap');
+      const dataBrands = JSON.parse(this.querySelector('.brandsVendor').textContent);
+      var listBrands = dataBrands.map((brand) => {
+        brandLink = `<a href="{{ routes.collections_url }}/vendors?q=${brand.title}">${brand.title}</a>`;
+        const letter = brand.letter;
+        return `<li class="brand" data-code="${letter}">${brandLink}</li>`;
+      });
+      const listCheck = newParserBrands.parseFromString(listBrands, 'text/html');
+      listCheck.querySelectorAll('li').forEach((item) => {
+        const letter = item.dataset.code;
+        if (
+          letter == '1' ||
+          letter == '2' ||
+          letter == '3' ||
+          letter == '4' ||
+          letter == '5' ||
+          letter == '6' ||
+          letter == '7' ||
+          letter == '8' ||
+          letter == '9' ||
+          letter == '0'
+        ) {
+          brandGroup = wrapper.querySelector('.brands-group[data-code="#"] ul');
+        } else {
+          brandGroup = wrapper.querySelector(`.brands-group[data-code="${letter}"] ul`);
+        }
+        brandGroup.append(item);
+      });
+    }
+
+    parseBrandList() {
+      const navigation = document.querySelector('#brandsCode');
+      document.querySelectorAll('.brands-group').forEach((element) => {
+        const letter = element?.dataset.code;
+
+        if (document.querySelector('.brands-group-list', element).children[0].length > 0) {
+          navigation.querySelector(`[data-code="${letter}"]`).removeClass('disable').addClass('has-letter');
+        }
+      });
+    }
+
+    loadContent() {
+      window.addEventListener('load', () => {
+        const collectionLinksElement = document.querySelector('.wrapper-brands');
+        const collectionLinksList = [...collectionLinksElement.querySelectorAll('ul li')];
+        const firstLink = collectionLinksList[0];
+        const lastLink = collectionLinksList.pop();
+
+        collectionLinksElement.classList.add('initialized');
+
+        const scrollToLastObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              collectionLinksElement.classList.add('disable-last');
+            } else {
+              collectionLinksElement.classList.remove('disable-last');
+            }
+          },
+          {
+            threshold: 0.6,
+          }
+        );
+
+        const scrollToFirstObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              collectionLinksElement.classList.add('disable-first');
+            } else {
+              collectionLinksElement.classList.remove('disable-first');
+            }
+          },
+          {
+            threshold: 0.6,
+          }
+        );
+
+        scrollToLastObserver.observe(lastLink);
+        scrollToFirstObserver.observe(firstLink);
+      });
+    }
+
+    actionFilter(event) {
+      event.preventDefault();
+      this.querySelectorAll('.brand-filter').forEach((element) => {
+        element.classList.remove('is-active');
+      });
+      event.target.closest('li').classList.add('is-active');
+
+      var code = event.target.dataset.href;
+      this.querySelectorAll('.brands-group').forEach((brands) => {
+        brands.classList.remove('is-active');
+      });
+
+      if (code != undefined || code != null) {
+        this.querySelector('#brandsWrap').classList.remove('active-all');
+        this.querySelector(`#brandsWrap [data-code="${code}"]`).classList.add('is-active');
+      } else {
+        this.querySelector('#brandsWrap').classList.add('active-all');
+      }
+    }
+  }
+  customElements.define('page-brands', PageBrands);
+</script>
+{% schema %}
+{
+  "name": "t:sections.brands-page.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

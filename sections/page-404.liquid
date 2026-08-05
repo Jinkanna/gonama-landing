@@ -1,0 +1,110 @@
+{%- liquid
+  assign st = section.settings
+  assign container = st.container
+  assign image = st.image
+  assign heading = st.heading
+  assign sub_heading = st.sub_heading
+  assign label = st.label
+  assign link = st.link
+  assign custom_width = st.custom_width
+-%}
+
+<section class="bls__section bls__404-page">
+  <div class="{{ container }} section-full">
+    <div class="page-404-content text-center">
+      <div class="image-404 mb-30">
+        {%- if image != blank -%}
+          <img
+            src="{{ image | image_url }}"
+            width="{{ custom_width }}"
+            alt="{{ image.alt | escape }}"
+            width="{{ image.width }}"
+            height="{{ image.height }}"
+            loading="lazy">
+        {%- else -%}
+          {%- render 'icon-404' -%}
+        {%- endif -%}
+      </div>
+      {%- if heading != blank or sub_heading != blank -%}
+        <div class="bls__section-header">
+          {%- if heading != blank -%}
+            <h2 class="bls__section-heading mb-5">
+              {{ heading }}
+            </h2>
+          {%- endif -%}
+          {%- if sub_heading != blank -%}
+            <div class="bls__section-des">
+              {{ sub_heading }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <a href="{%- if link != blank -%}{{ link }}{%- else -%}{{ routes.root_url }}{%- endif -%}" class="btn btn-primary">
+        {{- label -}}
+      </a>
+    </div>
+  </div>
+</section>
+{% schema %}
+  {
+    "name": "t:sections.404-page.name",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.all.header.general"
+      },
+      {
+        "type": "select",
+        "id": "container",
+        "label": "t:sections.all.layout.label",
+        "default": "container",
+        "options": [
+          {
+            "value": "container",
+            "label": "t:sections.all.layout.options__1.label"
+          }, {
+            "value": "container-fluid",
+            "label": "t:sections.all.layout.options__2.label"
+          }, {
+            "value": "strecth-width",
+            "label": "t:sections.all.layout.options__3.label"
+          }, {
+            "value": "full-width",
+            "label": "t:sections.all.layout.options__4.label"
+          }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.all.upload_image.image_dk",
+        "info": "t:sections.404-page.settings.image_dk.info"
+      },
+      {
+        "type": "text",
+        "id": "custom_width",
+        "label": "t:sections.404-page.settings.custom_width.label",
+        "default": "440"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "t:sections.all.content_text.heading",
+        "default": "Oops...That link is broken."
+      }, {
+        "type": "textarea",
+        "id": "sub_heading",
+        "label": "t:sections.all.content_text.subheading",
+        "default": "Sorry for the inconvenience. Go to our homepage or check out our latest collections."
+      }, {
+        "type": "text",
+        "id": "label",
+        "label": "t:sections.all.content_text.button_text",
+        "default": "Back to homepage"
+      }, {
+        "type": "url",
+        "id": "link",
+        "label": "t:sections.404-page.settings.link.label"
+      }
+    ]
+  }
+{% endschema %}

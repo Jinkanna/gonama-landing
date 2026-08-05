@@ -1,0 +1,376 @@
+{%- liquid
+  assign th_st = settings
+  assign product_style = th_st.product_style
+  assign container = th_st.general_layout
+  assign custom_container = th_st.custom_width_bd
+  assign container_width = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+  assign enable_sidebar = enable_sidebar
+  assign sidebar_ps = sidebar_ps
+  assign show_count = st.show_count
+  assign color_swatches_size = th_st.color_swatches_size
+  assign color_swatches_style = th_st.color_swatches_style
+
+  assign sidebar_canvas = ''
+  if sidebar_ps == 'filter_canvas'
+    assign sidebar_canvas = 'bls__canvas bls__canvas-left h-full'
+  endif
+
+  assign colorOptions = th_st.option_name_color | downcase | replace: ', ', ',' | replace: ' , ', ',' | replace: ' ,', ',' | split: ','
+  assign sizeOptions = th_st.option_name_size | downcase | replace: ', ', ',' | replace: ' , ', ',' | replace: ' ,', ',' | split: ','
+  if current_tags != blank
+    assign all_tags_downcase = search.tags | json | downcase
+    assign current_arr = ''
+    assign new_current_arr = ''
+    for tag in current_tags
+      assign newtag = tag | handleize | prepend: '_'
+      assign current_arr = current_arr | append: tag | append: ',' | downcase
+      assign new_current_arr = new_current_arr | append: newtag | append: ',' | downcase
+    endfor
+    assign new_current_tags = new_current_arr | split: ','
+    assign current_tags = current_arr | split: ','
+  else
+    for tag in search.all_tags
+      assign new_tag = tag | handleize | json | downcase
+      assign all_tags_downcase = all_tags_downcase | append: new_tag
+    endfor
+  endif
+-%}
+<div
+  id="CollectionSidebar"
+  class="{{ sidebar_ps }}"
+>
+  <div
+    class="collection-sidebar bls__canvas-mb bls__canvas-mb-left {{ sidebar_canvas }}"
+  >
+    <div
+      class="sidebar-header"
+    >
+      <h3>{{ 'collections.toolbar.filter' | t }}</h3>
+      <button
+        id="sidebar__close"
+        class="sidebar-close"
+        title="Close"
+      >
+        <i
+          class="lnr lnr-cross"
+        ></i>
+      </button>
+    </div>
+    {% liquid
+      if enable_sidebar
+        if sidebar_ps == 'left_sidebar' and sidebar_ps == 'right_sidebar'
+          render 'search-filter-current'
+        endif
+      endif
+    %}
+    {%- assign filters = search.filters -%}
+    {%- assign total_active_values = 0 -%}
+    {%- for filter in filters -%}
+      {%- assign total_active_values = total_active_values | plus: filter.active_values.size -%}
+      <div
+        {{ block.shopify_attributes }}
+        class="filter-item"
+      >
+        <h4
+          class="filter-title fs-24 mb-20"
+        >
+          {{ filter.label | escape }}
+          <div
+            class="open-children-toggle active"
+          ></div>
+        </h4>
+
+        <div
+          class="filter-content"
+        >
+          {% case filter.type %}
+            {% when 'list' %}
+              {%- liquid
+                assign iscolor = false
+                assign isSize = false
+                assign fname = filter.label | downcase
+                assign attribute = ''
+                if colorOptions contains fname
+                  assign iscolor = true
+                  assign attribute = ' color'
+                endif
+                if sizeOptions contains fname
+                  assign isSize = true
+                  assign attribute = ' size'
+                endif
+              -%}
+              {% if iscolor or isSize %}
+                <div
+                  class="swatch-attribute{{ attribute }}"
+                >
+                  <ul
+                    class="items list-none p-0 m-0"
+                  >
+                    {%- for value in filter.values -%}
+                      <li
+                        class="item mb-10 last-0"
+                      >
+                        <a
+                          href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                          class="bls__link-filter{% if value.count == 0 and value.active == false %} disabled{% endif %}"
+                          aria-label="{{ value.value }}"
+                        >
+                          <div
+                            class="bls_tooltip swatch-option{{ attribute }}{% if value.active %} current-filter{% endif %}"
+                          >
+                            {% if iscolor %}
+                              <span
+                                class="bls__product-color-swatches {{ color_swatches_style }} {{ color_swatches_size }} bls__{{ value.value | handleize }} clrbox"
+                                data-color="{{ value.label | downcase }}"
+                                data-image=""
+                                style="background-color:{{ value.value | downcase }};"
+                              ></span>
+                            {% else %}
+                              {{ value.label | escape }}
+                            {% endif %}
+                            <span
+                              class="bls_tooltip-content "
+                            >
+                              {{- value.value -}}
+                            </span>
+                          </div>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {% else %}
+                <ul
+                  class="items list-none p-0 m-0"
+                >
+                  {%- for value in filter.values -%}
+                    <li
+                      class="item mb-10 last-0{% if value.count == 0 and value.active == false %} disabled{% endif %}{% if value.active %} current-filter{% endif %}"
+                    >
+                      <a
+                        href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                        class="bls__link-filter"
+                      >
+                        <span
+                          class="checkbox{% if value.active %} checked{% endif %}"
+                        ></span>
+                        {{ value.label | escape }}
+                        {%- if show_count -%}
+                          <span
+                            class="count"
+                            >({{ value.count }})</span
+                          >
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {% endif %}
+            {% when 'price_range' %}
+              <form
+                id="CollectionFiltersForm"
+                class="filter-form"
+              >
+                {% liquid
+                  assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+                  assign uses_comma_decimals = false
+                  if currencies_using_comma_decimals contains cart.currency.iso_code
+                    assign uses_comma_decimals = true
+                  endif
+                %}
+                <div
+                  class="filter-price"
+                >
+                  <price-range
+                    class="price-range"
+                  >
+                    <div
+                      class="field"
+                    >
+                      <input
+                        class="min-price-range"
+                        name="{{ filter.min_value.param_name }}"
+                        type="number"
+                        placeholder="0"
+                        min="0"
+                        {%- if filter.min_value.value -%}
+                          {%- if uses_comma_decimals -%}
+                            value="{{ filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' | round }}"
+                            {%- assign minPrice = filter.min_value.value
+                              | money_without_currency
+                              | replace: '.', ''
+                              | replace: ',', '.'
+                              | round
+                            -%}
+                          {%- else -%}
+                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' | round }}"
+                            {%- assign minPrice = filter.min_value.value
+                              | money_without_currency
+                              | replace: ',', ''
+                              | round
+                            -%}
+                          {% endif %}
+                        {%- else -%}
+                          {%- assign minPrice = 0 -%}
+                        {%- endif -%}
+                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      >
+                    </div>
+                    <span>
+                      <svg
+                        width="10"
+                        height="2"
+                        viewBox="0 0 10 2"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M10 0.5L10 1.5L-4.37114e-08 1.5L0 0.5L10 0.5Z"
+                          fill="#999999" />
+                      </svg>
+                    </span>
+                    <div
+                      class="field"
+                    >
+                      <label
+                        for="max-price-range"
+                        class="d-none"
+                      ></label>
+                      <input
+                        id="max-price-range"
+                        class="max-price-range"
+                        name="{{ filter.max_value.param_name }}"
+                        type="number"
+                        min="0"
+                        {%- if filter.max_value.value -%}
+                          {%- if uses_comma_decimals -%}
+                            value="{{ filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                            {%- assign maxPrice = filter.max_value.value
+                              | money_without_currency
+                              | replace: '.', ''
+                              | replace: ',', '.'
+                              | round
+                            -%}
+                          {%- else -%}
+                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' | round }}"
+                            {%- assign maxPrice = filter.max_value.value
+                              | money_without_currency
+                              | replace: ',', ''
+                              | round
+                            -%}
+                          {%- endif %}
+                        {%- else -%}
+                          {%- assign maxPrice = filter.range_max
+                            | money_without_currency
+                            | replace: ',', ''
+                            | replace: '.', ''
+                          -%}
+                          value="{{ maxPrice }}"
+                        {%- endif -%}
+                        {%- if uses_comma_decimals -%}
+                          placeholder="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                          max="{{ filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.' }}"
+                        {%- else -%}
+                          placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' | replace: '.00', '' }}"
+                          max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                        {% endif %}
+                      >
+                    </div>
+                  </price-range>
+                </div>
+                {% liquid
+                  assign minPrice = minPrice | times: 1
+                  assign maxPrice = maxPrice | times: 1
+                  if uses_comma_decimals
+                    assign range_max = filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.'
+                  else
+                    assign range_max = filter.range_max | money_without_currency | replace: ',', ''
+                  endif
+                  assign from = minPrice | times: 100 | divided_by: range_max | round: 2
+                  assign to = maxPrice | times: 100 | divided_by: range_max | round: 2
+                -%}
+                <div
+                  class="price-range"
+                  style="--range-from: {{ from }}%; --range-to: {{ to }}%"
+                >
+                  <label
+                    for="range-slider-min"
+                    class="visually-hidden"
+                    >Range</label
+                  >
+                  <input
+                    type="range"
+                    class="range-slider range-slider-min"
+                    min="0"
+                    max="{{ range_max }}"
+                    value="{{ minPrice }}"
+                    id="range-slider-min"
+                  >
+                  <label
+                    for="range-slider-max"
+                    class="visually-hidden"
+                    >Range</label
+                  >
+                  <input
+                    type="range"
+                    class="range-slider range-slider-max"
+                    min="0"
+                    max="{{ range_max }}"
+                    value="{{ maxPrice }}"
+                    id="range-slider-max"
+                  >
+                </div>
+                <div
+                  class="price-lable"
+                >
+                  <div
+                    class="label"
+                  >
+                    {{ filter.label | escape }}:
+                  </div>
+                  <div
+                    class="price"
+                  >
+                    {%- assign min_value = filter.min_value.value | default: 0 -%}
+                    {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                    <span
+                      class="min"
+                    >
+                      {% if settings.currency_code_enabled %}
+                        {% if filter.max_value.value %}
+                          {{ min_value | money_with_currency }}
+                        {% else %}
+                          {{ min_value | money_with_currency }}
+                        {% endif %}
+                      {% else %}
+                        {{ min_value | money }}
+                      {% endif %}
+                    </span>
+                    -
+                    <span
+                      class="max"
+                    >
+                      {% if settings.currency_code_enabled %}
+                        {% if filter.max_value.value %}
+                          {{ max_value | money_with_currency }}
+                        {% else %}
+                          {{ filter.range_max | money_with_currency }}
+                        {% endif %}
+                      {% else %}
+                        {{ max_value | money }}
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+              </form>
+          {% endcase %}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>

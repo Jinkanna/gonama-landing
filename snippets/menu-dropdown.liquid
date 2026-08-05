@@ -1,0 +1,88 @@
+{%- for link in linklists[handle_menu].links -%}
+  <li class="relative level-1">
+    {%- liquid
+      assign label1 = link.title | split: '[label' | last | split: ']' | first | prepend: 'label'
+      assign label_bg1 = section.settings[label1] | downcase | split: 'label' | last | prepend: "color_scheme_"
+
+    -%}
+    <a href="{{ link.url }}" class="site-nav level-1">
+      <span>{{ link.title | split: '[label' | first }}</span>
+      {%- if link.title contains '[label' -%}
+        <span
+          class="px-6 d-inline-block label {{ label1 }} color-{{ section.settings[label_bg1] }} gradient"
+        >
+          {{ section.settings[label1] }}
+        </span>
+      {%- endif -%}
+      {%- if link.links != blank -%}
+        <i class="absolute position-center-y right-15 ad icon-chevron-right" aria-hidden="true"></i>
+      {%- endif -%}
+    </a>
+    {%- if link.links != blank -%}
+      {%- assign menu_title = link.title -%}
+      <div class="open-children-toggle"></div>
+      <ul class="subchildmenu subLinks p-0 list-none my-0 absolute top-0 gradient">
+        <li class="fw-600 submenu-mobile-title justify-content-between">
+          <a role="link" class="back-main-menu-lv2 pointer">
+            <i class="icon-chevron-left"></i>
+            {{ menu_title }}
+          </a>
+          <i class="icon-x close-menu pointer"></i>
+        </li>
+        {%- for childlink in link.links -%}
+          <li class="level-2 relative">
+            {%- liquid
+              assign label2 = childlink.title | split: '[label' | last | split: ']' | first | prepend: 'label'
+              assign label_bg2 = section.settings[label2] | downcase | split: 'label' | last | prepend: "color_scheme_"
+            -%}
+            <a href="{{ childlink.url }}" class="site-nav level-2">
+              <span>{{ childlink.title | split: '[label' | first }}</span>
+              {%- if childlink.title contains '[label' -%}
+                <span
+                  class="px-6 d-inline-block label {{ label2 }} color-{{ section.settings[label_bg2] }} gradient"
+                  style="--navigation-bg-label:{{ section.settings[label_bg2] }};"
+                >
+                  {{ section.settings[label2] }}
+                </span>
+              {%- endif -%}
+              {%- if childlink.links != blank -%}
+                <i class="absolute position-center-y right-15 ad icon-chevron-right" aria-hidden="true"></i>
+              {%- endif -%}
+            </a>
+            {%- if childlink.links != blank -%}
+              {%- assign menu_title = childlink.title -%}
+              <div class="open-children-toggle"></div>
+              <ul class="subchildmenu subLinks p-0 list-none my-0  absolute top-0 gradient">
+                <li class="fw-600 submenu-mobile-title justify-content-between">
+                  <a role="link" class="back-main-menu-lv3 pointer">
+                    <i class="icon-chevron-left"></i>
+                    {{ menu_title }}
+                  </a>
+                  <i class="icon-x close-menu pointer"></i>
+                </li>
+                {%- for lvl3link in childlink.links -%}
+                  <li class="relative level-3">
+                    {%- liquid
+                      assign label3 = lvl3link.title | split: '[label' | last | split: ']' | first | prepend: 'label'
+                      assign label_bg3 = section.settings[label3] | downcase | split: 'label' | last | prepend: "color_scheme_"
+                    -%}
+                    <a href="{{ lvl3link.url }}" class="site-nav level-3">
+                      <span>{{ lvl3link.title | split: '[label' | first }}</span>
+                      {%- if lvl3link.title contains '[label' -%}
+                        <span
+                          class="px-6 d-inline-block label {{ label3 }} color-{{ section.settings[label_bg3] }} gradient"
+                        >
+                          {{ section.settings[label3] }}
+                        </span>
+                      {%- endif -%}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </li>
+{%- endfor -%}

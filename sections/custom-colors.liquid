@@ -1,0 +1,45 @@
+{% capture colors %}
+    <style>
+        {%- for block in section.blocks -%}
+            {%- if block.settings.color_name != blank -%}
+                {%- assign color_name = block.settings.color_name | downcase | replace: ' ', '-' -%}
+                .bls__{{ color_name }}{
+                    {% if block.settings.color_image == blank %}
+                        background-color:{{ block.settings.color_code }} !important;
+                        background-image: initial !important;
+                    {% else  %}
+                        background:{{ block.settings.color_code }} url({{ block.settings.color_image | image_url: width: 80 }}) no-repeat 50% 50%/cover !important;
+                    {% endif %}
+                }
+            {%- endif -%}
+        {%- endfor -%} 
+    </style>
+{% endcapture %}
+{{ colors | strip_newlines | remove: '  ' | remove: '	' }}
+{% schema %}
+  {
+    "name": "t:sections.custom-color.name",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "color",
+        "name": "t:sections.custom-color.blocks.Color.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "color_name",
+            "label": "t:sections.custom-color.blocks.Color.settings.color_name.label"
+          }, {
+            "type": "color",
+            "id": "color_code",
+            "label": "t:sections.custom-color.blocks.Color.settings.color_code.label"
+          }, {
+            "type": "image_picker",
+            "id": "color_image",
+            "label": "t:sections.custom-color.blocks.Color.settings.color_image.label"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

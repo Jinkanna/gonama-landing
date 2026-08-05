@@ -1,0 +1,226 @@
+.bls__section_tiktok-image::before,
+html.js .bls-loading-image:after {
+    background-image: linear-gradient(90deg, rgba(22, 24, 35, 0) 0, rgba(22, 24, 35, .04) 50%, rgba(22, 24, 35, 0) 100%);
+    background-repeat: no-repeat;
+    width: 100%
+}
+
+.tiktok-embed>section:before,
+[style*="--aspect-ratio"]:before {
+    padding-top: calc(100%/(0 + var(--aspect-ratio, 16/9)))
+}
+
+.bls__placeholder {
+    fill: rgba(51, 50, 50, .35);
+    background-color: #eee;
+    display: block
+}
+
+.bls__product-quickview .bls-loading-image:after,
+div[class*=bls__product-thumbnails] .col_thumb .swiper:not([class*=initialized]) .swiper-slide:not(:first-child) {
+    display: none
+}
+
+html.js .bls__product-quickview .bls-loading-image img {
+    opacity: 1;
+    content: unset
+}
+
+html.js .bls-loading-image {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .2) 20%, rgba(255, 255, 255, .5) 60%, rgba(255, 255, 255, 0));
+    background-color: var(--lazyload_bg_color);
+    --lazyload_bg_color: var(--light-grey-color)
+}
+
+html.js .bls-loading-image img {
+    content: url(swatch_loading.png)
+}
+
+html.js .bls-loading-image:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-background-size: 200% 100%;
+    background-size: 200% 100%;
+    height: 100%;
+    -webkit-animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images;
+    animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images
+}
+
+html.js .bls__product-main-img img,
+html.js .bls_instagram-image img {
+    opacity: 0
+}
+
+html.js .bls-loaded-image,
+html.js .bls__product-main-img .bls-loaded-image,
+html.js .bls_instagram-image .bls-loaded-image {
+    animation: 1s cubic-bezier(.26, .54, .32, 1) forwards fadeIn;
+    -webkit-animation: 1s cubic-bezier(.26, .54, .32, 1) forwards fadeIn
+}
+
+html.js .swiper-initialized .bls-loaded-image {
+    animation: none;
+    opacity: 1;
+    visibility: visible;
+}
+
+.header-container {
+    min-height: 1px
+}
+
+.bls_img-ratio {
+    width: 100%
+}
+
+[style*="--aspect-ratio"] {
+    position: relative;
+    overflow: hidden
+}
+
+[style*="--aspect-ratio"]:before {
+    content: "";
+    height: 0;
+    display: block
+}
+
+.bls__section_tiktok-image::before {
+    -webkit-background-size: 200% 100%;
+    background-size: 200% 100%;
+    height: 100%;
+    -webkit-animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images;
+    animation: 1.5s cubic-bezier(0, 0, 1, 1) infinite animation-loading-images
+}
+
+[style*="--aspect-ratio"] img,
+[style*="--aspect-ratio"]>svg,
+[style*=--aspect-ratio] .tiktok-embed {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%
+}
+
+.bls__slideshow .swiper:not([class*=initialized]) .swiper-wrapper .swiper-slide:not(:first-child),
+.swiper-wrapper .bls__slide-items.swiper-slide-duplicate:not(.swiper-slide-active):first-child {
+    opacity: 0;
+    visibility: hidden
+}
+
+.swiper:not([class*=initialized]) .swiper-wrapper {
+    display: flex;
+    overflow: hidden;
+    margin-left: calc(var(--perload-gap)/ 2 * -1);
+    margin-right: calc(var(--perload-gap)/ 2 * -1);
+    width: calc(var(--perload-gap) + 100%);
+    flex: 0 0 auto
+}
+
+.swiper:not([class*=initialized]) .swiper-wrapper .swiper-slide {
+    padding-left: calc(var(--perload-gap)/ 2);
+    padding-right: calc(var(--perload-gap)/ 2)
+}
+
+.bls__swiper-vertical.swiper:not([class*=initialized]) .swiper-wrapper {
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    margin: 0
+}
+
+.bls__swiper-vertical.swiper:not([class*=initialized]) .swiper-wrapper .swiper-slide {
+    width: 100% !important;
+    padding: 0;
+    margin: 0 0 var(--perload-gap)
+}
+
+@media (min-width:1200px) {
+    .swiper:not([class*=initialized])[data-desktop="8"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 8)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="7"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 7)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="6"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 6)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="5"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 5)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="4"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 4)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="3"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 3)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="2"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 2)
+    }
+
+    .swiper:not([class*=initialized])[data-desktop="1"] .swiper-wrapper .swiper-slide {
+        width: 100%
+    }
+}
+
+@media (max-width:1199px) {
+    .swiper:not([class*=initialized])[data-tablet="6"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 6)
+    }
+
+    .swiper:not([class*=initialized])[data-tablet="5"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 5)
+    }
+
+    .swiper:not([class*=initialized])[data-tablet="4"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 4)
+    }
+
+    .swiper:not([class*=initialized])[data-tablet="3"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 3)
+    }
+
+    .swiper:not([class*=initialized])[data-tablet="2"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 2)
+    }
+
+    .swiper:not([class*=initialized])[data-tablet="1"] .swiper-wrapper .swiper-slide {
+        width: 100%
+    }
+}
+
+@media (max-width:767px) {
+    .swiper:not([class*=initialized])[data-mobile="6"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 6)
+    }
+
+    .swiper:not([class*=initialized])[data-mobile="5"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 5)
+    }
+
+    .swiper:not([class*=initialized])[data-mobile="4"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 4)
+    }
+
+    .swiper:not([class*=initialized])[data-mobile="3"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 3)
+    }
+
+    .swiper:not([class*=initialized])[data-mobile="2"] .swiper-wrapper .swiper-slide {
+        width: calc(100% / 2)
+    }
+
+    .swiper:not([class*=initialized])[data-mobile="1"] .swiper-wrapper .swiper-slide {
+        width: 100%
+    }
+}

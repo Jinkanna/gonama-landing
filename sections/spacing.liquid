@@ -1,0 +1,37 @@
+<div class="bls__spacing" style="--height-desktop: {{ section.settings.spacing_desktop }}px; --height-mobile: {{ section.settings.spacing_moible }}px;"></div>
+{% schema %}
+{
+  "name": "t:sections.spacing.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "spacing_desktop",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "default": 30,
+      "label": "t:sections.spacing.settings.spacing_desktop.label"
+    },
+    {
+      "type": "range",
+      "id": "spacing_moible",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30,
+      "label": "t:sections.spacing.settings.spacing_moible.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.spacing.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,93 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "main-blog-heading": {
+      "type": "custom-text",
+      "blocks": {
+        "ff32fbca-2006-4bd9-a2cd-2c4eb470cdea": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/icon-pf.png",
+            "text_circle": "BUILD NEXT GENERATION SHOPIFY 2.0 STORE",
+            "image_mt": 0,
+            "image_mb": 30
+          }
+        },
+        "0042ec7c-0db8-4a54-ab0d-885bfbfe1745": {
+          "type": "heading",
+          "settings": {
+            "heading": "Hi, I’m Umino.",
+            "heading_fs": 45,
+            "heading_fw": "400",
+            "heading_tf": "unset",
+            "heading_mt": 0,
+            "heading_mb": 5
+          }
+        },
+        "ef86b401-45a6-492c-aaa2-807a0638a1cd": {
+          "type": "heading",
+          "settings": {
+            "heading": "Building Digital Products, Brands.",
+            "heading_fs": 45,
+            "heading_fw": "400",
+            "heading_tf": "unset",
+            "heading_mt": 0,
+            "heading_mb": 25
+          }
+        },
+        "adb6be51-9d94-41c1-b195-08b349255473": {
+          "type": "desc",
+          "settings": {
+            "desc": "<p>We help our client suceed by creating identities, digital experiences and printmaterials that communicate clearly, achieve marketing goals and look fantastic.</p>",
+            "desc_fs": 18,
+            "desc_fw": "400",
+            "content_width": 68,
+            "desc_tf": "unset",
+            "desc_mt": 0,
+            "desc_mb": 0
+          }
+        }
+      },
+      "block_order": [
+        "ff32fbca-2006-4bd9-a2cd-2c4eb470cdea",
+        "0042ec7c-0db8-4a54-ab0d-885bfbfe1745",
+        "ef86b401-45a6-492c-aaa2-807a0638a1cd",
+        "adb6be51-9d94-41c1-b195-08b349255473"
+      ],
+      "settings": {
+        "container": "container",
+        "text_align": "text-center",
+        "color_scheme": "",
+        "custom_class": "",
+        "padding_top": 100,
+        "padding_bottom": 55,
+        "reset_spacing": true
+      }
+    },
+    "main": {
+      "type": "main-blog-portfolio",
+      "settings": {
+        "container": "container",
+        "max_articles": 9,
+        "items_per_row": 3,
+        "column_gap": 30,
+        "pagination": "default",
+        "aspect_ratio": "original",
+        "custom_ratio": "21:9",
+        "hover_effect": "zoom"
+      }
+    }
+  },
+  "order": [
+    "main-blog-heading",
+    "main"
+  ]
+}

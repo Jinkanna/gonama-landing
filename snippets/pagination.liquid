@@ -1,0 +1,136 @@
+{% # theme-check-disable ContentForHeaderModification %}
+{%- capture contentForQuerystring -%}
+  {{ content_for_header }}
+{%- endcapture -%}
+{% # theme-check-enable ContentForHeaderModification %}
+{%- assign pageUrl = contentForQuerystring
+  | split: '"pageurl":"'
+  | last
+  | split: '"'
+  | first
+  | split: request.host
+  | last
+  | replace: '\/', '/'
+  | replace: '%20', ' '
+  | replace: '\u0026', '&'
+-%}
+{%- assign pageQuerystring = pageUrl | split: '?' | last -%}
+{%- liquid
+  assign pagination_ps = ''
+  if pageQuerystring contains 'layout='
+    assign layout_pra = pageQuerystring | split: 'layout=' | last | split: '&' | first
+    if layout_pra == 'list' or layout_pra == 'grid'
+      assign pagination_ps = pagination_ps | append: '&layout=' | append: layout_pra
+    endif
+  endif
+  if pageQuerystring contains 'pagination='
+    assign pagination_pr = pageQuerystring | split: 'pagination=' | last | split: '&' | first
+    if pagination_pr == 'default' or pagination_pr == 'load_more' or pagination_pr == 'infinit_scrolling'
+      assign pagination_ps = pagination_ps | append: '&pagination=' | append: pagination_pr
+    endif
+  endif
+  assign pagination = pagination
+  assign t = template | split: '.' | first
+-%}
+{%- if paginate.parts.size > 0 -%}
+  {%- if pagination == 'default' or pagination == blank -%}
+    <div class="pagination-wrapper mt-20">
+      <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+        <ul class="pagination__list list-unstyled" role="list">
+          {%- if paginate.previous -%}
+            <li>
+              <a
+                href="{{ paginate.previous.url }}{{ anchor }}"
+                class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce"
+                aria-label="{{ 'general.pagination.previous' | t }}"
+              >
+                {{ 'general.pagination.previous' | t }}
+              </a>
+            </li>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            <li>
+              {%- if part.is_link -%}
+                <a
+                  href="{{ part.url }}{{ anchor }}"
+                  class="pagination__item link"
+                  aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                >
+                  {{- part.title -}}
+                </a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <a
+                    role="link"
+                    aria-disabled="true"
+                    class="pagination__item pagination__item--current light"
+                    aria-current="page"
+                    aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                  >
+                    {{- part.title -}}
+                  </a>
+                {%- else -%}
+                  <span class="pagination__item">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <li>
+              <a
+                href="{{ paginate.next.url }}"
+                class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"
+                aria-label="{{ 'general.pagination.next' | t }}"
+              >
+                {{ 'general.pagination.next' | t }}
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </nav>
+    </div>
+  {%- else -%}
+    <div class="pagination-load-more mt-20">
+      <div class="pagination">
+        <div class="load-more-bar">
+          {%- liquid
+            assign paginate_size = paginate.parts.size | times: 1
+            assign cur_page = paginate.current_page | times: 1
+            assign number_products = st.number_products_grid
+            if pageurl == 'list'
+              assign number_products = st.number_products_list
+            endif
+            if t == 'collection' and collection.handle
+              assign number_page = number_products | times: 1
+              assign count = collection.products_count
+            elsif t == 'blog'
+              assign number_page = st.max_articles | times: 1
+              assign count = blog.articles_count
+            endif
+            
+            assign amount = number_page | times: cur_page
+            if cur_page == paginate_size or amount > count
+              assign amount = count
+            endif
+            assign percent = amount | times: 100 | divided_by: count | round
+          -%}
+          <span class="load-more-amount">
+            {{- 'collections.pagination.load_more_amount' | t: amount: amount, count: count -}}
+          </span>
+          <div class="load-more-bar">
+            <span class="load-more-percent" style="width: {{ percent }}%"> </span>
+          </div>
+        </div>
+        {%- if paginate.next -%}
+          <a
+            href="{{ paginate.next.url }}{{ pagination_ps }}&section_id={{ section.id }}"
+            class="collections-load-more relative btn action primary{% if pagination == 'infinit_scrolling' %} infinit-scrolling{% endif %}"
+          >
+            <span class="hidden-loading">{{ 'collections.pagination.load_more' | t }}</span>
+            <span class="loader-icon absolute"></span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}

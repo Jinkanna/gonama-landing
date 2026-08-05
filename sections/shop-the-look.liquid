@@ -1,0 +1,500 @@
+{{ 'lookbook.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign st = section.settings
+  assign container = st.container
+  assign text_align = st.text_alignment
+  assign heading = st.heading
+  assign description = st.description
+  assign heading_logo = st.heading_logo
+  assign heading_logo_svg = st.heading_logo_svg
+  assign color_scheme = st.color_scheme
+  assign aspect_ratio = st.aspect_ratio
+  assign custom_ratio = st.custom_ratio
+  assign thumbnail_position = st.thumbnail_position
+  assign enabled_animations = settings.animations_enabled
+  assign carousel_pagination = st.carousel_pagination
+
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+  assign spt_tablet = ''
+  if st.padding_top > 50
+    assign spt_tablet = ' spt-tablet'
+  endif
+  assign spt_mobile = ''
+  if st.padding_top > 30
+    assign spt_mobile = ' spt-mobile'
+  endif
+  assign spb_tablet = ''
+  if st.padding_bottom > 50
+    assign spb_tablet = ' spb-tablet'
+  endif
+  assign spb_mobile = ''
+  if st.padding_bottom > 30
+    assign spb_mobile = ' spb-mobile'
+  endif
+
+  assign has_bg = ''
+  if bg_color != blank
+    assign has_bg = ' has-bg'
+  endif
+-%}
+<shop-the-look
+  class="color-{{ color_scheme }} gradient bls__section {{ has_bg }} bls__shoplookbook {{ reset_spacing }}"
+  style=" --section-bg-color: {{ bg_color }};"
+  id="{{ section.id }}"
+  data-id="{{ section.id }}"
+>
+  <div class="{{ container }} section-full">
+    <div class="bls__shop-lookbook-content align-items-center row{% if thumbnail_position == "right" %} row-reverse{% endif %}">
+      <div class="bls__lookbook-items col-xl-6 m-0-important">
+        <div class="bls__lookbook-image {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %} {% if settings.image_style != blank and section.settings.container != "full-width" and section.settings.column_gap != 0 %} radius {% endif %}">
+          {%- if st.lookbook_image != blank -%}
+            {% render 'responsive-image',
+              image: st.lookbook_image,
+              aspect_ratio: aspect_ratio,
+              custom_ratio: custom_ratio
+            %}
+          {%- else -%}
+            {%- render 'responsive-image', cls: 'border', aspect_ratio: aspect_ratio, custom_ratio: custom_ratio -%}
+          {%- endif -%}
+        </div>
+        {%- for block in section.blocks -%}
+          {% liquid
+            assign position_top = block.settings.position_top
+            assign position_left = block.settings.position_left
+            assign product = block.settings.product
+          %}
+          <div
+            {{ block.shopify_attributes }}
+            class="bls__lookbook-dot {% if forloop.index == 1 %}active{% endif %} absolute"
+            style="top: {{ position_top }}%; left: {{ position_left }}%;transform: translate(-{{ position_left }}%,-{{ position_top }}%)"
+            data-product-position="{{ forloop.index }}"
+          >
+            {%- if st.dot_type == 'icon' -%}
+              <span class="icon-dot icon">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5 0C4.44772 0 4 0.447715 4 1V4L1 4C0.447715 4 0 4.44771 0 5C0 5.55228 0.447715 6 1 6H4V9C4 9.55229 4.44772 10 5 10C5.55228 10 6 9.55228 6 9V6H9C9.55228 6 10 5.55229 10 5C10 4.44772 9.55228 4 9 4L6 4V1C6 0.447715 5.55228 0 5 0Z" fill=""></path>
+                </svg>
+              </span>
+            {%- else -%}
+              <span class="icon-dot number">{{ forloop.index }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- liquid
+        assign product_style = settings.product_style
+        assign item_desktop = st.slider_lookbook_items
+        assign show_arrow = st.show_arrow
+        assign show_bullet = st.show_bullet
+        assign show_bullet_mobile = st.show_bullet_mobile
+        assign column_gap = st.column_gap
+      -%}
+      <div
+        class="bls__lookbook-products col-xl-6 bls__grid bls__section m-0-important {{ has_bg }} {{ product_style }} {{ spt_tablet }}{{ spb_tablet }}{{ spt_mobile }}{{ spb_mobile }}"
+        style="
+          --section-padding-top: {{ st.padding_top }}px; --section-padding-bottom: {{ st.padding_bottom }}px; --bls-gutter-x:
+          {{ column_gap }}px;
+        "
+      >
+        {%- if heading != blank or description != blank or heading_logo != blank or heading_logo_svg != blank -%}
+          <div class="bls__section-header {{ text_align }} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {%- if heading_logo_svg != blank -%}
+              <div class="bls__section-logo bls__section-logo-svg">
+                {{ heading_logo_svg }}
+              </div>
+            {%- elsif heading_logo != blank -%}
+              <div class="bls__section-logo">
+                <img
+                  srcset="
+                    {%- if heading_logo.width >= 165 -%}{{ heading_logo | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if heading_logo.width >= 360 -%}{{ heading_logo | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if heading_logo.width >= 533 -%}{{ heading_logo | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if heading_logo.width >= 720 -%}{{ heading_logo | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if heading_logo.width >= 940 -%}{{ heading_logo | image_url: width: 940 }} 940w,{%- endif -%}
+                    {%- if heading_logo.width >= 1066 -%}{{ heading_logo | image_url: width: 1066 }} 1066w,{%- endif -%}
+                    {{ heading_logo | image_url }} {{ heading_logo.width }}w
+                  "
+                  src="{{ heading_logo | image_url: width: 533 }}"
+                  alt="{{ heading_logo.alt | escape }}"
+                  class="motion-reduce"
+                  loading="lazy"
+                  width="{{ heading_logo.width }}"
+                  height="{{ heading_logo.height }}"
+                  style="--point:{{ heading_logo.presentation.focal_point }}"
+                >
+              </div>
+            {%- endif -%}
+            {%- if heading != blank -%}
+              <h2 class="bls__section-heading mb-5">{{ heading }}</h2>
+            {%- endif -%}
+            {%- if description != blank -%}
+              <div class="bls__section-des">
+                {{ description }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        <div
+          class="swiper lookbook-swiper grid-{{ product_style }} hover__show-nav"
+          id="bls__swiper-{{ section.id }}"
+          data-section-id="{{ section.id }}"
+          data-autoplay="false"
+          data-loop="true"
+          data-mobile="2"
+          data-tablet="3"
+          data-desktop="{{ item_desktop }}"
+          data-spacing="{{ column_gap }}"
+          data-pagination-progressbar="{% if carousel_pagination == 'carousel_pagination_progress' %}true{% else %}false{% endif %}"
+        >
+          {%- if show_arrow != false -%}
+            <div class="swipper-next-back">
+              <div class="swiper-arrow swiper-next swiper-button-next box-shadow">
+                <i class="icon-chevron-right"></i>
+              </div>
+              <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow">
+                <i class="icon-chevron-left"></i>
+              </div>
+            </div>
+          {%- endif -%}
+          <div
+            class="swiper-wrapper {% if carousel_pagination_progress %}mb-45{% endif %}"
+            style="--perload-gap: {{ column_gap }}px"
+          >
+            {%- for block in section.blocks -%}
+              {% liquid
+                assign position_top = block.settings.position_top
+                assign position_left = block.settings.position_left
+                assign product = block.settings.product
+              %}
+              <div
+                {{ block.shopify_attributes }}
+                class="swiper-slide {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+                {% if enabled_animations %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {%- render 'product-item' | product: product -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- if carousel_pagination == 'carousel_bullets'
+            or carousel_pagination == 'show_bullet_mobile'
+            or carousel_pagination == 'carousel_pagination_progress'
+          -%}
+            <div
+              class="swiper-pagination {% if carousel_pagination == 'show_bullet_mobile' %} show-on-mobile {% endif %}"
+            ></div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</shop-the-look>
+{% schema %}
+{
+  "name": "t:sections.shop-the-look.name",
+  "disabled_on": {
+    "groups": ["header", "footer", "custom.overlay"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_header.title_header"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_logo",
+      "label": "t:sections.all.section_header.heading_logo"
+    },
+    {
+      "type": "text",
+      "id": "heading_logo_svg",
+      "label": "t:sections.all.section_header.heading_logo_svg"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Shop by lookbook"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop-the-look.Lookbook-settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "lookbook_image",
+      "label": "t:sections.shop-the-look.settings.lookbook_image.label"
+    },
+    {
+      "type": "select",
+      "id": "dot_type",
+      "label": "t:sections.shop-the-look.settings.dot_type.label",
+      "options": [
+        {
+          "value": "icon",
+          "label": "t:sections.shop-the-look.settings.dot_type.options__1.label"
+        },
+        {
+          "value": "number",
+          "label": "t:sections.shop-the-look.settings.dot_type.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "t:sections.shop-the-look.settings.aspect_ratio.label",
+      "default": "1/1",
+      "options": [
+        {
+          "value": "original",
+          "label": "t:sections.shop-the-look.settings.aspect_ratio.options__1.label"
+        },
+        {
+          "value": "16/9",
+          "label": "16:9"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "4/3",
+          "label": "4:3"
+        },
+        {
+          "value": "1/1",
+          "label": "1:1"
+        },
+        {
+          "value": "custom",
+          "label": "t:sections.shop-the-look.settings.aspect_ratio.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "custom_ratio",
+      "label": "t:sections.shop-the-look.settings.custom_ratio.label",
+      "default": "21:9"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop-the-look.Lookbook-action"
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "t:sections.shop-the-look.settings.thumbnail_position.label",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.shop-the-look.settings.thumbnail_position.options__1.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.shop-the-look.settings.thumbnail_position.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop-the-look.Products"
+    },
+    {
+      "type": "range",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "t:sections.shop-the-look.settings.slider_lookbook_items.label",
+      "id": "slider_lookbook_items"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.setting_carousel.carousel_title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "t:sections.all.setting_carousel.show_arrow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "carousel_pagination",
+      "label": "t:sections.all.setting_carousel.carousel_pagination.label",
+      "options": [
+        {
+          "value": "carousel_none",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__none.label"
+        },
+        {
+          "value": "carousel_bullets",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__bullets.label"
+        },
+        {
+          "value": "show_bullet_mobile",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.bullet__mobile.label"
+        },
+        {
+          "value": "carousel_pagination_progress",
+          "label": "t:sections.all.setting_carousel.carousel_pagination.carousel__progress.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "min": 0,
+      "max": 50,
+      "unit": "px",
+      "step": 5,
+      "default": 30,
+      "label": "t:sections.shop-the-look.settings.column_gap.label",
+      "id": "column_gap"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.all.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "t:sections.shop-the-look.blocks.Product.name",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "range",
+          "id": "position_top",
+          "label": "t:sections.shop-the-look.blocks.Product.settings.position_top.label",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "position_left",
+          "label": "t:sections.shop-the-look.blocks.Product.settings.position_left.label",
+          "min": 0,
+          "max": 100,
+          "unit": "%",
+          "step": 1,
+          "default": 50
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.shop-the-look.blocks.Product.settings.product.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shop-the-look.name",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

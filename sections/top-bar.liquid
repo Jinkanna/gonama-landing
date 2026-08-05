@@ -1,0 +1,184 @@
+{%- liquid
+  assign container = section.settings.container
+  assign show_topbar = section.settings.show_topbar
+  assign bg_topbar = section.settings.background_color
+  assign color_topbar = section.settings.text_color
+  assign color_hover_topbar = section.settings.text_hover_color
+  assign show_mobile = section.settings.show_mobile
+  assign show_phone_number = section.settings.show_phone_number
+  assign show_email = section.settings.show_email
+  assign show_social = section.settings.show_social
+  assign show_store_page = section.settings.show_store_page
+  assign show_language = section.settings.show_language
+  assign show_country = section.settings.show_country
+  assign message = section.settings.message
+  assign show_message = section.settings.show_message
+  assign box_alignment = 'justify-content-center'
+  if show_phone_number == blank and show_email == blank and show_social == blank
+    assign box_alignment = 'justify-content-start'
+  elsif show_store_page == blank and show_language == blank and show_country == blank
+    assign box_alignment = 'justify-content-end'
+  endif
+-%}
+{%- if show_topbar -%}
+  <div class="topbar border-bottom color-{{ section.settings.color_scheme }} gradient {% if show_phone_number or show_email or show_social or show_store_page or show_language or show_country or show_message %} {% endif %} {% if show_mobile == blank %}d-none-mb{% endif %}">
+    <div class="topbar__section">
+      <div class="{{ container }} section-full d-flex flex-wrap justify-content-between align-items-center topbar__section-inner">
+        {%- if show_phone_number or show_email or show_social -%}
+          <div class="col-t col-left d-flex flex-wrap">
+            {%- if show_phone_number -%}
+              <a href="tel:{{ settings.store_phone }}" class="items-contact d-flex align-items-center py-5">
+                <span>{{ settings.store_phone }}</span>
+              </a>
+            {%- endif -%}
+            {%- if show_email -%}
+              <a href="mailto:{{ settings.store_email }}" class="items-contact d-flex align-items-center py-5">
+                <span>{{ settings.store_email }}</span>
+              </a>
+            {%- endif -%}
+            {%- if show_social -%}
+              <div class="py-5">
+                {%- render 'social-media-links' -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if show_message -%}
+          <div class="py-5 col-center col-t d-flex align-items-center {{ box_alignment }} {% if show_message and show_phone_number == blank and show_email == blank and show_social == blank and show_store_page == blank and show_language == blank and show_country == blank %}message-center{% endif %}">
+            <div class="topbar-message px-6 align-items-center">{{ message }}</div>
+          </div>
+        {%- endif -%}
+        {%- if show_store_page or show_language or show_country -%}
+          <div class="col-t col-right d-flex align-items-center justify-content-end">
+            {%- if show_store_page and settings.link_store_page and settings.label_location -%}
+              <a
+                href="{{ pages[settings.link_store_page].url | default: '#' }}"
+                aria-label="Link detail"
+                class="py-5"
+              >
+                {%- if settings.label_location != blank -%}
+                  <span>{{ settings.label_location }}</span>
+                {%- else -%}
+                  <span>{{ pages[settings.link_store_page].title }}</span>
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+            {%- liquid
+              if show_country
+                render 'country-switcher'
+              endif
+              if show_language
+                render 'language-switcher'
+              endif
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.top-bar.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.top-bar.content"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_topbar",
+      "label": "t:sections.top-bar.settings.show_topbar.label",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.top-bar.settings.color.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile",
+      "label": "t:sections.top-bar.settings.show_mobile.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.top-bar.Addons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone_number",
+      "label": "t:sections.top-bar.settings.show_phone_number.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "t:sections.top-bar.settings.show_email.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "t:sections.top-bar.settings.show_social.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "t:sections.top-bar.settings.show_country.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language",
+      "label": "t:sections.top-bar.settings.show_language.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_store_page",
+      "label": "t:sections.top-bar.settings.show_store_page.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_message",
+      "label": "t:sections.top-bar.settings.show_message.label",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "message",
+      "label": "t:sections.top-bar.settings.message.label",
+      "default": "<p></p>"
+    }
+  ]
+}
+{% endschema %}

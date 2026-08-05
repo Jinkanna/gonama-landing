@@ -1,0 +1,262 @@
+{{ 'product.css' | asset_url | stylesheet_tag }}
+{{ 'page-heading.css' | asset_url | stylesheet_tag }}
+{{ 'collection.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign th_st = settings
+  assign product_style = th_st.product_style
+  assign st = section.settings
+  assign results_per_page = st.results_per_page
+  assign sidebar_ps =  st.sidebar_position
+  assign enable_sidebar = st.enable_filtering
+  assign item_desktop = st.results_per_row
+-%}
+{%- paginate search.results by results_per_page -%}
+  <section class="page-heading not-bg">
+    <div class="{{ section.settings.container }} section-full">
+      <div class="page-head text-center">
+        {% if search.performed %}
+          <h1 class="heading-title search-result">
+            {{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+          </h1>
+        {% else %}
+          <h3 class="">{{ 'general.search.title' | t }}</h3>
+        {% endif %}
+        {%- if th_st.enable_search_input -%}
+          <form
+            action="{{ routes.search_url }}"
+            method="GET"
+            novalidate
+            class="search-modal__form col-md-8 mx-auto mt-30"
+          >
+            <div class="field">
+              <input
+                type="text"
+                placeholder="{{ 'general.search.search' | t }}"
+                name="q"
+                value="{{ search.terms | escape }}"
+                required
+                maxlength="128"
+                role="combobox"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-autocomplete="list"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                class="search__input"
+              >
+              <input
+                type="hidden"
+                name="options[unavailable_products]"
+                value="show"
+              >
+              <input
+                type="hidden"
+                name="options[prefix]"
+                value="last"
+              >
+              <input
+                type="hidden"
+                name="type"
+                value="{% if settings.search_for == 'search_for_all' %}all{% else %}product{% endif %}"
+              >
+              <input
+                type="hidden"
+                name="options[fields]"
+                value="title,vendor,product_type,variants.title"
+              >
+              <button type="submit" class="search__button field__button">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M11.9 11.731C11.8 11.731 11.8 11.731 11.9 11.731C11.8 11.8304 11.8 11.8304 11.8 11.8304C11.3 12.3275 10.7 12.7251 9.9 13.0234C9.2 13.3216 8.4 13.4211 7.6 13.4211C6.8 13.4211 6 13.2222 5.3 12.924C4.6 12.6257 4 12.2281 3.4 11.6316C2.9 11.1345 2.4 10.4386 2.1 9.74269C1.8 9.1462 1.7 8.45029 1.7 7.65497C1.7 6.85965 1.9 6.06433 2.2 5.36842C2.5 4.5731 2.9 3.97661 3.4 3.38012C4 2.88304 4.6 2.48538 5.3 2.18713C6 1.88889 6.8 1.69006 7.6 1.69006C8.4 1.69006 9.2 1.88889 9.9 2.18713C10.6 2.48538 11.3 2.88304 11.8 3.47953C12.3 3.97661 12.7 4.67251 13.1 5.36842C13.4 6.06433 13.6 6.76023 13.6 7.65497C13.6 8.45029 13.4 9.24561 13.1 9.94152C12.8 10.538 12.4 11.1345 11.9 11.731ZM16.7 15.4094L13.6 12.3275C14.1 11.6316 14.5 10.9357 14.8 10.1404C15.1 9.34503 15.2 8.45029 15.2 7.55556C15.2 6.46199 15 5.46784 14.6 4.5731C14.2 3.67836 13.7 2.88304 13 2.18713C12.3 1.49123 11.5 0.994152 10.6 0.596491C9.7 0.19883 8.7 0 7.6 0C6.6 0 5.6 0.19883 4.6 0.596491C3.7 0.994152 2.9 1.49123 2.2 2.18713C1.5 2.88304 1 3.67836 0.6 4.67251C0.2 5.56725 0 6.5614 0 7.65497C0 8.64912 0.2 9.64327 0.6 10.6374C1 11.5322 1.6 12.3275 2.3 13.0234C3 13.7193 3.8 14.2164 4.7 14.7134C5.6 15.0117 6.6 15.2105 7.6 15.2105C8.5 15.2105 9.4 15.1111 10.2 14.8129C11 14.5146 11.8 14.117 12.4 13.6199L15.5 16.7018C15.7 16.9006 15.9 17 16.1 17C16.3 17 16.5 16.9006 16.7 16.7018C16.9 16.5029 17 16.3041 17 16.1053C17 15.807 16.9 15.6082 16.7 15.4094Z" fill="#111111" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+  <section
+    class="facest-filters-section section-collection-product"
+    data-section-type="page-search"
+    data-section-id="{{ section.id }}"
+    data-view="{{ template.name }}"
+  >
+    <div class="{{ section.settings.container }} bls__search-page-main ">
+      <div id="productgridcontainer" class="row {% if sidebar_ps == 'right_sidebar' and enable_sidebar %}flex-row-reverse{% endif %}">
+        {% if search.results_count != 0 %}
+          {% if enable_sidebar %}
+            {%- liquid
+              render 'search-toolbar' | st: st, enable_sidebar: enable_sidebar, sidebar_ps: sidebar_ps
+            -%}
+            {%- render 'search-filter-current' -%}
+            {%- render 'search-sidebar' | sidebar_ps: sidebar_ps, enable_sidebar: enable_sidebar, st: st -%}
+          {% endif %}
+        {% endif %}
+        <div class="main-result-search flex-1">
+          {% if search.performed %}
+            <div style="--bs-gutter-x: 30px" class="row row-cols-xl-{{ item_desktop }} bls__grid {{ product_style }}">
+              {% if search.results_count != 0 %}
+                {%- for item in search.results limit: results_per_page -%}
+                  {% case item.object_type %}
+                    {%- when 'product' -%}
+                      <div class="bls__product-load">
+                        {%- render 'product-item' | product: item -%}
+                      </div>
+                    {%- when 'article' -%}
+                        <div class="bls__product-load">
+                          {%- render 'article-card',
+                            article: item,
+                            show_category: false,
+                            show_date: false,
+                            show_excerpt: false,
+                            show_readmore: false,
+                            show_author: false,
+                            post_content_center: false
+                          -%}
+                        </div>
+                    {%- when 'page' -%}
+                        <div class="bls__product-load">
+                          <div class="card mb-40">
+                            <div class="card__content">
+                              <div class="card__information">
+                                <h4 class="card__heading mb-5 fs-18">
+                                  <a href="{{ item.url }}">
+                                    {{ item.title | escape }}
+                                  </a>
+                                </h4>
+                              </div>
+                              <div class="card__badge">
+                                <span>{{ 'templates.search.page' | t }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                  {% endcase %}
+                {%- endfor -%}
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if paginate.pages > 1 %}
+            <div class="mt-30">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-search.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.main-search.content"
+    },
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "t:sections.main-search.settings.results_per_page.label",
+      "default": 4,
+      "min": 1,
+      "max": 50,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "results_per_row",
+      "label": "t:sections.main-search.settings.columns_desktop.label",
+      "default": 4,
+      "min": 1,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-search.settings.filter.name"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "t:sections.main-search.settings.filter.settings.enable_filter"
+    },
+    {
+      "type": "select",
+      "id": "sidebar_position",
+      "label": "t:sections.main-search.settings.filter.settings.position.name",
+      "default": "left_sidebar",
+      "options": [
+        {
+          "value": "left_sidebar",
+          "label": "t:sections.main-search.settings.filter.settings.position.options__1"
+        },
+        {
+          "value": "right_sidebar",
+          "label": "t:sections.main-search.settings.filter.settings.position.options__2"
+        },
+        {
+          "value": "dropdonw_sidebar",
+          "label": "t:sections.main-search.settings.filter.settings.position.options__3"
+        },
+        {
+          "value": "filter_canvas",
+          "label": "t:sections.main-search.settings.filter.settings.position.options__4"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "t:sections.main-search.settings.filter.settings.show_count"
+    },
+    {
+      "type":"header",
+      "content": "t:sections.main-search.settings.toolbar.name"
+    },
+    {
+      "type": "checkbox",
+      "id": "number_products_per_page",
+      "label": "t:sections.main-search.settings.toolbar.settings.enable_number_product"
+    },
+    {
+      "type": "checkbox",
+      "id": "sorting",
+      "label": "t:sections.main-search.settings.toolbar.settings.enable_sort"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,372 @@
+{{ 'faqs.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign st = section.settings
+  assign container = st.container
+  assign heading_help = st.heading_help
+  assign show_number = st.show_number
+  assign text = st.text
+  assign icon_1 = st.icon_1
+  assign icon_2 = st.icon_2
+  assign label_1 = st.label_1
+  assign label_2 = st.label_2
+  assign link_1 = st.link_1
+  assign link_2 = st.link_2
+  assign show_button_1 = st.show_button_1
+  assign show_button_2 = st.show_button_2
+-%}
+<section class="bls__section bls__faqs-page mt-lg-30">
+  <div class="{{ container }} section-full">
+    <div class="bls__faqs-content row" style="--bls-gutter-x: 5rem;">
+      <div class="col-lg-4">
+        <h3 class=" mb-20">{{ heading_help }}</h3>
+        {{ text }}
+        {%- if show_button_1 == true or show_button_2 == true -%}
+          <div class="btn-faqs">
+        {%- endif -%}
+        {%- if show_button_1 == true -%}
+          <a href="{{ link_1 }}" class="btn btn-faq btn-secondary w-full mb-10 text-center mt-10">
+            {{ icon_1 }}
+            {{ label_1 }}
+          </a>
+        {%- endif -%}
+        {%- if show_button_2 == true -%}
+          <a href="{{ link_2 }}" class="btn btn-faq btn-secondary w-full text-center">
+            {{ icon_2 }}
+            {{ label_2 }}
+          </a>
+        {%- endif -%}
+        {%- if show_button_1 == true or show_button_2 == true -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="col-lg-8 bls__faqs-right relative mb-0-important">
+        {%- for block in section.blocks -%}
+          <div id="{{ block.id }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.faq_title != blank -%}
+              <h3 class=" mb-10">{{ block.settings.faq_title }}</h3>
+            {%- endif -%}
+            {%- for i in (1..10) -%}
+              {%- liquid
+                assign question_ = 'question_' | append: i
+                assign question = block.settings[question_]
+                assign answer_ = 'answer_' | append: i
+                assign answer = block.settings[answer_]
+              -%}
+              {%- if question != blank and answer != blank -%}
+                <div class="bls__page-faq-items bls-toggle relative">
+                  <h4 class="bls__page-faq-title fs-18 fw-500 border-bottom py-20 mb-0 pointer">
+                    {% if show_number == true %}
+                      {{ i }}.
+                    {%- endif %}
+                    {{ question }}
+                    <span class="open-children-toggle d-block-important"></span>
+                  </h4>
+                  <div class="bls__page-faq-content py-20 overflow-hidden">
+                    {{ answer }}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {%- for block in section.blocks -%}
+        {%- for i in (1..10) -%}
+          {%- assign question_ = 'question_' | append: i -%}
+          {%- assign question = block.settings[question_] -%}
+          {%- assign answer_ = 'answer_' | append: i -%}
+          {%- assign answer = block.settings[answer_] -%}
+          {%- if answer != blank or question != blank -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+            {
+              "@type": "Question",
+              "name": "{{ question }}",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ answer | replace: '<p>', '' | replace: '</p>', '' }}"
+              }
+            }
+          {%- endif -%}
+        {%- endfor -%}
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+{% schema %}
+{
+  "name": "t:sections.Faqs-page.name",
+  "disabled_on": {
+    "groups": ["custom.overlay", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_number",
+      "label": "t:sections.Faqs-page.settings.show_number.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.Faqs-page.settings.header.Faqs-message"
+    },
+    {
+      "type": "text",
+      "id": "heading_help",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Need Help?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.Faqs-page.settings.text.label",
+      "default": "<p>If you have an issue or question that requires immediate assistance, you can click the button below to chat live with a Customer Service representative.</p><p>Please allow 06 - 12 business days from the time your package arrives back to us for a refund to be issued.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_1",
+      "label": "t:sections.Faqs-page.settings.show_button_1.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "icon_1",
+      "label": "t:sections.Faqs-page.settings.icon_1.label",
+      "info": "t:sections.Faqs-page.settings.icon_1.info",
+      "default": "<svg width=\"21\" height=\"20\" viewBox=\"0 0 21 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"> <path d=\"M15.8922 14.0249L16.2172 16.6582C16.3005 17.3498 15.5589 17.8331 14.9672 17.4748L11.4755 15.3998C11.0922 15.3998 10.7172 15.3748 10.3505 15.3248C10.9672 14.5998 11.3339 13.6832 11.3339 12.6915C11.3339 10.3248 9.28386 8.40819 6.75052 8.40819C5.78386 8.40819 4.89219 8.68317 4.15053 9.1665C4.12553 8.95817 4.11719 8.74983 4.11719 8.53316C4.11719 4.7415 7.40886 1.6665 11.4755 1.6665C15.5422 1.6665 18.8339 4.7415 18.8339 8.53316C18.8339 10.7832 17.6755 12.7749 15.8922 14.0249Z\" stroke=\"#111111\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/> <path d=\"M11.3307 12.6915C11.3307 13.6832 10.9641 14.5999 10.3474 15.3249C9.5224 16.3249 8.21406 16.9665 6.7474 16.9665L4.5724 18.2582C4.20573 18.4832 3.73906 18.1748 3.78906 17.7498L3.99739 16.1082C2.88073 15.3332 2.16406 14.0915 2.16406 12.6915C2.16406 11.2248 2.9474 9.93318 4.1474 9.16651C4.88907 8.68318 5.78073 8.4082 6.7474 8.4082C9.28073 8.4082 11.3307 10.3248 11.3307 12.6915Z\" stroke=\"#111111\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/> </svg>"
+    },
+    {
+      "type": "text",
+      "id": "label_1",
+      "label": "t:sections.Faqs-page.settings.label_1.label",
+      "default": "Message Us"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "t:sections.Faqs-page.settings.link_1.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_2",
+      "label": "t:sections.Faqs-page.settings.show_button_2.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "icon_2",
+      "label": "t:sections.Faqs-page.settings.icon_2.label",
+      "info": "t:sections.Faqs-page.settings.icon_2.info",
+      "default": "<svg width=\"19\" height=\"16\" viewBox=\"0 0 19 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"> <path d=\"M9.4974 15.0832H5.33073C2.83073 15.0832 1.16406 13.8332 1.16406 10.9165V5.08317C1.16406 2.1665 2.83073 0.916504 5.33073 0.916504H13.6641C16.1641 0.916504 17.8307 2.1665 17.8307 5.08317V7.58317\" stroke=\"#111111\" stroke-width=\"1.4\" stroke-miterlimit=\"10\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/> </svg>"
+    },
+    {
+      "type": "text",
+      "id": "label_2",
+      "label": "t:sections.Faqs-page.settings.label_2.label",
+      "default": "Contact Us"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "t:sections.Faqs-page.settings.link_2.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "t:sections.Faqs-page.blocks.faq.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "faq_title",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.faq_title.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-1"
+        },
+        {
+          "type": "text",
+          "id": "question_1",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_1.label",
+          "default": "Frequently Asked Questions?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_1",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_1.label",
+          "default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-2"
+        },
+        {
+          "type": "text",
+          "id": "question_2",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_2.label",
+          "default": "Frequently Asked Questions?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_2",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_2.label",
+          "default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-3"
+        },
+        {
+          "type": "text",
+          "id": "question_3",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_3.label",
+          "default": "Frequently Asked Questions?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_3",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_3.label",
+          "default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-4"
+        },
+        {
+          "type": "text",
+          "id": "question_4",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_4.label",
+          "default": "Frequently Asked Questions?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_4",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_4.label",
+          "default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-5"
+        },
+        {
+          "type": "text",
+          "id": "question_5",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_5.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_5",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_5.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-6"
+        },
+        {
+          "type": "text",
+          "id": "question_6",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_6.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_6",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_6.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-7"
+        },
+        {
+          "type": "text",
+          "id": "question_7",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_7.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_7",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_7.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-8"
+        },
+        {
+          "type": "text",
+          "id": "question_8",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_8.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_8",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_8.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-9"
+        },
+        {
+          "type": "text",
+          "id": "question_9",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_9.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_9",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_9.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.Faqs-page.blocks.faq.settings.header.Question-10"
+        },
+        {
+          "type": "text",
+          "id": "question_10",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.question_10.label"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_10",
+          "label": "t:sections.Faqs-page.blocks.faq.settings.answer_10.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

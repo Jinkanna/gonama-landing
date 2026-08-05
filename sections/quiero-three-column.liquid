@@ -1,0 +1,85 @@
+{% schema %}
+{
+  "name": "Quiero Three Column",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "Link for Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Link for Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "url",
+      "id": "link_3",
+      "label": "Link for Image 3"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="three-column-layout">
+  <div class="column">
+    <a href="{{ section.settings.link_1 }}">
+      <img
+        src="{{ section.settings.image_1 | image_url: 'medium' }}"
+        alt="Image 1"
+        width="{{ section.settings.image_1 | default: '500' }}"
+        height="{{ section.settings.image_1 | default: '500' }}"
+      >
+    </a>
+  </div>
+  <div class="column">
+    <a href="{{ section.settings.link_2 }}">
+      <img
+        src="{{ section.settings.image_2 | image_url: 'medium' }}"
+        alt="Image 2"
+        width="{{ section.settings.image_2 | default: '500' }}"
+        height="{{ section.settings.image_2 | default: '500' }}"
+      >
+    </a>
+  </div>
+  <div class="column">
+    <a href="{{ section.settings.link_3 }}">
+      <img
+        src="{{ section.settings.image_3 | image_url: 'medium' }}"
+        alt="Image 3"
+        width="{{ section.settings.image_3 | default: '500' }}"
+        height="{{ section.settings.image_3 | default: '500' }}"
+      >
+    </a>
+  </div>
+</div>
+
+<style>
+  .three-column-layout {
+    display: flex;
+    justify-content: space-between;
+  }
+  .three-column-layout .column {
+    flex: 1;
+    padding: 10px;
+  }
+  .three-column-layout .column img {
+    width: 100%;
+    height: auto;
+  }
+</style>

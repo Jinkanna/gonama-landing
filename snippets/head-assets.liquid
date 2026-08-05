@@ -1,0 +1,380 @@
+{%- liquid
+  assign font_source_body = settings.font_source_body
+  assign font_source_heading = settings.font_source_heading
+  assign font_source_menu = settings.font_source_menu
+
+  assign enable_rtl = settings.rtl
+  assign iso_code = request.locale.iso_code
+  assign lis_language_rtl = settings.language_rtl
+  if lis_language_rtl != blank
+    if lis_language_rtl contains iso_code
+      assign enable_rtl = true
+    else
+      assign enable_rtl = false
+    endif
+  endif
+-%}
+{%- if font_source_body == '1' -%}
+  {%- liquid
+    assign fnt_body_sp = settings.fnt_body_sp
+  -%}
+  {%- unless fnt_body_sp.system? -%}
+    <link rel="preload" as="font" href="{{ fnt_body_sp | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- liquid
+    assign fm_body_sp = fnt_body_sp.family
+  -%}
+
+  {%- capture fnt_fm_body -%}{{ fm_body_sp }}, {{ fnt_body_sp.fallback_families }};{%- endcapture -%}
+  {%- style -%}
+    {%- for variant in fnt_body_sp.variants -%}{{ variant | font_face: font_display: 'swap' }}{%- endfor -%}
+  {%- endstyle -%}
+
+{%- elsif font_source_body == '2' -%}
+  {%- liquid
+    assign fnt_body_gg = settings.fnt_body_gg
+  -%}
+  {%- capture font_var -%}
+    {{ fnt_body_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+  {%- endcapture -%}
+
+  {% # theme-check-disable RemoteAsset %}
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family={{ font_var }}&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+  {% # theme-check-enable RemoteAsset %}
+  {%- liquid
+    assign fnt_fm_body = fnt_body_gg
+  -%}
+{%- else -%}
+  {%- liquid
+    assign fnt_fm_body = settings.fnt_body_custom
+  -%}
+  {{ 'define-custom-font-body.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if font_source_heading == '1' -%}
+  {%- liquid
+    assign fnt_heading_sp = settings.fnt_headings_sp
+  -%}
+  {%- unless fnt_heading_sp.system? -%}
+    <link rel="preload" as="font" href="{{ fnt_heading_sp | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- liquid
+    assign fm_heading_sp = fnt_heading_sp.family
+  -%}
+
+  {%- capture fnt_fm_headings -%}{{ fm_heading_sp }}, {{ fnt_heading_sp.fallback_families }};{%- endcapture -%}
+  {%- style -%}
+    {%- for variant in fnt_heading_sp.variants -%}{{ variant | font_face: font_display: 'swap' }}{%- endfor -%}
+  {%- endstyle -%}
+
+{%- elsif font_source_heading == '2' -%}
+  {%- liquid
+    assign fnt_heading_gg = settings.fnt_headings_gg
+  -%}
+  {%- capture font_var -%}
+    {{ fnt_heading_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+  {%- endcapture -%}
+
+  {% # theme-check-disable RemoteAsset %}
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family={{ font_var }}&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+  {% # theme-check-enable RemoteAsset %}
+  {%- liquid
+    assign fnt_fm_headings = fnt_heading_gg
+  -%}
+{%- else -%}
+  {%- liquid
+    assign fnt_fm_headings = settings.fnt_headings_custom
+  -%}
+  {{ 'define-custom-font-headings.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if font_source_menu == '1' -%}
+  {%- liquid
+    assign fnt_menu_sp = settings.fnt_menu_sp
+  -%}
+  {%- unless fnt_menu_sp.system? -%}
+    <link rel="preload" as="font" href="{{ fnt_menu_sp | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- liquid
+    assign fm_menu_sp = fnt_menu_sp.family
+  -%}
+
+  {%- capture fnt_fm_menu -%}{{ fm_menu_sp }}, {{ fnt_menu_sp.fallback_families }};{%- endcapture -%}
+  {%- style -%}
+    {%- for variant in fnt_menu_sp.variants -%}{{ variant | font_face: font_display: 'swap' }}{%- endfor -%}
+  {%- endstyle -%}
+
+{%- elsif font_source_menu == '2' -%}
+  {%- liquid
+    assign fnt_menu_gg = settings.fnt_menu_gg
+  -%}
+  {%- capture font_var -%}
+    {{ fnt_menu_gg | strip | replace: ' ', '+' }}:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i
+  {%- endcapture -%}
+
+  {% # theme-check-disable RemoteAsset %}
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family={{ font_var }}&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+  {% # theme-check-enable RemoteAsset %}
+  {%- liquid
+    assign fnt_fm_menu = fnt_menu_gg
+  -%}
+{%- else -%}
+  {%- liquid
+    assign fnt_fm_menu = settings.fnt_menu_custom
+  -%}
+  {{ 'define-custom-font-menu.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- style -%}
+  {% for scheme in settings.color_schemes -%}
+    {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
+  {% if forloop.index == 1 -%}
+    :root,
+  {%- endif %}
+  .color-{{ scheme.id }}:not(.reset-color-on-menu,.reset-color-on-mb) {
+    {% if scheme.settings.background_gradient != empty %}
+      --gradient-background: {{ scheme.settings.background_gradient }};
+    {% else %}
+      --gradient-background: {{ scheme.settings.body_bg_color }};
+    {% endif %}
+    --base-color : {{ scheme.settings.text_color.red }},{{ scheme.settings.text_color.green }},{{ scheme.settings.text_color.blue }};
+    --base-body-bg-color : {{ scheme.settings.body_bg_color }};
+    --border-color-base : {{ scheme.settings.border_color }};
+    --heading-color : {{ scheme.settings.heading_color }};
+    --primary-color: {{ scheme.settings.primary_color }};
+    --color-link : {{ scheme.settings.link_color }};
+    --color-link-hover : {{ scheme.settings.link_hover_color }};
+    --btn-primary-bg : {{ scheme.settings.button_primary_background_color }};
+    --btn-primary-color : {{ scheme.settings.button_primary_color }};
+    --btn-primary-color-hover : {{ scheme.settings.button_primary_hover_color }};
+    --btn-primary-bg-hover : {{ scheme.settings.button_primary_hover_background_color }};
+    --btn-secondary-color : {{ scheme.settings.button_secondary_color }};
+    --btn-secondary-border-color : {{ scheme.settings.button_secondary_border_color }};
+    --btn-secondary-bg : {{ scheme.settings.button_secondary_background_color }};
+    --btn-secondary-color-hover : {{ scheme.settings.button_secondary_hover_color }};
+    --btn-secondary-bg-hover : {{ scheme.settings.button_secondary_hover_background_color }};
+    --btn-link-color : {{ scheme.settings.button_link_color }};
+    --btn-link-color-hover : {{ scheme.settings.button_link_hover_color }};
+    --footer-background-color: {{ scheme.settings.body_bg_color }};
+    --footer-heading-color : {{ scheme.settings.heading_color }};
+    --footer-text-color: {{ scheme.settings.text_color }};
+    --footer-link-color : {{ scheme.settings.link_color }};
+    --footer-link-hover-color : {{ scheme.settings.link_hover_color }};
+    --footer-bottom-background--color : {{ scheme.settings.footer_bottom_background_color }};
+
+    --header-bg : {{ scheme.settings.body_bg_color }};
+    --header-color : {{ scheme.settings.heading_color }};
+    --header_border_color:  {{ scheme.settings.border_color }};
+    --menu-color : {{ scheme.settings.heading_color }};
+    --submenu-color : {{ scheme.settings.text_color }};
+    --submenu-hover-color : {{ scheme.settings.link_hover_color }};
+
+    --grey-color: rgba(var(--base-color));
+    --input-border-color: var(--border-color-base);
+    --input-placeholder-color: rgb(var(--base-color));
+
+  }
+  @media (min-width: 768px) {
+    .color-{{ scheme.id }}.reset-color-on-mb{
+
+      {% if scheme.settings.background_gradient != empty %}
+      --gradient-background: {{ scheme.settings.background_gradient }};
+      {% else %}
+        --gradient-background: {{ scheme.settings.body_bg_color }};
+      {% endif %}
+      --base-color : {{ scheme.settings.text_color.red }},{{ scheme.settings.text_color.green }},{{ scheme.settings.text_color.blue }};
+      --base-body-bg-color : {{ scheme.settings.body_bg_color }};
+      --border-color-base : {{ scheme.settings.border_color }};
+      --heading-color : {{ scheme.settings.heading_color }};
+      --primary-color: {{ scheme.settings.primary_color }};
+      --color-link : {{ scheme.settings.link_color }};
+      --color-link-hover : {{ scheme.settings.link_hover_color }};
+      --btn-primary-bg : {{ scheme.settings.button_primary_background_color }};
+      --btn-primary-color : {{ scheme.settings.button_primary_color }};
+      --btn-primary-color-hover : {{ scheme.settings.button_primary_hover_color }};
+      --btn-primary-bg-hover : {{ scheme.settings.button_primary_hover_background_color }};
+      --btn-secondary-color : {{ scheme.settings.button_secondary_color }};
+      --btn-secondary-border-color : {{ scheme.settings.button_secondary_border_color }};
+      --btn-secondary-bg : {{ scheme.settings.button_secondary_background_color }};
+      --btn-secondary-color-hover : {{ scheme.settings.button_secondary_hover_color }};
+      --btn-secondary-bg-hover : {{ scheme.settings.button_secondary_hover_background_color }};
+      --btn-link-color : {{ scheme.settings.button_link_color }};
+      --btn-link-color-hover : {{ scheme.settings.button_link_hover_color }};
+
+      --footer-background-color: {{ scheme.settings.body_bg_color }};
+      --footer-heading-color : {{ scheme.settings.heading_color }};
+      --footer-text-color: {{ scheme.settings.text_color }};
+      --footer-link-color : {{ scheme.settings.link_color }};
+      --footer-link-hover-color : {{ scheme.settings.link_hover_color }};
+      --footer-bottom-background--color : {{ scheme.settings.footer_bottom_background_color }};
+
+      --header-bg : {{ scheme.settings.body_bg_color }};
+      --header-color : {{ scheme.settings.heading_color }};
+      --header_border_color:  {{ scheme.settings.border_color }};
+      --menu-color : {{ scheme.settings.heading_color }};
+      --submenu-color : {{ scheme.settings.text_color }};
+      --submenu-hover-color : {{ scheme.settings.link_hover_color }};
+
+      --grey-color: rgba(var(--base-color));
+      --input-border-color: var(--border-color-base);
+      --input-placeholder-color: rgb(var(--base-color));
+    }
+  }
+  @media (min-width: 1025px) {
+    .color-{{ scheme.id }}.reset-color-on-menu{
+
+      {% if scheme.settings.background_gradient != empty %}
+      --gradient-background: {{ scheme.settings.background_gradient }};
+      {% else %}
+        --gradient-background: {{ scheme.settings.body_bg_color }};
+      {% endif %}
+      --base-color : {{ scheme.settings.text_color.red }},{{ scheme.settings.text_color.green }},{{ scheme.settings.text_color.blue }};
+      --base-body-bg-color : {{ scheme.settings.body_bg_color }};
+      --border-color-base : {{ scheme.settings.border_color }};
+      --heading-color : {{ scheme.settings.heading_color }};
+      --primary-color: {{ scheme.settings.primary_color }};
+      --color-link : {{ scheme.settings.link_color }};
+      --color-link-hover : {{ scheme.settings.link_hover_color }};
+      --btn-primary-bg : {{ scheme.settings.button_primary_background_color }};
+      --btn-primary-color : {{ scheme.settings.button_primary_color }};
+      --btn-primary-color-hover : {{ scheme.settings.button_primary_hover_color }};
+      --btn-primary-bg-hover : {{ scheme.settings.button_primary_hover_background_color }};
+      --btn-secondary-color : {{ scheme.settings.button_secondary_color }};
+      --btn-secondary-border-color : {{ scheme.settings.button_secondary_border_color }};
+      --btn-secondary-bg : {{ scheme.settings.button_secondary_background_color }};
+      --btn-secondary-color-hover : {{ scheme.settings.button_secondary_hover_color }};
+      --btn-secondary-bg-hover : {{ scheme.settings.button_secondary_hover_background_color }};
+      --btn-link-color : {{ scheme.settings.button_link_color }};
+      --btn-link-color-hover : {{ scheme.settings.button_link_hover_color }};
+
+      --footer-background-color: {{ scheme.settings.body_bg_color }};
+      --footer-heading-color : {{ scheme.settings.heading_color }};
+      --footer-text-color: {{ scheme.settings.text_color }};
+      --footer-link-color : {{ scheme.settings.link_color }};
+      --footer-link-hover-color : {{ scheme.settings.link_hover_color }};
+      --footer-bottom-background--color : {{ scheme.settings.footer_bottom_background_color }};
+
+      --header-bg : {{ scheme.settings.body_bg_color }};
+      --header-color : {{ scheme.settings.heading_color }};
+      --header_border_color:  {{ scheme.settings.border_color }};
+      --menu-color : {{ scheme.settings.heading_color }};
+      --submenu-color : {{ scheme.settings.text_color }};
+      --submenu-hover-color : {{ scheme.settings.link_hover_color }};
+
+      --grey-color: rgba(var(--base-color));
+      --input-border-color: var(--border-color-base);
+      --input-placeholder-color: rgb(var(--base-color));
+    }
+  }
+  {% endfor %}
+  {{ scheme_classes | prepend: 'body' }} {
+    color: rgb(var(--base-color));
+    background: rgb(var(--base-body-bg-color));
+  }
+  :root {
+    --base-font-family : {{ fnt_fm_body }};
+    --base-font-size : {{ settings.bd_font_size }}px;
+    --base-font-weight : {{ settings.bd_font_weight }};
+    --base-border-radius : {{ settings.base_radius }}px;
+
+    --heading-font-family : {{ fnt_fm_headings }};
+    --heading-font-weight : {{ settings.sub_headings_font_weight }};
+    --heading-letter-spacing : {{ settings.headings_letter_spacing }}px;
+    --heading-uppercase : {% if settings.headings_uppercase %} uppercase {% else %} none {% endif %};
+    --font-h1: {{ settings.headings_font_size_h1 }}px;
+    --font-h2: {{ settings.headings_font_size_h2 }}px;
+    --font-h3: {{ settings.headings_font_size_h3 }}px;
+    --font-h4: {{ settings.headings_font_size_h4 }}px;
+    --bls__section-heading-weight: {{ settings.headings_font_weight }};
+
+    --navigation-font-family : {{ fnt_fm_menu }};
+    --navigation-font-size : {{ settings.menu_font_size }}px;
+    --navigation-font-weight : {{ settings.menu_font_weight }};
+    --navigation-letter-spacing : {{ settings.menu_letter_spacing }}px;
+    --navigation-uppercase : {% if settings.menu_uppercase %} uppercase {% else %} none {% endif %};
+    --color-title-mobile : {{ settings.color_title_mobile }};
+    --bg-title-mobile : {{ settings.bg_title_mobile }};
+
+    --btn-font-size : {{ settings.button_font_size }}px;
+    --btn-font-weight : {{ settings.button_font_weight }};
+    --btn-letter-spacing : {{ settings.button_letter_spacing }}px;
+    --btn-border-radius : {{ settings.button_border_radius }}px;
+    --btn-uppercase : {% if settings.button_uppercase %} uppercase {% else %} none {% endif %};
+    --color-product-reviews : {{ settings.color_product_reviews }};
+    --bls__product-price-size : {{ settings.price_font_size }}px;
+    --bls__product-price-color : {{ settings.price_color }};
+    --bls__product-price-weight : {{ settings.price_font_weight }};
+    --bls__product-price-sale-color : {{ settings.compare_price_color }};
+    --bls__product-price-sale-weight : {{ settings.compare_price_font_weight }};
+    --bls__product-price-sale-size : {{ settings.compare_price_font_size }}px;
+
+    --bls__product-color-sale-label : {{ settings.color_sale_label }};
+    --bls__product-bg-sale-label : {{ settings.bg_sale_label }};
+    --bls__product-color-pre-order-label : {{ settings.color_pre_order_label }};
+    --bls__product-bg-pre-order-label : {{ settings.bg_pre_order_label }};
+    --bls__product-color-sold-out-label : {{ settings.color_sold_out_label }};
+    --bls__product-bg-sold-out-label : {{ settings.bg_sold_out_label }};
+    --bls__product-color-custom-label : {{ settings.color_custom_label }};
+    --bls__product-bg-custom-label : {{ settings.bg_custom_label }};
+    
+    --body-custom-width-container: {% if settings.general_layout == 'default' %}1260px{% elsif settings.general_layout == 'fluid_container' %}{{ settings.container-fluil-max-width }}px{% elsif settings.general_layout == 'full_width' %}100%{% else %}{{ settings.custom_width_bd }}px{%- endif -%};
+    --bls-container-fluid-width: {{ settings.container-fluil-max-width }}px;
+
+    --space_between_section: {{ settings.space_for_mobile }}px;
+    --bls__product-details-align: {%- if settings.content_center -%}center{% else %} {%- if enable_rtl -%}right{% else %}left{%- endif -%}{%- endif -%};
+    --header-transparent-color: {{ settings.header_color_transparent }}
+  }
+  @media (min-width: 768px) {
+    :root{
+      --space_between_section: {{ settings.space_for_tablet }}px;
+    }
+  }
+  @media (min-width: 1200px) {
+    :root{
+      --space_between_section: {{ settings.space_for_desktop }}px;
+    }
+  }
+  {% if settings.enable_loading_img and settings.loading_img != blank %}
+    html.js .bls-loading-image:before{
+      background-image: url({{ settings.loading_img | image_url: width: 100, height: 100 }});
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 80px;
+    }
+  {% endif %}
+{%- endstyle -%}
+{{ 'critical.min.css' | asset_url | stylesheet_tag }}
+{%- if enable_rtl -%}
+  {{- 'bootstrap-grid.rtl.css' | asset_url | stylesheet_tag -}}
+  {{ 'utilities-rtl.css' | asset_url | stylesheet_tag }}
+{%- else -%}
+  {{- 'bootstrap-grid.css' | asset_url | stylesheet_tag -}}
+  {{ 'utilities.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{{ 'animations.css' | asset_url | stylesheet_tag }}
+{{ 'reset.css' | asset_url | stylesheet_tag }}
+{{ 'vendor.css' | asset_url | stylesheet_tag }}
+{{ 'base.css' | asset_url | stylesheet_tag }}
+{{ 'judgeme-reviews.css' | asset_url | stylesheet_tag }}
+{%- if enable_rtl -%}
+  {{ 'rtl.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'shopify.js' | asset_url }}" defer="defer"></script>

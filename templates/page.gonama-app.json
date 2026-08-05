@@ -1,0 +1,336 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "custom_html_NJWjNp": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-016388e0-a424-4e06-b4d5-8a29b428336d",
+        "content_html": "<div class=\"bannerApp\">\n  <img src=\"https://cdn.shopify.com/s/files/1/0929/1310/7232/files/WhatsApp_Image_2025-09-26_at_19.58.48.jpg?v=1759154789\" alt=\"\" style=\"max-width: 100%; height: auto;\">\n</div>",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "custom_text_TYRGya": {
+      "type": "custom-text",
+      "blocks": {
+        "sub_heading_dNKxjW": {
+          "type": "sub_heading",
+          "settings": {
+            "sub_heading": "",
+            "sub_fs": 12,
+            "sub_fw": "default",
+            "sub_tf": "unset",
+            "sub_mt": 0,
+            "sub_mb": 0
+          }
+        },
+        "desc_xpe3wQ": {
+          "type": "desc",
+          "settings": {
+            "desc": "<p>El carrito de compras optimizado para vender más en Shopify. Acepta descuentos de bancos, reduce comisiones con Plexo y personaliza tus entregas. <br/><strong>**Todo para tu tienda en Uruguay.**</strong></p>",
+            "desc_fs": 28,
+            "desc_fw": "default",
+            "content_width": 100,
+            "desc_tf": "unset",
+            "desc_mt": 14,
+            "desc_mb": 0
+          }
+        }
+      },
+      "block_order": [
+        "sub_heading_dNKxjW",
+        "desc_xpe3wQ"
+      ],
+      "name": "t:sections.custom-content.name",
+      "settings": {
+        "container": "container",
+        "text_align": "text-center",
+        "color_scheme": "scheme-016388e0-a424-4e06-b4d5-8a29b428336d",
+        "custom_class": "",
+        "padding_top": 53,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_hBjhYf": {
+      "type": "custom-html",
+      "custom_css": [],
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-016388e0-a424-4e06-b4d5-8a29b428336d",
+        "content_html": "<form method=\"post\" action=\"/contact#contact_form\" id=\"contact_form\" accept-charset=\"UTF-8\" class=\"gonama-contact-form\">\n  <input type=\"hidden\" name=\"form_type\" value=\"contact\">\n  <input type=\"hidden\" name=\"utf8\" value=\"✓\">\n  <input type=\"hidden\" name=\"contact[email]\" value=\"sin@email.com\">\n\n  <div class=\"gonama-form-wrapper\">\n    <input type=\"text\" name=\"contact[body]\" placeholder=\"Ingresá tu celular\" required=\"\" class=\"gonama-input\">\n    <button type=\"submit\" class=\"gonama-button\">\n      Quiero que me contacten\n    </button>\n  </div>\n</form>\n\n<div class=\"gonama-success-message\" style=\"display: none;\">\n  ✅ ¡Gracias! Te vamos a contactar pronto.\n</div>\n\n<script>\n  if (window.location.search.includes('contact_posted=true')) {\n    document.querySelector('.gonama-success-message').style.display = 'block';\n  }\n</script>",
+        "padding_top": 35,
+        "padding_bottom": 85,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_McDjQc": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-b1c1b1d1-803d-47cb-85af-38b35fac6f71",
+        "content_html": "<h3 class=\"gonama-heading\">\n  Tu tienda online con más clientes y menores costos por transacción\n</h3>",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_487mfk": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "content_html": "<div class=\"gonama-features-grid\">\n\n  <div class=\"gonama-card\">\n    <div class=\"gonama-icon-wrapper\">\n      <svg class=\"gonama-icon\" xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\"><path d=\"M21 18a1 1 0 0 1-1-1v-4a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8a1 1 0 0 1-1 1h-2zM4 10h16v6H4v-6zM12 18a2 2 0 1 1 0-4 2 2 0 0 1 0 4z\"></path></svg>\n    </div>\n    <h3 class=\"gonama-card-title\">Pagos locales y flexibles</h3>\n    <p class=\"gonama-card-text\">\n      Conectá <strong>PLEXO</strong> a tu tienda Shopify y reducí comisiones. Además, podés integrar múltiples pasarelas al mismo tiempo para ofrecer más opciones a tus clientes.\n    </p>\n  </div>\n\n  <div class=\"gonama-card\">\n    <div class=\"gonama-icon-wrapper\">\n      <svg class=\"gonama-icon\" xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\"><path d=\"M20 7h-4V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM8 5h8v2H8V5zM20 19H4V9h16v10zM12 12a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 4a1 1 1 0 1 1 0-2 1 1 0 0 1 0 2z\"></path></svg>\n    </div>\n    <h3 class=\"gonama-card-title\">Descuentos con Tarjetas</h3>\n    <p class=\"gonama-card-text\">\n      Aceptá descuentos con tarjetas de crédito y débito de bancos uruguayos. Configurá promociones por tipo de tarjeta (Platinum, Infinite, Black, etc.).\n    </p>\n  </div>\n\n  <div class=\"gonama-card\">\n    <div class=\"gonama-icon-wrapper\">\n      <svg class=\"gonama-icon\" xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\"><path d=\"M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-8V7a1 1 0 0 1 2 0v5h3a1 1 0 0 1 0 2h-4a1 1 0 0 1 0-2z\"></path></svg>\n    </div>\n    <h3 class=\"gonama-card-title\">Envíos a tu manera</h3>\n    <p class=\"gonama-card-text\">\n      Configurá opciones de envío y pickup que se adapten a tu empresa en Uruguay. Establecé fechas, promociones y envíos gratis según el monto.\n    </p>\n  </div>\n\n  <div class=\"gonama-card\">\n    <div class=\"gonama-icon-wrapper\">\n      <svg class=\"gonama-icon\" xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\"><path d=\"M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zM4 18V9l8 5 8-5v9H4z\"></path></svg>\n    </div>\n    <h3 class=\"gonama-card-title\">Datos que convierten con Meta y Google Ads</h3>\n    <p class=\"gonama-card-text\">\n      Un proceso de compra simple y optimizado para el cliente uruguayo, diseñado para aprovechar al máximo los datos en Meta y Google Ads.\n    </p>\n  </div>\n\n</div>",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_bxAmMP": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-b1c1b1d1-803d-47cb-85af-38b35fac6f71",
+        "content_html": "<h3 class=\"gonama-heading\">\n  Planes que hacen crecer tu tienda\n\n</h3>",
+        "padding_top": 10,
+        "padding_bottom": 45,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_p9LMfF": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "",
+        "content_html": "<div class=\"gonama-pricing-card\">\n\n  <div class=\"gonama-pricing-badge\">\n    🎉 Oferta exclusiva en Uruguay\n  </div>\n\n  <h3 class=\"gonama-pricing-title\">Simple y Transparente</h3>\n\n  <div class=\"gonama-pricing-price\">\n    USD 70 <span>/ mes</span>\n  </div>\n\n  <div class=\"gonama-pricing-subtext\">\n    + Setup único de USD 400\n  </div>\n\n  <ul class=\"gonama-pricing-features\">\n    <li>✅ Integración con Plexo, MercadoPago y Bamboo</li>\n    <li>✅ Descuentos con tarjetas configurables</li>\n    <li>✅ Optimizado para Uruguay</li>\n    <li>✅ Soporte dedicado y actualizaciones</li>\n  </ul>\n\n  <a href=\"https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-8C51282917393404AM4DKVUA\" class=\"gonama-pricing-button\">\n  Comprar ahora\n</a>\n\n  <p class=\"gonama-pricing-alert\">💡 ¡Solo 10 lugares disponibles este mes!</p>\n\n</div>",
+        "padding_top": 0,
+        "padding_bottom": 100,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_TXaNwq": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-b1c1b1d1-803d-47cb-85af-38b35fac6f71",
+        "content_html": "<h3 class=\"gonama-heading\">\n  Transformando negocios con GOnama\n\n</h3>",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "testimonial_jEBUPK": {
+      "type": "testimonial",
+      "blocks": {
+        "testimonials_iH8YFH": {
+          "type": "testimonials",
+          "settings": {
+            "title_text": "",
+            "description": "<p><em>“Excelente! Un servicio rápido y esmerado, un gran equipo siempre atento a contestar dudas o realizar cambios sugerido”</em></p>",
+            "author": "Carlos Murissich",
+            "job": "Nutriciencia",
+            "testimonial_width": 0
+          }
+        },
+        "testimonials_jiGqtL": {
+          "type": "testimonials",
+          "settings": {
+            "title_text": "",
+            "description": "<p><em>\"Una excelente opción para quienes buscan implementar Shopify en sus negocios de e-commerce. El equipo tiene una gran experiencia en la plataforma, ofreciendo soluciones personalizadas y soporte estratégico para ayudar a los clientes a alcanzar sus objetivos comerciales.\"</em></p>",
+            "author": "Martín Escardó",
+            "job": "Quanam",
+            "testimonial_width": 100
+          }
+        },
+        "testimonials_MyDNAn": {
+          "type": "testimonials",
+          "settings": {
+            "title_text": "",
+            "description": "<p><em>“Excelente experiencia con GOnama para mejorar la conversión en la tienda: rápida integración con los medios de pago.”</em></p>",
+            "author": "Victoria Gastaldi",
+            "job": "MetroVeinte",
+            "testimonial_width": 0
+          }
+        },
+        "testimonials_BgKkEp": {
+          "type": "testimonials",
+          "settings": {
+            "title_text": "",
+            "description": "<p><em>“Excelente servicio, equipo especializado en Carritos de compra en Shopify, muy recomendable!”</em></p>",
+            "author": "Nicolas Strass",
+            "job": "PetSmiles",
+            "testimonial_width": 0
+          }
+        }
+      },
+      "block_order": [
+        "testimonials_iH8YFH",
+        "testimonials_jiGqtL",
+        "testimonials_MyDNAn",
+        "testimonials_BgKkEp"
+      ],
+      "custom_css": [
+        "h2 {text-align: center;}"
+      ],
+      "name": "t:sections.testimonials.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_align": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-21a1a5c3-baf3-4ff8-a6dd-4f229a94ad09",
+        "content_width": 100,
+        "design": "design_1",
+        "testi_text_size": "small",
+        "show_rating": true,
+        "img_view": "default",
+        "img_position": "position-top",
+        "car_gap": 50,
+        "carousel_item_desktop": 2,
+        "autoplay": false,
+        "loop": false,
+        "show_arrow": true,
+        "reveal_on_scroll": false,
+        "pagination_style": "dots",
+        "padding_top": 12,
+        "padding_bottom": 46,
+        "reset_spacing": false
+      }
+    },
+    "custom_text_q8gpQx": {
+      "type": "custom-text",
+      "blocks": {
+        "sub_heading_JgkFLU": {
+          "type": "sub_heading",
+          "settings": {
+            "sub_heading": "",
+            "sub_fs": 12,
+            "sub_fw": "default",
+            "sub_tf": "unset",
+            "sub_mt": 0,
+            "sub_mb": 0
+          }
+        },
+        "heading_gYt6GV": {
+          "type": "heading",
+          "settings": {
+            "heading": "Empezá hoy mismo",
+            "heading_fs": 43,
+            "heading_fw": "700",
+            "heading_tf": "unset",
+            "heading_mt": 40,
+            "heading_mb": 40
+          }
+        },
+        "desc_NgzMg4": {
+          "type": "desc",
+          "settings": {
+            "desc": "<p>Te daremos un análisis gratuito de tu sitio actual y te contactaremos a la brevedad para ayudarte a crecer.</p>",
+            "desc_fs": 16,
+            "desc_fw": "default",
+            "content_width": 70,
+            "desc_tf": "unset",
+            "desc_mt": 21,
+            "desc_mb": 0
+          }
+        }
+      },
+      "block_order": [
+        "sub_heading_JgkFLU",
+        "heading_gYt6GV",
+        "desc_NgzMg4"
+      ],
+      "name": "t:sections.custom-content.name",
+      "settings": {
+        "container": "container",
+        "text_align": "text-center",
+        "color_scheme": "scheme-016388e0-a424-4e06-b4d5-8a29b428336d",
+        "custom_class": "",
+        "padding_top": 53,
+        "padding_bottom": 0,
+        "reset_spacing": false
+      }
+    },
+    "custom_html_LJLbFB": {
+      "type": "custom-html",
+      "name": "t:sections.custom-html.name",
+      "settings": {
+        "heading_logo_svg": "",
+        "heading": "",
+        "description": "",
+        "text_alignment": "text-center",
+        "container": "container",
+        "color_scheme": "scheme-016388e0-a424-4e06-b4d5-8a29b428336d",
+        "content_html": "<div class=\"gonama-form-section-4\">\n  \n\n  <form method=\"post\" action=\"/contact#contact_form\" accept-charset=\"UTF-8\" class=\"gonama-contact-form-4\" id=\"gonama_form_4\">\n    <input type=\"hidden\" name=\"form_type\" value=\"contact\">\n    <input type=\"hidden\" name=\"utf8\" value=\"✓\">\n    <input type=\"hidden\" name=\"contact[email]\" value=\"sin@email.com\">\n    <input type=\"hidden\" name=\"contact[body]\" id=\"contact_body_4\" value=\"\">\n\n    <input type=\"text\" name=\"fields[nombre_completo]\" placeholder=\"Nombre Completo\" required=\"\" class=\"gonama-input-4\">\n\n    <input type=\"text\" name=\"fields[sitio_web]\" placeholder=\"Sitio web de tu tienda (opcional)\" class=\"gonama-input-4\">\n\n    <input type=\"tel\" name=\"fields[celular]\" placeholder=\"Celular (ej: 099123456)\" required=\"\" class=\"gonama-input-4\">\n\n    <button type=\"submit\" class=\"gonama-button-4\">Enviar</button>\n\n    \n  </form>\n</div>\n\n<script>\n  document.getElementById('gonama_form_4').addEventListener('submit', function (e) {\n    const nombre = document.querySelector('[name=\"fields[nombre_completo]\"]').value;\n    const sitio = document.querySelector('[name=\"fields[sitio_web]\"]').value;\n    const celular = document.querySelector('[name=\"fields[celular]\"]').value;\n\n    const mensaje =\n      `Nombre completo: ${nombre}\\n` +\n      `Sitio web: ${sitio || 'No informado'}\\n` +\n      `Celular: ${celular}`;\n\n    document.getElementById('contact_body_4').value = mensaje;\n  });\n</script>",
+        "padding_top": 0,
+        "padding_bottom": 89,
+        "reset_spacing": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_html_NJWjNp",
+    "custom_text_TYRGya",
+    "custom_html_hBjhYf",
+    "custom_html_McDjQc",
+    "custom_html_487mfk",
+    "custom_html_bxAmMP",
+    "custom_html_p9LMfF",
+    "custom_html_TXaNwq",
+    "testimonial_jEBUPK",
+    "custom_text_q8gpQx",
+    "custom_html_LJLbFB"
+  ]
+}

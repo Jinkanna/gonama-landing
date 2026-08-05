@@ -1,0 +1,13 @@
+{%- liquid
+    assign products_group = product.metafields.bls.product_grouped | split: ',' | uniq
+-%}
+{% if products_group.size > 0 %}
+<div id="bls__product-group">
+    <script type="application/json" class="productGroup">
+        {%- liquid
+            assign products_grouped = product.metafields.bls.product_grouped | split: ','
+        -%}
+        [{{ product.id }},{%- for item in products_grouped -%}{{ item | split: 'Product/' | last | split: '"' | first }}{%- unless forloop.last -%},{%- endunless forloop.last -%}{%- endfor -%}]
+    </script>
+</div>
+{% endif %}

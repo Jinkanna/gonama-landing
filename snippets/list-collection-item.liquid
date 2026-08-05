@@ -1,0 +1,137 @@
+{%- liquid
+  assign th_st = settings
+  assign container = th_st.general_layout
+  assign custom_container = th_st.custom_width_bd
+  assign container_width = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+  assign design_collection = st.design_collection
+
+  if st.design_collection == 'design-1'
+    assign design_collection = 'pointer-events-none absolute text-center'
+  elsif st.design_collection == 'design-2'
+    assign design_collection = 'mt-15 text-center flex flex-column'
+  elsif st.design_collection == 'design-3'
+    assign design_collection = 'mt-20 text-center flex flex-nowrap'
+  elsif st.design_collection == 'design-1' or st.design_collection == 'design-6'
+    assign design_collection = 'pointer-events-none absolute text-center'
+  endif
+  assign hover_effect = st.hover_effect
+  assign block_st = block.settings
+  assign ratio = '1/1'
+  assign featured_image = collection_item.featured_image
+  if type == 'custom' and block_st.image
+    assign featured_image = block_st.image | default: featured_image
+  endif
+  if media_aspect_ratio == 'square'
+    assign media_aspect_ratio = 'original'
+  endif
+  if featured_image != blank and media_aspect_ratio == 'original'
+    assign ratio = featured_image.aspect_ratio
+  elsif media_aspect_ratio == 'custom' and custom_ratio
+    assign ratio = custom_ratio | replace: ':', '/'
+  elsif media_aspect_ratio == 'original'
+    assign ratio = ratio
+  else
+    assign ratio = media_aspect_ratio | default: ratio
+  endif
+  assign count_product = collection_item.all_products_count | default: 0
+  assign enabled_animations = th_st.animations_enabled
+-%}
+<div
+  class="collection-item relative {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+  {% if enabled_animations %}
+    data-cascade
+    style="--animation-order: {{ index }};"
+  {% endif %}
+>
+  <div class="bls__collection-image h-full mb-15">
+    <a
+      aria-label="{{ collection_item.title }}"
+      href="{% if collection_item == blank %}#{% else %}{{ collection_item.url }}{% endif %}"
+      class="collection-item-link h-full hover-{{ hover_effect }} hover-effect"
+    >
+      <div
+        class="image bls__responsive-image h-full bls-image-js {% if featured_image != blank %}bls-loading-image{% endif %}"
+        style="--aspect-ratio: {{ ratio }}"
+      >
+        {%- if featured_image != blank -%}
+          <img
+            srcset="
+              {%- if featured_image.width >= 165 -%}{{ featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if featured_image.width >= 330 -%}{{ featured_image | image_url: width: 330 }} 330w,{%- endif -%}
+              {%- if featured_image.width >= 535 -%}{{ featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+              {%- if featured_image.width >= 750 -%}{{ featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+              {%- if featured_image.width >= 1000 -%}{{ featured_image | image_url: width: 1000 }} 1000w,{%- endif -%}
+              {%- if featured_image.width >= 1500 -%}{{ featured_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+              {%- if featured_image.width >= 3000 -%}{{ featured_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+              {{ featured_image | image_url }} {{ featured_image.width }}w
+            "
+            src="{{ featured_image | image_url: width: 1500 }}"
+            sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+            alt="{{ collection_item.title }}"
+            height="{{ featured_image.height }}"
+            width="{{ featured_image.width }}"
+            loading="lazy"
+            class="motion-reduce"
+          >
+        {%- else -%}
+          {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__placeholder' -%}
+        {%- endif -%}
+      </div>
+    </a>
+  </div>
+  {%- liquid
+    assign title_collection = collection_item.title
+    assign show_count_product = st.show_count_product
+    assign title_collection = block_st.title_collection | default: title_collection
+
+    assign show_count_product = ''
+    if st.show_count_product
+      assign show_count_product = ' show-count'
+    else
+
+    endif
+  -%}
+  <div class="bls__collection-infor {{ design_collection }}{{ show_count_product }}">
+    <div class="h3 bls__collection-title m-0">
+      <a
+        href="{% if collection_item == blank %}#{% else %}{{ collection_item.url }}{% endif %}"
+        class="d-block text-transform"
+        aria-label="{{ collection_item.title }}"
+      >
+        {%- if title_collection != blank -%}
+          {{- title_collection | escape -}}
+        {%- else -%}
+          {{- 'onboarding.collection_title' | t -}}
+        {%- endif -%}
+      </a>
+    </div>
+    {% if design_collection == 'design-5' %}
+      <div class="bls__collection-link">
+        <a
+          href="{% if collection_item == blank %}#{% else %}{{ collection_item.url }}{% endif %}"
+          class="d-flex text-transform align-items-center justify-content-between"
+          aria-label="{{ collection_item.title }}"
+        >
+          {{- 'collection.collection_link' | t -}}
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.839844 1.67969C0.605469 1.67969 0.403646 1.60156 0.234375 1.44531C0.078125 1.27604 0 1.07422 0 0.839844C0 0.605469 0.078125 0.410156 0.234375 0.253906C0.403646 0.0846354 0.605469 0 0.839844 0H9.16016C9.22526 0 9.28385 0.00651042 9.33594 0.0195312C9.38802 0.0325521 9.4401 0.0520833 9.49219 0.078125C9.54427 0.0911458 9.58984 0.117188 9.62891 0.15625C9.68099 0.182292 9.72005 0.214844 9.74609 0.253906C9.75911 0.253906 9.76562 0.253906 9.76562 0.253906C9.80469 0.292969 9.83724 0.338542 9.86328 0.390625C9.88932 0.429688 9.91536 0.47526 9.94141 0.527344C9.95443 0.566406 9.96745 0.61849 9.98047 0.683594C9.99349 0.735677 10 0.78776 10 0.839844V9.17969C10 9.40104 9.91536 9.59635 9.74609 9.76562C9.58984 9.92188 9.39453 10 9.16016 10C8.9388 10 8.74349 9.92188 8.57422 9.76562C8.41797 9.59635 8.33984 9.40104 8.33984 9.17969V2.85156L1.42578 9.76562C1.25651 9.92188 1.05469 10 0.820312 10C0.598958 10 0.410156 9.92188 0.253906 9.76562C0.0846354 9.59635 0 9.40104 0 9.17969C0 8.94531 0.0846354 8.75 0.253906 8.59375L7.14844 1.67969H0.839844Z"/>
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+    {%- if show_count_product != blank and show_count_product != false -%}
+      <span class="bls__collection-count">
+        {%- if count_product > 1 -%}
+          {{- 'collection.counts_html' | t: count: count_product -}}
+        {%- else -%}
+          {{- 'collection.count_html' | t: count: count_product -}}
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,232 @@
+{{ 'age-verify.css' | asset_url | stylesheet_tag }}
+{% liquid
+  assign banner_blur = ''
+  if section.settings.banner_blur
+    assign banner_blur = ' banner_blur'
+  endif
+  assign logo_svg = settings.logo_svg
+  assign logo_image = settings.logo_image_desktop
+  assign logo_width = settings.logo_width_desktop
+  assign logo_width_mb = settings.logo_width_mobile
+%}
+<age-verifier
+  class="gradient color-{{ section.settings.color_scheme }} bls__section d-flex content-center fixed w-full h-full top-0 left-0 overflow-auto bg-default"
+  data-enable-design-mode="{{ section.settings.show_on_design }}"
+  style="--content-bg: {{ section.settings.content_background }}">
+  <div class="age-outline-focus-none age-verify-detail d-none relative z-3 bg-default padding-inner overflow-y-auto text-center" tabindex="0">
+    {% if section.settings.show_logo %}
+      {%- if logo_svg != blank -%}
+        <div class="logo_svg d-none-mb d-flex justify-content-center mx-auto mb-20" style="width: {{ logo_width }}px">
+          {{ logo_svg }}
+        </div>
+        <div class="logo_svg d-none-desktop" style="width: {{ logo_width_mb }}px">
+          {{ logo_svg }}
+        </div>
+      {%- elsif logo_image != blank -%}
+        {%- assign logo_height = logo_width | divided_by: logo_image.aspect_ratio | round -%}
+        <span class="d-none-mb d-flex justify-content-center mb-20">
+          <img
+            srcset="
+              {%- if logo_image.width >= 165 -%}
+                {{ logo_image | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if logo_image.width >= 330 -%}
+                {{ logo_image | image_url: width: 330 }} 330w,{%- endif -%}
+              {%- if logo_image.width >= 535 -%}
+                {{ logo_image | image_url: width: 535 }} 535w,{%- endif -%}
+              {%- if logo_image.width >= 750 -%}
+                {{ logo_image | image_url: width: 750 }} 750w,{%- endif -%}
+              {{ logo_image | image_url }} {{ logo_image.width }}w
+            "
+            src="{{ logo_image | image_url: width: 330 }}"
+            sizes="{{ logo_width }}px"
+            loading="lazy"
+            width="{{ logo_width }}"
+            height="{{ logo_height }}"
+            alt="{{ logo_height.alt | default: shop.name | escape }}"
+            style="width: {{ logo_width }}px">
+        </span>
+        {%- liquid
+          assign logo_image_mb = settings.logo_image_mobile | default: settings.logo_image_desktop
+          assign logo_height_mb = logo_width_mb | divided_by: logo_image_mb.aspect_ratio | round
+        -%}
+        <img
+          srcset="
+            {%- if logo_image_mb.width >= 165 -%}
+              {{ logo_image_mb | image_url: width: 165 }} 165w,{%- endif -%}
+            {%- if logo_image_mb.width >= 330 -%}
+              {{ logo_image_mb | image_url: width: 330 }} 330w,{%- endif -%}
+            {%- if logo_image_mb.width >= 535 -%}
+              {{ logo_image_mb | image_url: width: 535 }} 535w,{%- endif -%}
+            {%- if logo_image_mb.width >= 750 -%}
+              {{ logo_image_mb | image_url: width: 750 }} 750w,{%- endif -%}
+            {{ logo_image_mb | image_url }} {{ logo_image_mb.width }}w
+          "
+          src="{{ logo_image_mb | image_url: width: 330 }}"
+          class="d-none-desktop mb-20"
+          loading="lazy"
+          sizes="{{ logo_width_mb }}px"
+          width="{{ logo_width_mb }}"
+          height="{{ logo_height_mb }}"
+          alt="{{ logo_image_mb.alt | default: shop.name | escape }}"
+          style="width: {{ logo_width_mb }}px">
+      {%- endif -%}
+    {% endif %}
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="heading-letter-spacing banner__heading mt-0 mb-20" {{ block.shopify_attributes }}>
+            <span>{{ block.settings.heading }}</span>
+          </h2>
+        {%- when 'description' -%}
+          <div class="banner__text mb-20 last-0" {{ block.shopify_attributes }}>
+            {{ block.settings.description }}
+          </div>
+        {%- when 'button' -%}
+          {%- if block.settings.button_decline != blank or block.settings.button_approve != blank -%}
+            <div class="age-button-wrapper d-flex mt-30 gap-10 flex-wrap justify-content-center">
+              {%- if block.settings.button_decline != blank -%}
+                <button class="btn-secondary age-verifier-decline" aria-label="{{ block.settings.button_decline }}">
+                  {{ block.settings.button_decline }}
+                </button>
+              {%- endif -%}
+              {%- if block.settings.button_approve != blank -%}
+                <button class="btn-primary age-verifier-approve" aria-label="{{ block.settings.button_approve }}">
+                  {{ block.settings.button_approve }}
+                </button>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+  <div class="age-outline-focus-none decline-verify-detail d-none relative z-3 padding-inner overflow-y-auto text-center" tabindex="0">
+    <h2 class="banner__heading mt-0">
+      <span>{{ section.settings.decline_heading }}</span>
+    </h2>
+    <div class="banner__text">
+      {{ section.settings.decline_text }}
+    </div>
+    <button class="button mt-30 btn age-verifier-return" aria-label="{{ section.settings.button_return }}">
+      {{ section.settings.button_return }}
+    </button>
+  </div>
+</age-verifier>
+
+{% schema %}
+  {
+    "name": "t:sections.age-verifier-popup.name",
+    "tag": "section",
+    "class": "overlay-section overlay-age-verifier",
+    "enabled_on": {
+      "groups": ["custom.overlay"]
+    },
+    "limit": 1,
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.all.header.general"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_on_design",
+        "label": "t:sections.age-verifier-popup.settings.show_on_design.label",
+        "default": true
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.age-verifier-popup.settings.color_scheme.label"
+      },
+      {
+        "type": "color",
+        "id": "content_background",
+        "label": "t:sections.age-verifier-popup.settings.content_background.label",
+        "default": "#fff"
+      }, {
+        "type": "checkbox",
+        "id": "show_logo",
+        "label": "t:sections.age-verifier-popup.settings.show_logo.label",
+        "default": false
+      }, {
+        "type": "header",
+        "content": "t:sections.age-verifier-popup.settings.Decline-content.content"
+      }, {
+        "type": "paragraph",
+        "content": "t:sections.age-verifier-popup.settings.paragraph.content"
+      }, {
+        "type": "text",
+        "id": "decline_heading",
+        "label": "t:sections.all.content_text.heading",
+        "default": "Come back when you're older"
+      }, {
+        "type": "richtext",
+        "id": "decline_text",
+        "label": "t:sections.age-verifier-popup.settings.decline_text.label",
+        "default": "<p>Sorry, the content of this store can't be seen by a younger audience. Come back when you're older.</p>"
+      }, {
+        "type": "text",
+        "id": "button_return",
+        "label": "t:sections.age-verifier-popup.settings.button_return.label",
+        "default": "Oops, I entered incorrectly"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "name": "t:sections.age-verifier-popup.blocks.heading.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "heading",
+            "default": "Welcome to Umino!",
+            "label": "t:sections.all.content_text.heading"
+          }
+        ]
+      }, {
+        "type": "description",
+        "name": "t:sections.age-verifier-popup.blocks.description.name",
+        "limit": 3,
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "description",
+            "default": "<p>You must be 18 years of age or older to view page. Please verify your age to enter.</p>",
+            "label": "t:sections.all.section_header.description"
+          }
+        ]
+      }, {
+        "type": "button",
+        "name": "t:sections.age-verifier-popup.blocks.button.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "button_decline",
+            "default": "No, I'm not",
+            "label": "t:sections.age-verifier-popup.blocks.button.settings.button_decline.label"
+          }, {
+            "type": "text",
+            "id": "button_approve",
+            "default": "Yes, I am",
+            "label": "t:sections.age-verifier-popup.blocks.button.settings.button_approve.label"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.age-verifier-popup.name",
+        "blocks": [
+          {
+            "type": "heading"
+          }, {
+            "type": "description"
+          }, {
+            "type": "button"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

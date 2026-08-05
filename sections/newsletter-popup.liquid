@@ -1,0 +1,87 @@
+{%- liquid
+   assign th_st = settings 
+   assign mailchimp = th_st.newsletter_mailchimp
+   assign width = th_st.newsletter_width
+   assign heading = th_st.newsletter_title
+   assign sub_title = th_st.newsletter_sub_title
+   assign show_newsletter = th_st.show_newsletter
+   assign disable_mobile =  th_st.disable_mobile
+
+   assign show = 'hidden'
+  if show_newsletter == 'show_newsletter_homepage'
+    if request.page_type == 'index'
+      assign show = 'show-on-homepage'
+    endif
+  elsif show_newsletter == 'hide_newsletter'
+  assign show = 'hidden'
+    else
+   assign show = 'show-on-all-pages'
+  endif
+ -%}
+<div
+  id="bls__newsletter-popup"
+  data-show="{{ show }}"
+  data-show-mobile="{{ disable_mobile }}">
+  <div class="bls__newsletter-popup gradient" style="--newsletter-width: {{ width }}px">
+    <div class="content-newsletter">
+      <div class="bls__section-header text-center mb-30">
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5">{{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if sub_title != blank -%}
+          <div class="bls__section-des mb-20">
+            {{ sub_title }}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if mailchimp != blank -%}
+        <form
+          method="post"
+          action="{{ mailchimp }}"
+          class="newsletter-form-popup"
+          autocomplete="on">
+          <div class="signup-newsletter-form d-flex flex-column">
+            <input
+              type="email"
+              name="EMAIL"
+              placeholder="{{ 'newsletter.placeholder' | t }}"
+              value="{% if customer %}{{ customer.email }}{% endif %}"
+              class="input-text btn-radius"
+              required="required">
+            <button type="submit" class="btn btn-theme mt-10">{{ 'newsletter.button_label' | t }}</button>
+          </div>
+        </form>
+      {%- else -%}
+        {%- form 'customer', class: 'newsletter-form-popup', id: "newsletter-form-popup" -%}
+          <input
+            type="hidden"
+            name="contact[tags]"
+            value="newsletter">
+          <div class="signup-newsletter-form d-flex flex-column">
+            <input
+              type="email"
+              name="contact[email]"
+              value="{% if customer %}{{ customer.email }}{% endif %}"
+              placeholder="{{ 'newsletter.placeholder' | t }}"
+              class="input-text btn-radius"
+              required="required">
+            <button
+              type="submit"
+              name="commit"
+              class="btn btn-theme mt-10">
+              {{ 'newsletter.button_label' | t }}
+            </button>
+          </div>
+        {%- endform -%}
+      {%- endif -%}
+      <div class="do-not-show-again checkbox clearfix">
+        <input
+          id="doNotShow"
+          name="do-not-show"
+          type="checkbox">
+        <label for="doNotShow">{{ 'popup.do_not' | t }}</label>
+      </div>
+    </div>
+  </div>
+</div>

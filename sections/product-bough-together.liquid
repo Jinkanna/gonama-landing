@@ -1,0 +1,212 @@
+{%- liquid
+  assign th_st = settings
+  assign product_name_t_transfrom = th_st.product_name_t_transfrom
+  assign product_name_line = th_st.product_name_line
+  assign hidden_button_add_to_cart = th_st.hidden_button_add_to_cart
+  assign product_check = product.id
+  assign hidden_price = th_st.hidden_price
+-%}
+<div class="bls__bought-together">
+  <div class="content-bought-together">
+    <h3 class="bought-together-heading capitalize fs-24 mb-25">{{ 'products.product.bought_together.text' | t }}</h3>
+    <div class="bought-together-container d-flex">
+      <div class="products-wrapper overflow-hidden">
+        {%- if search.results != blank -%}
+          {%- assign array = search.terms | remove: 'id:' | split: ' OR ' | uniq -%}
+          <div class="sf-prod__block bls__image-bought-together d-flex overflow-x-auto">
+            {%- for i in array -%}
+              {%- assign j = i | plus: 0 -%}
+              {%- assign item = search.results | where: 'id', j -%}
+              {%- liquid
+                assign product = item[0]
+              assign product_available = product.variants | where: 'available'
+              if product_check == product.id or product.available == false 
+                continue 
+              endif 
+              -%}
+              <div class="product-bought-image-item {{ product.handle }}{% if forloop.first == true %} main-product{% endif %} select">
+                <div class="product-image mb-0 mb-md-15">
+                  {%- liquid
+                    assign current_variant = product.selected_or_first_available_variant
+                    assign image = current_variant.featured_image | default: product.featured_image
+                  -%}
+                  <a class="bls__img-url" href="{{ product.url | within: collection }}" title=" {{ product.title }}">
+                    <div class="main-image">
+                      {%- render 'responsive-image' | image: image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                    </div>
+                  </a>
+                </div>
+              </div>
+              {%- unless forloop.last -%}
+                <div class="icon-plus d-flex align-items-center mx-10 fs-20"></div>
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {% if hidden_price == false %}
+      <div class="flex-1 box-total">
+        <div class="total-product px-30 py-20 text-center">
+          {%- liquid
+            assign price = 0
+            assign compare_at_price = 0
+          -%}
+          {%- for product in search.results -%}
+            {%- liquid
+              assign product_available = product.variants | where: 'available'
+              assign current_variant = product.selected_or_first_available_variant
+              if product_check == product.id or product.available == false 
+                continue 
+              endif 
+              assign price = current_variant.price | plus: price
+              assign compare_at_price = current_variant.compare_at_price | default: current_variant.price | plus: compare_at_price
+            -%}
+          {%- endfor -%}
+          <div class="bls__total-price{% if compare_at_price > price %} price--on-sale{% endif %}">
+            <h5 class="fs-16 m-0 fw-600">{{ 'products.product.bought_together.total' | t }}:</h5>
+            <span class="price__sale">
+              <s class="price-item compare-price fs-16 grey-color">
+                {% if settings.currency_code_enabled %}
+                  {{ compare_at_price | money_with_currency }}
+                {% else %}
+                  {{ compare_at_price | money }}
+                {% endif %}
+              </s>
+            </span>
+            <span class="heading-weight price{%- if compare_at_price > price %} special-price{% endif -%}">
+              {% if settings.currency_code_enabled %}
+                {{ price | money_with_currency }}
+              {% else %}
+                {{ price | money }}
+              {% endif %}
+            </span>
+          </div>
+          {%- if hidden_button_add_to_cart == false -%}
+            <button class="mt-15 product-form__submit bought-together-submit whitespace-nowrap relative">
+              <span class="fw-600">{{ 'products.product.bought_together.add_cart' | t }}</span>
+              <span class="loader-icon"></span>
+            </button>
+          {%- endif -%}
+          <div class="mt-20 saved-price{% if compare_at_price > price %} d-block{% else %} d-none{% endif %}">
+            <span class="lable">{{ 'products.product.bought_together.save' | t }}:</span>
+            <span class="price">
+              {% if compare_at_price > price %}
+                {% if settings.currency_code_enabled %}
+                  {{ compare_at_price | minus: price | money_with_currency }}
+                {% else %}
+                  {{ compare_at_price | minus: price | money }}
+                {% endif %}
+              {% else %}
+                {{ 0 | money }}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {%- if search.results != blank -%}
+      {%- assign array = search.terms | remove: 'id:' | split: ' OR ' | uniq -%}
+      <div class="sf-prod__block bls__info-bought-together">
+        <form
+          method="post"
+          action="/cart/add"
+          accept-charset="UTF-8"
+          id="bls__bought-together-form"
+          enctype="multipart/form-data"
+          novalidate="novalidate"
+          data-type="add-to-cart-form"
+        >
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="✓">
+          <div class="product-bought-together-list">
+            {%- for i in array -%}
+              {%- assign j = i | plus: 0 -%}
+              {%- assign item = search.results | where: 'id', j -%}
+              {%- liquid
+                assign product = item[0]
+              assign product_available = product.variants | where: 'available'
+              if product_check == product.id or product.available == false 
+                continue 
+              endif 
+              -%}
+              <div class="product-bought-together-item{% if forloop.first == true %} main-product{% endif %} select">
+                <div class="product-info d-flex flex-wrap align-items-center mt-15">
+                  <div class="heading-color fs-16 mr-20 d-flex align-items-center">
+                    <div class="product-item-checkbox checkbox-group relative mr-10">
+                      <input
+                        type="checkbox"
+                        class="bought-together-checkbox hidden input m-0 opacity-0 absolute inset-0 pointer inset-0 mt-5"
+                        data-handle="{{ product.handle }}"
+                        checked
+                      >
+                      <span class="checkbought"></span>
+                    </div>
+                    <a
+                      class="limited-line {{ product_name_t_transfrom }}"
+                      style="--line-clamp: {{ product_name_line }}"
+                      href="{{ product.url | within: collection }}"
+                    >
+                      {{ product.title }}
+                    </a>
+                  </div>
+                  <div class="variant-select mr-15">
+                    {%- if product.variants.size > 1 -%}
+                      <select
+                        name="items[][id]"
+                        class="product-variant-option"
+                        data-compare-price="{{ product.compare_at_price | default: product.price }}"
+                        data-price="{{ product.price }}"
+                        data-handle="{{ product.handle }}"
+                      >
+                        {% for variant in product_available %}
+                          {%- liquid
+                            assign selected = false
+                          -%}
+                          {% assign quantity = variant.inventory_quantity %}
+                          {%- if quantity < 1 and variant.available == false -%}
+                            {% continue %}
+                          {%- endif -%}
+                          {%- if variant.id == product.selected_or_first_available_variant.id -%}
+                            {% assign selected = true %}
+                          {%- endif -%}
+                          <option
+                            value="{{ variant.id }}"
+                            {% if selected %}
+                              selected="true"
+                            {% endif %}
+                            data-image="{{ variant.featured_image | default: image | image_url }}"
+                            data-compare-price="{{ variant.compare_at_price | default: variant.price }}"
+                            data-price="{{ variant.price }}"
+                            data-option="{{ variant.title }}"
+                          >
+                            {{ variant.title }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    {%- else -%}
+                      <input
+                        type="hidden"
+                        class="product-variant-option mr-20"
+                        name="items[][id]"
+                        value="{{ product.selected_or_first_available_variant.id }}"
+                        data-compare-price="{{ product.compare_at_price | default: product.price }}"
+                        data-price="{{ product.price }}"
+                      >
+                    {%- endif -%}
+                    <input type="hidden" name="items[][quantity]" class="quantity" value="1">
+                  </div>
+                  {% if hidden_price == false %}
+                  <div class="price info-price  fs-small mr-20">
+                    {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,78 @@
+{%- liquid
+  assign total_active_values = 0
+  assign total_active_values = 0
+-%}
+{% for filter in search.filters %}
+  {% liquid
+    assign total_active_values = total_active_values | plus: filter.active_values.size
+  %}
+  {% if filter.type == 'price_range' %}
+    {% if filter.min_value.value != null or filter.max_value.value != null %}
+      {% liquid
+        assign total_active_values = total_active_values | plus: 1
+      %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% if current_tags.size > 0 or total_active_values > 0 %}
+  <div
+    class="filter-current"
+  >
+    <ol
+      class="filters"
+    >
+      {%- for filter in search.filters -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            <li
+              class="bls__filter_remove_item"
+            >
+              <a
+                href="{{ filter.url_to_remove }}"
+                class="bls__link-filter"
+              >
+                {%- assign min_value = filter.min_value.value | default: 0 -%}
+                {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                {% if settings.currency_code_enabled %}
+                  {{ min_value | money_with_currency }} - {{ max_value | money_with_currency }}
+                {% else %}
+                  {{ min_value | money }} - {{ max_value | money }}
+                {% endif %}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- else -%}
+          {%- for filter_value in filter.active_values -%}
+            <li
+              class="bls__filter_remove_item"
+            >
+              <a
+                href="{{ filter_value.url_to_remove }}"
+                class="bls__link-filter"
+              >
+                {{- filter_value.label -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for tag in current_tags -%}
+        <li
+          class="bls__filter_remove_item"
+        >
+          {% capture tag_link %}
+              {{ tag | link_to_remove_tag: tag }}
+            {% endcapture %}
+          {% assign tag_link_parts = tag_link | remove_first: '<a href="' | split: '" title="' %}
+          {% assign tag_link = tag_link_parts[0] | strip %}
+          <a
+            href="{{ tag_link }}"
+            class="bls__link-filter"
+          >
+            {{- tag -}}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+{% endif %}

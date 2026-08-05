@@ -1,0 +1,159 @@
+{%- liquid
+  assign th_st = settings
+  assign container = th_st.general_layout
+  assign custom_container = th_st.custom_width_bd
+  assign container_width = ''
+  if container == 'default'
+    assign container_width = '1260'
+  elsif container == custom_width
+    assign container_width = custom_container
+  endif
+  assign ratio = '1/1'
+  if settings.product_aspect_ratio != 'custom'
+    assign ratio = settings.product_aspect_ratio
+  else
+    assign ratio = settings.product_aspect_ratio_custom | replace: ':', '/'
+  endif
+  if layout == 'mobile'
+    assign media_wrapper_id = media.id | append: '-mobile-wrapper'
+  else
+    assign media_wrapper_id = media.id | append: '-wrapper'
+  endif
+-%}
+{% capture image_size_model %}{{ media.preview_image.width }}x{{ media.preview_image.height }}{% endcapture %}
+{%- if gallery -%}
+  <div
+    id="{{ media_wrapper_id }}"
+    class="bls__prod-media bls__media-image product-single__media-wrapper {{ media.media_type }} js"
+    data-media-id="{{ media.id }}"
+    data-src="{{ media | image_url }}"
+    data-width="{{ media.preview_image.width }}"
+    data-height="{{ media.preview_image.height }}"
+    {% if media.media_type == 'video' %}
+      data-source-url="{% for source in media.sources %}{% if source.format == 'mp4' %}{{ source.url }}{% endif %}{% endfor %}"
+      data-product-media-type-video-{{ layout }} data-enable-video-looping="{{ section.settings.enable_video_looping }}"
+    {% endif %}
+    {% if media.media_type == 'model' %}
+      data-product-media-type-model-{{ layout -}}
+    {% endif %}
+    {% if media.media_type == 'external_video' %}
+      data-source="{{ media.host }}"
+      data-video-id="{{ media.external_id }}"
+    {% endif %}
+    data-product-single-media-wrapper
+    data-product-media-id="{{ section.id }}-{{ media.id }}-{{ layout }}"
+    tabindex="-1"
+  >
+    {% case media.media_type %}
+      {% when 'external_video' %}
+        <div class="bls__responsive-image product-single__media bls-image-js" style="--aspect-ratio: {{ ratio }}">
+          {{ media | external_video_tag }}
+        </div>
+      {% when 'video' %}
+        <div
+          class="bls__responsive-image product-single__media bls-image-js product-single__media--video product-single__media--{{ media.id }}"
+          style="--aspect-ratio: {{ ratio }}"
+        >
+          {{ media | video_tag: class: 'media-video', image_size: image_size_model, loop: 'loop', alt: media.alt }}
+        </div>
+      {% when 'model' %}
+        <div class="bls__responsive-image product-single__media bls-image-js" style="--aspect-ratio: {{ ratio }}">
+          {{
+            media
+            | model_viewer_tag:
+              image_size: image_size_model,
+              reveal: 'interaction',
+              toggleable: true,
+              data-model-id: media.id
+          }}
+        </div>
+        <button
+          aria-label="{{ 'products.product.view_in_space_label' | t }}"
+          class="product-single__view-in-space"
+          data-shopify-xr
+          data-shopify-model3d-id="{{ media.id }}"
+          data-shopify-title="{{ product.title | escape }}"
+          data-shopify-xr-hidden
+        >
+          <span class="product-single__view-in-space-text">{{ 'products.product.view_in_space' | t }}</span>
+        </button>
+      {% else %}
+        <div class="bls__responsive-image product-single__media bls-image-js" style="--aspect-ratio: {% if st.image_action == 'show_zoom_hover' %}{{ media.preview_image.aspect_ratio }}{% else %}{{ ratio }}{% endif %}">
+          <img
+            srcset="
+              {% if media.preview_image.width >= 493 %}{{ media.preview_image | image_url: width: 493 }} 493w,{% endif %}
+              {% if media.preview_image.width >= 600 %}{{ media.preview_image | image_url: width: 600 }} 600w,{% endif %}
+              {% if media.preview_image.width >= 713 %}{{ media.preview_image | image_url: width: 713 }} 713w,{% endif %}
+              {% if media.preview_image.width >= 823 %}{{ media.preview_image | image_url: width: 823 }} 823w,{% endif %}
+              {% if media.preview_image.width >= 990 %}{{ media.preview_image | image_url: width: 990 }} 990w,{% endif %}
+              {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
+              {% if media.preview_image.width >= 1206 %}{{ media.preview_image | image_url: width: 1206 }} 1206w,{% endif %}
+              {% if media.preview_image.width >= 1346 %}{{ media.preview_image | image_url: width: 1346 }} 1346w,{% endif %}
+              {% if media.preview_image.width >= 1426 %}{{ media.preview_image | image_url: width: 1426 }} 1426w,{% endif %}
+              {% if media.preview_image.width >= 1646 %}{{ media.preview_image | image_url: width: 1646 }} 1646w,{% endif %}
+              {% if media.preview_image.width >= 1946 %}{{ media.preview_image | image_url: width: 1946 }} 1946w,{% endif %}
+              {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
+            "
+            src="{{ media | image_url: width: 1946 }}"
+            sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+            loading="lazy"
+            width="1000"
+            height="{{ 1000 | divided_by: media.preview_image.aspect_ratio | ceil }}"
+            alt="{{ media.preview_image.alt | escape }}"
+            data-zoom="{{ media | image_url }}"
+          >
+        </div>
+    {% endcase %}
+  </div>
+{%- else -%}
+  <div
+    class="bls__prod-media bls__media-image"
+    data-media-id="{{ media.id }}"
+    data-src="{{ media | image_url }}"
+    data-width="{{ media.preview_image.width }}"
+    data-height="{{ media.preview_image.height }}"
+  >
+    {% case media.media_type %}
+      {% when 'external_video' %}
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="22" height="22" rx="2" fill="#111111"/>
+          <path d="M14.7181 10.4268L9.07977 6.13623C8.87285 5.97921 8.59817 5.95557 8.37137 6.07759C8.14277 6.19866 8 6.44459 8 6.71039V15.2887C8 15.5573 8.14277 15.8023 8.37137 15.9234C8.46805 15.9745 8.57377 16 8.68039 16C8.81954 16 8.9605 15.9537 9.07977 15.8619L14.7181 11.5751C14.8961 11.438 15 11.2261 15 11.001C15.0009 10.7721 14.8943 10.5611 14.7181 10.4268Z" fill="white"/>
+        </svg>
+      {% when 'video' %}
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="22" height="22" rx="2" fill="#111111"/>
+          <path d="M14.7181 10.4268L9.07977 6.13623C8.87285 5.97921 8.59817 5.95557 8.37137 6.07759C8.14277 6.19866 8 6.44459 8 6.71039V15.2887C8 15.5573 8.14277 15.8023 8.37137 15.9234C8.46805 15.9745 8.57377 16 8.68039 16C8.81954 16 8.9605 15.9537 9.07977 15.8619L14.7181 11.5751C14.8961 11.438 15 11.2261 15 11.001C15.0009 10.7721 14.8943 10.5611 14.7181 10.4268Z" fill="white"/>
+        </svg>
+      {% when 'model' %}
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="22" height="22" rx="2" fill="#111111"/>
+          <path d="M15.4 8.06268L12.104 6.1603C11.9216 6.05528 11.7146 6 11.504 6C11.2934 6 11.0864 6.05528 10.904 6.1603L7.6 8.06268C7.41746 8.16775 7.26591 8.31891 7.16058 8.50095C7.05525 8.68298 6.99987 8.88946 7 9.09961V12.9004C6.99987 13.1105 7.05525 13.317 7.16058 13.4991C7.26591 13.6811 7.41746 13.8322 7.6 13.9373L10.904 15.8397C11.0864 15.9447 11.2934 16 11.504 16C11.7146 16 11.9216 15.9447 12.104 15.8397L15.4 13.9373C15.5825 13.8322 15.7341 13.6811 15.8394 13.4991C15.9448 13.317 16.0001 13.1105 16 12.9004V9.09961C16.0001 8.88946 15.9448 8.68298 15.8394 8.50095C15.7341 8.31891 15.5825 8.16775 15.4 8.06268ZM11.304 15.1497L8 13.2474C7.93896 13.2122 7.88831 13.1616 7.85319 13.1007C7.81807 13.0398 7.79972 12.9707 7.8 12.9004V9.09961C7.79972 9.02934 7.81807 8.96023 7.85319 8.8993C7.88831 8.83837 7.93896 8.78778 8 8.75264L11.304 6.85026C11.365 6.81581 11.4339 6.79793 11.504 6.79841C11.5741 6.79793 11.643 6.81581 11.704 6.85026L15 8.75264C15.0636 8.78883 15.1151 8.84294 15.148 8.90818L11.996 10.7109C11.8445 10.8008 11.7194 10.9288 11.6331 11.0821C11.5467 11.2353 11.5022 11.4085 11.504 11.5843V15.2096C11.4335 15.2061 11.3648 15.1855 11.304 15.1497Z" fill="white"/>
+        </svg>
+    {% endcase %}
+    <div class="bls__responsive-image bls-image-js" style="--aspect-ratio: {% if st.image_action == 'show_zoom_hover' %}{{ media.preview_image.aspect_ratio }}{% else %}{{ ratio }}{% endif %}">
+      <img
+        srcset="
+          {% if media.preview_image.width >= 493 %}{{ media.preview_image | image_url: width: 493 }} 493w,{% endif %}
+          {% if media.preview_image.width >= 600 %}{{ media.preview_image | image_url: width: 600 }} 600w,{% endif %}
+          {% if media.preview_image.width >= 713 %}{{ media.preview_image | image_url: width: 713 }} 713w,{% endif %}
+          {% if media.preview_image.width >= 823 %}{{ media.preview_image | image_url: width: 823 }} 823w,{% endif %}
+          {% if media.preview_image.width >= 990 %}{{ media.preview_image | image_url: width: 990 }} 990w,{% endif %}
+          {% if media.preview_image.width >= 1100 %}{{ media.preview_image | image_url: width: 1100 }} 1100w,{% endif %}
+          {% if media.preview_image.width >= 1206 %}{{ media.preview_image | image_url: width: 1206 }} 1206w,{% endif %}
+          {% if media.preview_image.width >= 1346 %}{{ media.preview_image | image_url: width: 1346 }} 1346w,{% endif %}
+          {% if media.preview_image.width >= 1426 %}{{ media.preview_image | image_url: width: 1426 }} 1426w,{% endif %}
+          {% if media.preview_image.width >= 1646 %}{{ media.preview_image | image_url: width: 1646 }} 1646w,{% endif %}
+          {% if media.preview_image.width >= 1946 %}{{ media.preview_image | image_url: width: 1946 }} 1946w,{% endif %}
+          {{ media.preview_image | image_url }} {{ media.preview_image.width }}w
+        "
+        src="{{ media | image_url: width: 1946 }}"
+        data-zoom="{{ media | image_url: width: 1946 }}"
+        sizes="(min-width: {{ container_width }}px) {{ container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+        loading="lazy"
+        width="1000"
+        height="{{ 1000 | divided_by: media.preview_image.aspect_ratio | ceil }}"
+        alt="{{ media.alt | escape }}"
+      >
+    </div>
+  </div>
+{%- endif -%}

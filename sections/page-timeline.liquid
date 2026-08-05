@@ -1,0 +1,153 @@
+{% liquid
+  assign st = section.settings
+  assign container = st.container
+  assign heading = st.heading
+  assign description = st.description
+  assign text_alignment = st.text_alignment
+  assign enabled_animations = settings.animations_enabled
+%}
+
+<div class="bls__section bls__timeline-page">
+  <div class="{{ container }} section-full">
+    {%- if heading != blank or description != blank -%}
+      <div class="bls__section-header {{ text_alignment }}">
+        {%- if heading != blank -%}
+          <h2 class="bls__section-heading mb-5 {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ heading }}
+          </h2>
+        {%- endif -%}
+        {%- if description != blank -%}
+          <div class="bls__section-des {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}">
+            {{ description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="timeline-main relative">
+      {% for block in section.blocks %}
+        <div
+          {{ block.shopify_attributes }}
+          class="timeline-item"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.time != blank %}
+            <div class="timeline-item__time">{{ block.settings.time }}</div>
+          {% endif %}
+          {% if block.settings.timeline_title != blank or block.settings.timeline_content != blank %}
+            <div
+              class="timeline-item__content--block {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+              {% if enabled_animations %}
+                data-cascade
+                style="--animation-order: {{ forloop.index }};"
+              {% endif %}
+            >
+              {% if block.settings.timeline_title != blank %}
+                <h3 class="timeline-item__title">{{ block.settings.timeline_title }}</h3>
+              {% endif %}
+              {% if block.settings.timeline_content != blank %}
+                <p class="timeline-item__content">
+                  {{ block.settings.timeline_content }}
+                </p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.page-timeline.name",
+  "class": "bls-timeline-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.header.general"
+    },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.all.content_text.heading",
+      "default": "Our Timelines"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.all.section_header.description",
+      "default": "<p>Here’s some of our most popular products people are in love with.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-center",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.page-timeline.blocks.item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "t:sections.page-timeline.blocks.item.settings.time.label",
+          "default": "2023"
+        },
+        {
+          "type": "text",
+          "id": "timeline_title",
+          "label": "t:sections.page-timeline.blocks.item.settings.timeline_title.label",
+          "default": "Timeline title"
+        },
+        {
+          "type": "textarea",
+          "id": "timeline_content",
+          "label": "t:sections.page-timeline.blocks.item.settings.timeline_content.label",
+          "default": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique minus inventore, possimus ratione saepe magnam maxime quae vitae, fuga dolor natus. Porro deserunt quis repellendus qui officiis, assumenda fugiat aliquid aliquam adipisci, ab quaerat sapiente autem quas! Sit debitis facere quam deleniti aliquam quod, iure aliquid dolor assumenda mollitia explicabo."
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

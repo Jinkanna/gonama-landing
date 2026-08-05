@@ -1,0 +1,218 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+    "sections": {
+        "8a621b44-193d-4aa5-afb8-1db52f9622d0": {
+            "type": "custom-text",
+            "blocks": {
+                "ebd10c35-8436-4a74-a6a8-97e427410f51": {
+                    "type": "image",
+                    "settings": {
+                        "image": "shopify:\/\/shop_images\/star.png",
+                        "text_circle": "",
+                        "image_mt": 11,
+                        "image_mb": 0
+                    }
+                },
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-0": {
+                    "type": "sub_heading",
+                    "settings": {
+                        "sub_heading": "<p>hello guys! 😍<\/p>",
+                        "sub_fs": 12,
+                        "sub_tf": "uppercase",
+                        "sub_mt": 0,
+                        "sub_mb": 15
+                    }
+                },
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-1": {
+                    "type": "heading",
+                    "settings": {
+                        "heading": "Go Home<br>We Are A Family",
+                        "heading_fs": 80,
+                        "heading_tf": "unset",
+                        "heading_mt": 0,
+                        "heading_mb": 25
+                    }
+                },
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-2": {
+                    "type": "desc",
+                    "settings": {
+                        "desc": "<p>Welcoming new people to our teams, each with a diverse skillset and background, is the catalyst for innovation and transformation.<\/p>",
+                        "desc_fs": 16,
+                        "content_width": 50,
+                        "desc_tf": "unset",
+                        "desc_mt": 0,
+                        "desc_mb": 40
+                    }
+                },
+                "7deade83-ba01-42b8-82c9-acb1a443ff0f": {
+                    "type": "buttons",
+                    "settings": {
+                        "btn_content": "See Available Career",
+                        "button_type": "primary",
+                        "button_link": "",
+                        "button_target": false,
+                        "b_mt": 10,
+                        "b_mb": 0
+                    }
+                }
+            },
+            "block_order": [
+                "ebd10c35-8436-4a74-a6a8-97e427410f51",
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-0",
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-1",
+                "template--16777177465079__8a621b44-193d-4aa5-afb8-1db52f9622d0-1688207697b1a60c5f-2",
+                "7deade83-ba01-42b8-82c9-acb1a443ff0f"
+            ],
+            "settings": {
+                "container": "container",
+                "text_align": "text-center",
+                "color_scheme": "",
+                "custom_class": "custom-content-carrer",
+                "padding_top": 100,
+                "padding_bottom": 0,
+                "reset_spacing": false
+            }
+        },
+        "main": {
+            "type": "page-carrer",
+            "blocks": {
+                "86eb261b-e18e-4ad6-af9f-e978e4f90ee4": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Senior Fullstack Developer",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "cda9a518-c652-4d9e-b5a8-42ad82158849": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Middle Data Engineer",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "f11e513e-73b5-4ab4-b6f6-f1e007dd045b": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Instagram Content Executive",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "b7d04d41-7514-4f10-8b6c-5fe8b2bdf0ff": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Video Editor Executive",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "80ac1d50-6b86-4254-9de6-c06d2ac0463e": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Media Leader",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "6be823d3-0227-47ed-80d1-e68b8d6ffc63": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Ecommerce Sales Manager",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "87a005ee-938c-498f-a43f-553ac645fc9c": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Intern Frontend",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "a5b121b6-d892-40dc-babf-97b392bec9f4": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Sunior development",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "shopify:\/\/pages\/middle-data-engineer-1",
+                        "detail_label_job": "View Details"
+                    }
+                },
+                "8316ad9a-cf66-4303-9905-a33fc47d8d90": {
+                    "type": "item",
+                    "settings": {
+                        "title_job": "Title job",
+                        "loction_job": "Work address",
+                        "type_job": "Full-time",
+                        "income_job": "$20.000 - $25.000",
+                        "date_job": "August 09 2023",
+                        "detail_job": "",
+                        "detail_label_job": "View Details"
+                    }
+                }
+            },
+            "block_order": [
+                "86eb261b-e18e-4ad6-af9f-e978e4f90ee4",
+                "cda9a518-c652-4d9e-b5a8-42ad82158849",
+                "f11e513e-73b5-4ab4-b6f6-f1e007dd045b",
+                "b7d04d41-7514-4f10-8b6c-5fe8b2bdf0ff",
+                "80ac1d50-6b86-4254-9de6-c06d2ac0463e",
+                "6be823d3-0227-47ed-80d1-e68b8d6ffc63",
+                "87a005ee-938c-498f-a43f-553ac645fc9c",
+                "a5b121b6-d892-40dc-babf-97b392bec9f4",
+                "8316ad9a-cf66-4303-9905-a33fc47d8d90"
+            ],
+            "settings": {
+                "container": "container",
+                "limit": 6,
+                "eb_loadmore": true
+            }
+        }
+    },
+    "order": [
+        "8a621b44-193d-4aa5-afb8-1db52f9622d0",
+        "main"
+    ]
+}

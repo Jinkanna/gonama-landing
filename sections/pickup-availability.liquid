@@ -1,0 +1,162 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+{%- assign hidden_price = settings.hidden_price -%}
+{%- if pick_up_availabilities.size > 0 -%}
+  <pickup-availability-preview class="pickup-availability-preview flex">
+    {%- liquid
+      assign closest_location = pick_up_availabilities.first
+    -%}
+    {% if closest_location.available %}
+      <svg class="mr-15 mt-7" width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.0742 1.07422C14.2435 0.917969 14.4388 0.839844 14.6602 0.839844C14.8945 0.839844 15.0898 0.917969 15.2461 1.07422C15.4154 1.24349 15.5 1.44531 15.5 1.67969C15.5 1.90104 15.4154 2.08984 15.2461 2.24609L6.08594 11.4258C5.92969 11.582 5.73438 11.6602 5.5 11.6602C5.26562 11.6602 5.07031 11.582 4.91406 11.4258L0.753906 7.24609C0.584635 7.08984 0.5 6.90104 0.5 6.67969C0.5 6.44531 0.584635 6.24349 0.753906 6.07422C0.910156 5.91797 1.09896 5.83984 1.32031 5.83984C1.55469 5.83984 1.75651 5.91797 1.92578 6.07422L5.5 9.64844L14.0742 1.07422Z" fill="#1E882F"/>
+      </svg>
+    {% endif %}
+    <div class="pickup-availability-info">
+      {%- if closest_location.available -%}
+        <span class="caption-large">
+          {{-
+            'products.product.pickup_availability.pick_up_available_at_html'
+            | t: location_name: closest_location.location.name
+          -}}
+        </span>
+        <span class="caption">{{ closest_location.pick_up_time }}</span>
+        <button
+          id="ShowPickupAvailabilityDrawer"
+          class="btn-reset grey-color underline d-block pickup-availability-button"
+          aria-haspopup="dialog"
+        >
+          {%- if pick_up_availabilities.size == 1 -%}
+            {{ 'products.product.pickup_availability.view_store_info' | t }}
+          {%- else -%}
+            {{ 'products.product.pickup_availability.check_other_stores' | t }}
+          {%- endif -%}
+        </button>
+      {%- else -%}
+        <span class="caption-large">
+          <svg class="mr-5" style="margin-bottom: 3px" width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.414062 2.24609C0.244792 2.08984 0.160156 1.90104 0.160156 1.67969C0.160156 1.44531 0.244792 1.24349 0.414062 1.07422C0.570312 0.917969 0.765625 0.839844 1 0.839844C1.23438 0.839844 1.42969 0.917969 1.58594 1.07422L6 5.48828L10.4141 1.07422C10.5703 0.917969 10.7656 0.839844 11 0.839844C11.2344 0.839844 11.4297 0.917969 11.5859 1.07422C11.7552 1.24349 11.8398 1.44531 11.8398 1.67969C11.8398 1.90104 11.7552 2.08984 11.5859 2.24609L7.17188 6.66016L11.5859 11.0742C11.7552 11.2435 11.8398 11.4453 11.8398 11.6797C11.8398 11.901 11.7552 12.0898 11.5859 12.2461C11.4297 12.4154 11.2344 12.5 11 12.5C10.7656 12.5 10.5703 12.4154 10.4141 12.2461L6 7.85156L1.58594 12.2461C1.42969 12.4154 1.23438 12.5 1 12.5C0.765625 12.5 0.570312 12.4154 0.414062 12.2461C0.244792 12.0898 0.160156 11.901 0.160156 11.6797C0.160156 11.4453 0.244792 11.2435 0.414062 11.0742L4.82812 6.66016L0.414062 2.24609Z" fill="#D73F0F"/>
+            </svg>
+          {{
+            'products.product.pickup_availability.pick_up_unavailable_at_html'
+            | t: location_name: closest_location.location.name
+          }}
+        </span>
+        {%- if pick_up_availabilities.size > 1 -%}
+          <button
+            id="ShowPickupAvailabilityDrawer"
+            class="btn-reset grey-color underline d-block pickup-availability-button"
+            aria-haspopup="dialog"
+          >
+            {{ 'products.product.pickup_availability.check_other_stores' | t }}
+          </button>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </pickup-availability-preview>
+
+  <pickup-availability-drawer
+    class="gradient bg-white bls__canvas bls__canvas-right pickup-availability-drawer"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="PickupAvailabilityHeading"
+  >
+    <div class="pickup-availability-header px-30 py-25 border-bottom">
+      <button class="button-close close-button">
+        <i class="icon-x"></i>
+      </button>
+      <div class="bls__product-info">
+        <div class="bls__product-pickup flex">
+          {%- liquid
+            assign image = product_variant.product.featured_image | default: product.featured_image
+          -%}
+          {%- if image != blank -%}
+            <div class="product-pickup-img width-80 mr-15">
+              {%- render 'responsive-image' | image: image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+            </div>
+          {%- endif -%}
+          <div class="bls__product-pickup__infos">
+            <h6 class="pickup-availability-drawer-title mb-0">
+              {{ product_variant.product.title | escape }}
+            </h6>
+            {%- unless product_variant.product.has_only_default_variant -%}
+              <p class="pickup-availability-variant fs-small grey-color">
+                {%- for product_option in product_variant.product.options_with_values -%}
+                  {{ product_option.name | escape }}:&nbsp;
+                  {%- for value in product_option.values -%}
+                    {%- if product_option.selected_value == value -%}
+                      <span>{{ value | escape }}</span>
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- unless forloop.last -%},&nbsp;{%- endunless -%}
+                {%- endfor -%}
+              </p>
+            {%- endunless -%}
+            {% if hidden_price == false %}
+            <div class="price mt-10">
+              {%- render 'price', product: product_variant.product, use_variant: true, price_class: 'price--large' -%}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="pickup-availability-list list-none py-25 px-30 m-0" role="list" data-store-availability-drawer-content>
+      {%- for availability in pick_up_availabilities -%}
+        <li class="pickup-availability-list__item pb-25 mb-25 border-bottom last-0">
+          <h4 class="fs-16 capitalize">{{ availability.location.name | escape }}</h4>
+            {%- if availability.available -%}
+          <p class="pickup-availability-preview caption-large flex align-items-center">
+
+              <svg
+                class="mr-10 m-width-12"
+                width="12"
+                height="10"
+                viewBox="0 0 12 10"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M10.8594 0.859375L4 7.71875L1.14062 4.85938C1.00521 4.73438 0.84375 4.67188 0.65625 4.67188C0.479167 4.67188 0.328125 4.73438 0.203125 4.85938C0.0677083 4.99479 0 5.15625 0 5.34375C0 5.52083 0.0677083 5.67188 0.203125 5.79688L3.53125 9.14062C3.65625 9.26562 3.8125 9.32812 4 9.32812C4.1875 9.32812 4.34375 9.26562 4.46875 9.14062L11.7969 1.79688C11.9323 1.67188 12 1.52083 12 1.34375C12 1.15625 11.9323 0.994792 11.7969 0.859375C11.6719 0.734375 11.5156 0.671875 11.3281 0.671875C11.151 0.671875 10.9948 0.734375 10.8594 0.859375Z" fill="#1E882F"/>
+              </svg>
+              {{ 'products.product.pickup_availability.pick_up_available' | t }},
+              {{ availability.pick_up_time | downcase }}
+          </p>
+            {%- endif -%}
+          {%- assign address = availability.location.address -%}
+          <address class="pickup-availability-address">
+            <p>
+              <span class="grey-color">{{ 'products.product.pickup_availability.address' | t }}: </span>
+              {{- address.address1 }}
+            </p>
+            <p>
+              <span class="grey-color">{{ 'products.product.pickup_availability.city' | t }}: </span>{{ address.city }}
+            </p>
+            <p>
+              <span class="grey-color">{{ 'products.product.pickup_availability.country' | t }}: </span>
+              {{- address.country }}
+            </p>
+            {%- if address.phone.size > 0 -%}
+              <p>
+                <span class="grey-color">{{ 'products.product.pickup_availability.phone' | t }}: </span>
+                {{- address.phone }}
+              </p>
+            {%- endif -%}
+          </address>
+          <a href="https://maps.google.com?daddr={{ address.street | escape }} {{ address.province_code | escape }} {{ address.zip | escape }} {{ address.country | escape }}">
+            <svg
+              class="mr-5 mb-5"
+              width="12"
+              height="15"
+              viewBox="0 0 12 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M11.8379 6C11.8379 5.59896 11.7969 5.20703 11.7148 4.82422C11.6328 4.44141 11.5189 4.07682 11.373 3.73047C11.2272 3.38411 11.0495 3.05143 10.8398 2.73242C10.6302 2.42253 10.3932 2.13542 10.1289 1.87109C9.86458 1.60677 9.57747 1.36979 9.26758 1.16016C8.94857 0.950521 8.61589 0.772786 8.26953 0.626953C7.92318 0.48112 7.55859 0.367188 7.17578 0.285156C6.79297 0.203125 6.40104 0.162109 6 0.162109C5.59896 0.162109 5.20703 0.203125 4.82422 0.285156C4.44141 0.367188 4.07682 0.48112 3.73047 0.626953C3.38411 0.772786 3.05143 0.950521 2.73242 1.16016C2.42253 1.36979 2.13542 1.60677 1.87109 1.87109C1.60677 2.13542 1.36979 2.42253 1.16016 2.73242C0.950521 3.05143 0.772786 3.38411 0.626953 3.73047C0.48112 4.07682 0.367188 4.44141 0.285156 4.82422C0.203125 5.20703 0.162109 5.59896 0.162109 6C0.162109 6.16406 0.171224 6.32812 0.189453 6.49219C0.207682 6.65625 0.230469 6.82031 0.257812 6.98438C0.339844 7.43099 0.462891 7.86849 0.626953 8.29688C0.80013 8.71615 1.00065 9.11719 1.22852 9.5C1.62956 10.1654 2.08529 10.7806 2.5957 11.3457C3.11523 11.9017 3.60286 12.3848 4.05859 12.7949C4.51432 13.196 4.89714 13.5059 5.20703 13.7246C5.51693 13.9525 5.67188 14.0664 5.67188 14.0664C5.77214 14.1302 5.88151 14.1621 6 14.1621C6.11849 14.1621 6.22786 14.1302 6.32812 14.0664C6.32812 14.0664 6.48307 13.9525 6.79297 13.7246C7.10286 13.5059 7.48568 13.196 7.94141 12.7949C8.39714 12.3848 8.88477 11.9017 9.4043 11.3457C9.91471 10.7806 10.3659 10.1654 10.7578 9.5C10.9948 9.11719 11.1953 8.71615 11.3594 8.29688C11.5326 7.86849 11.6602 7.43099 11.7422 6.98438C11.7695 6.82031 11.7923 6.65625 11.8105 6.49219C11.8288 6.32812 11.8379 6.16406 11.8379 6ZM10.6621 6C10.6621 6.1276 10.6576 6.25977 10.6484 6.39648C10.6393 6.52409 10.6211 6.65169 10.5938 6.7793C10.5299 7.14388 10.4251 7.50391 10.2793 7.85938C10.1335 8.21484 9.96029 8.5612 9.75977 8.89844C9.48633 9.3724 9.17188 9.81445 8.81641 10.2246C8.47005 10.6348 8.1237 11.013 7.77734 11.3594C7.43099 11.6966 7.10286 11.9883 6.79297 12.2344C6.49219 12.4896 6.24154 12.6901 6.04102 12.8359C5.84049 12.6992 5.58073 12.5078 5.26172 12.2617C4.95182 12.0156 4.61914 11.724 4.26367 11.3867C3.9082 11.0404 3.55273 10.6576 3.19727 10.2383C2.8418 9.81901 2.52279 9.3724 2.24023 8.89844C2.03971 8.5612 1.86654 8.21484 1.7207 7.85938C1.57487 7.50391 1.47005 7.14388 1.40625 6.7793C1.37891 6.65169 1.36068 6.52409 1.35156 6.39648C1.34245 6.25977 1.33789 6.1276 1.33789 6C1.33789 5.35286 1.45638 4.74674 1.69336 4.18164C1.93945 3.61654 2.27669 3.12435 2.70508 2.70508C3.12435 2.27669 3.61654 1.94401 4.18164 1.70703C4.74674 1.46094 5.35286 1.33789 6 1.33789C6.64714 1.33789 7.25326 1.46094 7.81836 1.70703C8.38346 1.94401 8.87565 2.27669 9.29492 2.70508C9.72331 3.12435 10.056 3.61654 10.293 4.18164C10.5391 4.74674 10.6621 5.35286 10.6621 6ZM8.33789 6C8.33789 5.68099 8.27409 5.38021 8.14648 5.09766C8.02799 4.80599 7.86393 4.55534 7.6543 4.3457C7.44466 4.13607 7.19401 3.97201 6.90234 3.85352C6.61979 3.72591 6.31901 3.66211 6 3.66211C5.68099 3.66211 5.37565 3.72591 5.08398 3.85352C4.80143 3.97201 4.55534 4.13607 4.3457 4.3457C4.13607 4.55534 3.96745 4.80599 3.83984 5.09766C3.72135 5.38021 3.66211 5.68099 3.66211 6C3.66211 6.31901 3.72135 6.62435 3.83984 6.91602C3.96745 7.19857 4.13607 7.44466 4.3457 7.6543C4.55534 7.86393 4.80143 8.03255 5.08398 8.16016C5.37565 8.27865 5.68099 8.33789 6 8.33789C6.31901 8.33789 6.61979 8.27865 6.90234 8.16016C7.19401 8.03255 7.44466 7.86393 7.6543 7.6543C7.86393 7.44466 8.02799 7.19857 8.14648 6.91602C8.27409 6.62435 8.33789 6.31901 8.33789 6ZM7.16211 6C7.16211 6.16406 7.13021 6.31901 7.06641 6.46484C7.01172 6.60156 6.92969 6.72005 6.82031 6.82031C6.72005 6.92969 6.59701 7.01628 6.45117 7.08008C6.31445 7.13477 6.16406 7.16211 6 7.16211C5.83594 7.16211 5.68099 7.13477 5.53516 7.08008C5.39844 7.01628 5.27995 6.92969 5.17969 6.82031C5.07031 6.72005 4.98372 6.60156 4.91992 6.46484C4.86523 6.31901 4.83789 6.16406 4.83789 6C4.83789 5.83594 4.86523 5.68555 4.91992 5.54883C4.98372 5.40299 5.07031 5.27995 5.17969 5.17969C5.27995 5.07031 5.39844 4.98828 5.53516 4.93359C5.68099 4.86979 5.83594 4.83789 6 4.83789C6.16406 4.83789 6.31445 4.86979 6.45117 4.93359C6.59701 4.98828 6.72005 5.07031 6.82031 5.17969C6.92969 5.27995 7.01172 5.40299 7.06641 5.54883C7.13021 5.68555 7.16211 5.83594 7.16211 6Z" fill="#111111"/>
+            </svg>
+            <span class="underline">{{ 'products.product.pickup_availability.pickup_location' | t }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </pickup-availability-drawer>
+{%- endif -%}

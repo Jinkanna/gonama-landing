@@ -1,0 +1,58 @@
+/* Page faqs
+-----------------------------------------------------------------*/
+.bls__faqs-right>div:not(:last-child) {
+    margin-bottom: clamp(4rem, 5vw, 6rem);
+}
+
+.bls__page-faq-content {
+    display: none;
+}
+
+.bls__faqs-content h3 {
+    font-size: clamp(2.5rem, 5vw, 3rem);
+}
+
+.btn-faqs>a svg {
+    vertical-align: -5px;
+    margin-right: 5px;
+}
+
+.btn-faqs>a:hover svg path {
+    stroke: var(--color-white);
+    fill: none !important;
+}
+
+.bls__page-faq-items .bls__page-faq-title {
+    padding-right: 5rem;
+    position: relative;
+    color: inherit;
+    cursor: pointer;
+}
+
+.bls__page-faq-items .bls__page-faq-title .open-children-toggle {
+    right: -15px;
+}
+
+.bls__page-faq-items.active .bls__page-faq-title {
+    color: var(--heading-color);
+    border: 0;
+}
+
+.bls__page-faq-items.active .open-children-toggle:before {
+    opacity: 0;
+}
+
+@media only screen and (min-width: 992px) {
+    .bls__faqs-right {
+        padding-left: 8.6rem;
+    }
+
+    .bls__faqs-right:before {
+        content: "";
+        position: absolute;
+        left: 3.6rem;
+        top: 0;
+        bottom: 0;
+        border-left: 1px solid var(--border-color-base);
+    }
+}

@@ -1,0 +1,37 @@
+<ul class="categories-list categories-list-menu-mobile p-0 list-none my-0" style="display: none;">
+  {% if st.collection_list_all %}
+    {%- for collection in collections -%}
+      <li class="categories-list-menu-items level0">
+        <a
+          aria-label="{{ collection.title }}"
+          href="{% if collection == blank %}#{% else %}{{ collection.url }}{% endif %}"
+          class="categories-menu-items-link"
+        >
+          {% if collection.metafields.bls.categories_menu_icon.value %}
+            <span class="icon-list-menu">
+              {{- collection.metafields.bls.categories_menu_icon.value | image_url: width: 80 | image_tag -}}
+            </span>
+          {% endif %}
+          <span>{{ collection.title }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  {% else %}
+    {%- for collection in st.collection_list_custom -%}
+      <li class="categories-list-menu-items level0">
+        <a
+          aria-label="{{ collection.title }}"
+          href="{% if collection == blank %}#{% else %}{{ collection.url }}{% endif %}"
+          class="categories-menu-items-link"
+        >
+          {% if collection.metafields.bls.categories_menu_icon.value %}
+            <span class="icon-list-menu">
+              {{- collection.metafields.bls.categories_menu_icon.value | image_url: width: 80 | image_tag -}}
+            </span>
+          {% endif %}
+          <span>{{ collection.title }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  {% endif %}
+</ul>

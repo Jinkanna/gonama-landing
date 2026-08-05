@@ -1,0 +1,265 @@
+{%- liquid
+  assign cls = st.collection
+  if bl != blank
+    assign cls = bl
+  endif
+  assign number_of_rows = st.number_of_rows
+  assign item_desktop = st.item_desktop
+  assign column_gap = st.column_gap
+  assign enabled_animations = settings.animations_enabled
+
+  assign column_gap_tablet = ''
+  if column_gap > 30
+    assign column_gap_tablet = ' gap-tablet'
+  endif
+  assign column_gap_mobile = ''
+  if column_gap > 15
+    assign column_gap_mobile = ' gap-mobile'
+  endif
+  assign load_more_button_enable = st.load_more_button_enable
+  assign button_label = st.button_label
+  assign button_type = st.button_type
+  assign button_action = st.button_action
+  assign limit_products = st.limit_products | plus: 0
+  assign prods = number_of_rows | times: item_desktop
+  assign hidden_price = th_st.hidden_price
+
+  assign collection = collections[cls]
+  assign product_to_show = 0
+  if prods >= limit_products
+    assign product_to_show = limit_products
+  else
+    assign product_to_show = prods
+  endif
+  assign id = ''
+  if block != blank
+    assign id = block.id
+  else
+    assign id = section.id
+  endif
+-%}
+{%- if load_more_button_enable == true -%}
+  {%- paginate collection.products by product_to_show -%}
+    {%- liquid
+      assign show_load_more = ''
+      if paginate.pages > 1
+        if load_more_button_enable and button_action == 'load'
+          assign show_load_more = 'show_load-more-btn'
+        endif
+      endif
+    -%}
+    {%- if collection.products.size == 0 -%}
+      <div
+        class="row row-cols-xl-{{ item_desktop }}"
+        style="--bs-gutter-x: {{ column_gap }}px"
+      >
+        {%- for i in (1..product_to_show) -%}
+          <div
+            class="col-lg-3 col-md-4 col-6 {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+            {% if enabled_animations %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            <div
+              class="bls__product-item"
+            >
+              <div
+                class="bls__product-image mb-15"
+              >
+                {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+              </div>
+              <div
+                class="bls__product-details"
+              >
+                <h3
+                  class="bls__product-name regular mb-5"
+                >
+                  <a
+                    role="link"
+                    aria-disabled="true"
+                  >
+                    {{ 'products.product.product_placeholder' | t }}
+                  </a>
+                </h3>
+                {% if hidden_price == false %}
+                <div
+                  class="bls__product-price mb-9"
+                >
+                  {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if load_more_button_enable -%}
+        {%- if button_action == 'redirect' -%}
+          <div
+            class="bls__load-more bls__load-more_wrap-{{ id }} text-center mt-50"
+          >
+            <a
+              class="bls__btn-redirect btn-{{ button_type }}"
+              href="{{ collection.url }}"
+            >
+              <span
+                class="hidden-loading"
+              >
+                {{- button_label }}
+              </span>
+              <span
+                class="loader-icon absolute"
+              ></span>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- else -%}
+      <div
+        id="bls__product-grid-{{ id }}"
+        class="row row-cols-xl-{{ item_desktop }} {{ more_row }}{{ column_gap_tablet }}{{ column_gap_mobile }} {{ show_load_more }}"
+        style="--bs-gutter-x: {{ column_gap }}px"
+        data-id="{{ section.id }}"
+        data-r="{{ number_of_rows }}"
+        data-d="{{ item_desktop }}"
+        data-to="{{ limit_products }}"
+      >
+        {%- for product in collection.products -%}
+          <div
+            class="col-md-4 col-6 bls__product-load {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+            {% if enabled_animations %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {%- render 'product-item' | product: product -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        {%- capture total_items -%}
+          {%- if limit_products >= paginate.items -%}
+            {{ paginate.items }}
+          {%- else -%}
+            {{ limit_products }}
+          {%- endif -%}
+        {%- endcapture -%}
+        {%- if load_more_button_enable -%}
+          {%- if button_action == 'load' -%}
+            <div
+              class="bls__load-more bls__load-more_wrap-{{ id }} text-center"
+              data-section-id="{{ id }}"
+              data-next-url="{{ collection.url }}"
+              data-current-page="{{ paginate.current_page }}"
+              data-total-pages="{{ paginate.pages }}"
+              data-page-size="{{ paginate.page_size }}"
+              data-total-items="{{ total_items }}"
+            >
+              <button
+                class="bls__btn-load-more btn-{{ button_type }} {% if button_type == 'link' %}btn-reset mt-10{% endif %}"
+                type="button"
+              >
+                <span
+                  class="hidden-loading"
+                >
+                  {{- button_label }}
+                </span>
+                <span
+                  class="loader-icon absolute"
+                ></span>
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if load_more_button_enable -%}
+        {%- if button_action == 'redirect' -%}
+          <div
+            class="bls__load-more bls__load-more_wrap-{{ id }} text-center"
+          >
+            <a
+              class="bls__btn-redirect btn-{{ button_type }}"
+              href="{{ collection.url }}"
+            >
+              <span
+                class="hidden-loading"
+              >
+                {{- button_label }}
+              </span>
+              <span
+                class="loader-icon absolute"
+              ></span>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endpaginate -%}
+{%- else -%}
+  {%- if collection.products.size == 0 -%}
+    <div
+      class="row row-cols-xl-{{ item_desktop }}"
+      style="--bs-gutter-x: {{ column_gap }}px"
+    >
+      {%- for i in (1..product_to_show) -%}
+        <div
+          class="col-lg-3 col-md-4 col-6"
+        >
+          <div
+            class="bls__product-item"
+          >
+            <div
+              class="bls__product-image mb-15"
+            >
+              {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+            </div>
+            <div
+              class="bls__product-details"
+            >
+              <h3
+                class="bls__product-name regular mb-5"
+              >
+                <a
+                  role="link"
+                  aria-disabled="true"
+                >
+                  {{ 'products.product.product_placeholder' | t }}
+                </a>
+              </h3>
+              {% if hidden_price == false %}
+              <div
+                class="bls__product-price mb-9"
+              >
+                {%- render 'price', product: product, use_variant: true, price_class: 'price--large' -%}
+              </div>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div
+      id="bls__product-grid-{{ id }}"
+      class="row row-cols-xl-{{ item_desktop }} {{ more_row }}{{ column_gap_tablet }}{{ column_gap_mobile }}"
+      style="--bs-gutter-x: {{ column_gap }}px"
+      data-id="{{ section.id }}"
+      data-r="{{ number_of_rows }}"
+      data-d="{{ item_desktop }}"
+      data-to="{{ limit_products }}"
+    >
+      {%- for product in collection.products limit: limit_products -%}
+        <div
+          class="col-md-4 col-6 bls__product-load {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+          {% if enabled_animations %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+        >
+          {%- render 'product-item' | product: product -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

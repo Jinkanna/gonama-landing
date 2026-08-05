@@ -1,0 +1,7 @@
+{%- if show_arrow != false -%}
+  <div class="swiper-arrow swiper-next swiper-button-next box-shadow"><i class="icon-chevron-right"></i></div>
+  <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow"><i class="icon-chevron-left"></i></div>
+{%- endif -%}
+{%- if carousel_pagination == 'carousel_bullets' or carousel_pagination == 'show_bullet_mobile' or carousel_pagination == 'carousel_pagination_progress' -%}
+  <div class="swiper-pagination {% if carousel_pagination == 'show_bullet_mobile' %} show-on-mobile {% endif %} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"></div>
+{%- endif -%}

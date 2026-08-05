@@ -1,0 +1,381 @@
+{% # theme-check-disable ContentForHeaderModification %}
+{%- capture contentForQuerystring -%}
+  {{ content_for_header }}
+{%- endcapture -%}
+{% # theme-check-enable ContentForHeaderModification %}
+{%- assign pageUrl = contentForQuerystring
+  | split: '"pageurl":"'
+  | last
+  | split: '"'
+  | first
+  | split: request.host
+  | last
+  | replace: '\/', '/'
+  | replace: '%20', ' '
+  | replace: '\u0026', '&'
+-%}
+{%- assign pageQuerystring = pageUrl | split: '?' | last -%}
+{%- liquid
+  assign st = section.settings
+  assign design = st.design
+  assign bg_color = st.bg_color
+  assign custom_class = st.custom_class
+  if pageQuerystring contains 'tab_info='
+    assign tab = pageQuerystring | split: 'tab_info=' | last | split: '&' | first
+    if tab == 'tab' or tab == 'accordition' or tab == 'show_all'
+      assign design = tab
+    endif
+  endif
+  assign position = st.position
+  if pageQuerystring contains 'position_tab='
+    assign position_tab = pageQuerystring | split: 'position_tab=' | last | split: '&' | first
+    if position_tab == 'default'
+      assign position = '1'
+    elsif position_tab == 'accordions-inner'
+      assign position = '2'
+    endif
+  endif
+
+  assign infomation_meta = product.metafields.bls.information_product_tab
+
+  assign reset_spacing = ''
+  if st.reset_spacing
+    assign reset_spacing = ' remove_spacing'
+  endif
+-%}
+{%- if section.blocks.size > 0 -%}
+  <div
+    id="{{ section.id }}"
+    class="bls__section color-{{ section.settings.color_scheme }} gradient {{ reset_spacing }} {{ custom_class }} bls__product-tabs design-{{design}}{% if design == 'accordition' and position == '2' %} inside-product-main-infomation d-none{% endif %} {% if design == 'show_all' and st.show_two_column %}show-two-column{% endif %}"
+    data-section-type="tabs"
+    data-section-id="{{ section.id }}"
+  >
+    <div class="{{ st.container }} section-full">
+      <div class="product info detailed">
+        <div class="product data items">
+          {%- if design == 'tab' or design == 'accordition' -%}
+            {%- if design == 'tab' -%}
+              <ul class="nav nav-tabs list-none text-center pl-0 flex flex-wrap justify-content-center mb-40 mt-0">
+                {%- for block in section.blocks %}
+                  {% assign bk_st = block.settings %}
+                  {% assign bk_id = block.id -%}
+                  <li class="data item{% if forloop.first %} active{% endif %}">
+                    <a
+                      class="is-nav-tabs heading-weight relative heading-color px-30 py-10 inline-block"
+                      href="#{{ block.id }}"
+                      data-block-id="proTabs{{ block.id }}"
+                      {%- if block.type == 'review' -%}
+                        tab-review
+                      {%- endif -%}
+                      {%- if block.type == '@app' -%}
+                        tab-review-app
+                      {%- endif -%}
+                    >
+                      {{- bk_st.title -}}
+                      {%- if block.type == '@app' -%}
+                        {{ 'products.product.review_app' | t }}
+                      {%- endif -%}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            <div class="tab-content">
+              {%- for block in section.blocks %}
+                {% assign bk_st = block.settings %}
+                {% assign bk_id = block.id -%}
+                <div
+                  id="proTabs{{ block.id }}"
+                  class="tab-item{% if forloop.first and design == 'accordition' and st.open_first_tab %} active{% endif %}{% if forloop.first and design == 'tab' %} active{% endif %}"
+                >
+                  <div class="data item title" id="tab-label-{{ bk_id }}">
+                    <a
+                      class="data accordition relative flex align-items-center"
+                      href="javascript:;"
+                      data-block-id="proTabs{{ block.id }}"
+                      aria-label="Toogle"
+                      {%- if block.type == 'review' -%}
+                        tab-review
+                      {%- endif -%}
+                      {%- if block.type == '@app' -%}
+                        tab-review-app
+                      {%- endif -%}
+                    >
+                      <span class="txt_h_tab d-blokc w-full heading-color heading-weight">
+                        {{- bk_st.title -}}
+                        {%- if block.type == '@app' -%}
+                          {{ 'products.product.review_app' | t }}
+                        {%- endif -%}
+                      </span>
+                      <span class="open-children-toggle"></span>
+                    </a>
+                  </div>
+                  <div
+                    class="tab-panel"
+                    {% if forloop.first and design == 'accordition' and st.open_first_tab %}
+                      style="display: block;"
+                    {% endif -%}
+                    {% if forloop.first and design == 'tab' %}
+                      style="display: block;"
+                    {% endif %}
+                  >
+                    {%- case block.type -%}
+                      {%- when '@app' -%}
+                        {% render block %}
+                      {%- when 'description' -%}
+                        {{ product.description }}
+                      {%- when 'review' -%}
+                        <div id="shopify-product-reviews" data-id="{{ product.id }}">
+                          {{ product.metafields.spr.reviews }}
+                        </div>
+                      {%- when 'custom_tab' -%}
+                        {% assign tab_content = bk_st.tab_content %}
+                        {%- case tab_content -%}
+                          {%- when 'content' -%}
+                            {{ bk_st.content }}
+                          {%- when 'content_page' -%}
+                            {%- if bk_st.page != blank -%}
+                              {{ pages[bk_st.page].content }}
+                            {%- endif -%}
+                          {% when 'content_custom' %}
+                            {% if infomation_meta.value.information_text != blank %}
+                              {{ infomation_meta.value.information_text }}
+                            {% elsif infomation_meta.value.information_in_page != blank %}
+                              {{ pages[infomation_meta.value.information_in_page].content }}
+                            {% else %}
+                              {%- if bk_st.page != blank -%}
+                                {{ pages[bk_st.page].content }}
+                              {%- endif -%}
+                            {% endif %}
+                        {%- endcase -%}
+                    {%- endcase -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            {%- for block in section.blocks %}
+              {% assign bk_st = block.settings %}
+              {% assign bk_id = block.id -%}
+              <div
+                class="tab-content-all"
+                {%- if block.type == 'review' -%}
+                  tab-review
+                {%- endif -%}
+                {%- if block.type == '@app' -%}
+                  tab-review-app
+                {%- endif -%}
+              >
+                <div class="data item title" id="tab-label-{{ bk_id }}">
+                  <h4 id="tab-label-{{ bk_id }}-title">
+                    {{ bk_st.title }}
+                    {%- if block.type == '@app' -%}
+                      {{ 'products.product.review_app' | t }}
+                    {%- endif -%}
+                  </h4>
+                </div>
+                <div class="tab-panel">
+                  {%- case block.type -%}
+                    {%- when 'description' -%}
+                      {{ product.description }}
+                    {%- when 'review' -%}
+                      <div id="shopify-product-reviews" data-id="{{ product.id }}">
+                        {{ product.metafields.spr.reviews }}
+                      </div>
+                    {%- when '@app' -%}
+                      {% render block %}
+                    {%- when 'custom_tab' -%}
+                      {% assign tab_content = bk_st.tab_content %}
+                      {%- case tab_content -%}
+                        {%- when 'content' -%}
+                          {{ bk_st.content }}
+                        {%- when 'content_page' -%}
+                          {%- if bk_st.page != blank -%}
+                            {{ pages[bk_st.page].content }}
+                          {%- endif -%}
+                      {%- endcase -%}
+                  {%- endcase -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.product-information-tabs.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.product-information-tabs.settings.color_scheme.label"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "t:sections.product-information-tabs.settings.design.label",
+      "default": "tab",
+      "options": [
+        {
+          "value": "tab",
+          "label": "t:sections.product-information-tabs.settings.design.options__1.label"
+        },
+        {
+          "value": "accordition",
+          "label": "t:sections.product-information-tabs.settings.design.options__2.label"
+        },
+        {
+          "value": "show_all",
+          "label": "t:sections.product-information-tabs.settings.design.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "t:sections.product-information-tabs.settings.position.label",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.product-information-tabs.settings.position.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.product-information-tabs.settings.position.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_tab",
+      "label": "t:sections.product-information-tabs.settings.open_first_tab.label",
+      "info": "t:sections.product-information-tabs.settings.open_first_tab.info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_two_column",
+      "label": "t:sections.product-information-tabs.settings.show_two_column.label",
+      "info": "t:sections.product-information-tabs.settings.show_two_column.info",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "custom_class",
+      "label": "t:sections.product-information-tabs.settings.custom_class.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "reset_spacing",
+      "label": "t:sections.product-information-tabs.settings.reset_spacing.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "description",
+      "name": "t:sections.all.section_header.description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.product-information-tabs.blocks.description.settings.title.label",
+          "default": "Description"
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "t:sections.product-information-tabs.blocks.review.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.product-information-tabs.blocks.review.settings.title.label",
+          "default": "Review"
+        }
+      ]
+    },
+    {
+      "type": "custom_tab",
+      "name": "t:sections.product-information-tabs.blocks.custom_tab.name",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.title.label",
+          "default": "Custom Tab"
+        },
+        {
+          "type": "select",
+          "id": "tab_content",
+          "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.tab_content.label",
+          "default": "content",
+          "options": [
+            {
+              "value": "content",
+              "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.tab_content.options__1.label"
+            },
+            {
+              "value": "content_page",
+              "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.tab_content.options__2.label"
+            },
+            {
+              "value": "content_custom",
+              "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.tab_content.options__3.label"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.content.label",
+          "default": "<p></p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:sections.product-information-tabs.blocks.custom_tab.settings.page.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

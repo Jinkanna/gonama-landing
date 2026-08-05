@@ -1,0 +1,106 @@
+/*
+* ------------------------------------------------------------
+* IMPORTANT: The contents of this file are auto-generated.
+*
+* This file may be updated by the Shopify admin theme editor
+* or related systems. Please exercise caution as any changes
+* made to this file may be overwritten.
+* ------------------------------------------------------------
+*/
+{
+  "sections": {
+    "page-heading": {
+      "type": "page-heading",
+      "blocks": {
+        "title": {
+          "type": "1",
+          "settings": {
+            "page_title": "",
+            "text_fs": 45
+          }
+        }
+      },
+      "block_order": [
+        "title"
+      ],
+      "settings": {
+        "show_banner": false,
+        "min_height": 200,
+        "parallax": false,
+        "show_overlay": false,
+        "overlay": 54,
+        "design": "text-overlay-image",
+        "text_postion": "text-center"
+      }
+    },
+    "main": {
+      "type": "page-store-location",
+      "blocks": {
+        "0e262e6e-fc4d-4ec5-81d9-9c95e76979a8": {
+          "type": "item",
+          "settings": {
+            "store_lng": "-77.038659",
+            "store_lat": "38.931567",
+            "store_name": "South Fulon",
+            "store_address": "Main Street, Anytown, CA 12345",
+            "store_phone": "(555) 456-7890"
+          }
+        },
+        "c06f9d83-8f64-479a-8993-0071fc5d2099": {
+          "type": "item",
+          "settings": {
+            "store_lng": "-77.003168",
+            "store_lat": "38.894651",
+            "store_name": "Place Ste-Foy",
+            "store_address": "Spruce Street, Petville, PA 34567",
+            "store_phone": "(555) 456-7890"
+          }
+        },
+        "21c6c1c9-4d71-4bac-85f5-765d07b31e17": {
+          "type": "item",
+          "settings": {
+            "store_lng": "-77.090372",
+            "store_lat": "38.881189",
+            "store_name": "Martin Place",
+            "store_address": "Oak Street, Sunnyville, FL 54321",
+            "store_phone": "(555) 456-7890"
+          }
+        },
+        "4c8eb07d-7eb5-4d2d-9e44-8d680d54b096": {
+          "type": "item",
+          "settings": {
+            "store_lng": "-77.111561",
+            "store_lat": "38.882342",
+            "store_name": "Southland Park",
+            "store_address": "Maple Road, Garden City, TX 45678",
+            "store_phone": "(555) 456-7890"
+          }
+        },
+        "57ff10a2-32e2-4e49-a745-719b9a95243a": {
+          "type": "item",
+          "settings": {
+            "store_lng": "-77.052477",
+            "store_lat": "38.943951",
+            "store_name": "Port Melbourne",
+            "store_address": "Pine Lane, Fitville, AZ 56789",
+            "store_phone": "(555) 456-7890"
+          }
+        }
+      },
+      "block_order": [
+        "0e262e6e-fc4d-4ec5-81d9-9c95e76979a8",
+        "c06f9d83-8f64-479a-8993-0071fc5d2099",
+        "21c6c1c9-4d71-4bac-85f5-765d07b31e17",
+        "4c8eb07d-7eb5-4d2d-9e44-8d680d54b096",
+        "57ff10a2-32e2-4e49-a745-719b9a95243a"
+      ],
+      "settings": {
+        "container": "container"
+      }
+    }
+  },
+  "order": [
+    "page-heading",
+    "main"
+  ]
+}

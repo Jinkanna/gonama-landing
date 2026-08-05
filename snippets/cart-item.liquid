@@ -1,0 +1,215 @@
+{%- liquid
+  assign th_st = settings
+  assign hidden_button_add_to_cart = th_st.hidden_button_add_to_cart
+  assign hidden_price = th_st.hidden_price
+-%}
+<div id="bls-minicart-product-{{ item.key }}" product-handle="{{ item.product.handle }}" class="cart-item d-flex mb-20 pb-20">
+  <div class="bls-minicart-product__image global-media-settings mr-15">
+    <a href="{{- item.url -}}">
+      {%- if item.image != blank -%}
+        {%- render 'responsive-image' | image: item.image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+      {%- else -%}
+        {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+      {%- endif -%}
+    </a>
+  </div>
+  <div class="bls-minicart-product-info flex-1 relative">
+    <h4 class="bls-minicart-product-name">
+      <a href="{{- item.url -}}">{{ item.product.title | escape }}</a>
+    </h4>
+    <div class="bls-minicart-item-variant">
+      {%- unless item.product.has_only_default_variant -%}
+        {%- for option in item.options_with_values -%}
+          <div class="product-option">
+            <span class="label">{{ option.name }}: </span>
+            <span>{{ option.value }}</span>
+          </div>
+        {%- endfor -%}
+      {%- endunless -%}
+      {%- if item.properties.size != 0 -%}<div class="product-option-property">{%- endif -%}
+      {%- for property in item.properties -%}
+        {%- assign property_first_char = property.first | slice: 0 -%}
+        {%- if property.last != blank and property_first_char != '_' -%}
+          <div class="product-option">
+            <span>{{ property.first }}: </span>
+            <span>
+              {%- if property.last contains '/uploads/' -%}
+                <a href="{{ property.last }}" class="link" target="_blank">
+                  {{ property.last | split: '/' | last }}
+                </a>
+              {%- else -%}
+                {{ property.last }}
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if item.properties.size != 0 -%}</div>{%- endif -%}
+    </div>
+    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+      {%- for discount in item.line_level_discount_allocations -%}
+        <li class="discounts__discount fs-14 d-inline-flex align-items-center">
+          {%- render 'icon-discount' -%}
+          {{ discount.discount_application.title }}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% if hidden_price == false %}
+      <div class="bls-minicart-item-prices">
+        {%- assign current_variant = item.variant -%}
+        {%- if item.original_price != item.final_price -%}
+          <div class="bls-minicart-discounted-prices">
+            <span class="bls-minicart-item-price bls-minicart-item-regular-price text-color-regular-price">
+              {% if settings.currency_code_enabled %}
+                {{ item.final_price | money_with_currency }}
+              {% else %}
+                {{ item.final_price | money }}
+              {% endif %}
+            </span>
+            <s class="bls-minicart-item-original-price">
+              {% if settings.currency_code_enabled %}
+                {{ item.original_price | money_with_currency }}
+              {% else %}
+                {{ item.original_price | money }}
+              {% endif %}
+            </s>
+          </div>
+        {%- elsif current_variant.compare_at_price > current_variant.price -%}
+          <span class="bls-minicart-item-price bls-minicart-item-regular-price text-color-regular-price">
+            {% if settings.currency_code_enabled %}
+              {{ current_variant.price | money_with_currency }}
+            {% else %}
+              {{ current_variant.price | money }}
+            {% endif %}
+          </span>
+          <s class="bls-minicart-item-original-price">
+            {% if settings.currency_code_enabled %}
+              {{ current_variant.compare_at_price | money_with_currency }}
+            {% else %}
+              {{ current_variant.compare_at_price | money }}
+            {% endif %}
+          </s>
+        {%- else -%}
+          <span class="bls-minicart-item-price text-color-original-price">
+            {% if settings.currency_code_enabled %}
+              {{ item.original_price | money_with_currency }}
+            {% else %}
+              {{ item.original_price | money }}
+            {% endif %}
+          </span>
+        {%- endif -%}
+        {%- if item.variant.available and item.unit_price_measurement -%}
+          <div class="unit-price caption">
+            <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+            {% if settings.currency_code_enabled %}
+              {{ item.variant.unit_price | money_with_currency }}
+            {% else %}
+              {{ item.variant.unit_price | money }}
+            {% endif %}
+            <span aria-hidden="true">/</span>
+            <span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+            {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
+              {{- item.variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+            {{ item.variant.unit_price_measurement.reference_unit }}
+          </div>
+        {%- endif -%}
+        {% if hidden_button_add_to_cart == false %}
+          <div class="bls-minicart-actions mt-5">
+            <quantity-input class="quantity rounded-5 border d-inline-flex align-items-center text-center">
+              <button
+                class="quantity__button btn-reset width-35 flex justify-content-center align-items-center no-js-hidden"
+                name="minus"
+                type="button"
+                data-id="{{- item.key -}}"
+              >
+                <svg width="11" height="12" viewBox="0 0 11 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 0.5L11 1.5L-4.37114e-08 1.5L0 0.5L11 0.5Z" fill="#111111"></path>
+                </svg>
+              </button>
+              <input
+                class="bls-quantity-input bg-unset border-none text-center width-50 appearance-none p-0-important"
+                type="number"
+                name="updates[]"
+                data-id="{{- item.key -}}"
+                value="{{- item.quantity -}}"
+                data-value="{{- item.quantity -}}"
+                min="0"
+              >
+              <button
+                class="quantity__button  btn-reset width-35 flex justify-content-center align-items-center no-js-hidden"
+                name="plus"
+                type="button"
+                data-id="{{- item.key -}}"
+              >
+                <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5 11.5H6L6 6.5H11V5.5H6L6 0.5H5L5 5.5H0V6.5H5L5 11.5Z" fill="#111111"></path>
+                </svg>
+              </button>
+            </quantity-input>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="bls-minicart-bottom">
+      {% assign item_url = item.url %}
+      {%- unless item.product.has_only_default_variant -%}
+        <a
+          href="{{ item_url }}"
+          class="bls-minicart-item-edit"
+          data-id="{{ item.id }}"
+          data-key="{{ item.key }}"
+          data-quantity="{{ item.quantity }}"
+        >
+          {{- 'general.cart.edit' | t -}}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.73512 2.10012L2.94595 7.16928C2.76512 7.36178 2.59012 7.74095 2.55512 8.00345L2.33928 9.89345C2.26345 10.5759 2.75345 11.0426 3.43012 10.9259L5.30845 10.6051C5.57095 10.5584 5.93845 10.3659 6.11928 10.1676L10.9085 5.09845C11.7368 4.22345 12.1101 3.22595 10.8209 2.00678C9.53762 0.799283 8.56345 1.22512 7.73512 2.10012Z" stroke="#999999" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.93604 2.94571C7.18687 4.55571 8.49354 5.78654 10.1152 5.94988" stroke="#999999" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1.75 12.8333H12.25" stroke="#999999" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endunless -%}
+      <mini-cart-remove-button
+        data-product-handle="{{ item.product.handle }}"
+        class="{% if settings.show_message_add_to_wishlist %}bls-action-add-wishlist{% endif %} bls-minicart-item-remove"
+        data-index="{{- item.key -}}"
+      >
+        <a href="{{ item.url_to_remove }}" class="cart-remove button--tertiary">
+          {{- 'general.cart.remove' | t -}}
+          <span class="icon-trash-2"></span>
+        </a>
+      </mini-cart-remove-button>
+    </div>
+  </div>
+  {% if settings.show_message_add_to_wishlist %}
+    <div class="flex-1 relative bls-minicart-wishlist" style="display: none;">
+      <p class="pr-20">
+        {{ 'templates.wishlist.title_remove' | t }}
+      </p>
+      <minicart-wishlist-action class="mt-10 d-flex gap-5">
+        <a
+          data-product-handle="{{ item.product.handle }}"
+          data-index="{{- item.key -}}"
+          class="btn-primary btn-small bls__product-wishlist-js btn-minicart-add-wishlist-js pointer"
+          type="button"
+          role="button"
+          aria-label="{{ 'templates.wishlist.action_yes' | t }}"
+        >
+          {{ 'templates.wishlist.action_yes' | t }}
+        </a>
+        <a
+          data-index="{{- item.key -}}"
+          class="btn-secondary btn-small bg-grey btn-minicart-remove-js pointer text-center"
+          type="button"
+          role="button"
+          aria-label="{{ 'templates.wishlist.action_no' | t }}"
+        >
+          {{ 'templates.wishlist.action_no' | t }}
+        </a>
+      </minicart-wishlist-action>
+      <a href="#" class="cart-close-wishlist button--tertiary absolute top-0 right-0 z-1 grey-color pointer">
+        <span class="icon-x fs-14"></span>
+      </a>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,79 @@
+{%- liquid
+  assign th_st = settings
+  assign product_style = th_st.product_style
+  assign cls = st.collection
+  if bl != blank
+    assign cls = bl
+  endif
+  assign item_desktop = st.item_desktop
+  assign item_mobile = st.item_mobile
+  assign limit_products = st.limit_products | plus: 0
+  assign carousel_autoplay = st.carousel_autoplay
+  assign carousel_loop = st.carousel_loop
+  assign carousel_arrows = st.carousel_arrows
+  assign column_gap = st.column_gap
+  assign enabled_animations = th_st.animations_enabled
+  assign reveal_on_scroll = st.reveal_on_scroll
+  assign carousel_pagination = st.carousel_pagination
+-%}
+<div
+  class="swiper bls__swiper grid-{{ product_style }} hover__show-nav {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}  {% if reveal_on_scroll %}reveal_on_scroll{% endif %}"
+  id="bls__swiper-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-autoplay="{{ carousel_autoplay }}"
+  data-loop="{{ carousel_loop }}"
+  data-mobile="2"
+  data-tablet="3"
+  data-arrow-centerimage="1"
+  data-desktop="{{ item_desktop }}"
+  data-spacing="{{ column_gap }}"
+  data-item-mobile="{{ item_mobile }}"
+  data-pagination-progressbar="{% if carousel_pagination == 'carousel_pagination_progress' %}true{% else %}false{% endif %}"
+>
+  {%- assign collection = collections[cls] -%}
+  {%- if carousel_arrows != false -%}
+    <div class="swipper-next-back">
+      <div class="swiper-arrow swiper-next swiper-button-next box-shadow"><i class="icon-chevron-right"></i></div>
+      <div class="swiper-arrow swiper-prev swiper-button-prev box-shadow"><i class="icon-chevron-left"></i></div>
+    </div>
+  {%- endif -%}
+  <div
+    class="swiper-wrapper {% if carousel_pagination_progress %}mb-45{% endif %}"
+    style="--perload-gap: {{ column_gap }}px"
+  >
+    {%- if collection.products.size == 0 -%}
+      {%- for i in (1..limit_products) -%}
+        <div class="swiper-slide">
+          <div
+            class="bls__product-item {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+            {% if enabled_animations %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-tab-plh' -%}
+            <div class="bls__product-details pt-15">
+              <a role="link" aria-disabled="true">{{ 'products.product.product_placeholder' | t }}</a>
+              <div>{%- render 'price' -%}</div>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for product in collection.products limit: limit_products -%}
+        {%- if product.available -%}{%- endif -%}
+        <div class="swiper-slide">
+          {%- render 'product-item' | product: product -%}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+  {%- if carousel_pagination == 'carousel_bullets'
+    or carousel_pagination == 'show_bullet_mobile'
+    or carousel_pagination == 'carousel_pagination_progress'
+  -%}
+    <div
+      class="swiper-pagination {% if carousel_pagination == 'show_bullet_mobile' %} show-on-mobile {% endif %} {% if enabled_animations %}scroll-trigger animate--slide-in{% endif %}"
+    ></div>
+  {%- endif -%}
+</div>

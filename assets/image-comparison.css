@@ -1,0 +1,116 @@
+.img-comp-container {
+    position: relative;
+    cursor: col-resize;
+}
+
+.img-comp-img>*:not(span) {
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .img-comp-img>*:not(span) {
+        height: var(--height);
+    }
+}
+
+.img-comp-img .bls__placeholder,
+.img-comp-img img {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    -o-object-fit: cover;
+    object-fit: cover;
+    display: block;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.img-comp-img.img-comp-overlay {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    clip-path: inset(0px 0px 0px var(--percent));
+}
+
+.image-comparison__button {
+    padding: 0;
+    width: 30px;
+    position: absolute;
+    left: var(--percent);
+    top: 0;
+    bottom: 0;
+    transform: translateX(-15px);
+    border: 0;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    transition: none !important;
+    background-color: transparent !important;
+    cursor: col-resize;
+}
+
+.image-comparison__button span {
+    width: 30px;
+    height: 50px;
+    border-radius: 30px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-white);
+    position: relative;
+}
+
+.image-comparison__button svg path {
+    fill: var(--heading-color) !important;
+}
+
+.image-comparison__button:before {
+    content: "";
+    width: 2px;
+    position: absolute;
+    background-color: var(--color-white);
+    top: 0;
+    bottom: 0;
+}
+
+.button-comparison {
+    background-color: var(--color-white);
+    color: var(--heading-color);
+    z-index: 1;
+    padding: 0.8rem 3rem;
+    font-weight: var(--btn-font-weight);
+    border-radius: var(--btn-border-radius);
+}
+
+.button-comparison.button-after {
+    z-index: 2;
+
+}
+
+@media (max-width: 767px) {
+    .button-comparison {
+        padding: 0.5rem 2rem;
+    }
+
+    .button-before {
+        left: 1.5rem;
+        top: 1.5rem;
+    }
+
+    .button-after {
+        right: 1.5rem;
+        bottom: 1.5rem;
+    }
+}

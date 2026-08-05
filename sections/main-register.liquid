@@ -1,0 +1,62 @@
+{{ 'custormer.css' | asset_url | stylesheet_tag }}
+<div class="customer-register">
+  <div class="container">
+    <div class="customer-form register-form col-md-6 col-sm-8 m-auto">
+      {% form 'create_customer' , class: 'custormer-register-form' %}
+        {%- if form.errors -%}
+            <ul class="error error-list">
+              {%- for field in form.errors -%}
+                  <li>
+                      {%- if field == 'form' -%}
+                          {{ form.errors.messages[field] }}
+                      {%- else -%}
+                        <a href="#RegisterForm-{{ field }}" class="link link-underline">
+                          <span class="text">
+                              {{ form.errors.translated_fields[field] | capitalize }}
+                              {{ form.errors.messages[field] }}
+                          </span>
+                        </a>
+                      {%- endif -%}
+                  </li>
+              {%- endfor -%}
+          </ul>
+        {% endif %}
+        <div class="form-group mb-20 d-flex flex-column first-name">
+            <label class="form-label pb-5" for="first-name">{{ 'customer.register.first_name' | t }}<span class="required">*</span></label>
+            <input type="text" id="first-name" placeholder="{{ 'customer.register.first_name' | t }}" name="customer[first_name]">
+        </div>
+        <div class="form-group mb-20 d-flex flex-column last-name">
+            <label class="form-label pb-5" for="last-name">{{ 'customer.register.last_name' | t }}<span class="required">*</span></label>
+            <input type="text" id="last-name" name="customer[last_name]" placeholder="{{ 'customer.register.last_name' | t }}">
+        </div>
+        <div class="form-group mb-20 d-flex flex-column email">
+            <label class="pb-5" for="email">{{ 'customer.register.email' | t }}<span class="required">*</span></label>
+            <input 
+              type="email" 
+              name="customer[email]"
+              placeholder="{{ 'customer.login_page.placeholder_email' | t }}"
+              required
+              id="email"
+            >
+        </div>
+        <div class="form-group mb-20 d-flex flex-column password">
+            <label class="form-label pb-5" for="password">{{ 'customer.register.password' | t }}<span class="required">*</span></label>
+            <input 
+              type="password"
+              name="customer[password]"
+              placeholder="{{ 'customer.login_page.placeholder_pass' | t }}"
+              required
+              id="password"
+            >
+        </div>
+        <p>
+          {{ 'customer.register.content_form' | t }}
+        </p>
+        <div class="submit mt-30 d-flex flex-column">
+            <input class="btn-primary w-full text-center" type="submit" value="{{ 'customer.register.submit' | t }}">
+            <a href="{{ routes.account_login_url }}" class="btn btn-secondary w-full text-center mt-20">{{ 'customer.log_in' | t }}</a>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</div>

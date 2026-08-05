@@ -1,0 +1,70 @@
+{%- liquid
+  assign st = section.settings
+-%}
+<section class="breadcrumbs color-{{ section.settings.color_scheme }} gradient {{ st.postion }} py-25 fs-small">
+  <div class="{{ st.container }}">
+    {% render 'breadcrumbs' | next_prev: st.next_prev %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "t:sections.Breadcrumbs.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.all.layout.label",
+      "default": "container",
+      "options": [
+        {
+          "value": "container",
+          "label": "t:sections.all.layout.options__1.label"
+        },
+        {
+          "value": "container-fluid",
+          "label": "t:sections.all.layout.options__2.label"
+        },
+        {
+          "value": "strecth-width",
+          "label": "t:sections.all.layout.options__3.label"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.all.layout.options__4.label"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.Breadcrumbs.settings.color_scheme.label"
+    },
+    {
+      "type": "select",
+      "id": "postion",
+      "label": "t:sections.all.horizontal_alignment.text_alignment",
+      "default": "text-left",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "t:sections.all.horizontal_alignment.options__1.label"
+        },
+        {
+          "value": "text-center",
+          "label": "t:sections.all.horizontal_alignment.options__2.label"
+        },
+        {
+          "value": "text-right",
+          "label": "t:sections.all.horizontal_alignment.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "next_prev",
+      "label": "t:sections.Breadcrumbs.settings.next_prev.label",
+      "default": false
+    }
+  ]
+}
+{% endschema %}
