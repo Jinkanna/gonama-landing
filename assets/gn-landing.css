@@ -98,6 +98,27 @@
    Tipografía
    -------------------------------------------------------------------------- */
 
+/* El tema define `h1,h2,...{font-family;color;font-weight;text-transform}` y
+   `a{color}` con selectores de elemento, que le ganan a la herencia de .gn.
+   Este bloque los neutraliza dentro de la landing. Sin esto los títulos salen
+   en Montserrat y con el color de heading del tema. */
+.gn h1,
+.gn h2,
+.gn h3,
+.gn h4,
+.gn h5,
+.gn h6 {
+  font-family: inherit;
+  color: var(--text);
+  text-transform: none;
+  line-height: inherit;
+}
+
+.gn a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .gn h1,
 .gn h2,
 .gn h3,
@@ -114,7 +135,7 @@
   list-style: none;
 }
 
-.gn a {
+.gn a:not(.gn__btn) {
   color: var(--accent);
 }
 
@@ -248,23 +269,33 @@
   transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.gn__btn--primary {
+/* Doble clase a propósito: el tema pinta los <a> y los <button> con sus propias
+   reglas, y esto tiene que ganarles sin recurrir a !important. */
+.gn .gn__btn--primary,
+.gn .gn__btn--primary:link,
+.gn .gn__btn--primary:visited {
   background: var(--accent);
   color: var(--on-accent);
+  border-color: var(--accent);
 }
 
-.gn__btn--primary:hover {
+.gn .gn__btn--primary:hover,
+.gn .gn__btn--primary:focus {
   background: var(--accent-hover);
+  border-color: var(--accent-hover);
   color: var(--on-accent);
 }
 
-.gn__btn--ghost {
+.gn .gn__btn--ghost,
+.gn .gn__btn--ghost:link,
+.gn .gn__btn--ghost:visited {
   border-color: var(--border-strong);
   color: var(--text);
   background: transparent;
 }
 
-.gn__btn--ghost:hover {
+.gn .gn__btn--ghost:hover,
+.gn .gn__btn--ghost:focus {
   border-color: var(--accent);
   color: var(--accent);
 }
