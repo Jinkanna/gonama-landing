@@ -926,6 +926,10 @@
   padding: clamp(22px, 2.4vw, 32px) 0;
   background: none;
   border: 0;
+  /* El marcador propio del <summary>: en Safari es un triangulo oscuro que
+     aparece a la izquierda. Las tres reglas cubren los tres motores. */
+  list-style: none;
+  list-style-type: none;
   cursor: pointer;
   text-align: left;
   font-family: inherit;
@@ -934,6 +938,30 @@
   letter-spacing: -0.031em;
   color: var(--fg);
   transition: color 0.3s ease;
+}
+
+.gnp-faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.gnp-faq__q::marker {
+  content: '';
+  font-size: 0;
+}
+
+/* Nada de fondo en ningun estado de la pregunta. */
+.gnp-faq__q,
+.gnp-faq__q:hover,
+.gnp-faq__q:focus,
+.gnp-faq__q:active,
+.gnp-faq__item:hover .gnp-faq__q,
+.gnp-faq__item[open] .gnp-faq__q {
+  background: transparent;
+}
+
+.gnp-faq__q:focus-visible {
+  outline: 1px solid var(--mint);
+  outline-offset: 4px;
 }
 
 @media (min-width: 760px) {
