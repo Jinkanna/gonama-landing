@@ -916,9 +916,6 @@
   border-top: 1px solid var(--line);
 }
 
-.gnp-faq__item {
-  border-bottom: 1px solid var(--line);
-}
 
 .gnp-faq__q {
   width: 100%;
@@ -945,21 +942,69 @@
   }
 }
 
-/* El hover ya no tiñe la pregunta entera: se marca con el icono y con un
-   corrimiento corto, que se lee sin gritar. */
+/* Mismo lenguaje que el resto de la pagina: un velo que sube y el texto
+   virando a Mint, en vez del corrimiento lateral que tenia. */
+.gnp-faq__item {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+.gnp-faq__item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.gnp-faq__item:hover::before {
+  opacity: 1;
+  transform: none;
+}
+
+/* Filo de acento que crece de izquierda a derecha sobre la divisoria. */
+.gnp-faq__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--mint);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-faq__item:hover::after {
+  transform: scaleX(1);
+}
+
+.gnp-faq__q {
+  position: relative;
+  z-index: 1;
+  padding-inline: clamp(0px, 1.4vw, 20px);
+}
+
 .gnp-faq__q:hover {
-  color: var(--fg);
-}
-
-.gnp-faq__q span:first-child {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.gnp-faq__q:hover span:first-child {
-  transform: translateX(8px);
+  color: var(--mint);
 }
 
 .gnp-faq__q:hover .gnp-faq__ico {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+.gnp-faq__a {
+  position: relative;
+  z-index: 1;
+  padding-inline: clamp(0px, 1.4vw, 20px);
+}
+
+.gnp-faq__ico {
   border-color: var(--mint);
   color: var(--mint);
 }
@@ -1054,7 +1099,8 @@
 
 .gnp-close__input {
   width: 100%;
-  padding: 16px 0;
+  /* Con padding lateral cero el texto arrancaba pegado al filo del renglon. */
+  padding: 16px 14px;
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--line);
@@ -1506,4 +1552,90 @@
   .gnp-nav.is-hidden {
     transform: none;
   }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.gnp-foot {
+  padding: clamp(56px, 6vw, 88px) 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.gnp-foot__top {
+  display: grid;
+  gap: clamp(40px, 5vw, 72px);
+  padding-bottom: clamp(40px, 5vw, 64px);
+}
+
+@media (min-width: 860px) {
+  .gnp-foot__top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  }
+}
+
+.gnp-foot__mark {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+}
+
+.gnp-foot__go {
+  color: var(--go-blue);
+}
+
+.gnp-foot__tagline {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  max-width: 34ch;
+}
+
+.gnp-foot__cta {
+  margin-top: 26px;
+}
+
+.gnp-foot__cols {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+}
+
+.gnp-foot__col-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 18px;
+}
+
+.gnp-foot__col li {
+  padding: 7px 0;
+}
+
+.gnp-foot__col a,
+.gnp-foot__col span {
+  font-size: 15px;
+  color: var(--fg-soft);
+  transition: color 0.25s ease;
+}
+
+.gnp-foot__col a:hover {
+  color: var(--mint);
+}
+
+.gnp-foot__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--fg-faint);
 }

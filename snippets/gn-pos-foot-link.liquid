@@ -1,0 +1,20 @@
+{% comment %}
+  Una línea del footer con formato  Texto | destino
+  Sin destino, el ítem se muestra como texto plano.
+{% endcomment %}
+
+{%- liquid
+  assign parts = row | strip_html | strip | split: '|'
+  assign label = parts[0] | strip
+  assign href = parts[1] | strip
+-%}
+
+{%- if label != blank -%}
+  <li>
+    {%- if href != blank -%}
+      <a href="{{ href }}">{{ label | escape }}</a>
+    {%- else -%}
+      <span>{{ label | escape }}</span>
+    {%- endif -%}
+  </li>
+{%- endif -%}
