@@ -296,7 +296,7 @@
         "q4"
       ],
       "settings": {
-        "tone": "a",
+        "tone": "b",
         "label": "Corporate",
         "headline": "How we operate as a company",
         "sub": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce."
@@ -305,7 +305,7 @@
     "close": {
       "type": "gn-pos-close",
       "settings": {
-        "tone": "b",
+        "tone": "a",
         "label": "The future of commerce",
         "headline": "The future\nis autonomous.",
         "sub": "The next decade will transform how businesses sell, operate and interact with customers. The companies that succeed will operate through intelligent infrastructure. GOnama is building that infrastructure.",
@@ -333,7 +333,7 @@
     "reliability",
     "edge",
     "partners",
-    "faq",
-    "close"
+    "close",
+    "faq"
   ]
 }
