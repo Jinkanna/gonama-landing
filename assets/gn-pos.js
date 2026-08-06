@@ -124,6 +124,50 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(setSpeed, 180);
     });
+
+    /* Frenado suave -------------------------------------------------------
+     * Antes esto era animation-play-state:paused en CSS, que corta la
+     * marquesina en seco al entrar y la devuelve a velocidad plena al salir.
+     * Se reemplaza por una rampa sobre playbackRate: la fila desacelera
+     * hasta parar y vuelve a arrancar sin saltos.
+     */
+    var target = 1;
+    var current = 1;
+    var frame = null;
+
+    function anims() {
+      if (!group.getAnimations) return [];
+      return group.getAnimations().concat(clone.getAnimations());
+    }
+
+    function tick() {
+      // 0.16 por cuadro da medio segundo de frenado a 60fps.
+      current += (target - current) * 0.16;
+      if (Math.abs(target - current) < 0.004) current = target;
+      anims().forEach(function (a) {
+        a.playbackRate = current;
+      });
+      frame = current === target ? null : window.requestAnimationFrame(tick);
+    }
+
+    function ramp(to) {
+      target = to;
+      if (frame === null) frame = window.requestAnimationFrame(tick);
+    }
+
+    track.addEventListener('pointerenter', function () {
+      ramp(0);
+    });
+    track.addEventListener('pointerleave', function () {
+      ramp(1);
+    });
+    // Equivalente para teclado, que antes cubria :focus-within.
+    track.addEventListener('focusin', function () {
+      ramp(0);
+    });
+    track.addEventListener('focusout', function () {
+      ramp(1);
+    });
   }
 
   /* ------------------------------------------------------------- Contadores */

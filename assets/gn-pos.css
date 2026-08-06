@@ -842,10 +842,8 @@
   animation-direction: reverse;
 }
 
-.gnp-part__rail:hover .gnp-ticker__group,
-.gnp-part__rail:focus-within .gnp-ticker__group {
-  animation-play-state: paused;
-}
+/* El frenado al pasar el mouse lo hace gn-pos.js con una rampa sobre
+   playbackRate. Con animation-play-state la fila se cortaba en seco. */
 
 @keyframes gnp-ticker {
   from {
@@ -880,9 +878,9 @@
   transition: background 0.35s ease, border-color 0.35s ease;
 }
 
-.gnp-part:hover {
-  border-color: var(--hover);
-}
+/* Sin borde de acento al pasar: el navy pleno sobre la tarjeta blanca
+   entraba como un golpe. El estado lo marca el velo, que va con su propia
+   transicion, y el texto. */
 
 /* Ancho fijo dentro del riel. La separacion va por margen y no por gap:
    asi tambien queda en la union entre el grupo y su clon, donde el gap del
