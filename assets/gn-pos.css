@@ -670,41 +670,59 @@
    5. CONFIABILIDAD
    ========================================================================== */
 
+/* Con tres columnas y cuatro bloques quedaba 3 + 1 y un hueco al lado del
+   ultimo. Los cortes son 1, 2 y 4 columnas, que cierran filas completas. */
 .gnp-rel__grid {
   display: grid;
-  gap: clamp(28px, 3vw, 44px);
+  column-gap: clamp(24px, 2.6vw, 44px);
+  row-gap: clamp(36px, 4vw, 56px);
 }
 
-@media (min-width: 860px) {
+@media (min-width: 720px) {
   .gnp-rel__grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1180px) {
+  .gnp-rel__grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 .gnp-rel {
-  padding-top: 26px;
+  padding-top: 22px;
   border-top: 2px solid var(--accent);
 }
 
 .gnp-rel__name {
-  font-size: 21px;
-  line-height: 1.08;
+  font-size: 20px;
+  line-height: 1.14;
   font-weight: 700;
   letter-spacing: -0.031em;
   text-transform: uppercase;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 720px) {
   .gnp-rel__name {
-    font-size: 24px;
+    font-size: 22px;
+  }
+}
+
+/* En cuatro columnas el titulo baja un punto: a ese ancho, 22px con dos
+   renglones empezaba a partir palabras. */
+@media (min-width: 1180px) {
+  .gnp-rel__name {
+    font-size: 20px;
   }
 }
 
 .gnp-rel__desc {
   margin-top: 14px;
-  font-size: 15px;
-  line-height: 1.62;
+  font-size: 14.5px;
+  line-height: 1.65;
   color: var(--fg-soft);
+  max-width: 42ch;
 }
 
 /* ==========================================================================
@@ -1674,4 +1692,12 @@
   color: var(--fg);
   font-weight: 500;
   margin-top: 6px;
+}
+
+/* Respaldo para el salto nativo, cuando llega por teclado o por URL con
+   ancla: deja aire debajo del header fijo. */
+.gnp[id],
+[id^='section-'],
+#gnp-contact {
+  scroll-margin-top: 104px;
 }

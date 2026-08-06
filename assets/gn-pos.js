@@ -296,6 +296,55 @@
     });
   }
 
+  /* --------------------------------------------------------------- Anclas */
+
+  /**
+   * El tema declara .bls-wrapper{overflow-x:hidden}. Con un eje en hidden y el
+   * otro en visible, el visible computa a auto: el wrapper pasa a ser un
+   * contenedor con scroll y el navegador intenta desplazarlo a el en vez de al
+   * documento. Como crece con su contenido, no se mueve nada y los enlaces del
+   * menu y del footer parecen muertos.
+   *
+   * Se resuelve tomando el click y desplazando la ventana a mano, que ademas
+   * permite descontar la altura del header fijo.
+   */
+  function initAnchors() {
+    document.addEventListener('click', function (ev) {
+      var link = ev.target.closest && ev.target.closest('a[href^="#"]');
+      if (!link) return;
+
+      var hash = link.getAttribute('href');
+      if (!hash || hash.length < 2) return;
+
+      var target;
+      try {
+        target = document.querySelector(hash);
+      } catch (e) {
+        return;
+      }
+      if (!target) return;
+
+      ev.preventDefault();
+
+      // El menu se cierra en su propio handler; se espera un cuadro para que
+      // el scroll del documento vuelva a estar habilitado.
+      window.requestAnimationFrame(function () {
+        var header = document.querySelector('.gnp-nav');
+        var offset = header ? header.offsetHeight : 0;
+        var y = target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
+
+        window.scrollTo({
+          top: Math.max(0, y),
+          behavior: reduced ? 'auto' : 'smooth'
+        });
+
+        if (window.history && window.history.pushState) {
+          window.history.pushState(null, '', hash);
+        }
+      });
+    });
+  }
+
   /* ----------------------------------------------------------------- Boot */
 
   function each(selector, fn) {
@@ -309,6 +358,7 @@
   function boot() {
     stageLines();
     initReveal();
+    initAnchors();
     each('[data-gn-intro]', initIntro);
     each('[data-gnp-nav]', initNav);
     each('[data-gnp-marquee]', initMarquee);
