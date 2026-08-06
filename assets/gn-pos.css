@@ -81,10 +81,16 @@
   margin: 0;
 }
 
-.gnp p,
-.gnp ul,
-.gnp li,
-.gnp figure {
+/* El tema pone margenes a los p con selector de elemento y hay que anularlos,
+   pero escrito como ".gnp p" este reset pasa a valer 0,1,1 y le gana a
+   cualquier clase de componente. Nueve clases de la landing declaraban su
+   margen y se lo comia esto en silencio, entre ellas las bajadas de las
+   tarjetas de Global Checkout y de Capacidades.
+
+   Con :where() el parentesis no suma especificidad: el reset queda en 0,1,0,
+   suficiente para ganarle al tema y empatado con las clases, que al estar
+   mas abajo en este mismo archivo se imponen. */
+.gnp :where(p, ul, li, figure) {
   margin: 0;
 }
 
@@ -692,7 +698,7 @@
 }
 
 .gnp-rel__desc {
-  margin-top: 14px;
+  margin-top: 20px;
   font-size: 14.5px;
   line-height: 1.65;
   color: var(--fg-soft);
@@ -977,10 +983,7 @@
   opacity: 1;
 }
 
-/* Con .gnp-part__note a secas el margen no aplicaba: el reset .gnp p{margin:0}
-   de mas arriba le gana por especificidad. Por eso el texto venia pegado al
-   titulo desde siempre. */
-.gnp .gnp-part__note {
+.gnp-part__note {
   margin-top: 16px;
   font-size: 14px;
   line-height: 1.55;
