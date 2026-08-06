@@ -92,7 +92,7 @@
       // El globo se sale de cuadro a la derecha, como en la referencia.
       cx = w * 0.5;
       cy = h * 0.5;
-      radius = Math.min(w, h) * 0.43;
+      radius = Math.min(w, h) * 0.435;
     }
 
     var TILT = -19 * Math.PI / 180;
@@ -225,20 +225,28 @@
       }
     }
 
-    var raf = 0, running = false, t0 = 0, spin = 2.4;
+    var raf = 0, running = false, t0 = 0, elapsed = 0, last = 0;
+
+    // Radianes por segundo. Una vuelta completa lleva unos dos minutos.
+    var SPEED = 0.052;
+    var START = 2.4;
 
     function frame(ts) {
       if (!running) return;
-      if (!t0) t0 = ts;
-      var t = (ts - t0) / 1000;
-      spin += 0.0016;
-      draw(spin, t);
+      if (!t0) { t0 = ts; last = ts; }
+      // El tiempo se acumula, asi que pausar y retomar no da un salto.
+      var dt = Math.min((ts - last) / 1000, 0.05);
+      last = ts;
+      elapsed += dt;
+      draw(START + elapsed * SPEED, elapsed);
       raf = window.requestAnimationFrame(frame);
     }
 
     function start() {
       if (running || reduced) return;
       running = true;
+      last = 0;
+      t0 = 0;
       raf = window.requestAnimationFrame(frame);
     }
 
@@ -249,7 +257,7 @@
     }
 
     resize();
-    draw(spin, 0);
+    draw(START, 0);
 
     if (reduced) return;
 
@@ -271,7 +279,7 @@
       clearTimeout(rt);
       rt = setTimeout(function () {
         resize();
-        draw(spin, 0);
+        draw(START + elapsed * SPEED, elapsed);
       }, 160);
     });
   }
