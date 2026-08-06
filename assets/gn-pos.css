@@ -1420,7 +1420,11 @@
   gap: clamp(14px, 2vw, 32px);
 }
 
-/* Visible en todos los anchos. Antes se ocultaba abajo de 700px porque en
+/* Arriba de todo no se muestra: el hero ya tiene su propio boton de contacto
+   y la barra queda con el logo solo. Aparece al empezar a bajar, con el mismo
+   umbral de 90px que vuelve solida la barra.
+
+   Visible en todos los anchos. Antes se ocultaba abajo de 700px porque en
    telefono el contacto se alcanzaba desde el menu; sin menu, esconderlo
    dejaba la barra con el logo y nada mas. */
 .gnp-nav__util {
@@ -1430,7 +1434,16 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-soft);
-  transition: color 0.25s ease;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.25s ease;
+}
+
+.gnp-nav.is-solid .gnp-nav__util {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 
 .gnp-nav__util:hover {

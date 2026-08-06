@@ -288,6 +288,10 @@
       },
       { passive: true }
     );
+
+    // Si la pagina se abre ya scrolleada, con un ancla en la URL o al volver
+    // atras, el estado tiene que estar bien desde el primer cuadro.
+    update();
   }
 
   /* --------------------------------------------------------------- Intro */
@@ -329,6 +333,49 @@
    */
   var anchorsReady = false;
 
+  /**
+   * El behavior:'smooth' del navegador tarda mas o menos lo mismo sea cual sea
+   * la distancia: unos 400ms. Del hero al contacto hay varios miles de pixeles
+   * y ese recorrido en 400ms se ve como un tiron, no como un desplazamiento.
+   *
+   * Este reemplazo hace durar el viaje segun lo lejos que quede, con un tope,
+   * y con una curva que arranca y termina despacio. Si la persona toca la
+   * rueda o la pantalla en el medio, se cancela y le devuelve el control.
+   */
+  function scrollSuave(destino) {
+    var desde = window.pageYOffset;
+    var tramo = destino - desde;
+    if (Math.abs(tramo) < 2) return;
+
+    // 0.42ms por pixel, entre medio segundo y segundo y medio.
+    var dur = Math.min(1500, Math.max(500, Math.abs(tramo) * 0.42));
+    var t0 = null;
+    var cancelado = false;
+
+    function cancelar() {
+      cancelado = true;
+    }
+
+    window.addEventListener('wheel', cancelar, { passive: true, once: true });
+    window.addEventListener('touchstart', cancelar, { passive: true, once: true });
+
+    function paso(ts) {
+      if (cancelado) return;
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      // easeInOutCubic
+      var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      window.scrollTo(0, desde + tramo * e);
+      if (p < 1) window.requestAnimationFrame(paso);
+      else {
+        window.removeEventListener('wheel', cancelar);
+        window.removeEventListener('touchstart', cancelar);
+      }
+    }
+
+    window.requestAnimationFrame(paso);
+  }
+
   function initAnchors() {
     // boot() corre de nuevo con cada shopify:section:load. Sin esta guarda se
     // apilaba un listener por recarga y el pushState se repetia.
@@ -360,10 +407,11 @@
       var offset = header ? header.offsetHeight : 0;
       var y = target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
 
-      window.scrollTo({
-        top: Math.max(0, y),
-        behavior: reduced ? 'auto' : 'smooth'
-      });
+      if (reduced) {
+        window.scrollTo(0, Math.max(0, y));
+      } else {
+        scrollSuave(Math.max(0, y));
+      }
 
       if (window.history && window.history.pushState) {
         window.history.pushState(null, '', hash);
