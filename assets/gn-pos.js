@@ -108,9 +108,22 @@
     // La velocidad se fija por distancia, no por tiempo: así todas las filas
     // se mueven al mismo ritmo aunque tengan distinta cantidad de ítems.
     var pxPerSecond = parseFloat(track.getAttribute('data-gnp-speed') || 55);
-    var duration = group.scrollWidth / pxPerSecond;
-    group.style.setProperty('--speed', duration + 's');
-    clone.style.setProperty('--speed', duration + 's');
+
+    function setSpeed() {
+      var duration = group.scrollWidth / pxPerSecond;
+      group.style.setProperty('--speed', duration + 's');
+      clone.style.setProperty('--speed', duration + 's');
+    }
+
+    setSpeed();
+
+    // El ancho del grupo cambia con el corte: si la duración se calcula una
+    // sola vez, al redimensionar la marquesina deja de ir a los px/s pedidos.
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setSpeed, 180);
+    });
   }
 
   /* ------------------------------------------------------------- Contadores */

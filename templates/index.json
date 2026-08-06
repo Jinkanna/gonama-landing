@@ -213,19 +213,35 @@
           "type": "partner",
           "settings": {
             "kind": "Industry",
-            "name": "Financial Services",
-            "note": "Banking, Insurance, Lending, Fintech"
+            "name": "Healthcare",
+            "note": "Pharmaceuticals, Health Insurance, Hospitals and Clinics, Telemedicine"
           }
         },
         "p4": {
           "type": "partner",
           "settings": {
             "kind": "Industry",
-            "name": "Healthcare",
-            "note": "Pharmaceuticals, Health Insurance, Hospitals and Clinics, Telemedicine"
+            "name": "Financial Services",
+            "note": "Banking, Insurance, Lending, Fintech"
           }
         },
         "p5": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Transportation and Logistics",
+            "note": "Last-Mile Delivery, Local Logistics, International Logistics"
+          }
+        },
+        "p6": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Food and Beverage",
+            "note": "Restaurants, Grocery, Food Delivery, Food Manufacturing"
+          }
+        },
+        "p7": {
           "type": "partner",
           "settings": {
             "kind": "Industry",
@@ -233,12 +249,52 @@
             "note": "Hotels, Airlines, Travel Services, Tourism"
           }
         },
-        "p6": {
+        "p8": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Education",
+            "note": "Universities, Online Learning, Professional Training"
+          }
+        },
+        "p9": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Media and Entertainment",
+            "note": "Streaming, Events and Ticketing, Publishing, Sports"
+          }
+        },
+        "p10": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Real Estate",
+            "note": "Property Booking, Property Rentals"
+          }
+        },
+        "p11": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Government and Public Services",
+            "note": "Citizen Services, Licensing, Municipal Services"
+          }
+        },
+        "p12": {
+          "type": "partner",
+          "settings": {
+            "kind": "Industry",
+            "name": "Professional Services",
+            "note": "Legal, Accounting, Consulting"
+          }
+        },
+        "p13": {
           "type": "partner",
           "settings": {
             "kind": "Industry",
             "name": "Membership and Subscription",
-            "note": "Clubs and Associations, Loyalty Programs, Subscription Commerce"
+            "note": "Clubs and Associations, Loyalty Programs, Subscription Commerce, Digital Memberships"
           }
         }
       },
@@ -248,14 +304,22 @@
         "p3",
         "p4",
         "p5",
-        "p6"
+        "p6",
+        "p7",
+        "p8",
+        "p9",
+        "p10",
+        "p11",
+        "p12",
+        "p13"
       ],
       "settings": {
         "tone": "b",
         "label": "Major Global Industries",
-        "headline": "Built for every commerce model",
+        "headline": "Built for every commerce model in global industries.",
         "sub": "From regulated sectors to high-velocity retail, the same infrastructure adapts to how each industry sells.",
-        "foot": "Your industry is not on the list? Tell us."
+        "foot": "Your industry is not on the list? Tell us.",
+        "speed": 46
       }
     },
     "faq": {

@@ -794,19 +794,56 @@
    7. PARTNERS
    ========================================================================== */
 
-/* Dos columnas en mobile y tres en escritorio. Seis celdas en una sola fila
-   quedaban finitas y con el nombre flotando en el medio, sin peso. */
-.gnp-part__strip {
+/* Dos rieles en sentidos opuestos. Con trece industrias una grilla obligaba
+   a scrollear la pagina entera para verlas; el carrusel las trae solo. */
+.gnp-part__rails {
   display: grid;
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
-  grid-template-columns: repeat(2, 1fr);
 }
 
-@media (min-width: 860px) {
-  .gnp-part__strip {
-    grid-template-columns: repeat(3, 1fr);
+.gnp-part__rail {
+  display: flex;
+  /* Los dos ejes en hidden a proposito: con uno hidden y el otro visible el
+     visible computa a auto y el div pasa a ser un contenedor con scroll,
+     que es la trampa del tema que ya rompio las anclas una vez. */
+  overflow: hidden;
+}
+
+.gnp-part__rail .gnp-ticker__group {
+  display: flex;
+  flex-shrink: 0;
+  /* gn-pos.js escribe --speed a partir del ancho real del grupo. */
+  animation: gnp-ticker var(--speed, 40s) linear infinite;
+}
+
+.gnp-part__rail--rev .gnp-ticker__group {
+  animation-direction: reverse;
+}
+
+.gnp-part__rail:hover .gnp-ticker__group,
+.gnp-part__rail:focus-within .gnp-ticker__group {
+  animation-play-state: paused;
+}
+
+@keyframes gnp-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Sin animacion el riel se recorre a mano. */
+@media (prefers-reduced-motion: reduce) {
+  .gnp-part__rail {
+    overflow-x: auto;
+  }
+
+  .gnp-part__rail .gnp-ticker__group {
+    animation: none;
   }
 }
 
@@ -819,6 +856,22 @@
   flex-direction: column;
   overflow: hidden;
   transition: background 0.35s ease;
+}
+
+/* Ancho fijo dentro del riel. El margen de 1px hace la divisoria, tambien
+   en la union entre el grupo y su clon, donde un gap no llegaria. */
+.gnp-part__rail .gnp-part {
+  flex: 0 0 300px;
+  width: 300px;
+  margin-right: 1px;
+  min-height: 190px;
+}
+
+@media (min-width: 760px) {
+  .gnp-part__rail .gnp-part {
+    flex-basis: 340px;
+    width: 340px;
+  }
 }
 
 .gnp-part::before {

@@ -1,5 +1,15 @@
 {% comment %}
-  GOnama · new-pos · Partners
+  GOnama · new-pos · Industrias
+  Dos rieles que se mueven solos en sentidos opuestos. Los bloques se
+  reparten por paridad: los de indice par arriba, los impares abajo. El
+  bucle y la velocidad los arma gn-pos.js, que clona el grupo y calcula la
+  duracion por distancia, asi los dos rieles van al mismo ritmo aunque
+  tengan distinta cantidad de celdas.
+
+  Las celdas no llevan gnp-rv: el observador de reveal corre antes de que
+  el JS clone el grupo, y las copias se quedarian en opacity 0. El reveal
+  va en el contenedor.
+
   Cada celda acepta un logo o, si no hay imagen, el nombre en texto.
 {% endcomment %}
 
@@ -25,28 +35,42 @@
       {%- endif -%}
     </div>
 
-    <div class="gnp-part__strip">
-      {%- for block in section.blocks -%}
-        {%- assign b = block.settings -%}
-        <div class="gnp-part gnp-rv" {{ block.shopify_attributes }}>
-          {%- if b.kind != blank -%}
-            <p class="gnp-part__kind">{{ b.kind | escape }}</p>
-          {%- endif -%}
+    <div class="gnp-part__rails gnp-rv">
+      {%- for pass in (1..2) -%}
+        {%- assign want = pass | minus: 1 -%}
+        <div
+          class="gnp-part__rail{% if want == 1 %} gnp-part__rail--rev{% endif %}"
+          data-gnp-marquee
+          data-gnp-speed="{{ st.speed | default: 46 }}"
+        >
+          <div class="gnp-ticker__group">
+            {%- for block in section.blocks -%}
+              {%- assign parity = forloop.index0 | modulo: 2 -%}
+              {%- if parity == want -%}
+                {%- assign b = block.settings -%}
+                <div class="gnp-part" {{ block.shopify_attributes }}>
+                  {%- if b.kind != blank -%}
+                    <p class="gnp-part__kind">{{ b.kind | escape }}</p>
+                  {%- endif -%}
 
-          {%- if b.logo != blank -%}
-            <img
-              class="gnp-part__logo"
-              src="{{ b.logo | image_url: height: 120 }}"
-              alt="{{ b.name | escape }}"
-              loading="lazy"
-            >
-          {%- else -%}
-            <p class="gnp-part__name">{{ b.name | escape }}</p>
-          {%- endif -%}
+                  {%- if b.logo != blank -%}
+                    <img
+                      class="gnp-part__logo"
+                      src="{{ b.logo | image_url: height: 120 }}"
+                      alt="{{ b.name | escape }}"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <p class="gnp-part__name">{{ b.name | escape }}</p>
+                  {%- endif -%}
 
-          {%- if b.note != blank -%}
-            <p class="gnp-part__note">{{ b.note | escape }}</p>
-          {%- endif -%}
+                  {%- if b.note != blank -%}
+                    <p class="gnp-part__note">{{ b.note | escape }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
         </div>
       {%- endfor -%}
     </div>
@@ -59,8 +83,8 @@
 
 {% schema %}
 {
-  "name": "POS · Partners",
-  "max_blocks": 12,
+  "name": "POS · Industrias",
+  "max_blocks": 24,
   "settings": [
     {
       "type": "select",
@@ -88,7 +112,18 @@
       "type": "text",
       "id": "headline",
       "label": "Titular",
-      "default": "Connected to what you already use"
+      "default": "Built for every commerce model in global industries."
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Velocidad del carrusel",
+      "info": "Pixeles por segundo. Mas alto, mas rapido.",
+      "min": 20,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "default": 46
     },
     {
       "type": "textarea",
@@ -106,7 +141,7 @@
   "blocks": [
     {
       "type": "partner",
-      "name": "Partner",
+      "name": "Industria",
       "settings": [
         {
           "type": "text",
@@ -136,7 +171,7 @@
   ],
   "presets": [
     {
-      "name": "POS · Partners"
+      "name": "POS · Industrias"
     }
   ]
 }
