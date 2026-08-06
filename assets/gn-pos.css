@@ -1,0 +1,1789 @@
+/* ==========================================================================
+   GOnama · landing new-pos
+   Estructura basada en unitedcarriers.com, con la paleta de marca GOnama.
+
+   Paleta:
+     GO blue #44B7E8   Ocean #178DBE   Sky #D9F4FC
+     Panda 1 #0F172A   Panda 2 #F7F9FC
+
+   Las secciones alternan tono. La landing es siempre oscura de arranque: el
+   tono base (.gnp--a) es Panda 1 y el invertido (.gnp--b) es Panda 2. No
+   sigue el modo del navegador, se ve igual para todo el mundo.
+
+   Tipografía en px: el tema define html{font-size:62.5%} en reset.css.
+   ========================================================================== */
+
+.gnp {
+  --go-blue: #44b7e8;
+  --ocean: #178dbe;
+  --mint: #2dd4bf;
+  --sky: #d9f4fc;
+  --panda-1: #0f172a;
+  --panda-2: #f7f9fc;
+
+  --max: 1320px;
+  --gutter: clamp(20px, 4.5vw, 64px);
+  --pad-y: clamp(72px, 8vw, 150px);
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  padding: var(--pad-y) 0;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tono base: oscuro. Es con el que arranca la pagina. */
+.gnp--a {
+  --bg: var(--panda-1);
+  --fg: var(--panda-2);
+  --fg-soft: #a9b7cc;
+  --fg-faint: #7f8ea6;
+  --line: rgba(217, 244, 252, 0.16);
+  --line-soft: rgba(217, 244, 252, 0.08);
+  --accent: var(--go-blue);
+  --on-accent: var(--panda-1);
+  --veil: rgba(68, 183, 232, 0.1);
+  --surface: rgba(217, 244, 252, 0.04);
+  --hover: var(--mint);
+}
+
+/* Tono invertido: claro. */
+.gnp--b {
+  --bg: var(--panda-2);
+  --fg: var(--panda-1);
+  --fg-soft: #46536b;
+  --fg-faint: #77839a;
+  --line: rgba(15, 23, 42, 0.12);
+  --line-soft: rgba(15, 23, 42, 0.07);
+  --accent: var(--ocean);
+  --on-accent: #ffffff;
+  --veil: rgba(23, 141, 190, 0.07);
+  --surface: #ffffff;
+  /* Sobre fondo claro el Mint se lava. El hover va en navy. */
+  --hover: var(--panda-1);
+}
+
+.gnp *,
+.gnp *::before,
+.gnp *::after {
+  box-sizing: border-box;
+}
+
+/* El tema pinta headings, enlaces y negritas con selectores de elemento. */
+.gnp h1,
+.gnp h2,
+.gnp h3,
+.gnp h4 {
+  font-family: inherit;
+  color: var(--fg);
+  text-transform: none;
+  margin: 0;
+}
+
+/* El tema pone margenes a los p con selector de elemento y hay que anularlos,
+   pero escrito como ".gnp p" este reset pasa a valer 0,1,1 y le gana a
+   cualquier clase de componente. Nueve clases de la landing declaraban su
+   margen y se lo comia esto en silencio, entre ellas las bajadas de las
+   tarjetas de Global Checkout y de Capacidades.
+
+   Con :where() el parentesis no suma especificidad: el reset queda en 0,1,0,
+   suficiente para ganarle al tema y empatado con las clases, que al estar
+   mas abajo en este mismo archivo se imponen. */
+.gnp :where(p, ul, li, figure) {
+  margin: 0;
+}
+
+.gnp ul {
+  padding: 0;
+  list-style: none;
+}
+
+.gnp a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gnp strong,
+.gnp b {
+  color: inherit;
+  font-weight: 600;
+}
+
+.gnp__in {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Tipografía
+   -------------------------------------------------------------------------- */
+
+/* Display apilado en mayúsculas, interlineado cerrado. */
+.gnp__display {
+  font-size: 44px;
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 760px) {
+  .gnp__display {
+    font-size: 76px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp__display {
+    font-size: 104px;
+  }
+}
+
+.gnp__title {
+  font-size: 32px;
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+  max-width: 18ch;
+}
+
+@media (min-width: 760px) {
+  .gnp__title {
+    font-size: 44px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp__title {
+    font-size: 56px;
+  }
+}
+
+.gnp__sub {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--fg-soft);
+  max-width: 46ch;
+}
+
+.gnp__body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--fg-soft);
+}
+
+/* Etiqueta monoespaciada, el recurso que ordena toda la página. */
+.gnp__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.gnp__label::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.gnp__head {
+  display: grid;
+  gap: 26px;
+  margin-bottom: clamp(48px, 6vw, 90px);
+}
+
+@media (min-width: 900px) {
+  .gnp__head--split {
+    grid-template-columns: 1.25fr 1fr;
+    align-items: end;
+    gap: 60px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Botones y enlaces
+   -------------------------------------------------------------------------- */
+
+.gnp__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 17px 32px;
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.gnp .gnp__btn:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.gnp__btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--fg);
+}
+
+.gnp .gnp__btn--ghost:hover {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+/* Enlace con subrayado que se dibuja al pasar. */
+.gnp__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.gnp__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp__link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.gnp__arrow {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.3s ease;
+}
+
+.gnp__link:hover .gnp__arrow,
+.gnp__btn:hover .gnp__arrow {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   Reveal
+   -------------------------------------------------------------------------- */
+
+.gnp-js .gnp-rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.gnp-js .gnp-rv.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* El display entra línea por línea. */
+/* overflow:hidden recortaba las colas de la y, la g y la p. El relleno baja
+   el borde de la mascara y el margen negativo devuelve el espacio, de modo
+   que el interlineado no cambia. */
+.gnp-js .gnp-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+
+.gnp-js .gnp-line > span {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.85s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.gnp-js .is-in .gnp-line > span,
+.gnp-js .gnp-line.is-in > span {
+  transform: none;
+}
+
+/* ==========================================================================
+   2. HERO
+   ========================================================================== */
+
+.gnp-hero {
+  padding-top: calc(88px + clamp(56px, 7vw, 110px));
+  padding-bottom: clamp(56px, 7vw, 110px);
+  min-height: min(88vh, 900px);
+  display: flex;
+  align-items: center;
+}
+
+.gnp-hero__label {
+  margin-bottom: clamp(28px, 3vw, 44px);
+}
+
+.gnp-hero__foot {
+  display: grid;
+  gap: 32px;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: clamp(28px, 3vw, 40px);
+  border-top: 1px solid var(--line);
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .gnp-hero__foot {
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+  }
+}
+
+.gnp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   PANTALLA DE ENTRADA
+   ========================================================================== */
+
+.gnp-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  padding: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  background: var(--bg);
+  animation: gnpIntroOut 0.72s cubic-bezier(0.76, 0, 0.24, 1) 1.24s forwards;
+}
+
+/* Sale hacia arriba y deja de existir para el mouse. */
+@keyframes gnpIntroOut {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.gnp-intro__mark {
+  font-size: clamp(38px, 6vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  line-height: 1;
+  color: var(--fg);
+  opacity: 0;
+  filter: blur(10px);
+  animation: gnpIntroIn 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) 0.05s forwards;
+}
+
+.gnp-intro__go {
+  color: var(--go-blue);
+}
+
+.gnp-intro__cap {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  opacity: 0;
+  filter: blur(6px);
+  animation: gnpIntroIn 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) 0.24s forwards;
+}
+
+@keyframes gnpIntroIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.gnp-intro__rule {
+  width: min(220px, 42vw);
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.gnp-intro__rule i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--go-blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: gnpIntroBar 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.16s forwards;
+}
+
+@keyframes gnpIntroBar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Ya vista en esta sesión: no se vuelve a mostrar. */
+.gnp-intro[data-seen] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnp-intro {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   3. STATEMENT + CONTADORES
+   ========================================================================== */
+
+.gnp-stat__grid {
+  display: grid;
+  gap: clamp(36px, 4vw, 64px);
+}
+
+@media (min-width: 900px) {
+  .gnp-stat__grid {
+    grid-template-columns: 1.1fr 1fr;
+  }
+
+  /* Sin la grilla de numeros la seccion va a una sola columna, con el texto
+     limitado para que no se estire a todo el ancho. */
+  .gnp-stat__grid--solo {
+    grid-template-columns: minmax(0, 820px);
+  }
+}
+
+.gnp-stat__copy p + p {
+  margin-top: 18px;
+}
+
+.gnp-stat__link {
+  margin-top: 34px;
+}
+
+.gnp-stat__nums {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 560px) {
+  .gnp-stat__nums {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gnp-num {
+  background: var(--bg);
+  padding: 30px 28px;
+}
+
+.gnp-num__val {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  line-height: 1.05;
+  color: var(--fg);
+}
+
+@media (min-width: 760px) {
+  .gnp-num__val {
+    font-size: 58px;
+  }
+}
+
+.gnp-num__suffix {
+  color: var(--accent);
+}
+
+.gnp-num__lab {
+  margin-top: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   4. SERVICIOS
+   ========================================================================== */
+
+.gnp-serv__grid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+@media (min-width: 700px) {
+  .gnp-serv__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Alto mínimo solo cuando hay varias columnas: en una sola, seis celdas de
+     300px daban 1800px de scroll muerto en mobile. */
+  .gnp-serv {
+    min-height: 300px;
+  }
+}
+
+@media (min-width: 1060px) {
+  .gnp-serv__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gnp-serv {
+  position: relative;
+  background: var(--bg);
+  padding: clamp(26px, 3vw, 44px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.gnp-serv::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.gnp-serv:hover::before,
+.gnp-serv:focus-within::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-serv > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* El numero queda arriba y el resto del bloque se apoya en la base de la
+   celda: con margin-top:auto solo en el titulo quedaba un hueco al pie. */
+.gnp-serv__num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  margin-bottom: auto;
+  transition: color 0.35s ease;
+}
+
+.gnp-serv:hover .gnp-serv__num {
+  color: var(--hover);
+}
+
+.gnp-serv__name {
+  padding-top: clamp(26px, 3vw, 48px);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+  transition: color 0.35s ease;
+}
+
+@media (min-width: 760px) {
+  .gnp-serv__name {
+    font-size: 30px;
+  }
+}
+
+.gnp-serv:hover .gnp-serv__name {
+  color: var(--hover);
+}
+
+.gnp-serv__desc {
+  margin-top: 16px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+}
+
+/* ==========================================================================
+   5. CONFIABILIDAD
+   ========================================================================== */
+
+/* Con tres columnas y cuatro bloques quedaba 3 + 1 y un hueco al lado del
+   ultimo. Los cortes son 1, 2 y 4 columnas, que cierran filas completas. */
+.gnp-rel__grid {
+  display: grid;
+  column-gap: clamp(24px, 2.6vw, 44px);
+  row-gap: clamp(36px, 4vw, 56px);
+}
+
+@media (min-width: 720px) {
+  .gnp-rel__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1180px) {
+  .gnp-rel__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gnp-rel {
+  padding-top: 22px;
+  border-top: 2px solid var(--accent);
+}
+
+.gnp-rel__name {
+  font-size: 20px;
+  line-height: 1.14;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 720px) {
+  .gnp-rel__name {
+    font-size: 22px;
+  }
+}
+
+/* En cuatro columnas el titulo baja un punto: a ese ancho, 22px con dos
+   renglones empezaba a partir palabras. */
+@media (min-width: 1180px) {
+  .gnp-rel__name {
+    font-size: 20px;
+  }
+}
+
+.gnp-rel__desc {
+  margin-top: 20px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--fg-soft);
+  max-width: 42ch;
+}
+
+/* ==========================================================================
+   6. DIFERENCIALES
+   ========================================================================== */
+
+.gnp-edge__list {
+  border-top: 1px solid var(--line);
+}
+
+/* Tres columnas recién a los 1000px: a 820 el titular quedaba en una columna
+   de 340px fija y la descripción se estiraba a casi 700px, con renglones de
+   más de 100 caracteres. */
+.gnp-edge {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: clamp(26px, 3vw, 46px) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 1000px) {
+  .gnp-edge {
+    grid-template-columns: 64px minmax(220px, 1fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 4vw, 76px);
+    align-items: start;
+  }
+}
+
+/* Filo que crece desde el centro, en lugar de correr la fila con padding:
+   mover el padding en hover empujaba el texto y se sentía inestable. */
+.gnp-edge::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-edge:hover::before {
+  transform: scaleX(1);
+  background: var(--hover);
+}
+
+.gnp-edge__num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  transition: color 0.35s ease;
+}
+
+@media (min-width: 1000px) {
+  .gnp-edge__num {
+    padding-top: 6px;
+  }
+}
+
+.gnp-edge:hover .gnp-edge__num {
+  color: var(--hover);
+}
+
+.gnp-edge__name {
+  font-size: 22px;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+  transition: color 0.35s ease;
+}
+
+@media (min-width: 760px) {
+  .gnp-edge__name {
+    font-size: 28px;
+  }
+}
+
+.gnp-edge:hover .gnp-edge__name {
+  color: var(--hover);
+}
+
+.gnp-edge__desc {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--fg-soft);
+  max-width: 52ch;
+}
+
+/* ==========================================================================
+   7. PARTNERS
+   ========================================================================== */
+
+/* Dos rieles en sentidos opuestos. Con trece industrias una grilla obligaba
+   a scrollear la pagina entera para verlas; el carrusel las trae solo.
+
+   Sin recuadro y a todo el ancho: el marco cortaba el flujo y hacia que el
+   movimiento terminara contra un borde en vez de seguir de largo. Se sale
+   del contenedor con el truco de los margenes negativos, sin 100vw, que
+   sumaria el ancho de la barra de scroll. */
+.gnp-part__rails {
+  display: grid;
+  gap: 20px;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.gnp-part__rail {
+  display: flex;
+  /* Los dos ejes en hidden a proposito: con uno hidden y el otro visible el
+     visible computa a auto y el div pasa a ser un contenedor con scroll,
+     que es la trampa del tema que ya rompio las anclas una vez. */
+  overflow: hidden;
+  /* Las tarjetas se desvanecen en las puntas en vez de cortarse secas. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+}
+
+.gnp-part__rail .gnp-ticker__group {
+  display: flex;
+  flex-shrink: 0;
+  /* gn-pos.js escribe --speed a partir del ancho real del grupo. */
+  animation: gnp-ticker var(--speed, 40s) linear infinite;
+}
+
+.gnp-part__rail--rev .gnp-ticker__group {
+  animation-direction: reverse;
+}
+
+/* El frenado al pasar el mouse lo hace gn-pos.js con una rampa sobre
+   playbackRate. Con animation-play-state la fila se cortaba en seco. */
+
+@keyframes gnp-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Sin animacion el riel se recorre a mano. */
+@media (prefers-reduced-motion: reduce) {
+  .gnp-part__rail {
+    overflow-x: auto;
+  }
+
+  .gnp-part__rail .gnp-ticker__group {
+    animation: none;
+  }
+}
+
+.gnp-part {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* Sin borde de acento al pasar: el navy pleno sobre la tarjeta blanca
+   entraba como un golpe. El estado lo marca el velo, que va con su propia
+   transicion, y el texto. */
+
+/* Ancho fijo dentro del riel. La separacion va por margen y no por gap:
+   asi tambien queda en la union entre el grupo y su clon, donde el gap del
+   contenedor no llega y las tarjetas se pegarian una vez por vuelta. */
+/* El alto lo fija el riel mas alto de los dos, asi el bloque que se ilumina
+   al pasar el mouse es igual arriba que abajo. Medido: el contenido mas
+   largo pide 174px a 300 de ancho y 180px a 340, mas los 48 de padding. */
+.gnp-part__rail .gnp-part {
+  flex: 0 0 300px;
+  width: 300px;
+  margin-right: 20px;
+  min-height: 228px;
+}
+
+@media (min-width: 760px) {
+  .gnp-part__rail .gnp-part {
+    flex-basis: 340px;
+    width: 340px;
+    min-height: 232px;
+  }
+}
+
+.gnp-part::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--veil);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.gnp-part:hover::before {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-part > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* La categoría es lo que hace que la lista signifique algo: sin ella son
+   seis nombres sueltos. */
+.gnp-part__kind {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: auto;
+  transition: color 0.35s ease;
+}
+
+.gnp-part:hover .gnp-part__kind {
+  color: var(--hover);
+}
+
+/* Sin line-height propio heredaba el 1.75 del tema, y los nombres de dos
+   renglones quedaban desarmados. Los demas titulos de tarjeta van entre 1
+   y 1.14. */
+.gnp-part__name {
+  padding-top: 28px;
+  font-size: 21px;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+  transition: color 0.35s ease;
+}
+
+@media (min-width: 760px) {
+  .gnp-part__name {
+    font-size: 24px;
+  }
+}
+
+.gnp-part:hover .gnp-part__name {
+  color: var(--hover);
+}
+
+.gnp-part__logo {
+  margin-top: 34px;
+  max-width: 100%;
+  max-height: 34px;
+  width: auto;
+  align-self: flex-start;
+  opacity: 0.62;
+  transition: opacity 0.35s ease;
+}
+
+.gnp-part:hover .gnp-part__logo {
+  opacity: 1;
+}
+
+.gnp-part__note {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+
+.gnp-part__foot {
+  margin-top: 26px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-faint);
+  max-width: 60ch;
+}
+
+/* ==========================================================================
+   8. FAQ
+   ========================================================================== */
+
+.gnp-faq__list {
+  border-top: 1px solid var(--line);
+}
+
+
+.gnp-faq__q {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  padding: clamp(22px, 2.4vw, 32px) 0;
+  background: none;
+  border: 0;
+  /* El marcador propio del <summary>: en Safari es un triangulo oscuro que
+     aparece a la izquierda. Las tres reglas cubren los tres motores. */
+  list-style: none;
+  list-style-type: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+  transition: color 0.3s ease;
+}
+
+.gnp-faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.gnp-faq__q::marker {
+  content: '';
+  font-size: 0;
+}
+
+/* Nada de fondo en ningun estado de la pregunta. */
+.gnp-faq__q,
+.gnp-faq__q:hover,
+.gnp-faq__q:focus,
+.gnp-faq__q:active,
+.gnp-faq__item:hover .gnp-faq__q,
+.gnp-faq__item[open] .gnp-faq__q {
+  background: transparent;
+}
+
+.gnp-faq__q:focus-visible {
+  outline: 1px solid var(--hover);
+  outline-offset: 4px;
+}
+
+@media (min-width: 760px) {
+  .gnp-faq__q {
+    font-size: 21px;
+  }
+}
+
+/* Sin recuadro de fondo: el estado se marca solo con el filo de Mint sobre
+   la divisoria y el texto virando de color. */
+.gnp-faq__item {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Filo de acento que crece de izquierda a derecha sobre la divisoria. */
+.gnp-faq__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: var(--hover);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-faq__item:hover::after {
+  transform: scaleX(1);
+}
+
+.gnp-faq__q {
+  position: relative;
+  z-index: 1;
+}
+
+.gnp-faq__q:hover {
+  color: var(--hover);
+}
+
+.gnp-faq__q:hover .gnp-faq__ico {
+  border-color: var(--hover);
+  color: var(--hover);
+}
+
+.gnp-faq__a {
+  position: relative;
+  z-index: 1;
+}
+
+.gnp-faq__ico {
+  border-color: var(--hover);
+  color: var(--hover);
+}
+
+.gnp-faq__ico {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.35s ease;
+}
+
+.gnp-faq__ico::before,
+.gnp-faq__ico::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: opacity 0.3s ease;
+}
+
+.gnp-faq__ico::before {
+  width: 11px;
+  height: 1.5px;
+}
+
+.gnp-faq__ico::after {
+  width: 1.5px;
+  height: 11px;
+}
+
+.gnp-faq__item.is-open .gnp-faq__ico {
+  background: var(--hover);
+  border-color: var(--hover);
+  color: var(--panda-1);
+  transform: rotate(90deg);
+}
+
+.gnp-faq__item.is-open .gnp-faq__ico::after {
+  opacity: 0;
+}
+
+.gnp-faq__a {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-faq__a-in {
+  padding-bottom: 30px;
+  max-width: 74ch;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--fg-soft);
+}
+
+.gnp-faq__a-in p + p {
+  margin-top: 12px;
+}
+
+/* ==========================================================================
+   9. CIERRE
+   ========================================================================== */
+
+.gnp-close__grid {
+  display: grid;
+  gap: clamp(40px, 5vw, 72px);
+  align-items: start;
+}
+
+@media (min-width: 940px) {
+  .gnp-close__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* El titular vive en media columna, asi que baja respecto del display general.
+   Medido contra "IS AUTONOMOUS.", que es la linea mas larga: entra hasta 47px
+   a 940, 61px a 1200 y 74px de 1440 para arriba. Estos valores dejan margen. */
+.gnp-close .gnp__display {
+  font-size: 34px;
+}
+
+@media (min-width: 760px) {
+  .gnp-close .gnp__display {
+    font-size: 46px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp-close .gnp__display {
+    font-size: 58px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .gnp-close .gnp__display {
+    font-size: 68px;
+  }
+}
+
+.gnp-close__form {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 560px) {
+  .gnp-close__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+/* Los campos van con .gnp adelante a proposito. El tema los estila con
+   input[type="text"], que suma un selector de atributo y le ganaba a
+   .gnp-close__input a secas: los de una linea salian con el fondo blanco y
+   la tipografia de 10px del tema, y solo el mensaje, que el tema toma con
+   el selector textarea, quedaba transparente. De ahi que el mensaje se
+   perdiera de vista y los otros no.
+
+   Cada propiedad esta declarada aunque repita el valor por defecto, para
+   que no quede ninguna a merced del tema. */
+.gnp .gnp-close__input {
+  width: 100%;
+  padding: 14px 16px;
+  /* El tema le pone height a los de una linea y al textarea no. Con auto
+     manda el padding, que es el mismo para todos. */
+  height: auto;
+  background: var(--panda-2);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--panda-1);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  transition: border-color 0.3s ease;
+}
+
+/* Lo unico que cambia el mensaje: entra mas texto. Sin manija de arrastre,
+   que seria la ultima diferencia visible contra los demas campos. */
+.gnp textarea.gnp-close__input {
+  min-height: 108px;
+  resize: none;
+}
+
+.gnp .gnp-close__input::placeholder {
+  color: #77839a;
+  font-size: 15px;
+  opacity: 1;
+}
+
+.gnp .gnp-close__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.gnp-close__submit {
+  margin-top: 12px;
+  justify-self: start;
+}
+
+.gnp-close__msg {
+  padding: 14px 18px;
+  border: 1px solid var(--accent);
+  background: var(--veil);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.gnp-close__note {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--fg-faint);
+  line-height: 1.5;
+}
+
+.gnp-close__contact {
+  margin-top: clamp(36px, 4vw, 56px);
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 560px) {
+  .gnp-close__contact {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gnp-close__ct-lab {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 8px;
+}
+
+.gnp-close__ct-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .gnp *,
+  .gnp *::before,
+  .gnp *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .gnp-js .gnp-rv,
+  .gnp-js .gnp-line > span {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   HEADER CON OVERLAY
+   ========================================================================== */
+
+/* fixed y no sticky: el tema define html{overflow-x:hidden} en reset.css y eso
+   anula position:sticky. El espaciador de abajo reserva la altura. */
+.gnp-nav {
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+.gnp-nav.is-solid {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.gnp-nav.is-hidden {
+  transform: translateY(-100%);
+}
+
+/* Con el panel abierto el header nunca se esconde. */
+.gnp-nav.is-open,
+.gnp-nav.is-open.is-hidden {
+  transform: none;
+  background: var(--bg);
+  border-bottom-color: transparent;
+}
+
+/* Sin espaciador: el header se apoya sobre el hero, que compensa con su
+   padding superior. Con espaciador quedaba una franja del color del <body>
+   del tema, que es blanco, arriba de todo. */
+.gnp-nav__bar {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.gnp-nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.gnp-nav__logo-img {
+  height: 54px;
+  width: auto;
+  display: block;
+}
+
+.gnp-nav__word {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+}
+
+.gnp-nav__word b {
+  color: var(--go-blue);
+  font-weight: 700;
+}
+
+/* Con imagen de logo, el wordmark solo aparece donde el SVG no se lee. */
+.gnp-nav__word--dark {
+  display: none;
+}
+
+.gnp-nav.is-open .gnp-nav__logo-img--light,
+.gnp--a .gnp-nav__logo-img--light {
+  display: none;
+}
+
+.gnp-nav.is-open .gnp-nav__word--dark,
+.gnp--a .gnp-nav__word--dark {
+  display: inline;
+}
+
+.gnp-nav__right {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 32px);
+}
+
+.gnp-nav__util {
+  display: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-soft);
+  transition: color 0.25s ease;
+}
+
+.gnp-nav__util:hover {
+  color: var(--hover);
+}
+
+@media (min-width: 700px) {
+  .gnp-nav__util {
+    display: inline-flex;
+  }
+}
+
+.gnp-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* Las dos etiquetas ocupan la misma celda: el ancho no salta al cambiar. */
+.gnp-nav__toggle-txt {
+  grid-area: 1 / 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gnp-nav__toggle {
+  display: inline-grid;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
+.gnp-nav__toggle > .gnp-nav__toggle-txt {
+  display: grid;
+}
+
+.gnp-nav__toggle [data-gnp-nav-close-txt] {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-open-txt] {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-close-txt] {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__burger {
+  display: block;
+  width: 22px;
+  height: 12px;
+  position: relative;
+  margin-left: 12px;
+}
+
+.gnp-nav__burger i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s ease;
+}
+
+.gnp-nav__burger i:first-child {
+  top: 2px;
+}
+
+.gnp-nav__burger i:last-child {
+  bottom: 2px;
+  width: 62%;
+}
+
+.gnp-nav:not(.is-open) .gnp-nav__toggle:hover .gnp-nav__burger i:last-child {
+  width: 100%;
+}
+
+.gnp-nav.is-open .gnp-nav__burger i:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.gnp-nav.is-open .gnp-nav__burger i:last-child {
+  width: 100%;
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+/* Panel ------------------------------------------------------------------ */
+
+/* Panel acotado colgado de la barra, no una cortina de pantalla completa.
+   El ancho se topa contra el viewport para que en telefono siga entrando. */
+.gnp-nav__overlay {
+  position: fixed;
+  top: 88px;
+  right: var(--gutter);
+  width: min(420px, calc(100vw - var(--gutter) * 2));
+  max-height: calc(100vh - 88px - 24px);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+  z-index: 1;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.52s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.gnp-nav.is-open .gnp-nav__overlay {
+  clip-path: inset(0 0 0 0);
+}
+
+.gnp-nav__overlay[hidden] {
+  display: none;
+}
+
+.gnp-nav__overlay-in {
+  padding: 26px 26px 24px;
+  display: grid;
+  gap: 24px;
+  max-height: calc(100vh - 88px - 24px);
+  overflow-y: auto;
+}
+
+.gnp-nav__list {
+  display: block;
+}
+
+.gnp-nav__item {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2, 0.75, 0.25, 1),
+    color 0.3s ease;
+}
+
+.gnp-nav.is-open .gnp-nav__item {
+  opacity: 1;
+  transform: none;
+  /* Escalonado por índice, sin necesidad de temporizadores en JS. */
+  transition-delay: calc(0.16s + var(--i) * 0.055s);
+}
+
+.gnp-nav__item:hover {
+  color: var(--hover);
+}
+
+.gnp-nav__item-n {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+}
+
+.gnp-nav__item-t {
+  font-size: 20px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+}
+
+.gnp-nav__item-a {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.gnp-nav__item:hover .gnp-nav__item-a {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__aside {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease 0.42s, transform 0.5s ease 0.42s;
+}
+
+.gnp-nav.is-open .gnp-nav__aside {
+  opacity: 1;
+  transform: none;
+}
+
+.gnp-nav__contact {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+  transition: color 0.25s ease;
+}
+
+.gnp-nav__contact:hover {
+  color: var(--hover);
+}
+
+.gnp-nav__cta {
+  margin-top: 12px;
+  justify-self: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnp-nav,
+  .gnp-nav__overlay,
+  .gnp-nav__item,
+  .gnp-nav__aside {
+    transition: none;
+  }
+
+  .gnp-nav.is-hidden {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.gnp-foot {
+  padding: clamp(56px, 6vw, 88px) 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.gnp-foot__top {
+  display: grid;
+  gap: clamp(40px, 5vw, 72px);
+  padding-bottom: clamp(40px, 5vw, 64px);
+}
+
+@media (min-width: 860px) {
+  .gnp-foot__top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  }
+}
+
+.gnp-foot__mark {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+}
+
+.gnp-foot__go {
+  color: var(--go-blue);
+}
+
+.gnp-foot__tagline {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  max-width: 34ch;
+}
+
+.gnp-foot__cta {
+  margin-top: 26px;
+}
+
+.gnp-foot__cols {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+}
+
+.gnp-foot__col-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 18px;
+}
+
+.gnp-foot__col li {
+  padding: 7px 0;
+}
+
+.gnp-foot__col a,
+.gnp-foot__col span {
+  font-size: 15px;
+  color: var(--fg-soft);
+  transition: color 0.25s ease;
+}
+
+.gnp-foot__col a:hover {
+  color: var(--hover);
+}
+
+.gnp-foot__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--fg-faint);
+}
+
+/* Líneas cortas de la declaración: cada una en su renglón, y la última
+   cierra con el color de texto pleno. */
+.gnp-stat__punch {
+  margin-top: 26px;
+  padding-left: 18px;
+  border-left: 2px solid var(--accent);
+}
+
+.gnp-stat__punch p {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--fg-faint);
+}
+
+.gnp-stat__punch p:last-child {
+  color: var(--fg);
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+/* Respaldo para el salto nativo, cuando llega por teclado o por URL con
+   ancla: deja aire debajo del header fijo. */
+.gnp[id],
+[id^='section-'],
+#gnp-contact {
+  scroll-margin-top: 104px;
+}

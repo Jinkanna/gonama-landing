@@ -1,0 +1,199 @@
+{% comment %}
+  GOnama · new-pos · Declaración con contadores
+  Titular apilado a la izquierda, párrafos y enlace; a la derecha una grilla de
+  números que cuentan al entrar en pantalla.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign lines = st.headline | newline_to_br | split: '<br />'
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-stat" id="section-statement">
+  <div class="gnp__in">
+    {%- assign has_nums = false -%}
+    {%- if section.blocks.size > 0 -%}
+      {%- assign has_nums = true -%}
+    {%- endif -%}
+
+    <div class="gnp-stat__grid{% unless has_nums %} gnp-stat__grid--solo{% endunless %}">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 26px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+
+        <h2 class="gnp__title" data-gnp-lines>
+          {%- for line in lines -%}
+            {%- assign clean = line | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+            {%- endif -%}
+          {%- endfor -%}
+        </h2>
+
+        <div class="gnp-stat__copy gnp-rv" style="margin-top: 30px;">
+          {%- if st.body_1 != blank -%}
+            <div class="gnp__body">{{ st.body_1 }}</div>
+          {%- endif -%}
+          {%- if st.body_2 != blank -%}
+            <div class="gnp__body">{{ st.body_2 }}</div>
+          {%- endif -%}
+        </div>
+
+        {%- if st.punch != blank -%}
+          <div class="gnp-stat__punch gnp-rv">
+            {%- assign punch_lines = st.punch | newline_to_br | split: '<br />' -%}
+            {%- for line in punch_lines -%}
+              {%- assign clean = line | strip_html | strip -%}
+              {%- if clean != blank -%}
+                <p>{{ clean | escape }}</p>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if st.link_label != blank -%}
+          <div class="gnp-stat__link gnp-rv">
+            <a class="gnp__link" href="{{ st.link_url | default: '#' }}">
+              {{ st.link_label | escape }}
+              <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if has_nums -%}
+        <div class="gnp-stat__nums gnp-rv">
+          {%- for block in section.blocks -%}
+            {%- assign b = block.settings -%}
+            <div class="gnp-num" {{ block.shopify_attributes }}>
+              <p class="gnp-num__val">
+                {%- if b.prefix != blank -%}<span class="gnp-num__suffix">{{ b.prefix | escape }}</span>{%- endif -%}
+                <span data-gnp-count="{{ b.value }}" data-gnp-decimals="{{ b.decimals }}">0</span>
+                {%- if b.suffix != blank -%}<span class="gnp-num__suffix">{{ b.suffix | escape }}</span>{%- endif -%}
+              </p>
+              <p class="gnp-num__lab">{{ b.label | escape }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Declaración",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        {
+          "value": "a",
+          "label": "Base"
+        },
+        {
+          "value": "b",
+          "label": "Invertido"
+        }
+      ],
+      "default": "b"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": ""
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titular",
+      "info": "Una línea por renglón.",
+      "default": "One platform.\nOne system.\nOne outcome."
+    },
+    {
+      "type": "richtext",
+      "id": "body_1",
+      "label": "Párrafo 1",
+      "default": "<p>Most businesses stitch together disconnected software, vendors and manual processes.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "body_2",
+      "label": "Párrafo 2",
+      "default": "<p>GOnama replaces operational complexity with a single autonomous infrastructure where every transaction, workflow and AI agent works from the same source of truth.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "punch",
+      "label": "Líneas cortas",
+      "info": "Una por renglón. La última se resalta.",
+      "default": "No disconnected tools.\nNo fragmented vendors.\nNo operational blind spots.\nJust commerce running exactly as it should."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Enlace",
+      "info": "Vacio y el enlace no se muestra.",
+      "default": ""
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Destino del enlace"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "number",
+      "name": "Número",
+      "settings": [
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "Prefijo"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Valor",
+          "default": "99"
+        },
+        {
+          "type": "range",
+          "id": "decimals",
+          "label": "Decimales",
+          "min": 0,
+          "max": 2,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Sufijo",
+          "default": "%"
+        },
+        {
+          "type": "textarea",
+          "id": "label",
+          "label": "Etiqueta"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "POS · Declaración"
+    }
+  ]
+}
+{% endschema %}

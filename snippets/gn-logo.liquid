@@ -1,0 +1,45 @@
+{% comment %}
+  Logo de la landing, compartido por gn-header y gn-footer.
+
+  Se renderizan las dos variantes y el CSS muestra la que corresponda según el
+  modo del navegador (.gn-logo__light / .gn-logo__dark).
+
+  En modo oscuro, si no se subió una versión clara del logo, se usa el wordmark
+  en texto: el SVG de marca tiene "nama" en gris oscuro y sobre Panda 1 no se
+  lee. El wordmark respeta la construcción: GO en GO blue, nama en el color de
+  texto del tema, que en oscuro es Panda 2.
+
+  Parámetros: logo, logo_dark, go, rest, size (px), extra_class
+{% endcomment %}
+
+{%- liquid
+  assign size = size | default: 30
+-%}
+
+{%- if logo != blank -%}
+  <img
+    class="gn-logo__img gn-logo__light {{ extra_class }}"
+    src="{{ logo | image_url: height: 120 }}"
+    alt="{{ shop.name | escape }}"
+    style="height: {{ size }}px"
+    loading="eager"
+  >
+{%- else -%}
+  <span class="gn-logo__word gn-logo__light" style="font-size: {{ size | minus: 8 }}px">
+    <b>{{ go | escape }}</b>{{ rest | escape }}
+  </span>
+{%- endif -%}
+
+{%- if logo_dark != blank -%}
+  <img
+    class="gn-logo__img gn-logo__dark {{ extra_class }}"
+    src="{{ logo_dark | image_url: height: 120 }}"
+    alt="{{ shop.name | escape }}"
+    style="height: {{ size }}px"
+    loading="eager"
+  >
+{%- else -%}
+  <span class="gn-logo__word gn-logo__dark" style="font-size: {{ size | minus: 8 }}px">
+    <b>{{ go | escape }}</b>{{ rest | escape }}
+  </span>
+{%- endif -%}

@@ -1,0 +1,110 @@
+{% comment %}
+  GOnama · new-pos · Confiabilidad
+  Tres bloques con filo de acento arriba.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign lines = st.headline | newline_to_br | split: '<br />'
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-rel-sec" id="section-reliability">
+  <div class="gnp__in">
+    <div class="gnp__head gnp__head--split">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 24px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+        <h2 class="gnp__title" data-gnp-lines>
+          {%- for line in lines -%}
+            {%- assign clean = line | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+            {%- endif -%}
+          {%- endfor -%}
+        </h2>
+      </div>
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gnp-rel__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign name_lines = b.name | newline_to_br | split: '<br />'
+        -%}
+        <article class="gnp-rel gnp-rv" {{ block.shopify_attributes }}>
+          <h3 class="gnp-rel__name">
+            {%- for nl in name_lines -%}
+              {%- assign cn = nl | strip_html | strip -%}
+              {%- if cn != blank -%}
+                <span style="display:block">{{ cn | escape }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </h3>
+          {%- if b.desc != blank -%}
+            <p class="gnp-rel__desc">{{ b.desc | escape }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Confiabilidad",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "b"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": ""
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titular",
+      "info": "Una línea por renglón.",
+      "default": "Unify payments\nand fulfillment.\nSell globally,\nconvert like a local."
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "Route payments through local acquirers, price shipping and duties before checkout, and adapt currency and language per market."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Bloque",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "name",
+          "label": "Título",
+          "info": "Una línea por renglón."
+        },
+        { "type": "textarea", "id": "desc", "label": "Descripción" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "POS · Confiabilidad" }]
+}
+{% endschema %}

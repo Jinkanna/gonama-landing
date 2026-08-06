@@ -1,0 +1,256 @@
+{% comment %}
+  GOnama landing 2026 · Hero
+  Diagrama de arquitectura animado: es una de las dos animaciones que conservamos
+  porque explica el producto. Todo el texto es editable desde el editor de temas.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  media="print"
+  onload="this.media='all'"
+>
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gn gn-hero" id="section-{{ section.id }}">
+  <div class="gn__inner">
+    <div class="gn-hero__layout">
+      <div class="gn-reveal">
+        {%- if st.eyebrow != blank -%}
+          <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if st.heading != blank -%}
+          <h1 class="gn__h1">{{ st.heading | escape }}</h1>
+        {%- endif -%}
+
+        {%- if st.lead != blank -%}
+          <p class="gn__lead gn-hero__lead">{{ st.lead | escape }}</p>
+        {%- endif -%}
+
+        {%- if st.primary_label != blank or st.secondary_label != blank -%}
+          <div class="gn-hero__actions">
+            {%- if st.primary_label != blank -%}
+              <a class="gn__btn gn__btn--primary" href="{{ st.primary_link | default: '#gn-contact' }}">
+                {{- st.primary_label | escape -}}
+              </a>
+            {%- endif -%}
+            {%- if st.secondary_label != blank -%}
+              <a class="gn__btn gn__btn--ghost" href="{{ st.secondary_link | default: '#' }}">
+                {{- st.secondary_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="gn-reveal">
+        <div
+          class="gn-arch"
+          data-gn-arch
+          data-gn-phrase="{{ st.chat_phrase | escape }}"
+          role="img"
+          aria-label="{{ st.diagram_alt | escape }}"
+        >
+          <div class="gn-arch__head">
+            <span>{{ st.diagram_title | escape }}</span>
+            <span>{{ st.diagram_meta | escape }}</span>
+          </div>
+
+          <div class="gn-arch__flow">
+          <p class="gn-arch__label" data-gn-label>{{ st.entry_label | escape }}</p>
+
+          <div class="gn-arch__node" data-gn-node="0">{{ st.node_business | escape }}</div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__node gn-arch__node--primary" data-gn-node="1">{{ st.node_studio | escape }}</div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__branch" data-gn-branch>
+            {%- assign studio_items = st.studio_items | split: ',' -%}
+            {%- for item in studio_items -%}
+              <div class="gn-arch__node gn-arch__node--sm" data-gn-node="2">{{ item | strip | escape }}</div>
+            {%- endfor -%}
+          </div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__chat" data-gn-chat>
+            <span class="gn-arch__chat-icon"></span>
+            <span class="gn-arch__chat-text" data-gn-chat-text></span>
+            <span class="gn-arch__caret"></span>
+          </div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__dot" data-gn-dot></div>
+          <p class="gn-arch__label" data-gn-label>{{ st.exec_label | escape }}</p>
+
+          <div class="gn-arch__node" data-gn-node="4">{{ st.node_infra | escape }}</div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__branch" data-gn-branch>
+            {%- assign infra_items = st.infra_items | split: ',' -%}
+            {%- for item in infra_items -%}
+              <div class="gn-arch__node gn-arch__node--sm" data-gn-node="5">{{ item | strip | escape }}</div>
+            {%- endfor -%}
+          </div>
+          <div class="gn-arch__line" data-gn-line></div>
+
+          <div class="gn-arch__node" data-gn-node="6">{{ st.node_compliance | escape }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · Hero",
+  "tag": "section",
+  "class": "gn-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Agentic Commerce Infrastructure"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Building the infrastructure behind the autonomous economy."
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Bajada",
+      "default": "Commerce is entering a new era. GOnama provides the infrastructure to build, operate and scale AI-native commerce experiences, globally."
+    },
+    {
+      "type": "header",
+      "content": "Botones"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Botón principal",
+      "default": "Talk to GOnama"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Link del botón principal"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Botón secundario",
+      "default": "Explore the platform"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Link del botón secundario"
+    },
+    {
+      "type": "header",
+      "content": "Diagrama de arquitectura"
+    },
+    {
+      "type": "paragraph",
+      "content": "Los grupos se separan con comas."
+    },
+    {
+      "type": "text",
+      "id": "diagram_title",
+      "label": "Encabezado del recuadro",
+      "default": "Platform architecture"
+    },
+    {
+      "type": "text",
+      "id": "diagram_meta",
+      "label": "Encabezado · derecha",
+      "default": "v1"
+    },
+    {
+      "type": "text",
+      "id": "entry_label",
+      "label": "Etiqueta superior",
+      "default": "Entry"
+    },
+    {
+      "type": "text",
+      "id": "node_business",
+      "label": "Nodo 1",
+      "default": "Your business"
+    },
+    {
+      "type": "text",
+      "id": "node_studio",
+      "label": "Nodo destacado",
+      "default": "GOnama AI Studio"
+    },
+    {
+      "type": "text",
+      "id": "studio_items",
+      "label": "Capacidades del Studio",
+      "default": "AI Agent Skills, AI Domain Experts, Emagine Code"
+    },
+    {
+      "type": "text",
+      "id": "chat_phrase",
+      "label": "Frase que se tipea",
+      "default": "Create a new promotion today..."
+    },
+    {
+      "type": "text",
+      "id": "exec_label",
+      "label": "Etiqueta de ejecución",
+      "default": "Execution Layer"
+    },
+    {
+      "type": "text",
+      "id": "node_infra",
+      "label": "Nodo de infraestructura",
+      "default": "Commerce Infrastructure"
+    },
+    {
+      "type": "text",
+      "id": "infra_items",
+      "label": "Módulos de infraestructura",
+      "default": "Local Payments, Local Logistics"
+    },
+    {
+      "type": "text",
+      "id": "node_compliance",
+      "label": "Nodo final",
+      "default": "Local Compliance"
+    },
+    {
+      "type": "textarea",
+      "id": "diagram_alt",
+      "label": "Texto alternativo del diagrama",
+      "info": "Lo que leen los lectores de pantalla.",
+      "default": "Flujo de GOnama: tu negocio entra por GOnama AI Studio, que expone AI Agent Skills, AI Domain Experts y Emagine Code, y se ejecuta sobre Commerce Infrastructure con pagos, logística y compliance locales."
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Hero"
+    }
+  ]
+}
+{% endschema %}

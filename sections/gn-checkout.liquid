@@ -1,0 +1,163 @@
+{% comment %}
+  GOnama landing 2026 · Global Checkout
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gn gn-checkout" id="section-{{ section.id }}">
+
+  <div class="gn__inner">
+    <div class="gn__head gn-reveal">
+      {%- if st.eyebrow != blank -%}
+        <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if st.heading != blank -%}
+        <h2 class="gn__h2">
+          {{ st.heading | escape }}
+          {%- if st.heading_2 != blank -%}
+            <br>{{ st.heading_2 | escape }}
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+      {%- if st.lead != blank -%}
+        <p class="gn__lead">{{ st.lead | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gn-checkout__grid">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <article class="gn-cap gn-reveal" {{ block.shopify_attributes }}>
+          <p class="gn-cap__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+          {%- if b.title != blank -%}
+            <h3 class="gn__h3">{{ b.title | escape }}</h3>
+          {%- endif -%}
+          {%- if b.desc != blank -%}
+            <p class="gn-cap__desc">{{ b.desc | escape }}</p>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if st.cta_label != blank -%}
+      <div class="gn-checkout__cta gn-reveal">
+        <a class="gn__btn gn__btn--primary" href="{{ st.cta_link | default: '#gn-contact' }}">
+          {{- st.cta_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · Global Checkout",
+  "tag": "section",
+  "class": "gn-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Global Checkout"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título · línea 1",
+      "default": "Unify payments and fulfillment."
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Título · línea 2",
+      "default": "Scale everywhere, convert anywhere."
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Bajada",
+      "default": "Eliminate checkout friction globally. Route payments through local acquirers and automate last-mile fulfillment."
+    },
+    {
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texto",
+      "default": "Deploy Next-Gen Checkout"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "capability",
+      "name": "Capacidad",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Descripción"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Global Checkout",
+      "blocks": [
+        {
+          "type": "capability",
+          "settings": {
+            "title": "Local Payment Orchestration",
+            "desc": "Dynamic routing to regional acquiring banks to maximize authorization rates and eliminate foreign transaction fees."
+          }
+        },
+        {
+          "type": "capability",
+          "settings": {
+            "title": "Smart Last-Mile Logistics",
+            "desc": "Real-time carrier selection, localized shipping rules, and automated landed-cost calculations right at checkout."
+          }
+        },
+        {
+          "type": "capability",
+          "settings": {
+            "title": "Adaptive Funnel & Localized Experience",
+            "desc": "Instant front-end customization for currency, language, and regional checkout preferences."
+          }
+        },
+        {
+          "type": "capability",
+          "settings": {
+            "title": "Agentic Execution Engine",
+            "desc": "Native support for AI buyer agents (machine-to-machine commerce), tokenized automated checkouts, and programmatic cart settlements."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

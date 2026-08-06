@@ -1,0 +1,349 @@
+{% comment %}
+  GOnama landing 2026 · GOnama Holdings
+  Panel colapsado al pie: principios de liderazgo, cultura y políticas.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+  assign culture_tags = st.culture_tags | split: ','
+-%}
+
+<section class="gn gn-holdings" id="section-{{ section.id }}" data-gn-holdings>
+  <button
+    class="gn-holdings__trigger"
+    type="button"
+    aria-expanded="false"
+    aria-controls="gn-holdings-panel-{{ section.id }}"
+    data-gn-holdings-trigger
+  >
+    {{ st.trigger_label | escape }}
+    <svg class="gn-holdings__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <div
+    class="gn-holdings__panel"
+    id="gn-holdings-panel-{{ section.id }}"
+    data-gn-holdings-panel
+  >
+    <div class="gn__inner">
+
+      {%- if st.heading != blank -%}
+        <h2 class="gn__h2">
+          {{ st.heading | escape }}
+        </h2>
+      {%- endif -%}
+
+      {%- if st.lead != blank -%}
+        <p class="gn__lead">{{ st.lead | escape }}</p>
+      {%- endif -%}
+
+      {%- assign principles = section.blocks | where: 'type', 'principle' -%}
+      {%- if principles.size > 0 -%}
+        <div class="gn-principles">
+          {%- for block in principles -%}
+            {%- assign b = block.settings -%}
+            <article class="gn-principle gn-reveal" {{ block.shopify_attributes }}>
+              <div class="gn-principle__icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  {%- case b.icon -%}
+                    {%- when 'home' -%}
+                      <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1v-9.5z"/><path d="M9 21V12h6v9"/>
+                    {%- when 'search' -%}
+                      <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+                    {%- when 'bolt' -%}
+                      <path d="M13 2L4 14h7l-1 8 10-12h-7l1-8z"/>
+                    {%- when 'people' -%}
+                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                    {%- when 'bars' -%}
+                      <path d="M5 19V9M12 19V5M19 19v-7"/>
+                    {%- when 'heart' -%}
+                      <path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.6z"/>
+                    {%- else -%}
+                      <circle cx="12" cy="12" r="9"/>
+                  {%- endcase -%}
+                </svg>
+              </div>
+              {%- if b.title != blank -%}
+                <h3 class="gn__h3">{{ b.title | escape }}</h3>
+              {%- endif -%}
+              {%- if b.desc != blank -%}
+                <p>{{ b.desc | newline_to_br }}</p>
+              {%- endif -%}
+            </article>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if st.culture_heading != blank or st.culture_body != blank -%}
+        <div class="gn-culture gn-reveal">
+          {%- if st.culture_heading != blank -%}
+            <h2 class="gn__h2">{{ st.culture_heading | escape }}</h2>
+          {%- endif -%}
+          {%- if st.culture_body != blank -%}
+            <p>{{ st.culture_body | escape }}</p>
+          {%- endif -%}
+          {%- if st.culture_tags != blank -%}
+            <div class="gn-culture__tags">
+              {%- for tag in culture_tags -%}
+                {%- assign clean = tag | strip -%}
+                {%- if clean != blank -%}
+                  <span>{{ clean | escape }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- assign policies = section.blocks | where: 'type', 'policy' -%}
+      {%- if policies.size > 0 -%}
+        <div class="gn-policies">
+          {%- if st.policies_title != blank -%}
+            <p class="gn-policies__title">{{ st.policies_title | escape }}</p>
+          {%- endif -%}
+          {%- for block in policies -%}
+            {%- assign b = block.settings -%}
+            <details class="gn-policy" {{ block.shopify_attributes }}>
+              <summary>{{ b.title | escape }}</summary>
+              <div class="gn-policy__body">
+                {{ b.body }}
+              </div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if st.copyright != blank -%}
+        <p class="gn-holdings__copyright">{{ st.copyright | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · Holdings",
+  "tag": "section",
+  "class": "gn-section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "text",
+      "id": "trigger_label",
+      "label": "Texto del botón",
+      "default": "GOnama Holdings · Principles & Policies"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Discover Our Leadership Principles"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Bajada",
+      "default": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce. They guide how we make decisions, solve problems and create value."
+    },
+    {
+      "type": "header",
+      "content": "Cultura"
+    },
+    {
+      "type": "text",
+      "id": "culture_heading",
+      "label": "Título",
+      "default": "Our Culture"
+    },
+    {
+      "type": "textarea",
+      "id": "culture_body",
+      "label": "Texto",
+      "default": "At GOnama, we believe the future of commerce will be built by combining technology, artificial intelligence and exceptional people."
+    },
+    {
+      "type": "text",
+      "id": "culture_tags",
+      "label": "Tags",
+      "info": "Separados por comas.",
+      "default": "Ownership, Curiosity, Speed, Excellence, Humility"
+    },
+    {
+      "type": "header",
+      "content": "Políticas"
+    },
+    {
+      "type": "text",
+      "id": "policies_title",
+      "label": "Título del bloque",
+      "default": "Corporate Policies"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "default": "© GOnama Holdings Ltd."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "principle",
+      "name": "Principio",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícono",
+          "options": [
+            {
+              "value": "home",
+              "label": "Casa"
+            },
+            {
+              "value": "search",
+              "label": "Lupa"
+            },
+            {
+              "value": "bolt",
+              "label": "Rayo"
+            },
+            {
+              "value": "people",
+              "label": "Personas"
+            },
+            {
+              "value": "bars",
+              "label": "Barras"
+            },
+            {
+              "value": "heart",
+              "label": "Corazón"
+            }
+          ],
+          "default": "home"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Descripción",
+          "info": "Cada salto de línea se respeta."
+        }
+      ]
+    },
+    {
+      "type": "policy",
+      "name": "Política",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Contenido"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Holdings",
+      "blocks": [
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "home",
+            "title": "Own It",
+            "desc": "Act like an owner.\nThink long term.\nUse resources carefully."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "search",
+            "title": "Dive Deep",
+            "desc": "Understand before optimizing.\nChallenge assumptions.\nBe hands-on."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "bolt",
+            "title": "Deliver Value Fast",
+            "desc": "Focus on what matters.\nMove with pace.\nDeliver impact."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "people",
+            "title": "Bring Good Vibes",
+            "desc": "Build a positive environment.\nSupport others.\nFocus on possibilities."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "bars",
+            "title": "Raise The Bar",
+            "desc": "Always improve.\nSet high standards.\nDevelop talent."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "icon": "heart",
+            "title": "Stay Humble",
+            "desc": "Confidence without ego.\nStay open-minded.\nLearn continuously."
+          }
+        },
+        {
+          "type": "policy",
+          "settings": {
+            "title": "Code of Conduct",
+            "body": "<p>We act with integrity in every market we operate. Respect, fairness and accountability guide how we work with customers, partners and each other.</p><p><strong>We commit to:</strong> honest communication, zero tolerance for discrimination or harassment, and responsible use of company and customer data.</p>"
+          }
+        },
+        {
+          "type": "policy",
+          "settings": {
+            "title": "Data & Privacy",
+            "body": "<p>Commerce infrastructure handles sensitive operational and customer data. We design systems with privacy by default and comply with applicable regional regulations.</p>"
+          }
+        },
+        {
+          "type": "policy",
+          "settings": {
+            "title": "Security",
+            "body": "<p>Security is a product requirement, not an afterthought. Access controls, encryption, and continuous review protect the platforms we operate.</p>"
+          }
+        },
+        {
+          "type": "policy",
+          "settings": {
+            "title": "Responsible AI",
+            "body": "<p>AI agents and automation must remain aligned with human intent, transparent where it matters, and safe in production commerce flows.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

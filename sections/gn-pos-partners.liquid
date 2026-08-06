@@ -1,0 +1,179 @@
+{% comment %}
+  GOnama · new-pos · Industrias
+  Dos rieles que se mueven solos en sentidos opuestos. Los bloques se
+  reparten por paridad: los de indice par arriba, los impares abajo. El
+  bucle y la velocidad los arma gn-pos.js, que clona el grupo y calcula la
+  duracion por distancia, asi los dos rieles van al mismo ritmo aunque
+  tengan distinta cantidad de celdas.
+
+  Las celdas no llevan gnp-rv: el observador de reveal corre antes de que
+  el JS clone el grupo, y las copias se quedarian en opacity 0. El reveal
+  va en el contenedor.
+
+  Cada celda acepta un logo o, si no hay imagen, el nombre en texto.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<section class="gnp gnp--{{ st.tone }} gnp-part-sec" id="section-partners">
+  <div class="gnp__in">
+    <div class="gnp__head gnp__head--split">
+      <div>
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-rv" style="margin-bottom: 24px;">{{ st.label | escape }}</p>
+        {%- endif -%}
+        {%- if st.headline != blank -%}
+          <h2 class="gnp__title gnp-rv">{{ st.headline | escape }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="gnp-part__rails gnp-rv">
+      {%- for pass in (1..2) -%}
+        {%- assign want = pass | minus: 1 -%}
+        <div
+          class="gnp-part__rail{% if want == 1 %} gnp-part__rail--rev{% endif %}"
+          data-gnp-marquee
+          data-gnp-speed="{{ st.speed | default: 46 }}"
+        >
+          <div class="gnp-ticker__group">
+            {%- for block in section.blocks -%}
+              {%- assign parity = forloop.index0 | modulo: 2 -%}
+              {%- if parity == want -%}
+                {%- assign b = block.settings -%}
+                <div class="gnp-part" {{ block.shopify_attributes }}>
+                  {%- if b.kind != blank -%}
+                    <p class="gnp-part__kind">{{ b.kind | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if b.logo != blank -%}
+                    <img
+                      class="gnp-part__logo"
+                      src="{{ b.logo | image_url: height: 120 }}"
+                      alt="{{ b.name | escape }}"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <p class="gnp-part__name">{{ b.name | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if b.note != blank -%}
+                    <p class="gnp-part__note">{{ b.note | escape }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if st.foot != blank -%}
+      <p class="gnp-part__foot gnp-rv">{{ st.foot | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Industrias",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        {
+          "value": "a",
+          "label": "Base"
+        },
+        {
+          "value": "b",
+          "label": "Invertido"
+        }
+      ],
+      "default": "b"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular",
+      "default": "Built for every commerce model in global industries."
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Velocidad del carrusel",
+      "info": "Pixeles por segundo. Mas alto, mas rapido.",
+      "min": 20,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "default": 46
+    },
+    {
+      "type": "textarea",
+      "id": "sub",
+      "label": "Bajada",
+      "default": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt."
+    },
+    {
+      "type": "text",
+      "id": "foot",
+      "label": "Nota al pie",
+      "info": "Vacia y no se muestra.",
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner",
+      "name": "Industria",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kind",
+          "label": "Categoría",
+          "info": "Qué resuelve. Va arriba del nombre."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Detalle",
+          "info": "Una línea corta. Opcional."
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo",
+          "info": "Si lo cargás, reemplaza al nombre en texto."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "POS · Industrias"
+    }
+  ]
+}
+{% endschema %}

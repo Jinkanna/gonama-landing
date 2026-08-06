@@ -1,0 +1,167 @@
+{% comment %}
+  GOnama landing 2026 · Header propio de la home
+  El header del tema queda oculto en index (ver layout/theme.liquid), así que
+  esta sección es la navegación de la landing. Sticky y con menú mobile.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+
+  # Si no se elige un logo en la sección, se usa el del tema (Settings › Logo).
+  assign logo = st.logo | default: settings.logo_image_desktop
+  assign nav_rows = st.links | newline_to_br | split: '<br />'
+-%}
+
+<header class="gn gn-header" data-gn-header>
+  <div class="gn-header__bar">
+    <a class="gn-header__logo" href="{{ st.logo_link | default: routes.root_url }}">
+      {%- render 'gn-logo',
+        logo: logo,
+        logo_dark: st.logo_dark,
+        go: st.logo_go,
+        rest: st.logo_rest,
+        size: 30
+      -%}
+    </a>
+
+    <nav class="gn-header__nav" aria-label="{{ st.nav_label | escape }}">
+      {%- for row in nav_rows -%}
+        {%- liquid
+          assign parts = row | strip_html | strip | split: '|'
+          assign label = parts[0] | strip
+          assign href = parts[1] | strip
+        -%}
+        {%- if label != blank -%}
+          <a class="gn-header__link" href="{{ href }}">{{ label | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    <div class="gn-header__actions">
+      {%- if st.cta_label != blank -%}
+        <a class="gn__btn gn__btn--primary gn-header__cta" href="{{ st.cta_link | default: '#gn-contact' }}">
+          {{- st.cta_label | escape -}}
+        </a>
+      {%- endif -%}
+
+      <button
+        class="gn-header__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="gn-header-menu"
+        aria-label="{{ st.menu_label | escape }}"
+        data-gn-header-toggle
+      >
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gn-header__menu" id="gn-header-menu" data-gn-header-menu>
+    {%- for row in nav_rows -%}
+      {%- liquid
+        assign parts = row | strip_html | strip | split: '|'
+        assign label = parts[0] | strip
+        assign href = parts[1] | strip
+      -%}
+      {%- if label != blank -%}
+        <a class="gn-header__menu-link" href="{{ href }}">{{ label | escape }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if st.cta_label != blank -%}
+      <a class="gn__btn gn__btn--primary" href="{{ st.cta_link | default: '#gn-contact' }}">
+        {{- st.cta_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</header>
+
+{%- comment -%}
+  El header es fixed, así que no ocupa lugar en el flujo. Este espaciador
+  reserva su altura para que el hero no arranque debajo.
+{%- endcomment -%}
+<div class="gn-header__spacer" aria-hidden="true"></div>
+
+{% schema %}
+{
+  "name": "GN · Header",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "links",
+      "label": "Links de navegación",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "Platform | #section-platform\nImagine Code | #section-imagine\nCheckout | #section-checkout\nIndustries | #section-industries"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Si lo dejás vacío se usa el texto de abajo."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_dark",
+      "label": "Logo para fondo oscuro",
+      "info": "Se usa cuando el visitante tiene el navegador en modo oscuro. Si lo dejás vacío se usa el mismo de arriba."
+    },
+    {
+      "type": "text",
+      "id": "logo_go",
+      "label": "Logo en texto · parte en color",
+      "info": "Solo se usa si no hay imagen de logo.",
+      "default": "GO"
+    },
+    {
+      "type": "text",
+      "id": "logo_rest",
+      "label": "Logo en texto · resto",
+      "default": "nama"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Link del logo"
+    },
+    {
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texto",
+      "default": "Talk to GOnama"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Accesibilidad"
+    },
+    {
+      "type": "text",
+      "id": "nav_label",
+      "label": "Nombre de la navegación",
+      "default": "Main"
+    },
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "Botón de menú",
+      "default": "Menu"
+    }
+  ]
+}
+{% endschema %}

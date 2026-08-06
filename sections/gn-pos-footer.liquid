@@ -1,0 +1,138 @@
+{% comment %}
+  GOnama · new-pos · Footer
+
+  Reemplaza al footer de la landing anterior, cuyos enlaces apuntaban a anclas
+  que en esta página no existen. Acá los destinos son las secciones reales.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign year = 'now' | date: '%Y'
+-%}
+
+<footer class="gnp gnp--{{ st.tone }} gnp-foot">
+  <div class="gnp__in">
+    <div class="gnp-foot__top">
+      <div class="gnp-foot__brand">
+        <p class="gnp-foot__mark">
+          <span class="gnp-foot__go">{{ st.logo_go | escape }}</span>{{ st.logo_rest | escape }}
+        </p>
+        {%- if st.tagline != blank -%}
+          <p class="gnp-foot__tagline">{{ st.tagline | escape }}</p>
+        {%- endif -%}
+
+        {%- if st.cta_label != blank -%}
+          <a class="gnp__link gnp-foot__cta" href="{{ st.cta_link | default: '#gnp-contact' }}">
+            {{ st.cta_label | escape }}
+            <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="gnp-foot__cols">
+        {%- for i in (1..3) -%}
+          {%- liquid
+            case i
+              when 1
+                assign col_title = st.col1_title
+                assign col_items = st.col1_items
+              when 2
+                assign col_title = st.col2_title
+                assign col_items = st.col2_items
+              else
+                assign col_title = st.col3_title
+                assign col_items = st.col3_items
+            endcase
+          -%}
+          {%- if col_items != blank -%}
+            <div class="gnp-foot__col">
+              <p class="gnp-foot__col-title">{{ col_title | escape }}</p>
+              <ul>
+                {%- assign rows = col_items | newline_to_br | split: '<br />' -%}
+                {%- for row in rows -%}
+                  {%- render 'gn-pos-foot-link', row: row -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="gnp-foot__bottom">
+      <p>&copy; {{ year }} {{ st.copyright | escape }}</p>
+      {%- if st.legal != blank -%}
+        <p class="gnp-foot__legal">{{ st.legal | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "POS · Footer",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    { "type": "text", "id": "logo_go", "label": "Logo · parte en color", "default": "GO" },
+    { "type": "text", "id": "logo_rest", "label": "Logo · resto", "default": "nama" },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Bajada",
+      "default": "Agentic commerce infrastructure, run and supported from Uruguay."
+    },
+    { "type": "text", "id": "cta_label", "label": "Enlace destacado", "default": "Talk with us" },
+    { "type": "url", "id": "cta_link", "label": "Destino" },
+    { "type": "header", "content": "Columna 1" },
+    { "type": "text", "id": "col1_title", "label": "Título", "default": "Platform" },
+    {
+      "type": "textarea",
+      "id": "col1_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "What we run | #section-services\nHow we operate | #section-reliability\nWhy us | #section-edge"
+    },
+    { "type": "header", "content": "Columna 2" },
+    { "type": "text", "id": "col2_title", "label": "Título", "default": "Company" },
+    {
+      "type": "textarea",
+      "id": "col2_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "Ecosystem | #section-partners\nQuestions | #section-faq\nContact | #gnp-contact"
+    },
+    { "type": "header", "content": "Columna 3" },
+    { "type": "text", "id": "col3_title", "label": "Título", "default": "Get in touch" },
+    {
+      "type": "textarea",
+      "id": "col3_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "go@gonama.com | mailto:go@gonama.com\n+598 96 331 868 | tel:+59896331868"
+    },
+    { "type": "header", "content": "Pie" },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "info": "El año se agrega solo adelante.",
+      "default": "GOnama Holdings Ltd."
+    },
+    { "type": "text", "id": "legal", "label": "Línea legal", "default": "Montevideo, Uruguay" }
+  ],
+  "presets": [{ "name": "POS · Footer" }]
+}
+{% endschema %}

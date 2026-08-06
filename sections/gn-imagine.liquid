@@ -1,0 +1,193 @@
+{% comment %}
+  GOnama landing 2026 · Imagine Code
+  La consola que tipea prompts es la segunda animación que conservamos: muestra
+  cómo funciona el producto mejor que cualquier texto.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+
+  # Los prompts se cargan uno por línea y se pasan al JS como JSON.
+  assign raw_lines = st.prompts | newline_to_br | split: '<br />'
+  assign joined = ''
+  for line in raw_lines
+    assign clean = line | strip_html | strip
+    if clean != blank
+      assign joined = joined | append: clean | append: '|~|'
+    endif
+  endfor
+  assign prompt_list = joined | split: '|~|'
+
+  assign steps = st.steps | split: ','
+-%}
+
+<section class="gn gn-imagine" id="section-{{ section.id }}">
+
+  <div class="gn__inner">
+    <div class="gn__head gn__head--center gn-reveal">
+      {%- if st.eyebrow != blank -%}
+        <p class="gn__eyebrow">{{ st.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if st.heading != blank -%}
+        <h2 class="gn__h2">{{ st.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if st.punch != blank -%}
+        <p class="gn-imagine__punch">
+          {{ st.punch | escape }}
+          {%- if st.punch_em != blank %} <em>{{ st.punch_em | escape }}</em>{% endif -%}
+        </p>
+      {%- endif -%}
+    </div>
+
+    <div
+      class="gn-console gn-reveal"
+      data-gn-console
+      data-gn-prompts="{{ prompt_list | json | escape }}"
+    >
+      <div class="gn-console__top">
+        <div class="gn-console__badge">
+          <span class="gn-console__live"></span>
+          <span>{{ st.console_name | escape }}</span>
+        </div>
+        <span class="gn-console__mode">{{ st.console_mode | escape }}</span>
+      </div>
+
+      <div class="gn-console__area">
+        <p class="gn-console__prefix">{{ st.console_prefix | escape }}</p>
+        <p class="gn-console__line">
+          <span data-gn-typed></span>
+          <span class="gn-console__caret"></span>
+        </p>
+      </div>
+
+      <div class="gn-console__pipeline">
+        {%- for step in steps -%}
+          {%- assign clean = step | strip -%}
+          {%- if clean != blank -%}
+            <div class="gn-console__step" data-gn-step>
+              <div class="gn-console__step-n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+              <div class="gn-console__step-l">{{ clean | escape }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="gn-imagine__copy">
+      {%- if st.body_1 != blank -%}
+        <div class="gn__body gn-reveal">{{ st.body_1 }}</div>
+      {%- endif -%}
+      {%- if st.body_2 != blank -%}
+        <div class="gn__body gn-reveal">{{ st.body_2 }}</div>
+      {%- endif -%}
+      {%- if st.footer != blank -%}
+        <div class="gn-imagine__footer gn-reveal">{{ st.footer }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GN · Imagine Code",
+  "tag": "section",
+  "class": "gn-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "GOnama Imagine Code"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "The feature you need doesn't have to wait for a roadmap."
+    },
+    {
+      "type": "text",
+      "id": "punch",
+      "label": "Frase corta",
+      "default": "Describe it."
+    },
+    {
+      "type": "text",
+      "id": "punch_em",
+      "label": "Frase corta · parte resaltada",
+      "default": "GOnama builds it."
+    },
+    {
+      "type": "header",
+      "content": "Consola"
+    },
+    {
+      "type": "text",
+      "id": "console_name",
+      "label": "Nombre",
+      "default": "Imagine Code"
+    },
+    {
+      "type": "text",
+      "id": "console_mode",
+      "label": "Etiqueta derecha",
+      "default": "prompt → production"
+    },
+    {
+      "type": "text",
+      "id": "console_prefix",
+      "label": "Línea de ayuda",
+      "default": "› describe a capability"
+    },
+    {
+      "type": "textarea",
+      "id": "prompts",
+      "label": "Prompts que rotan",
+      "info": "Uno por línea.",
+      "default": "Create a multi-currency checkout with local payments for Uruguay and Argentina…\nBuild a loyalty wallet that issues points on every order and redeems at cart…\nGenerate an agent that recovers abandoned carts with personalized offers…\nAdd a last-mile logistics board with carrier routing per market…"
+    },
+    {
+      "type": "text",
+      "id": "steps",
+      "label": "Pasos del pipeline",
+      "info": "Separados por comas.",
+      "default": "Code, Interface, Validate, Deploy"
+    },
+    {
+      "type": "header",
+      "content": "Texto"
+    },
+    {
+      "type": "richtext",
+      "id": "body_1",
+      "label": "Párrafo 1",
+      "default": "<p>Transform ideas into <strong>production-ready commerce capabilities</strong> using natural language. GOnama generates the code, builds the interface, validates the solution, and prepares it for deployment.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "body_2",
+      "label": "Párrafo 2",
+      "default": "<p>Developers, agencies, IT teams, and business owners can ship checkouts, dashboards, integrations, AI agents, workflows, or entire modules, without starting from scratch.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "footer",
+      "label": "Cierre",
+      "default": "<p>From prompt to production, in <strong>hours</strong> instead of weeks.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GN · Imagine Code"
+    }
+  ]
+}
+{% endschema %}

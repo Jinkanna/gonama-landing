@@ -1,0 +1,53 @@
+{% comment %}
+  GOnama · new-pos · Pantalla de entrada
+
+  Cubre la pantalla, se resuelve sola en menos de dos segundos y se retira
+  hacia arriba dejando ver el hero. La animación es CSS puro con
+  animation-fill-mode: forwards, así que si el JavaScript no corre igual
+  desaparece. El script solo agrega el salteo en visitas siguientes.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+-%}
+
+<div class="gnp gnp--{{ st.tone }} gnp-intro" data-gn-intro aria-hidden="true">
+  <div class="gnp-intro__mark">
+    <span class="gnp-intro__go">{{ st.logo_go | escape }}</span><span
+      class="gnp-intro__rest"
+    >{{ st.logo_rest | escape }}</span>
+  </div>
+  {%- if st.caption != blank -%}
+    <p class="gnp-intro__cap">{{ st.caption | escape }}</p>
+  {%- endif -%}
+  <div class="gnp-intro__rule"><i></i></div>
+</div>
+
+{% schema %}
+{
+  "name": "POS · Entrada",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    { "type": "text", "id": "logo_go", "label": "Parte en color", "default": "GO" },
+    { "type": "text", "id": "logo_rest", "label": "Resto", "default": "nama" },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Bajada",
+      "default": "Agentic commerce infrastructure"
+    }
+  ],
+  "presets": [{ "name": "POS · Entrada" }]
+}
+{% endschema %}

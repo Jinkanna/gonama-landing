@@ -1,0 +1,182 @@
+{% comment %}
+  GOnama landing 2026 · Footer propio de la home
+
+  Se inserta con {% section %} desde layout/theme.liquid, no desde el template
+  JSON. Escrito a propósito sin construcciones raras: las tres columnas van
+  explícitas en vez de un bucle con case, y el año se concatena en vez de
+  reemplazar un token entre llaves.
+{% endcomment %}
+
+{%- comment -%}
+  Marca que hay JS antes de que se parsee el resto: sin esto, si el script
+  no carga, el reveal dejaria toda la landing invisible.
+{%- endcomment -%}
+<script>document.documentElement.classList.add('gn-js');</script>
+{{ 'gn-landing.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'gn-landing.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign st = section.settings
+  assign year = 'now' | date: '%Y'
+  assign logo = st.logo | default: settings.logo_image_desktop
+-%}
+
+<footer class="gn gn-footer">
+  <div class="gn__inner">
+    <div class="gn-footer__top">
+      <div class="gn-footer__brand">
+        {%- render 'gn-logo', logo: logo, logo_dark: st.logo_dark, go: st.logo_go, rest: st.logo_rest, size: 32 -%}
+
+        {%- if st.tagline != blank -%}
+          <p class="gn-footer__tagline">{{ st.tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="gn-footer__cols">
+        {%- if st.col1_title != blank or st.col1_items != blank -%}
+          <div class="gn-footer__col">
+            <p class="gn-footer__col-title">{{ st.col1_title | escape }}</p>
+            <ul>
+              {%- assign rows = st.col1_items | newline_to_br | split: '<br />' -%}
+              {%- for row in rows -%}
+                {%- render 'gn-footer-link', row: row -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if st.col2_title != blank or st.col2_items != blank -%}
+          <div class="gn-footer__col">
+            <p class="gn-footer__col-title">{{ st.col2_title | escape }}</p>
+            <ul>
+              {%- assign rows = st.col2_items | newline_to_br | split: '<br />' -%}
+              {%- for row in rows -%}
+                {%- render 'gn-footer-link', row: row -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if st.col3_title != blank or st.col3_items != blank -%}
+          <div class="gn-footer__col">
+            <p class="gn-footer__col-title">{{ st.col3_title | escape }}</p>
+            <ul>
+              {%- assign rows = st.col3_items | newline_to_br | split: '<br />' -%}
+              {%- for row in rows -%}
+                {%- render 'gn-footer-link', row: row -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="gn-footer__bottom">
+      <p>&copy; {{ year }} {{ st.copyright | escape }}</p>
+      {%- if st.legal != blank -%}
+        <div class="gn-footer__legal">{{ st.legal }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "GN · Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Si lo dejás vacío se usa el del tema."
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_dark",
+      "label": "Logo para fondo oscuro",
+      "info": "Si lo dejás vacío se usa el logo en texto, que se adapta solo."
+    },
+    {
+      "type": "text",
+      "id": "logo_go",
+      "label": "Logo en texto · parte en color",
+      "default": "GO"
+    },
+    {
+      "type": "text",
+      "id": "logo_rest",
+      "label": "Logo en texto · resto",
+      "default": "nama"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Bajada",
+      "default": "Infrastructure for the autonomous economy."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "info": "El año se agrega solo adelante.",
+      "default": "GOnama Holdings Ltd."
+    },
+    {
+      "type": "richtext",
+      "id": "legal",
+      "label": "Línea legal"
+    },
+    {
+      "type": "header",
+      "content": "Columna 1"
+    },
+    {
+      "type": "text",
+      "id": "col1_title",
+      "label": "Título",
+      "default": "Platform"
+    },
+    {
+      "type": "textarea",
+      "id": "col1_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "AI Studio | #section-platform\nCommerce Infrastructure | #section-platform\nCommerce Intelligence | #section-platform\nGrowth & Retention | #section-platform\nDeveloper Platform | #section-platform"
+    },
+    {
+      "type": "header",
+      "content": "Columna 2"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Título",
+      "default": "Solutions"
+    },
+    {
+      "type": "textarea",
+      "id": "col2_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "Global Checkout | #section-checkout\nImagine Code | #section-imagine\nIndustries | #section-industries"
+    },
+    {
+      "type": "header",
+      "content": "Columna 3"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Título",
+      "default": "Company"
+    },
+    {
+      "type": "textarea",
+      "id": "col3_items",
+      "label": "Ítems",
+      "info": "Uno por línea, con el formato  Texto | destino",
+      "default": "Principles & Policies | #section-holdings\nContact | #gn-contact"
+    }
+  ]
+}
+{% endschema %}
