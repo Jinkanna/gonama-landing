@@ -6,17 +6,17 @@
         "tone": "a",
         "logo_go": "GO",
         "logo_rest": "nama",
-        "caption": "Agentic commerce infrastructure"
+        "caption": "Agentic Commerce Infrastructure"
       }
     },
     "hero": {
       "type": "gn-pos-hero",
       "settings": {
         "tone": "a",
-        "label": "Agentic commerce infrastructure",
-        "headline": "Commerce that\nruns itself",
-        "sub": "One autonomous infrastructure where AI agents, checkout, payments and fulfillment execute commerce together.",
-        "cta1_label": "Talk with us",
+        "label": "Agentic Commerce Infrastructure",
+        "headline": "Building the infrastructure\nbehind the\nautonomous economy.",
+        "sub": "Commerce is entering a new era. GOnama provides the infrastructure to build, operate and scale AI-native commerce experiences, globally.",
+        "cta1_label": "Talk to GOnama",
         "cta1_link": "#gnp-contact"
       }
     },
@@ -30,7 +30,7 @@
             "value": "99.9",
             "decimals": 1,
             "suffix": "%",
-            "label": "Platform uptime"
+            "label": "Checkout uptime"
           }
         },
         "n2": {
@@ -72,13 +72,13 @@
       ],
       "settings": {
         "tone": "b",
-        "label": "Why GOnama",
-        "headline": "One platform.\nOne system.\nOne outcome.",
-        "body_1": "<p>Most businesses stitch together disconnected software, vendors and manual processes.</p>",
-        "body_2": "<p>GOnama replaces operational complexity with a single autonomous infrastructure where every transaction, workflow and AI agent works from the same source of truth.</p>",
-        "link_label": "Learn more about us",
-        "link_url": "#section-statement",
-        "punch": "No disconnected tools.\nNo fragmented vendors.\nNo operational blind spots.\nJust commerce running exactly as it should."
+        "label": "The shift",
+        "headline": "Commerce\nis changing.",
+        "body_1": "<p>The last generation of commerce software was built for people. The next generation will be built for <strong>AI agents and people</strong>.</p>",
+        "body_2": "<p>Intelligent agents won't just answer questions. They'll launch campaigns, negotiate offers, manage customer relationships, optimize operations, and complete purchases.</p>",
+        "link_label": "Explore the platform",
+        "link_url": "#section-services",
+        "punch": "But today's commerce stack wasn't designed for that world.\nIt needs a new operating system."
       }
     },
     "services": {
@@ -87,43 +87,43 @@
         "s1": {
           "type": "service",
           "settings": {
-            "name": "Global\nCheckout",
-            "desc": "One checkout across every market, with local currency, language and payment preferences resolved at the point of sale."
+            "name": "GOnama\nAI Studio",
+            "desc": "Make commerce intelligent. GOnama AI Chat, Emagine Code, AI Domain Experts and GO Agent Skills."
           }
         },
         "s2": {
           "type": "service",
           "settings": {
-            "name": "Local\nPayments",
-            "desc": "Routing to regional acquirers to lift authorization rates and drop the foreign transaction fees that quietly eat your margin."
+            "name": "Commerce\nInfrastructure",
+            "desc": "Run global commerce and checkout operations. Every module includes a dedicated AI Domain Expert."
           }
         },
         "s3": {
           "type": "service",
           "settings": {
-            "name": "Order\nManagement",
-            "desc": "One place for every order, whatever channel it came from. Stock, status and returns stay in sync without manual patching."
+            "name": "Commerce\nIntelligence",
+            "desc": "Understand every interaction. Analytics, funnel analytics, customer intelligence and CCS."
           }
         },
         "s4": {
           "type": "service",
           "settings": {
-            "name": "Logistics\nEngine",
-            "desc": "Carrier selection, localized shipping rules and landed cost calculated before the customer commits, not after."
+            "name": "Growth\nand Retention",
+            "desc": "Drive growth and retention across every channel. Promotions, loyalty, eWallet and cart recovery."
           }
         },
         "s5": {
           "type": "service",
           "settings": {
-            "name": "AI Studio\nand Agents",
-            "desc": "Domain experts and agents that launch campaigns, recover carts and answer customers, working inside your operation."
+            "name": "Developer\nPlatform",
+            "desc": "Build the next generation of commerce. APIs, MCP and A2A, sandbox and UI components."
           }
         },
         "s6": {
           "type": "service",
           "settings": {
-            "name": "Developer\nPlatform",
-            "desc": "APIs, sandbox, UI components and MCP support, so your team builds on top instead of around."
+            "name": "Global\nCheckout",
+            "desc": "Unify payments and fulfillment. Scale everywhere, convert anywhere."
           }
         }
       },
@@ -138,8 +138,8 @@
       "settings": {
         "tone": "a",
         "label": "What we run",
-        "headline": "Everything your store needs.\nUnder one platform.",
-        "sub": "From the first click to the final delivery, every layer of the sale runs on the same infrastructure, with one point of contact and full visibility."
+        "headline": "One infrastructure.\nEvery capability.",
+        "sub": "Built for agents. From the first click to the final delivery, every layer runs on the same platform, with one point of contact and full visibility."
       }
     },
     "reliability": {
@@ -148,35 +148,43 @@
         "r1": {
           "type": "pillar",
           "settings": {
-            "name": "Real-time\nvisibility",
-            "desc": "Know where every order stands at any moment. Live data means faster decisions and no guesswork."
+            "name": "Local Payment\nOrchestration",
+            "desc": "Dynamic routing to regional acquiring banks to maximize authorization rates and eliminate foreign transaction fees."
           }
         },
         "r2": {
           "type": "pillar",
           "settings": {
-            "name": "Regional\ncoverage",
-            "desc": "Uruguayan payment, tax and delivery rules are already solved, so you do not have to learn them one by one."
+            "name": "Smart Last-Mile\nLogistics",
+            "desc": "Real-time carrier selection, localized shipping rules, and automated landed-cost calculations right at checkout."
           }
         },
         "r3": {
           "type": "pillar",
           "settings": {
-            "name": "People who\nanswer",
-            "desc": "Real people, reachable. Routine question or urgent incident, someone picks up and owns the outcome."
+            "name": "Adaptive Funnel\nand Localization",
+            "desc": "Instant front-end customization for currency, language, and regional checkout preferences."
+          }
+        },
+        "r4": {
+          "type": "pillar",
+          "settings": {
+            "name": "Agentic Execution\nEngine",
+            "desc": "Native support for AI buyer agents, tokenized automated checkouts, and programmatic cart settlements."
           }
         }
       },
       "block_order": [
         "r1",
         "r2",
-        "r3"
+        "r3",
+        "r4"
       ],
       "settings": {
         "tone": "b",
-        "label": "How we operate",
-        "headline": "Reliability at\nevery step",
-        "sub": "Your store runs the way your business demands: predictably, transparently, and without excuses."
+        "label": "Global Checkout",
+        "headline": "Unify payments\nand fulfillment.",
+        "sub": "Eliminate checkout friction globally. Route payments through local acquirers and automate last-mile fulfillment."
       }
     },
     "edge": {
@@ -185,36 +193,36 @@
         "e1": {
           "type": "edge",
           "settings": {
-            "name": "One point of contact",
-            "desc": "No chasing five vendors. One team runs your entire operation, from checkout to delivery."
+            "name": "Describe it",
+            "desc": "Write the capability you need in plain language, the way you would explain it to a colleague."
           }
         },
         "e2": {
           "type": "edge",
           "settings": {
-            "name": "Full commerce visibility",
-            "desc": "Track orders, payments and fulfilment in real time, with alerts before a problem becomes a lost sale."
+            "name": "GOnama writes the code",
+            "desc": "The platform generates production-ready code instead of a prototype you have to finish."
           }
         },
         "e3": {
           "type": "edge",
           "settings": {
-            "name": "Compliance you can trust",
-            "desc": "Local invoicing, tax and consumer regulation handled per market, without you having to learn each one."
+            "name": "It builds the interface",
+            "desc": "Screens, states and components come out assembled, not as a sketch to hand off."
           }
         },
         "e4": {
           "type": "edge",
           "settings": {
-            "name": "Transparent pricing",
-            "desc": "No hidden fees. Clear pricing with sales support that stays reachable after the contract is signed."
+            "name": "It validates the solution",
+            "desc": "The result is checked before it reaches anyone, so what ships is what was asked for."
           }
         },
         "e5": {
           "type": "edge",
           "settings": {
-            "name": "Fast issue resolution",
-            "desc": "When something breaks we do not assign blame, we fix it. The team moves immediately to protect your revenue."
+            "name": "It prepares the deployment",
+            "desc": "From prompt to production in hours instead of weeks."
           }
         }
       },
@@ -227,8 +235,8 @@
       ],
       "settings": {
         "tone": "a",
-        "label": "Why us",
-        "headline": "Commerce that works\nas hard as you do."
+        "label": "GOnama Imagine Code",
+        "headline": "The feature you need\ndoesn't have to wait\nfor a roadmap."
       }
     },
     "partners": {
@@ -237,49 +245,49 @@
         "p1": {
           "type": "partner",
           "settings": {
-            "kind": "Ecommerce platform",
-            "name": "Shopify",
-            "note": "The store you already sell on, no migration needed."
+            "kind": "Industry",
+            "name": "Technology",
+            "note": "SaaS and Software, AI Platforms, Gaming, Telecommunications"
           }
         },
         "p2": {
           "type": "partner",
           "settings": {
-            "kind": "Payments",
-            "name": "Mercado Pago",
-            "note": "Local checkout with the methods people here actually use."
+            "kind": "Industry",
+            "name": "Retail and Consumer Goods",
+            "note": "E-commerce, Fashion and Apparel, Consumer Electronics, FMCG"
           }
         },
         "p3": {
           "type": "partner",
           "settings": {
-            "kind": "Cross-border payments",
-            "name": "dLocal",
-            "note": "Cross-border collection with local settlement."
+            "kind": "Industry",
+            "name": "Financial Services",
+            "note": "Banking, Insurance, Lending, Fintech"
           }
         },
         "p4": {
           "type": "partner",
           "settings": {
-            "kind": "Global payments",
-            "name": "Stripe",
-            "note": "Foreign cards and subscription billing."
+            "kind": "Industry",
+            "name": "Healthcare",
+            "note": "Pharmaceuticals, Health Insurance, Hospitals and Clinics, Telemedicine"
           }
         },
         "p5": {
           "type": "partner",
           "settings": {
-            "kind": "Last-mile delivery",
-            "name": "Correo Uruguayo",
-            "note": "Nationwide coverage, inland towns included."
+            "kind": "Industry",
+            "name": "Travel and Hospitality",
+            "note": "Hotels, Airlines, Travel Services, Tourism"
           }
         },
         "p6": {
           "type": "partner",
           "settings": {
-            "kind": "International shipping",
-            "name": "DHL",
-            "note": "Outbound shipping with end to end tracking."
+            "kind": "Industry",
+            "name": "Membership and Subscription",
+            "note": "Clubs and Associations, Loyalty Programs, Subscription Commerce"
           }
         }
       },
@@ -293,10 +301,10 @@
       ],
       "settings": {
         "tone": "b",
-        "label": "Ecosystem",
-        "headline": "Connected to what you already use",
-        "sub": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt.",
-        "foot": "Using something that is not on the list? Tell us."
+        "label": "Major Global Industries",
+        "headline": "Built for every commerce model",
+        "sub": "From regulated sectors to high-velocity retail, the same infrastructure adapts to how each industry sells.",
+        "foot": "Your industry is not on the list? Tell us."
       }
     },
     "faq": {
@@ -305,36 +313,29 @@
         "q1": {
           "type": "faq",
           "settings": {
-            "q": "How long does it take to go live?",
-            "a": "<p>It depends on how much you already have running. A store that only needs checkout and local payments is usually live within weeks, not quarters. Migrations with order history and existing integrations take longer, and we map that out before you commit to a date.</p>"
+            "q": "Code of Conduct",
+            "a": "<p>We act with integrity in every market we operate. Respect, fairness and accountability guide how we work with customers, partners and each other.</p><p><strong>We commit to:</strong> honest communication, zero tolerance for discrimination or harassment, and responsible use of company and customer data.</p>"
           }
         },
         "q2": {
           "type": "faq",
           "settings": {
-            "q": "Do I have to migrate everything at once?",
-            "a": "<p>No. Most businesses start with one layer, usually checkout or payments, and add the rest as they see results. The platform is built so each piece works on its own and works better together.</p>"
+            "q": "Data and Privacy",
+            "a": "<p>Commerce infrastructure handles sensitive operational and customer data. We design systems with privacy by default and comply with applicable regional regulations.</p>"
           }
         },
         "q3": {
           "type": "faq",
           "settings": {
-            "q": "Which markets are covered?",
-            "a": "<p>Uruguay. That is where we operate, where our integrations are already running and where we know the payment, tax and delivery rules first hand. If your plan is to sell outside the country, contact us and we tell you honestly what we can and cannot do today.</p>"
+            "q": "Security",
+            "a": "<p>Security is a product requirement, not an afterthought. Access controls, encryption, and continuous review protect the platforms we operate.</p>"
           }
         },
         "q4": {
           "type": "faq",
           "settings": {
-            "q": "What happens to my current integrations?",
-            "a": "<p>Payment gateways, carriers, marketplaces and ERPs that you already use stay connected. The point is to remove work, not to make you rebuild what already runs.</p>"
-          }
-        },
-        "q5": {
-          "type": "faq",
-          "settings": {
-            "q": "Who do I talk to when something breaks?",
-            "a": "<p>A named person on our team, not a ticket queue. That is the part of this that we are least willing to compromise on.</p>"
+            "q": "Responsible AI",
+            "a": "<p>AI agents and automation must remain aligned with human intent, transparent where it matters, and safe in production commerce flows.</p>"
           }
         }
       },
@@ -342,23 +343,22 @@
         "q1",
         "q2",
         "q3",
-        "q4",
-        "q5"
+        "q4"
       ],
       "settings": {
         "tone": "a",
-        "label": "F.A.Q.",
-        "headline": "Questions we get asked",
-        "sub": "If yours is not here, write to us and a person answers."
+        "label": "Corporate",
+        "headline": "How we operate as a company",
+        "sub": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce."
       }
     },
     "close": {
       "type": "gn-pos-close",
       "settings": {
         "tone": "b",
-        "label": "Next move",
-        "headline": "Ready to sell\nsmarter?",
-        "sub": "Tell us what you are building and a person from the team answers, not a bot.",
+        "label": "The future of commerce",
+        "headline": "The future\nis autonomous.",
+        "sub": "The next decade will transform how businesses sell, operate and interact with customers. The companies that succeed will operate through intelligent infrastructure. GOnama is building that infrastructure.",
         "email_label": "Write to us",
         "email": "go@gonama.com",
         "phone_label": "Call us",
@@ -368,7 +368,7 @@
         "f_company": "Company",
         "f_phone": "Phone",
         "f_msg": "What are you building?",
-        "submit": "Send",
+        "submit": "Talk to GOnama",
         "ok_msg": "Thanks. We received your message and will follow up shortly.",
         "err_msg": "Please review the following:",
         "note": "We use your details only to respond to your enquiry."
