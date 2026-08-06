@@ -1006,7 +1006,6 @@
   border-top: 1px solid var(--line);
 }
 
-
 .gnp-faq__q {
   width: 100%;
   display: flex;
@@ -1362,14 +1361,6 @@
   transform: translateY(-100%);
 }
 
-/* Con el panel abierto el header nunca se esconde. */
-.gnp-nav.is-open,
-.gnp-nav.is-open.is-hidden {
-  transform: none;
-  background: var(--bg);
-  border-bottom-color: transparent;
-}
-
 /* Sin espaciador: el header se apoya sobre el hero, que compensa con su
    padding superior. Con espaciador quedaba una franja del color del <body>
    del tema, que es blanco, arriba de todo. */
@@ -1415,12 +1406,10 @@
   display: none;
 }
 
-.gnp-nav.is-open .gnp-nav__logo-img--light,
 .gnp--a .gnp-nav__logo-img--light {
   display: none;
 }
 
-.gnp-nav.is-open .gnp-nav__word--dark,
 .gnp--a .gnp-nav__word--dark {
   display: inline;
 }
@@ -1431,8 +1420,11 @@
   gap: clamp(14px, 2vw, 32px);
 }
 
+/* Visible en todos los anchos. Antes se ocultaba abajo de 700px porque en
+   telefono el contacto se alcanzaba desde el menu; sin menu, esconderlo
+   dejaba la barra con el logo y nada mas. */
 .gnp-nav__util {
-  display: none;
+  display: inline-flex;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10.5px;
   letter-spacing: 0.16em;
@@ -1445,227 +1437,8 @@
   color: var(--hover);
 }
 
-@media (min-width: 700px) {
-  .gnp-nav__util {
-    display: inline-flex;
-  }
-}
-
-.gnp-nav__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg);
-}
-
-/* Las dos etiquetas ocupan la misma celda: el ancho no salta al cambiar. */
-.gnp-nav__toggle-txt {
-  grid-area: 1 / 1;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.gnp-nav__toggle {
-  display: inline-grid;
-  grid-auto-flow: column;
-  align-items: center;
-}
-
-.gnp-nav__toggle > .gnp-nav__toggle-txt {
-  display: grid;
-}
-
-.gnp-nav__toggle [data-gnp-nav-close-txt] {
-  opacity: 0;
-  transform: translateY(4px);
-}
-
-.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-open-txt] {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-
-.gnp-nav.is-open .gnp-nav__toggle [data-gnp-nav-close-txt] {
-  opacity: 1;
-  transform: none;
-}
-
-.gnp-nav__burger {
-  display: block;
-  width: 22px;
-  height: 12px;
-  position: relative;
-  margin-left: 12px;
-}
-
-.gnp-nav__burger i {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  background: currentColor;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s ease;
-}
-
-.gnp-nav__burger i:first-child {
-  top: 2px;
-}
-
-.gnp-nav__burger i:last-child {
-  bottom: 2px;
-  width: 62%;
-}
-
-.gnp-nav:not(.is-open) .gnp-nav__toggle:hover .gnp-nav__burger i:last-child {
-  width: 100%;
-}
-
-.gnp-nav.is-open .gnp-nav__burger i:first-child {
-  transform: translateY(3.5px) rotate(45deg);
-}
-
-.gnp-nav.is-open .gnp-nav__burger i:last-child {
-  width: 100%;
-  transform: translateY(-3.5px) rotate(-45deg);
-}
-
-/* Panel ------------------------------------------------------------------ */
-
-/* Panel acotado colgado de la barra, no una cortina de pantalla completa.
-   El ancho se topa contra el viewport para que en telefono siga entrando. */
-.gnp-nav__overlay {
-  position: fixed;
-  top: 88px;
-  right: var(--gutter);
-  width: min(420px, calc(100vw - var(--gutter) * 2));
-  max-height: calc(100vh - 88px - 24px);
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
-  z-index: 1;
-  overflow: hidden;
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.52s cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-.gnp-nav.is-open .gnp-nav__overlay {
-  clip-path: inset(0 0 0 0);
-}
-
-.gnp-nav__overlay[hidden] {
-  display: none;
-}
-
-.gnp-nav__overlay-in {
-  padding: 26px 26px 24px;
-  display: grid;
-  gap: 24px;
-  max-height: calc(100vh - 88px - 24px);
-  overflow-y: auto;
-}
-
-.gnp-nav__list {
-  display: block;
-}
-
-.gnp-nav__item {
-  display: grid;
-  grid-template-columns: 30px 1fr auto;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--line);
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2, 0.75, 0.25, 1),
-    color 0.3s ease;
-}
-
-.gnp-nav.is-open .gnp-nav__item {
-  opacity: 1;
-  transform: none;
-  /* Escalonado por índice, sin necesidad de temporizadores en JS. */
-  transition-delay: calc(0.16s + var(--i) * 0.055s);
-}
-
-.gnp-nav__item:hover {
-  color: var(--hover);
-}
-
-.gnp-nav__item-n {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  color: var(--fg-faint);
-}
-
-.gnp-nav__item-t {
-  font-size: 20px;
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.031em;
-  text-transform: uppercase;
-}
-
-.gnp-nav__item-a {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.gnp-nav__item:hover .gnp-nav__item-a {
-  opacity: 1;
-  transform: none;
-}
-
-.gnp-nav__aside {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease 0.42s, transform 0.5s ease 0.42s;
-}
-
-.gnp-nav.is-open .gnp-nav__aside {
-  opacity: 1;
-  transform: none;
-}
-
-.gnp-nav__contact {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--fg);
-  transition: color 0.25s ease;
-}
-
-.gnp-nav__contact:hover {
-  color: var(--hover);
-}
-
-.gnp-nav__cta {
-  margin-top: 12px;
-  justify-self: start;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .gnp-nav,
-  .gnp-nav__overlay,
-  .gnp-nav__item,
-  .gnp-nav__aside {
+  .gnp-nav {
     transition: none;
   }
 
