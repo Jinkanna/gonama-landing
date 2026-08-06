@@ -37,6 +37,18 @@
           {%- endif -%}
         </div>
 
+        {%- if st.punch != blank -%}
+          <div class="gnp-stat__punch gnp-rv">
+            {%- assign punch_lines = st.punch | newline_to_br | split: '<br />' -%}
+            {%- for line in punch_lines -%}
+              {%- assign clean = line | strip_html | strip -%}
+              {%- if clean != blank -%}
+                <p>{{ clean | escape }}</p>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
         {%- if st.link_label != blank -%}
           <div class="gnp-stat__link gnp-rv">
             <a class="gnp__link" href="{{ st.link_url | default: '#' }}">
@@ -76,8 +88,14 @@
       "id": "tone",
       "label": "Tono",
       "options": [
-        { "value": "a", "label": "Base" },
-        { "value": "b", "label": "Invertido" }
+        {
+          "value": "a",
+          "label": "Base"
+        },
+        {
+          "value": "b",
+          "label": "Invertido"
+        }
       ],
       "default": "b"
     },
@@ -92,19 +110,26 @@
       "id": "headline",
       "label": "Titular",
       "info": "Una línea por renglón.",
-      "default": "We run commerce.\nWe own the outcome."
+      "default": "One platform.\nOne system.\nOne outcome."
     },
     {
       "type": "richtext",
       "id": "body_1",
       "label": "Párrafo 1",
-      "default": "<p>With every layer under one platform and one accountable team, your store operates the way your business demands: predictably, transparently, and without excuses.</p>"
+      "default": "<p>Most businesses stitch together disconnected software, vendors and manual processes.</p>"
     },
     {
       "type": "richtext",
       "id": "body_2",
       "label": "Párrafo 2",
-      "default": "<p>That means no finger-pointing between vendors. No sales lost in handoffs. One team, accountable from first click to final delivery.</p>"
+      "default": "<p>GOnama replaces operational complexity with a single autonomous infrastructure where every transaction, workflow and AI agent works from the same source of truth.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "punch",
+      "label": "Líneas cortas",
+      "info": "Una por renglón. La última se resalta.",
+      "default": "No disconnected tools.\nNo fragmented vendors.\nNo operational blind spots.\nJust commerce running exactly as it should."
     },
     {
       "type": "text",
@@ -123,8 +148,17 @@
       "type": "number",
       "name": "Número",
       "settings": [
-        { "type": "text", "id": "prefix", "label": "Prefijo" },
-        { "type": "text", "id": "value", "label": "Valor", "default": "99" },
+        {
+          "type": "text",
+          "id": "prefix",
+          "label": "Prefijo"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Valor",
+          "default": "99"
+        },
         {
           "type": "range",
           "id": "decimals",
@@ -134,11 +168,24 @@
           "step": 1,
           "default": 0
         },
-        { "type": "text", "id": "suffix", "label": "Sufijo", "default": "%" },
-        { "type": "textarea", "id": "label", "label": "Etiqueta" }
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Sufijo",
+          "default": "%"
+        },
+        {
+          "type": "textarea",
+          "id": "label",
+          "label": "Etiqueta"
+        }
       ]
     }
   ],
-  "presets": [{ "name": "POS · Declaración" }]
+  "presets": [
+    {
+      "name": "POS · Declaración"
+    }
+  ]
 }
 {% endschema %}

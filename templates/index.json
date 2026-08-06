@@ -14,8 +14,8 @@
       "settings": {
         "tone": "a",
         "label": "Agentic commerce infrastructure",
-        "headline": "One platform\nevery step\nof the sale",
-        "sub": "Checkout, payments, fulfilment and AI agents, unified for Uruguay under one accountable platform.",
+        "headline": "Commerce that\nruns itself",
+        "sub": "One autonomous infrastructure where AI agents, checkout, payments and fulfillment execute commerce together.",
         "cta1_label": "Talk with us",
         "cta1_link": "#gnp-contact"
       }
@@ -30,7 +30,7 @@
             "value": "99.9",
             "decimals": 1,
             "suffix": "%",
-            "label": "Checkout uptime across every market"
+            "label": "Platform uptime"
           }
         },
         "n2": {
@@ -40,7 +40,7 @@
             "value": "6",
             "decimals": 0,
             "suffix": "",
-            "label": "Layers of your operation on one platform"
+            "label": "Commerce layers unified"
           }
         },
         "n3": {
@@ -50,17 +50,17 @@
             "value": "8",
             "decimals": 0,
             "suffix": "+",
-            "label": "Years operating Uruguayan e-commerce"
+            "label": "Years building Uruguayan e-commerce"
           }
         },
         "n4": {
           "type": "number",
           "settings": {
             "prefix": "",
-            "value": "24",
+            "value": "1",
             "decimals": 0,
-            "suffix": "/7",
-            "label": "People reachable, not a ticket queue"
+            "suffix": "",
+            "label": "Source of truth"
           }
         }
       },
@@ -73,11 +73,12 @@
       "settings": {
         "tone": "b",
         "label": "Why GOnama",
-        "headline": "We run commerce.\nWe own the outcome.",
-        "body_1": "<p>With every layer under one platform and one accountable team, your store operates the way your business demands: predictably, transparently, and without excuses.</p>",
-        "body_2": "<p>That means no finger-pointing between vendors. No sales lost in handoffs. One team, accountable from first click to final delivery.</p>",
+        "headline": "One platform.\nOne system.\nOne outcome.",
+        "body_1": "<p>Most businesses stitch together disconnected software, vendors and manual processes.</p>",
+        "body_2": "<p>GOnama replaces operational complexity with a single autonomous infrastructure where every transaction, workflow and AI agent works from the same source of truth.</p>",
         "link_label": "Learn more about us",
-        "link_url": "#section-statement"
+        "link_url": "#section-statement",
+        "punch": "No disconnected tools.\nNo fragmented vendors.\nNo operational blind spots.\nJust commerce running exactly as it should."
       }
     },
     "services": {

@@ -942,27 +942,11 @@
   }
 }
 
-/* Mismo lenguaje que el resto de la pagina: un velo que sube y el texto
-   virando a Mint, en vez del corrimiento lateral que tenia. */
+/* Sin recuadro de fondo: el estado se marca solo con el filo de Mint sobre
+   la divisoria y el texto virando de color. */
 .gnp-faq__item {
   position: relative;
   border-bottom: 1px solid var(--line);
-}
-
-.gnp-faq__item::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--veil);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  pointer-events: none;
-}
-
-.gnp-faq__item:hover::before {
-  opacity: 1;
-  transform: none;
 }
 
 /* Filo de acento que crece de izquierda a derecha sobre la divisoria. */
@@ -986,7 +970,6 @@
 .gnp-faq__q {
   position: relative;
   z-index: 1;
-  padding-inline: clamp(0px, 1.4vw, 20px);
 }
 
 .gnp-faq__q:hover {
@@ -1001,7 +984,6 @@
 .gnp-faq__a {
   position: relative;
   z-index: 1;
-  padding-inline: clamp(0px, 1.4vw, 20px);
 }
 
 .gnp-faq__ico {
@@ -1638,4 +1620,24 @@
   border-top: 1px solid var(--line);
   font-size: 13px;
   color: var(--fg-faint);
+}
+
+/* Líneas cortas de la declaración: cada una en su renglón, y la última
+   cierra con el color de texto pleno. */
+.gnp-stat__punch {
+  margin-top: 26px;
+  padding-left: 18px;
+  border-left: 2px solid var(--accent);
+}
+
+.gnp-stat__punch p {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--fg-faint);
+}
+
+.gnp-stat__punch p:last-child {
+  color: var(--fg);
+  font-weight: 500;
+  margin-top: 6px;
 }
