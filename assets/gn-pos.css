@@ -795,12 +795,17 @@
    ========================================================================== */
 
 /* Dos rieles en sentidos opuestos. Con trece industrias una grilla obligaba
-   a scrollear la pagina entera para verlas; el carrusel las trae solo. */
+   a scrollear la pagina entera para verlas; el carrusel las trae solo.
+
+   Sin recuadro y a todo el ancho: el marco cortaba el flujo y hacia que el
+   movimiento terminara contra un borde en vez de seguir de largo. Se sale
+   del contenedor con el truco de los margenes negativos, sin 100vw, que
+   sumaria el ancho de la barra de scroll. */
 .gnp-part__rails {
   display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 20px;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .gnp-part__rail {
@@ -809,6 +814,21 @@
      visible computa a auto y el div pasa a ser un contenedor con scroll,
      que es la trampa del tema que ya rompio las anclas una vez. */
   overflow: hidden;
+  /* Las tarjetas se desvanecen en las puntas en vez de cortarse secas. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
 }
 
 .gnp-part__rail .gnp-ticker__group {
@@ -849,21 +869,28 @@
 
 .gnp-part {
   position: relative;
-  background: var(--bg);
-  padding: clamp(24px, 2.6vw, 36px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
   min-height: 168px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: background 0.35s ease;
+  transition: background 0.35s ease, border-color 0.35s ease;
 }
 
-/* Ancho fijo dentro del riel. El margen de 1px hace la divisoria, tambien
-   en la union entre el grupo y su clon, donde un gap no llegaria. */
+.gnp-part:hover {
+  border-color: var(--hover);
+}
+
+/* Ancho fijo dentro del riel. La separacion va por margen y no por gap:
+   asi tambien queda en la union entre el grupo y su clon, donde el gap del
+   contenedor no llega y las tarjetas se pegarian una vez por vuelta. */
 .gnp-part__rail .gnp-part {
   flex: 0 0 300px;
   width: 300px;
-  margin-right: 1px;
+  margin-right: 20px;
   min-height: 190px;
 }
 
