@@ -1219,36 +1219,48 @@
   }
 }
 
-.gnp-close__input {
+/* Los campos van con .gnp adelante a proposito. El tema los estila con
+   input[type="text"], que suma un selector de atributo y le ganaba a
+   .gnp-close__input a secas: los de una linea salian con el fondo blanco y
+   la tipografia de 10px del tema, y solo el mensaje, que el tema toma con
+   el selector textarea, quedaba transparente. De ahi que el mensaje se
+   perdiera de vista y los otros no.
+
+   Cada propiedad esta declarada aunque repita el valor por defecto, para
+   que no quede ninguna a merced del tema. */
+.gnp .gnp-close__input {
   width: 100%;
-  /* Con padding lateral cero el texto arrancaba pegado al filo del renglon. */
-  padding: 16px 14px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--fg);
+  padding: 14px 16px;
+  /* El tema le pone height a los de una linea y al textarea no. Con auto
+     manda el padding, que es el mismo para todos. */
+  height: auto;
+  background: var(--panda-2);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--panda-1);
   font-family: inherit;
   font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
   transition: border-color 0.3s ease;
 }
 
-/* El tema declara textarea{border-radius:20px} con selector de elemento.
-   Como el campo solo tiene filo inferior, ese radio curvaba el subrayado en
-   las puntas y el mensaje no se leia como los demas campos. */
-textarea.gnp-close__input {
-  border-radius: 0;
-  resize: vertical;
-  min-height: 96px;
-  line-height: 1.55;
+/* Lo unico que cambia el mensaje: entra mas texto. Sin manija de arrastre,
+   que seria la ultima diferencia visible contra los demas campos. */
+.gnp textarea.gnp-close__input {
+  min-height: 108px;
+  resize: none;
 }
 
-.gnp-close__input::placeholder {
-  color: var(--fg-faint);
+.gnp .gnp-close__input::placeholder {
+  color: #77839a;
+  font-size: 15px;
+  opacity: 1;
 }
 
-.gnp-close__input:focus {
+.gnp .gnp-close__input:focus {
   outline: none;
-  border-bottom-color: var(--accent);
+  border-color: var(--accent);
 }
 
 .gnp-close__submit {
