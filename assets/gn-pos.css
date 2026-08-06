@@ -45,6 +45,7 @@
   --on-accent: var(--panda-1);
   --veil: rgba(68, 183, 232, 0.1);
   --surface: rgba(217, 244, 252, 0.04);
+  --hover: var(--mint);
 }
 
 /* Tono invertido: claro. */
@@ -59,6 +60,8 @@
   --on-accent: #ffffff;
   --veil: rgba(23, 141, 190, 0.07);
   --surface: #ffffff;
+  /* Sobre fondo claro el Mint se lava. El hover va en navy. */
+  --hover: var(--panda-1);
 }
 
 .gnp *,
@@ -607,7 +610,7 @@
 }
 
 .gnp-serv:hover .gnp-serv__num {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-serv__name {
@@ -627,7 +630,7 @@
 }
 
 .gnp-serv:hover .gnp-serv__name {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-serv__desc {
@@ -740,7 +743,7 @@
 
 .gnp-edge:hover::before {
   transform: scaleX(1);
-  background: var(--mint);
+  background: var(--hover);
 }
 
 .gnp-edge__num {
@@ -758,7 +761,7 @@
 }
 
 .gnp-edge:hover .gnp-edge__num {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-edge__name {
@@ -777,7 +780,7 @@
 }
 
 .gnp-edge:hover .gnp-edge__name {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-edge__desc {
@@ -852,7 +855,7 @@
 }
 
 .gnp-part:hover .gnp-part__kind {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-part__name {
@@ -871,7 +874,7 @@
 }
 
 .gnp-part:hover .gnp-part__name {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-part__logo {
@@ -955,7 +958,7 @@
 }
 
 .gnp-faq__q:focus-visible {
-  outline: 1px solid var(--mint);
+  outline: 1px solid var(--hover);
   outline-offset: 4px;
 }
 
@@ -980,7 +983,7 @@
   bottom: -1px;
   width: 100%;
   height: 1px;
-  background: var(--mint);
+  background: var(--hover);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -996,12 +999,12 @@
 }
 
 .gnp-faq__q:hover {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-faq__q:hover .gnp-faq__ico {
-  border-color: var(--mint);
-  color: var(--mint);
+  border-color: var(--hover);
+  color: var(--hover);
 }
 
 .gnp-faq__a {
@@ -1010,8 +1013,8 @@
 }
 
 .gnp-faq__ico {
-  border-color: var(--mint);
-  color: var(--mint);
+  border-color: var(--hover);
+  color: var(--hover);
 }
 
 .gnp-faq__ico {
@@ -1045,8 +1048,8 @@
 }
 
 .gnp-faq__item.is-open .gnp-faq__ico {
-  background: var(--mint);
-  border-color: var(--mint);
+  background: var(--hover);
+  border-color: var(--hover);
   color: var(--panda-1);
   transform: rotate(90deg);
 }
@@ -1325,7 +1328,7 @@
 }
 
 .gnp-nav__util:hover {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 @media (min-width: 700px) {
@@ -1419,17 +1422,24 @@
   transform: translateY(-3.5px) rotate(-45deg);
 }
 
-/* Overlay ---------------------------------------------------------------- */
+/* Panel ------------------------------------------------------------------ */
 
+/* Panel acotado colgado de la barra, no una cortina de pantalla completa.
+   El ancho se topa contra el viewport para que en telefono siga entrando. */
 .gnp-nav__overlay {
   position: fixed;
-  inset: 0;
+  top: 88px;
+  right: var(--gutter);
+  width: min(420px, calc(100vw - var(--gutter) * 2));
+  max-height: calc(100vh - 88px - 24px);
   background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
   z-index: 1;
-  display: flex;
-  align-items: center;
+  overflow: hidden;
   clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.62s cubic-bezier(0.76, 0, 0.24, 1);
+  transition: clip-path 0.52s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .gnp-nav.is-open .gnp-nav__overlay {
@@ -1441,21 +1451,11 @@
 }
 
 .gnp-nav__overlay-in {
-  width: 100%;
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 110px var(--gutter) 48px;
+  padding: 26px 26px 24px;
   display: grid;
-  gap: clamp(36px, 5vw, 72px);
-  max-height: 100vh;
+  gap: 24px;
+  max-height: calc(100vh - 88px - 24px);
   overflow-y: auto;
-}
-
-@media (min-width: 900px) {
-  .gnp-nav__overlay-in {
-    grid-template-columns: 1fr 300px;
-    align-items: center;
-  }
 }
 
 .gnp-nav__list {
@@ -1464,10 +1464,10 @@
 
 .gnp-nav__item {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 30px 1fr auto;
   align-items: center;
-  gap: 18px;
-  padding: clamp(12px, 1.4vw, 20px) 0;
+  gap: 14px;
+  padding: 13px 0;
   border-bottom: 1px solid var(--line);
   opacity: 0;
   transform: translateY(26px);
@@ -1483,7 +1483,7 @@
 }
 
 .gnp-nav__item:hover {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-nav__item-n {
@@ -1494,17 +1494,11 @@
 }
 
 .gnp-nav__item-t {
-  font-size: 32px;
-  line-height: 1;
+  font-size: 20px;
+  line-height: 1.1;
   font-weight: 700;
   letter-spacing: -0.031em;
   text-transform: uppercase;
-}
-
-@media (min-width: 760px) {
-  .gnp-nav__item-t {
-    font-size: 54px;
-  }
 }
 
 .gnp-nav__item-a {
@@ -1545,7 +1539,7 @@
 }
 
 .gnp-nav__contact:hover {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-nav__cta {
@@ -1638,7 +1632,7 @@
 }
 
 .gnp-foot__col a:hover {
-  color: var(--mint);
+  color: var(--hover);
 }
 
 .gnp-foot__bottom {

@@ -210,7 +210,6 @@
         root.classList.add('is-open');
       });
       btn.setAttribute('aria-expanded', 'true');
-      document.documentElement.style.overflow = 'hidden';
       var first = panel.querySelector('a');
       if (first) first.focus({ preventScroll: true });
     }
@@ -218,7 +217,6 @@
     function close() {
       root.classList.remove('is-open');
       btn.setAttribute('aria-expanded', 'false');
-      document.documentElement.style.overflow = '';
       // Se oculta recién cuando terminó la transición, para no cortarla.
       setTimeout(function () {
         if (!root.classList.contains('is-open')) panel.hidden = true;
@@ -237,6 +235,14 @@
 
     document.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape' && root.classList.contains('is-open')) close();
+    });
+
+    // Ya no es una cortina de pantalla completa: hay pagina alrededor y el
+    // clic afuera tiene que cerrar.
+    document.addEventListener('click', function (ev) {
+      if (!root.classList.contains('is-open')) return;
+      if (panel.contains(ev.target) || btn.contains(ev.target)) return;
+      close();
     });
 
     // El header se esconde al bajar y vuelve al subir.
@@ -308,7 +314,14 @@
    * Se resuelve tomando el click y desplazando la ventana a mano, que ademas
    * permite descontar la altura del header fijo.
    */
+  var anchorsReady = false;
+
   function initAnchors() {
+    // boot() corre de nuevo con cada shopify:section:load. Sin esta guarda se
+    // apilaba un listener por recarga y el pushState se repetia.
+    if (anchorsReady) return;
+    anchorsReady = true;
+
     document.addEventListener('click', function (ev) {
       var link = ev.target.closest && ev.target.closest('a[href^="#"]');
       if (!link) return;
@@ -326,22 +339,22 @@
 
       ev.preventDefault();
 
-      // El menu se cierra en su propio handler; se espera un cuadro para que
-      // el scroll del documento vuelva a estar habilitado.
-      window.requestAnimationFrame(function () {
-        var header = document.querySelector('.gnp-nav');
-        var offset = header ? header.offsetHeight : 0;
-        var y = target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
+      // Sincronico a proposito. Antes esto vivia dentro de un
+      // requestAnimationFrame para esperar a que el menu devolviera el scroll,
+      // pero el menu ya no lo bloquea y rAF no dispara en pestanas ocultas ni
+      // con el ahorro de energia, asi que el enlace quedaba mudo.
+      var header = document.querySelector('.gnp-nav');
+      var offset = header ? header.offsetHeight : 0;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
 
-        window.scrollTo({
-          top: Math.max(0, y),
-          behavior: reduced ? 'auto' : 'smooth'
-        });
-
-        if (window.history && window.history.pushState) {
-          window.history.pushState(null, '', hash);
-        }
+      window.scrollTo({
+        top: Math.max(0, y),
+        behavior: reduced ? 'auto' : 'smooth'
       });
+
+      if (window.history && window.history.pushState) {
+        window.history.pushState(null, '', hash);
+      }
     });
   }
 
