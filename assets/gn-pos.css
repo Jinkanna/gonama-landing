@@ -6,10 +6,9 @@
      GO blue #44B7E8   Ocean #178DBE   Sky #D9F4FC
      Panda 1 #0F172A   Panda 2 #F7F9FC
 
-   Las secciones alternan tono. En vez de fijar claro u oscuro, cada sección
-   declara si va en el tono base (.gnp--a) o en el invertido (.gnp--b), y el
-   par se da vuelta según el modo del navegador. Así la alternancia se mantiene
-   en los dos modos.
+   Las secciones alternan tono. La landing es siempre oscura de arranque: el
+   tono base (.gnp--a) es Panda 1 y el invertido (.gnp--b) es Panda 2. No
+   sigue el modo del navegador, se ve igual para todo el mundo.
 
    Tipografía en px: el tema define html{font-size:62.5%} en reset.css.
    ========================================================================== */
@@ -34,22 +33,8 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Tono base: sigue al navegador. */
+/* Tono base: oscuro. Es con el que arranca la pagina. */
 .gnp--a {
-  --bg: var(--panda-2);
-  --fg: var(--panda-1);
-  --fg-soft: #46536b;
-  --fg-faint: #77839a;
-  --line: rgba(15, 23, 42, 0.12);
-  --line-soft: rgba(15, 23, 42, 0.07);
-  --accent: var(--ocean);
-  --on-accent: #ffffff;
-  --veil: rgba(23, 141, 190, 0.07);
-  --surface: #ffffff;
-}
-
-/* Tono invertido. */
-.gnp--b {
   --bg: var(--panda-1);
   --fg: var(--panda-2);
   --fg-soft: #a9b7cc;
@@ -62,32 +47,18 @@
   --surface: rgba(217, 244, 252, 0.04);
 }
 
-@media (prefers-color-scheme: dark) {
-  .gnp--a {
-    --bg: var(--panda-1);
-    --fg: var(--panda-2);
-    --fg-soft: #a9b7cc;
-    --fg-faint: #7f8ea6;
-    --line: rgba(217, 244, 252, 0.16);
-    --line-soft: rgba(217, 244, 252, 0.08);
-    --accent: var(--go-blue);
-    --on-accent: var(--panda-1);
-    --veil: rgba(68, 183, 232, 0.1);
-    --surface: rgba(217, 244, 252, 0.04);
-  }
-
-  .gnp--b {
-    --bg: var(--panda-2);
-    --fg: var(--panda-1);
-    --fg-soft: #46536b;
-    --fg-faint: #77839a;
-    --line: rgba(15, 23, 42, 0.12);
-    --line-soft: rgba(15, 23, 42, 0.07);
-    --accent: var(--ocean);
-    --on-accent: #ffffff;
-    --veil: rgba(23, 141, 190, 0.07);
-    --surface: #ffffff;
-  }
+/* Tono invertido: claro. */
+.gnp--b {
+  --bg: var(--panda-2);
+  --fg: var(--panda-1);
+  --fg-soft: #46536b;
+  --fg-faint: #77839a;
+  --line: rgba(15, 23, 42, 0.12);
+  --line-soft: rgba(15, 23, 42, 0.07);
+  --accent: var(--ocean);
+  --on-accent: #ffffff;
+  --veil: rgba(23, 141, 190, 0.07);
+  --surface: #ffffff;
 }
 
 .gnp *,
@@ -1118,6 +1089,31 @@
   }
 }
 
+/* El titular vive en media columna, asi que baja respecto del display general.
+   Medido contra "IS AUTONOMOUS.", que es la linea mas larga: entra hasta 47px
+   a 940, 61px a 1200 y 74px de 1440 para arriba. Estos valores dejan margen. */
+.gnp-close .gnp__display {
+  font-size: 34px;
+}
+
+@media (min-width: 760px) {
+  .gnp-close .gnp__display {
+    font-size: 46px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp-close .gnp__display {
+    font-size: 58px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .gnp-close .gnp__display {
+    font-size: 68px;
+  }
+}
+
 .gnp-close__form {
   display: grid;
   gap: 14px;
@@ -1280,13 +1276,13 @@
 }
 
 .gnp-nav__logo-img {
-  height: 38px;
+  height: 54px;
   width: auto;
   display: block;
 }
 
 .gnp-nav__word {
-  font-size: 21px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: -0.031em;
   color: var(--fg);
@@ -1303,31 +1299,13 @@
 }
 
 .gnp-nav.is-open .gnp-nav__logo-img--light,
-.gnp--b .gnp-nav__logo-img--light {
+.gnp--a .gnp-nav__logo-img--light {
   display: none;
 }
 
 .gnp-nav.is-open .gnp-nav__word--dark,
-.gnp--b .gnp-nav__word--dark {
+.gnp--a .gnp-nav__word--dark {
   display: inline;
-}
-
-@media (prefers-color-scheme: dark) {
-  .gnp--a .gnp-nav__logo-img--light {
-    display: none;
-  }
-
-  .gnp--a .gnp-nav__word--dark {
-    display: inline;
-  }
-
-  .gnp--b .gnp-nav__logo-img--light {
-    display: block;
-  }
-
-  .gnp--b .gnp-nav__word--dark {
-    display: none;
-  }
 }
 
 .gnp-nav__right {
