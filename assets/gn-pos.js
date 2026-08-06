@@ -294,6 +294,79 @@
     update();
   }
 
+  /* ------------------------------------------------------- Seccion clavada */
+
+  /**
+   * La seccion mide una pantalla por bloque. Mientras se la recorre, el
+   * escenario se queda quieto y el bloque activo va cambiando.
+   *
+   * En unitedcarriers esto es position:sticky. Aca no sirve: el tema declara
+   * .bls-wrapper{overflow-x:hidden} y con un eje en hidden el otro computa a
+   * auto, con lo que ese div pasa a ser el contenedor de scroll de los sticky
+   * y nunca se activan. Medido sobre el sitio publicado: tras bajar 800px el
+   * elemento seguia a 8850px del tope. Se resuelve con position:fixed, que es
+   * lo que ya usa el header.
+   */
+  function initPin(section) {
+    var stage = section.querySelector('[data-gnp-pin-stage]');
+    if (!stage) return;
+
+    var items = section.querySelectorAll('[data-gnp-pin-item]');
+    var dots = section.querySelectorAll('[data-gnp-pin-dot]');
+    if (!items.length) return;
+
+    var estado = '';
+    var activo = -1;
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      if (reduced) return;
+
+      var r = section.getBoundingClientRect();
+      var vh = window.innerHeight;
+
+      var nuevo;
+      if (r.top > 0) nuevo = 'start';
+      else if (r.bottom < vh) nuevo = 'end';
+      else nuevo = 'fixed';
+
+      if (nuevo !== estado) {
+        estado = nuevo;
+        stage.setAttribute('data-state', nuevo);
+      }
+
+      // Recorrido util: todo lo que sobra despues de la primera pantalla.
+      var total = section.offsetHeight - vh;
+      var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+      // El ultimo bloque tiene que alcanzarse justo al final, de ahi el 0.999.
+      var i = Math.floor(p * 0.999 * items.length);
+
+      if (i !== activo) {
+        activo = i;
+        for (var k = 0; k < items.length; k++) {
+          items[k].classList.toggle('is-active', k === i);
+        }
+        for (var d = 0; d < dots.length; d++) {
+          dots[d].classList.toggle('is-active', d === i);
+        }
+      }
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('resize', update);
+    update();
+  }
+
   /* --------------------------------------------------------------- Intro */
 
   /**
@@ -436,6 +509,7 @@
     initAnchors();
     each('[data-gn-intro]', initIntro);
     each('[data-gnp-nav]', initNav);
+    each('[data-gnp-pin]', initPin);
     each('[data-gnp-marquee]', initMarquee);
     each('[data-gnp-count]', initCounter);
     each('[data-gnp-faq]', initFaq);

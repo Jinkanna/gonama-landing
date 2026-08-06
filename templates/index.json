@@ -388,6 +388,41 @@
         "err_msg": "Please review the following:",
         "note": "We use your details only to respond to your enquiry."
       }
+    },
+    "about": {
+      "type": "gn-pos-about",
+      "blocks": {
+        "a1": {
+          "type": "step",
+          "settings": {
+            "name": "Mission",
+            "desc": "Simplify digital commerce with a global checkout layer designed for every local market: payment methods, tax rules, last-mile logistics and a buying experience adapted to the country.\nFrom a single platform, GOnama connects payments, logistics, promotions, fulfillment, physical and digital products and subscriptions, and integrates with the major ecommerce platforms."
+          }
+        },
+        "a2": {
+          "type": "step",
+          "settings": {
+            "name": "Vision",
+            "desc": "Commerce is entering a new era. The next generation of software will be built for people and for AI agents. We are building the infrastructure behind the autonomous economy, so that AI-native commerce experiences can be built, operated and scaled globally.\nWe are building The Global Agentic Checkout: not just a more flexible cart, but the operating layer where intelligent agents and human teams orchestrate every purchase, from campaigns and offers to fulfillment and settlement."
+          }
+        },
+        "a3": {
+          "type": "step",
+          "settings": {
+            "name": "History",
+            "desc": "Founded in 2024, GOnama was born from the conviction that high-performance digital commerce demands data-driven precision and the creative capacity to adapt to every market. We started on Shopify; today we build the infrastructure that connects payments, logistics, promotions and fulfillment in any country.\nThe name joins GO and Nama. In Hinduism, Nama evokes creative force; for us it stands for the potential that every person on the team brings to the product. That idea is still at the centre of how we build."
+          }
+        }
+      },
+      "block_order": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "tone": "a",
+        "label": ""
+      }
     }
   },
   "order": [
@@ -399,6 +434,7 @@
     "edge",
     "partners",
     "close",
-    "faq"
+    "faq",
+    "about"
   ]
 }

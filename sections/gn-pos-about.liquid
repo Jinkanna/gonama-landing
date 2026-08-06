@@ -1,0 +1,119 @@
+{% comment %}
+  GOnama · new-pos · Misión, visión e historia
+
+  Estructura tomada de unitedcarriers.com/about: la sección mide varias
+  pantallas, se clava mientras se la recorre y el bloque activo va cambiando.
+
+  Allá eso se resuelve con position:sticky. Acá no se puede: el tema declara
+  .bls-wrapper{overflow-x:hidden} y, con un eje en hidden y el otro en
+  visible, ese div pasa a ser el contenedor de scroll de los sticky, que
+  nunca se activan. Está medido sobre el sitio publicado. El anclado lo hace
+  gn-pos.js con position:fixed, el mismo recurso que usa el header.
+
+  Sin JavaScript la sección se cae con gracia: la pista pierde su altura
+  forzada, el escenario queda en flujo normal y los bloques se muestran
+  todos abiertos, uno debajo del otro.
+{% endcomment %}
+
+{%- render 'gn-pos-assets' -%}
+
+{%- liquid
+  assign st = section.settings
+  assign pasos = section.blocks.size
+-%}
+
+<section
+  class="gnp gnp--{{ st.tone }} gnp-about"
+  id="section-about"
+  data-gnp-pin
+  style="--gnp-pasos: {{ pasos }};"
+>
+  <div class="gnp-about__track">
+    <div class="gnp-about__stage" data-gnp-pin-stage>
+      <div class="gnp__in gnp-about__in">
+        {%- if st.label != blank -%}
+          <p class="gnp__label gnp-about__label">{{ st.label | escape }}</p>
+        {%- endif -%}
+
+        <div class="gnp-about__list">
+          {%- for block in section.blocks -%}
+            {%- assign b = block.settings -%}
+            <div
+              class="gnp-about__item{% if forloop.first %} is-active{% endif %}"
+              data-gnp-pin-item
+              {{ block.shopify_attributes }}
+            >
+              <p class="gnp-about__name">{{ b.name | escape }}</p>
+              <div class="gnp-about__desc">
+                <div class="gnp-about__desc-in">
+                  {%- assign parrafos = b.desc | newline_to_br | split: '<br />' -%}
+                  {%- for parrafo in parrafos -%}
+                    {%- assign limpio = parrafo | strip_html | strip -%}
+                    {%- if limpio != blank -%}
+                      <p>{{ limpio | escape }}</p>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if pasos > 1 -%}
+          <div class="gnp-about__dots" aria-hidden="true">
+            {%- for block in section.blocks -%}
+              <span class="gnp-about__dot{% if forloop.first %} is-active{% endif %}" data-gnp-pin-dot></span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "POS · Misión y visión",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tono",
+      "options": [
+        { "value": "a", "label": "Base" },
+        { "value": "b", "label": "Invertido" }
+      ],
+      "default": "a"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "info": "Vacía y no se muestra.",
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Bloque",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Título" },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Texto",
+          "info": "Un párrafo por renglón."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "POS · Misión y visión",
+      "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }]
+    }
+  ]
+}
+{% endschema %}
