@@ -1211,7 +1211,11 @@
   font-size: 17px;
   line-height: 1.6;
   color: var(--fg-soft);
-  max-width: 46ch;
+  max-width: 52ch;
+}
+
+.gnp-about__desc p + p {
+  margin-top: 14px;
 }
 
 .gnp-about__dots {
@@ -1273,7 +1277,7 @@
   opacity: 0;
 }
 
-.gnp-js .gnp-about__desc > p {
+.gnp-js .gnp-about__desc-in {
   overflow: hidden;
   min-height: 0;
 }

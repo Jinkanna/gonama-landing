@@ -45,7 +45,15 @@
             >
               <p class="gnp-about__name">{{ b.name | escape }}</p>
               <div class="gnp-about__desc">
-                <p>{{ b.desc | escape }}</p>
+                <div class="gnp-about__desc-in">
+                  {%- assign parrafos = b.desc | newline_to_br | split: '<br />' -%}
+                  {%- for parrafo in parrafos -%}
+                    {%- assign limpio = parrafo | strip_html | strip -%}
+                    {%- if limpio != blank -%}
+                      <p>{{ limpio | escape }}</p>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
               </div>
             </div>
           {%- endfor -%}
@@ -92,7 +100,12 @@
       "name": "Bloque",
       "settings": [
         { "type": "text", "id": "name", "label": "Título" },
-        { "type": "textarea", "id": "desc", "label": "Texto" }
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Texto",
+          "info": "Un párrafo por renglón."
+        }
       ]
     }
   ],
