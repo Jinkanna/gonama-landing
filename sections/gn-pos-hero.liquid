@@ -19,7 +19,7 @@
   assign lines = st.headline | newline_to_br | split: '<br />'
 -%}
 
-<section class="gnp gnp--{{ st.tone }} gnp-hero" id="section-{{ section.id }}">
+<section class="gnp gnp--{{ st.tone }} gnp-hero" id="section-hero">
   <div class="gnp__in">
     {%- if st.label != blank -%}
       <p class="gnp__label gnp-hero__label gnp-rv">{{ st.label | escape }}</p>
@@ -77,7 +77,7 @@
       "type": "text",
       "id": "label",
       "label": "Etiqueta",
-      "default": "Agentic commerce infrastructure"
+      "default": ""
     },
     {
       "type": "textarea",

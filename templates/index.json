@@ -13,7 +13,7 @@
       "type": "gn-pos-hero",
       "settings": {
         "tone": "a",
-        "label": "Agentic Commerce Infrastructure",
+        "label": "",
         "headline": "Building the infrastructure\nbehind the\nautonomous economy.",
         "sub": "Commerce is entering a new era. GOnama provides the infrastructure to build, operate and scale AI-native commerce experiences, globally.",
         "cta1_label": "Talk to GOnama",
@@ -24,7 +24,7 @@
       "type": "gn-pos-statement",
       "settings": {
         "tone": "b",
-        "label": "The shift",
+        "label": "",
         "headline": "Commerce\nis changing.",
         "body_1": "<p>The last generation of commerce software was built for people. The next generation will be built for <strong>AI agents and people</strong>.</p>",
         "body_2": "<p>Intelligent agents won't just answer questions. They'll launch campaigns, negotiate offers, manage customer relationships, optimize operations, and complete purchases.</p>",
@@ -88,7 +88,7 @@
       ],
       "settings": {
         "tone": "a",
-        "label": "What we run",
+        "label": "",
         "headline": "One infrastructure.\nEvery capability.",
         "sub": "Built for agents. From the first click to the final delivery, every layer runs on the same platform, with one point of contact and full visibility."
       }
@@ -133,7 +133,7 @@
       ],
       "settings": {
         "tone": "b",
-        "label": "Global Checkout",
+        "label": "",
         "headline": "Unify payments\nand fulfillment.\nSell globally,\nconvert like a local.",
         "sub": "Route payments through local acquirers, price shipping and duties before checkout, and adapt currency and language per market."
       }
@@ -186,7 +186,7 @@
       ],
       "settings": {
         "tone": "a",
-        "label": "GOnama Imagine Code",
+        "label": "",
         "headline": "The feature you need\ndoesn't have to wait\nfor a roadmap."
       }
     },
@@ -315,7 +315,7 @@
       ],
       "settings": {
         "tone": "b",
-        "label": "Major Global Industries",
+        "label": "",
         "headline": "Built for every commerce model in global industries.",
         "sub": "From regulated sectors to high-velocity retail, the same infrastructure adapts to how each industry sells.",
         "foot": "",
@@ -362,7 +362,7 @@
       ],
       "settings": {
         "tone": "b",
-        "label": "Corporate",
+        "label": "",
         "headline": "How we operate as a company",
         "sub": "Our principles define who we are: our identity, our mindset and the way we build the future of commerce."
       }
@@ -371,7 +371,7 @@
       "type": "gn-pos-close",
       "settings": {
         "tone": "a",
-        "label": "The future of commerce",
+        "label": "",
         "headline": "The future\nis autonomous.",
         "sub": "The next decade will transform how businesses sell, operate and interact with customers. The companies that succeed will operate through intelligent infrastructure. GOnama is building that infrastructure.",
         "email_label": "Write to us",

@@ -1232,6 +1232,16 @@
   transition: border-color 0.3s ease;
 }
 
+/* El tema declara textarea{border-radius:20px} con selector de elemento.
+   Como el campo solo tiene filo inferior, ese radio curvaba el subrayado en
+   las puntas y el mensaje no se leia como los demas campos. */
+textarea.gnp-close__input {
+  border-radius: 0;
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.55;
+}
+
 .gnp-close__input::placeholder {
   color: var(--fg-faint);
 }

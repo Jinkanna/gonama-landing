@@ -11,7 +11,7 @@
   assign lines = st.headline | newline_to_br | split: '<br />'
 -%}
 
-<section class="gnp gnp--{{ st.tone }} gnp-stat" id="section-{{ section.id }}">
+<section class="gnp gnp--{{ st.tone }} gnp-stat" id="section-statement">
   <div class="gnp__in">
     {%- assign has_nums = false -%}
     {%- if section.blocks.size > 0 -%}
@@ -110,7 +110,7 @@
       "type": "text",
       "id": "label",
       "label": "Etiqueta",
-      "default": "Why GOnama"
+      "default": ""
     },
     {
       "type": "textarea",
