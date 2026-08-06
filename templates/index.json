@@ -236,37 +236,49 @@
         "p1": {
           "type": "partner",
           "settings": {
-            "name": "Shopify"
+            "kind": "Ecommerce platform",
+            "name": "Shopify",
+            "note": "The store you already sell on, no migration needed."
           }
         },
         "p2": {
           "type": "partner",
           "settings": {
-            "name": "Mercado Pago"
+            "kind": "Payments",
+            "name": "Mercado Pago",
+            "note": "Local checkout with the methods people here actually use."
           }
         },
         "p3": {
           "type": "partner",
           "settings": {
-            "name": "dLocal"
+            "kind": "Cross-border payments",
+            "name": "dLocal",
+            "note": "Cross-border collection with local settlement."
           }
         },
         "p4": {
           "type": "partner",
           "settings": {
-            "name": "Stripe"
+            "kind": "Global payments",
+            "name": "Stripe",
+            "note": "Foreign cards and subscription billing."
           }
         },
         "p5": {
           "type": "partner",
           "settings": {
-            "name": "Correo Uruguayo"
+            "kind": "Last-mile delivery",
+            "name": "Correo Uruguayo",
+            "note": "Nationwide coverage, inland towns included."
           }
         },
         "p6": {
           "type": "partner",
           "settings": {
-            "name": "DHL"
+            "kind": "International shipping",
+            "name": "DHL",
+            "note": "Outbound shipping with end to end tracking."
           }
         }
       },
@@ -282,7 +294,8 @@
         "tone": "b",
         "label": "Ecosystem",
         "headline": "Connected to what you already use",
-        "sub": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt."
+        "sub": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt.",
+        "foot": "Using something that is not on the list? Tell us. Most of the integrations already exist."
       }
     },
     "faq": {

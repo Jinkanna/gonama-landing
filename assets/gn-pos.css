@@ -796,6 +796,8 @@
    7. PARTNERS
    ========================================================================== */
 
+/* Dos columnas en mobile y tres en escritorio. Seis celdas en una sola fila
+   quedaban finitas y con el nombre flotando en el medio, sin peso. */
 .gnp-part__strip {
   display: grid;
   gap: 1px;
@@ -804,55 +806,106 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-@media (min-width: 700px) {
+@media (min-width: 860px) {
   .gnp-part__strip {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (min-width: 1060px) {
-  .gnp-part__strip {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
 .gnp-part {
+  position: relative;
   background: var(--bg);
-  min-height: 118px;
-  display: grid;
-  place-items: center;
-  padding: 22px;
+  padding: clamp(24px, 2.6vw, 36px);
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transition: background 0.35s ease;
 }
 
-.gnp-part:hover {
+.gnp-part::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--veil);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
 }
 
-.gnp-part img {
-  max-width: 100%;
-  max-height: 42px;
-  width: auto;
-  opacity: 0.55;
-  transition: opacity 0.35s ease;
-}
-
-.gnp-part:hover img {
+.gnp-part:hover::before {
   opacity: 1;
+  transform: none;
 }
 
-.gnp-part__text {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.031em;
+.gnp-part > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* La categoría es lo que hace que la lista signifique algo: sin ella son
+   seis nombres sueltos. */
+.gnp-part__kind {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-faint);
-  text-align: center;
+  margin-bottom: auto;
   transition: color 0.35s ease;
 }
 
-.gnp-part:hover .gnp-part__text {
+.gnp-part:hover .gnp-part__kind {
   color: var(--mint);
+}
+
+.gnp-part__name {
+  padding-top: 34px;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.031em;
+  color: var(--fg);
+  transition: color 0.35s ease;
+}
+
+@media (min-width: 760px) {
+  .gnp-part__name {
+    font-size: 24px;
+  }
+}
+
+.gnp-part:hover .gnp-part__name {
+  color: var(--mint);
+}
+
+.gnp-part__logo {
+  margin-top: 34px;
+  max-width: 100%;
+  max-height: 34px;
+  width: auto;
+  align-self: flex-start;
+  opacity: 0.62;
+  transition: opacity 0.35s ease;
+}
+
+.gnp-part:hover .gnp-part__logo {
+  opacity: 1;
+}
+
+.gnp-part__note {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+
+.gnp-part__foot {
+  margin-top: 26px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-faint);
+  max-width: 60ch;
 }
 
 /* ==========================================================================

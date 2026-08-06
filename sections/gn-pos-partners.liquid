@@ -25,18 +25,35 @@
       {%- endif -%}
     </div>
 
-    <div class="gnp-part__strip gnp-rv">
+    <div class="gnp-part__strip">
       {%- for block in section.blocks -%}
         {%- assign b = block.settings -%}
-        <div class="gnp-part" {{ block.shopify_attributes }}>
+        <div class="gnp-part gnp-rv" {{ block.shopify_attributes }}>
+          {%- if b.kind != blank -%}
+            <p class="gnp-part__kind">{{ b.kind | escape }}</p>
+          {%- endif -%}
+
           {%- if b.logo != blank -%}
-            <img src="{{ b.logo | image_url: height: 120 }}" alt="{{ b.name | escape }}" loading="lazy">
+            <img
+              class="gnp-part__logo"
+              src="{{ b.logo | image_url: height: 120 }}"
+              alt="{{ b.name | escape }}"
+              loading="lazy"
+            >
           {%- else -%}
-            <span class="gnp-part__text">{{ b.name | escape }}</span>
+            <p class="gnp-part__name">{{ b.name | escape }}</p>
+          {%- endif -%}
+
+          {%- if b.note != blank -%}
+            <p class="gnp-part__note">{{ b.note | escape }}</p>
           {%- endif -%}
         </div>
       {%- endfor -%}
     </div>
+
+    {%- if st.foot != blank -%}
+      <p class="gnp-part__foot gnp-rv">{{ st.foot | escape }}</p>
+    {%- endif -%}
   </div>
 </section>
 
@@ -50,8 +67,14 @@
       "id": "tone",
       "label": "Tono",
       "options": [
-        { "value": "a", "label": "Base" },
-        { "value": "b", "label": "Invertido" }
+        {
+          "value": "a",
+          "label": "Base"
+        },
+        {
+          "value": "b",
+          "label": "Invertido"
+        }
       ],
       "default": "b"
     },
@@ -72,6 +95,12 @@
       "id": "sub",
       "label": "Bajada",
       "default": "The gateways, carriers and platforms you already use in Uruguay, integrated, so nothing has to be rebuilt."
+    },
+    {
+      "type": "text",
+      "id": "foot",
+      "label": "Nota al pie",
+      "default": "Using something that is not on the list? Tell us. Most of the integrations already exist."
     }
   ],
   "blocks": [
@@ -79,16 +108,36 @@
       "type": "partner",
       "name": "Partner",
       "settings": [
-        { "type": "text", "id": "name", "label": "Nombre" },
+        {
+          "type": "text",
+          "id": "kind",
+          "label": "Categoría",
+          "info": "Qué resuelve. Va arriba del nombre."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre"
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Detalle",
+          "info": "Una línea corta. Opcional."
+        },
         {
           "type": "image_picker",
           "id": "logo",
           "label": "Logo",
-          "info": "Si lo dejás vacío se muestra el nombre en texto."
+          "info": "Si lo cargás, reemplaza al nombre en texto."
         }
       ]
     }
   ],
-  "presets": [{ "name": "POS · Partners" }]
+  "presets": [
+    {
+      "name": "POS · Partners"
+    }
+  ]
 }
 {% endschema %}
