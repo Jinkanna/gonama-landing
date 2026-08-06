@@ -17,6 +17,7 @@
 .gnp {
   --go-blue: #44b7e8;
   --ocean: #178dbe;
+  --mint: #2dd4bf;
   --sky: #d9f4fc;
   --panda-1: #0f172a;
   --panda-2: #f7f9fc;
@@ -142,24 +143,48 @@
 
 /* Display apilado en mayúsculas, interlineado cerrado. */
 .gnp__display {
-  font-size: clamp(40px, 8.2vw, 132px);
-  line-height: 0.92;
+  font-size: 44px;
+  line-height: 1.02;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
 }
 
+@media (min-width: 760px) {
+  .gnp__display {
+    font-size: 76px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp__display {
+    font-size: 104px;
+  }
+}
+
 .gnp__title {
-  font-size: clamp(30px, 4.6vw, 68px);
-  line-height: 0.98;
+  font-size: 32px;
+  line-height: 1.06;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
   max-width: 18ch;
 }
 
+@media (min-width: 760px) {
+  .gnp__title {
+    font-size: 44px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp__title {
+    font-size: 56px;
+  }
+}
+
 .gnp__sub {
-  font-size: clamp(16px, 1.3vw, 19px);
+  font-size: 17px;
   line-height: 1.55;
   color: var(--fg-soft);
   max-width: 46ch;
@@ -306,9 +331,14 @@
 }
 
 /* El display entra línea por línea. */
+/* overflow:hidden recortaba las colas de la y, la g y la p. El relleno baja
+   el borde de la mascara y el margen negativo devuelve el espacio, de modo
+   que el interlineado no cambia. */
 .gnp-js .gnp-line {
   display: block;
   overflow: hidden;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
 }
 
 .gnp-js .gnp-line > span {
@@ -327,7 +357,7 @@
    ========================================================================== */
 
 .gnp-hero {
-  padding-top: calc(76px + clamp(56px, 7vw, 110px));
+  padding-top: calc(88px + clamp(56px, 7vw, 110px));
   padding-bottom: clamp(56px, 7vw, 110px);
   min-height: min(88vh, 900px);
   display: flex;
@@ -406,11 +436,17 @@
   display: flex;
   align-items: baseline;
   gap: 2px;
-  font-size: clamp(38px, 4.4vw, 62px);
+  font-size: 42px;
   font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1;
+  letter-spacing: -0.5px;
+  line-height: 1.05;
   color: var(--fg);
+}
+
+@media (min-width: 760px) {
+  .gnp-num__val {
+    font-size: 58px;
+  }
 }
 
 .gnp-num__suffix {
@@ -500,21 +536,27 @@
 }
 
 .gnp-serv:hover .gnp-serv__num {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-serv__name {
   padding-top: clamp(26px, 3vw, 48px);
-  font-size: clamp(22px, 2.2vw, 32px);
+  font-size: 24px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.028em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
   transition: color 0.35s ease;
 }
 
+@media (min-width: 760px) {
+  .gnp-serv__name {
+    font-size: 30px;
+  }
+}
+
 .gnp-serv:hover .gnp-serv__name {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-serv__desc {
@@ -545,11 +587,17 @@
 }
 
 .gnp-rel__name {
-  font-size: clamp(19px, 1.9vw, 25px);
+  font-size: 21px;
   line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
+}
+
+@media (min-width: 760px) {
+  .gnp-rel__name {
+    font-size: 24px;
+  }
 }
 
 .gnp-rel__desc {
@@ -603,6 +651,7 @@
 
 .gnp-edge:hover::before {
   transform: scaleX(1);
+  background: var(--mint);
 }
 
 .gnp-edge__num {
@@ -620,20 +669,26 @@
 }
 
 .gnp-edge:hover .gnp-edge__num {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-edge__name {
-  font-size: clamp(20px, 2.2vw, 30px);
+  font-size: 22px;
   line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
   transition: color 0.35s ease;
 }
 
+@media (min-width: 760px) {
+  .gnp-edge__name {
+    font-size: 28px;
+  }
+}
+
 .gnp-edge:hover .gnp-edge__name {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-edge__desc {
@@ -703,7 +758,7 @@
 }
 
 .gnp-part:hover .gnp-part__text {
-  color: var(--fg);
+  color: var(--mint);
 }
 
 /* ==========================================================================
@@ -730,15 +785,36 @@
   cursor: pointer;
   text-align: left;
   font-family: inherit;
-  font-size: clamp(17px, 1.6vw, 22px);
+  font-size: 18px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.5px;
   color: var(--fg);
   transition: color 0.3s ease;
 }
 
+@media (min-width: 760px) {
+  .gnp-faq__q {
+    font-size: 21px;
+  }
+}
+
+/* El hover ya no tiñe la pregunta entera: se marca con el icono y con un
+   corrimiento corto, que se lee sin gritar. */
 .gnp-faq__q:hover {
-  color: var(--accent);
+  color: var(--fg);
+}
+
+.gnp-faq__q span:first-child {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gnp-faq__q:hover span:first-child {
+  transform: translateX(8px);
+}
+
+.gnp-faq__q:hover .gnp-faq__ico {
+  border-color: var(--mint);
+  color: var(--mint);
 }
 
 .gnp-faq__ico {
@@ -772,9 +848,9 @@
 }
 
 .gnp-faq__item.is-open .gnp-faq__ico {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
+  background: var(--mint);
+  border-color: var(--mint);
+  color: var(--panda-1);
   transform: rotate(90deg);
 }
 
@@ -961,7 +1037,7 @@
   max-width: var(--max);
   margin: 0 auto;
   padding: 0 var(--gutter);
-  height: 76px;
+  height: 88px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -977,7 +1053,7 @@
 }
 
 .gnp-nav__logo-img {
-  height: 28px;
+  height: 38px;
   width: auto;
   display: block;
 }
@@ -985,7 +1061,7 @@
 .gnp-nav__word {
   font-size: 21px;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.5px;
   color: var(--fg);
 }
 
@@ -1044,7 +1120,7 @@
 }
 
 .gnp-nav__util:hover {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 @media (min-width: 700px) {
@@ -1202,7 +1278,7 @@
 }
 
 .gnp-nav__item:hover {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-nav__item-n {
@@ -1213,11 +1289,17 @@
 }
 
 .gnp-nav__item-t {
-  font-size: clamp(28px, 5vw, 62px);
+  font-size: 32px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
+}
+
+@media (min-width: 760px) {
+  .gnp-nav__item-t {
+    font-size: 54px;
+  }
 }
 
 .gnp-nav__item-a {
@@ -1258,7 +1340,7 @@
 }
 
 .gnp-nav__contact:hover {
-  color: var(--accent);
+  color: var(--mint);
 }
 
 .gnp-nav__cta {
