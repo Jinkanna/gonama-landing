@@ -388,6 +388,41 @@
         "err_msg": "Please review the following:",
         "note": "We use your details only to respond to your enquiry."
       }
+    },
+    "about": {
+      "type": "gn-pos-about",
+      "blocks": {
+        "a1": {
+          "type": "step",
+          "settings": {
+            "name": "Mission",
+            "desc": "PENDIENTE: reemplazar. Texto de la mision, dos o tres lineas."
+          }
+        },
+        "a2": {
+          "type": "step",
+          "settings": {
+            "name": "Vision",
+            "desc": "PENDIENTE: reemplazar. Texto de la vision, dos o tres lineas."
+          }
+        },
+        "a3": {
+          "type": "step",
+          "settings": {
+            "name": "History",
+            "desc": "PENDIENTE: reemplazar. Texto de la historia, dos o tres lineas."
+          }
+        }
+      },
+      "block_order": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "tone": "a",
+        "label": ""
+      }
     }
   },
   "order": [
@@ -399,6 +434,7 @@
     "edge",
     "partners",
     "close",
-    "faq"
+    "faq",
+    "about"
   ]
 }

@@ -1168,6 +1168,171 @@
 }
 
 /* ==========================================================================
+   8b. MISION Y VISION
+   ========================================================================== */
+
+/* Sin JavaScript queda todo apilado y abierto, que es un estado legible.
+   Las reglas del anclado cuelgan de .gnp-js, igual que las del reveal. */
+.gnp-about {
+  padding: 0;
+}
+
+.gnp-about__in {
+  display: grid;
+  gap: 34px;
+}
+
+.gnp-about__list {
+  display: grid;
+  gap: 26px;
+}
+
+.gnp-about__name {
+  font-size: 30px;
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.031em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 760px) {
+  .gnp-about__name {
+    font-size: 46px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp-about__name {
+    font-size: 58px;
+  }
+}
+
+.gnp-about__desc p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  max-width: 46ch;
+}
+
+.gnp-about__dots {
+  display: none;
+}
+
+/* Con JavaScript: la pista mide una pantalla por bloque y el escenario se
+   clava mientras se la recorre. */
+.gnp-js .gnp-about__track {
+  height: calc(var(--gnp-pasos, 3) * 100vh);
+  position: relative;
+}
+
+.gnp-js .gnp-about__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+}
+
+/* position:fixed y no sticky: .bls-wrapper{overflow-x:hidden} del tema
+   convierte a ese div en el contenedor de scroll de los sticky y los deja
+   sin efecto. fixed sí funciona, es lo que usa el header. */
+.gnp-js .gnp-about__stage[data-state='fixed'] {
+  position: fixed;
+  top: 0;
+  bottom: auto;
+}
+
+.gnp-js .gnp-about__stage[data-state='end'] {
+  top: auto;
+  bottom: 0;
+}
+
+.gnp-js .gnp-about__list {
+  gap: 18px;
+}
+
+/* El bloque inactivo se apaga y su texto se pliega. grid-template-rows de
+   0fr a 1fr es lo que permite animar un alto que no se conoce de antemano. */
+.gnp-js .gnp-about__item {
+  opacity: 0.22;
+  transition: opacity 0.5s ease;
+}
+
+.gnp-js .gnp-about__item.is-active {
+  opacity: 1;
+}
+
+.gnp-js .gnp-about__desc {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.2, 0.75, 0.25, 1),
+    opacity 0.4s ease;
+  opacity: 0;
+}
+
+.gnp-js .gnp-about__desc > p {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.gnp-js .gnp-about__item.is-active .gnp-about__desc {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  padding-top: 14px;
+}
+
+.gnp-js .gnp-about__dots {
+  display: flex;
+  gap: 8px;
+}
+
+.gnp-about__dot {
+  width: 26px;
+  height: 2px;
+  background: var(--fg);
+  opacity: 0.22;
+  transition: opacity 0.4s ease;
+}
+
+.gnp-about__dot.is-active {
+  opacity: 1;
+}
+
+/* Sin animaciones no tiene sentido clavar nada: vuelve al apilado. */
+@media (prefers-reduced-motion: reduce) {
+  .gnp-js .gnp-about__track {
+    height: auto;
+  }
+
+  .gnp-js .gnp-about__stage,
+  .gnp-js .gnp-about__stage[data-state='fixed'],
+  .gnp-js .gnp-about__stage[data-state='end'] {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    height: auto;
+    padding: var(--pad-y) 0;
+  }
+
+  .gnp-js .gnp-about__item {
+    opacity: 1;
+  }
+
+  .gnp-js .gnp-about__desc {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: none;
+  }
+
+  .gnp-js .gnp-about__dots {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    9. CIERRE
    ========================================================================== */
 
