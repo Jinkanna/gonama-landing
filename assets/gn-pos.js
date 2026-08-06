@@ -338,17 +338,18 @@
    * la distancia: unos 400ms. Del hero al contacto hay varios miles de pixeles
    * y ese recorrido en 400ms se ve como un tiron, no como un desplazamiento.
    *
-   * Este reemplazo hace durar el viaje segun lo lejos que quede, con un tope,
-   * y con una curva que arranca y termina despacio. Si la persona toca la
-   * rueda o la pantalla en el medio, se cancela y le devuelve el control.
+   * Este reemplazo hace durar el viaje segun lo lejos que quede, con un tope.
+   * La curva es solo de salida: arranca a fondo y frena al llegar. Con una
+   * curva de entrada y salida el arranque se arrastraba. Si la persona toca
+   * la rueda o la pantalla en el medio, se cancela y le devuelve el control.
    */
   function scrollSuave(destino) {
     var desde = window.pageYOffset;
     var tramo = destino - desde;
     if (Math.abs(tramo) < 2) return;
 
-    // 0.42ms por pixel, entre medio segundo y segundo y medio.
-    var dur = Math.min(1500, Math.max(500, Math.abs(tramo) * 0.42));
+    // 0.30ms por pixel, entre 420ms y 1.1s.
+    var dur = Math.min(1100, Math.max(420, Math.abs(tramo) * 0.3));
     var t0 = null;
     var cancelado = false;
 
@@ -363,8 +364,8 @@
       if (cancelado) return;
       if (t0 === null) t0 = ts;
       var p = Math.min(1, (ts - t0) / dur);
-      // easeInOutCubic
-      var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      // easeOutQuad: velocidad maxima al principio, cero al llegar.
+      var e = 1 - (1 - p) * (1 - p);
       window.scrollTo(0, desde + tramo * e);
       if (p < 1) window.requestAnimationFrame(paso);
       else {
