@@ -412,36 +412,59 @@
   margin-top: clamp(30px, 3.5vw, 44px);
 }
 
+/* Paleta del globo 3D. Vive en el CSS para que siga al tema y no haya
+   colores duplicados dentro del bundle. */
 .gnp-hero__globe {
+  --gn3d-deep: #070c18;
+  --gn3d-rim: #17456e;
+  --gn3d-wire: var(--go-blue);
+  --gn3d-dust: #6ea8c9;
+  --gn3d-node: var(--mint);
+  --gn3d-arc: var(--go-blue);
+
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-height: 640px;
+  max-height: 620px;
 }
 
 .gnp-hero__globe canvas {
   display: block;
-  width: 100%;
-  height: 100%;
 }
 
+/* En escritorio mide unos 800px y sobresale del borde derecho. */
 @media (min-width: 980px) {
   .gnp-hero__globe {
-    width: 148%;
-    margin-right: -48%;
-    margin-block: -12%;
+    width: 800px;
+    height: 800px;
     max-height: none;
+    aspect-ratio: auto;
+    margin-right: -280px;
+    margin-block: -120px;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 1600px) {
+  .gnp-hero__globe {
+    width: 900px;
+    height: 900px;
+    margin-right: -240px;
   }
 }
 
 @media (max-width: 979px) {
   .gnp-hero__globe {
-    max-width: 620px;
-    width: 118%;
-    margin-inline: -9%;
-    margin-inline: auto;
-    opacity: 0.9;
+    max-width: 560px;
+    width: 116%;
+    margin-inline: -8%;
+    opacity: 0.92;
   }
+}
+
+/* Sin WebGL no queda un hueco: la columna se colapsa. */
+.gnp-hero__globe[data-gn3d-unsupported] {
+  display: none;
 }
 
 /* ==========================================================================

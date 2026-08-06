@@ -13,7 +13,7 @@
   onload="this.media='all'"
 >
 {%- render 'gn-pos-assets' -%}
-<script src="{{ 'gn-globe.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'gn-globe3d.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign st = section.settings
@@ -55,13 +55,12 @@
     </div>
 
     {%- comment -%}
-      El canvas se pinta solo cuando entra en pantalla y se detiene si la
-      pestaña pasa a segundo plano. aria-hidden porque es decorativo: lo que
+      Globo 3D en React Three Fiber. El bundle se monta recién cuando el
+      contenedor se acerca a pantalla, y no se monta si no hay WebGL o si el
+      sistema pide menos movimiento. aria-hidden porque es decorativo: lo que
       cuenta ya está en el texto de la izquierda.
     {%- endcomment -%}
-    <div class="gnp-hero__globe" data-gn-globe aria-hidden="true">
-      <canvas></canvas>
-    </div>
+    <div class="gnp-hero__globe" data-gn-globe3d aria-hidden="true"></div>
   </div>
 </section>
 

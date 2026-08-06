@@ -1,0 +1,19 @@
+{
+  "name": "gonama-globe",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Globo 3D del hero. Compila a ../assets/gn-globe3d.js, que es el archivo que sirve Shopify.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/postprocessing": "^2.16.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
