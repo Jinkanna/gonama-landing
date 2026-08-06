@@ -133,8 +133,8 @@
       "settings": {
         "tone": "b",
         "label": "Global Checkout",
-        "headline": "Unify payments\nand fulfillment.",
-        "sub": "Eliminate checkout friction globally. Route payments through local acquirers and automate last-mile fulfillment."
+        "headline": "Unify payments\nand fulfillment.\nSell globally,\nconvert like a local.",
+        "sub": "Route payments through local acquirers, price shipping and duties before checkout, and adapt currency and language per market."
       }
     },
     "edge": {
