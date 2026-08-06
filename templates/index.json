@@ -1,5 +1,14 @@
 {
   "sections": {
+    "intro": {
+      "type": "gn-pos-intro",
+      "settings": {
+        "tone": "a",
+        "logo_go": "GO",
+        "logo_rest": "nama",
+        "caption": "Agentic commerce infrastructure"
+      }
+    },
     "hero": {
       "type": "gn-pos-hero",
       "settings": {
@@ -8,7 +17,9 @@
         "headline": "One platform\nevery step\nof the sale",
         "sub": "Checkout, payments, fulfilment and AI agents, unified for Uruguay under one accountable platform.",
         "cta1_label": "Talk with us",
-        "cta1_link": "#gnp-contact"
+        "cta1_link": "#gnp-contact",
+        "cta2_label": "Our platform",
+        "cta2_link": "#section-services"
       }
     },
     "statement": {
@@ -353,6 +364,7 @@
     }
   },
   "order": [
+    "intro",
     "hero",
     "statement",
     "services",

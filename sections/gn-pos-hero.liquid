@@ -13,6 +13,7 @@
   onload="this.media='all'"
 >
 {%- render 'gn-pos-assets' -%}
+<script src="{{ 'gn-globe.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign st = section.settings
@@ -20,35 +21,51 @@
 -%}
 
 <section class="gnp gnp--{{ st.tone }} gnp-hero" id="section-{{ section.id }}">
-  <div class="gnp__in">
-    {%- if st.label != blank -%}
-      <p class="gnp__label gnp-hero__label gnp-rv">{{ st.label | escape }}</p>
-    {%- endif -%}
-
-    <h1 class="gnp__display" data-gnp-lines>
-      {%- for line in lines -%}
-        {%- assign clean = line | strip_html | strip -%}
-        {%- if clean != blank -%}
-          <span class="gnp-line"><span>{{ clean | escape }}</span></span>
-        {%- endif -%}
-      {%- endfor -%}
-    </h1>
-
-    <div class="gnp-hero__foot">
-      {%- if st.sub != blank -%}
-        <p class="gnp__sub gnp-rv">{{ st.sub | escape }}</p>
+  <div class="gnp__in gnp-hero__grid">
+    <div class="gnp-hero__copy">
+      {%- if st.label != blank -%}
+        <p class="gnp__label gnp-hero__label gnp-rv">{{ st.label | escape }}</p>
       {%- endif -%}
 
-      {%- if st.cta1_label != blank -%}
+      <h1 class="gnp__display" data-gnp-lines>
+        {%- for line in lines -%}
+          {%- assign clean = line | strip_html | strip -%}
+          {%- if clean != blank -%}
+            <span class="gnp-line"><span>{{ clean | escape }}</span></span>
+          {%- endif -%}
+        {%- endfor -%}
+      </h1>
+
+      {%- if st.sub != blank -%}
+        <p class="gnp__sub gnp-hero__sub gnp-rv">{{ st.sub | escape }}</p>
+      {%- endif -%}
+
+      {%- if st.cta1_label != blank or st.cta2_label != blank -%}
         <div class="gnp-hero__actions gnp-rv">
-          <a class="gnp__btn" href="{{ st.cta1_link | default: '#gnp-contact' }}">
-            {{ st.cta1_label | escape }}
-            <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
+          {%- if st.cta1_label != blank -%}
+            <a class="gnp__btn" href="{{ st.cta1_link | default: '#gnp-contact' }}">
+              {{ st.cta1_label | escape }}
+              <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if st.cta2_label != blank -%}
+            <a class="gnp__btn gnp__btn--ghost" href="{{ st.cta2_link | default: '#section-services' }}">
+              {{ st.cta2_label | escape }}
+            </a>
+          {%- endif -%}
         </div>
       {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      El canvas se pinta solo cuando entra en pantalla y se detiene si la
+      pestaña pasa a segundo plano. aria-hidden porque es decorativo: lo que
+      cuenta ya está en el texto de la izquierda.
+    {%- endcomment -%}
+    <div class="gnp-hero__globe" data-gn-globe aria-hidden="true">
+      <canvas></canvas>
     </div>
   </div>
 </section>
@@ -102,6 +119,17 @@
       "type": "url",
       "id": "cta1_link",
       "label": "Link del botón"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Botón secundario",
+      "default": "Our platform"
+    },
+    {
+      "type": "url",
+      "id": "cta2_link",
+      "label": "Link del botón secundario"
     }
   ],
   "presets": [

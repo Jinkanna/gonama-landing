@@ -271,6 +271,31 @@
     );
   }
 
+  /* --------------------------------------------------------------- Intro */
+
+  /**
+   * La animación de salida es CSS, así que la pantalla se retira sola aunque
+   * esto no corra. Acá solo se evita repetirla dentro de la misma sesión y se
+   * saca el nodo del DOM cuando terminó.
+   */
+  function initIntro(el) {
+    var KEY = 'gn-intro-seen';
+    var seen = false;
+    try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+
+    if (seen) {
+      el.setAttribute('data-seen', '');
+      return;
+    }
+
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+
+    el.addEventListener('animationend', function (ev) {
+      if (ev.animationName !== 'gnpIntroOut') return;
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
+  }
+
   /* ----------------------------------------------------------------- Boot */
 
   function each(selector, fn) {
@@ -284,6 +309,7 @@
   function boot() {
     stageLines();
     initReveal();
+    each('[data-gn-intro]', initIntro);
     each('[data-gnp-nav]', initNav);
     each('[data-gnp-marquee]', initMarquee);
     each('[data-gnp-count]', initCounter);
