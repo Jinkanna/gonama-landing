@@ -251,57 +251,13 @@
 
   /* --------------------------------------------------------------- Header */
 
+  /**
+   * El menu desplegable se saco del header. Lo unico que queda es el
+   * comportamiento de la barra al scrollear, que antes vivia despues de un
+   * "if (!btn || !panel) return": sin el boton, esa guarda se llevaba puesto
+   * tambien el auto-hide.
+   */
   function initNav(root) {
-    var btn = root.querySelector('[data-gnp-nav-toggle]');
-    var panel = root.querySelector('[data-gnp-nav-panel]');
-    if (!btn || !panel) return;
-
-    var lastFocus = null;
-
-    function open() {
-      lastFocus = document.activeElement;
-      panel.hidden = false;
-      // Un cuadro de margen para que el navegador registre el estado inicial
-      // antes de animar el clip-path.
-      window.requestAnimationFrame(function () {
-        root.classList.add('is-open');
-      });
-      btn.setAttribute('aria-expanded', 'true');
-      var first = panel.querySelector('a');
-      if (first) first.focus({ preventScroll: true });
-    }
-
-    function close() {
-      root.classList.remove('is-open');
-      btn.setAttribute('aria-expanded', 'false');
-      // Se oculta recién cuando terminó la transición, para no cortarla.
-      setTimeout(function () {
-        if (!root.classList.contains('is-open')) panel.hidden = true;
-      }, 620);
-      if (lastFocus) lastFocus.focus({ preventScroll: true });
-    }
-
-    btn.addEventListener('click', function () {
-      if (root.classList.contains('is-open')) close();
-      else open();
-    });
-
-    panel.addEventListener('click', function (ev) {
-      if (ev.target.closest('a')) close();
-    });
-
-    document.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Escape' && root.classList.contains('is-open')) close();
-    });
-
-    // Ya no es una cortina de pantalla completa: hay pagina alrededor y el
-    // clic afuera tiene que cerrar.
-    document.addEventListener('click', function (ev) {
-      if (!root.classList.contains('is-open')) return;
-      if (panel.contains(ev.target) || btn.contains(ev.target)) return;
-      close();
-    });
-
     // El header se esconde al bajar y vuelve al subir.
     var last = window.pageYOffset;
     var ticking = false;
@@ -310,7 +266,7 @@
       var y = window.pageYOffset;
       var delta = y - last;
 
-      if (root.classList.contains('is-open') || y <= 90) {
+      if (y <= 90) {
         root.classList.remove('is-hidden');
       } else if (delta > 6) {
         root.classList.add('is-hidden');

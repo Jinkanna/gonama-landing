@@ -1,15 +1,13 @@
 {% comment %}
-  GOnama · new-pos · Header con panel de menú
-  Barra fija mínima: logo, un par de enlaces de utilidad y el botón MENU.
-  El menú abre en un panel acotado arriba a la derecha, con los links
-  entrando escalonados. Cierra con Escape, con un clic afuera o al elegir.
+  GOnama · new-pos · Header
+  Barra fija mínima: logo y los enlaces de utilidad, hoy solo el de contacto.
+  El menú desplegable se sacó por pedido.
 {% endcomment %}
 
 {%- render 'gn-pos-assets' -%}
 
 {%- liquid
   assign st = section.settings
-  assign nav = st.links | newline_to_br | split: '<br />'
   assign utils = st.utils | newline_to_br | split: '<br />'
   assign logo = st.logo | default: settings.logo_image_desktop
 -%}
@@ -41,55 +39,6 @@
           <a class="gnp-nav__util" href="{{ href | default: '#' }}">{{ label | escape }}</a>
         {%- endif -%}
       {%- endfor -%}
-
-      <button class="gnp-nav__toggle" type="button" aria-expanded="false" aria-controls="gnp-menu" data-gnp-nav-toggle>
-        <span class="gnp-nav__toggle-txt" data-gnp-nav-open-txt>{{ st.open_label | escape }}</span>
-        <span class="gnp-nav__toggle-txt" data-gnp-nav-close-txt>{{ st.close_label | escape }}</span>
-        <span class="gnp-nav__burger" aria-hidden="true"><i></i><i></i></span>
-      </button>
-    </div>
-  </div>
-
-  <div class="gnp-nav__overlay" id="gnp-menu" data-gnp-nav-panel hidden>
-    <div class="gnp-nav__overlay-in">
-      <nav class="gnp-nav__list" aria-label="{{ st.nav_label | escape }}">
-        {%- for row in nav -%}
-          {%- liquid
-            assign parts = row | strip_html | strip | split: '|'
-            assign label = parts[0] | strip
-            assign href = parts[1] | strip
-          -%}
-          {%- if label != blank -%}
-            <a class="gnp-nav__item" href="{{ href | default: '#' }}" style="--i: {{ forloop.index0 }}">
-              <span class="gnp-nav__item-n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-              <span class="gnp-nav__item-t">{{ label | escape }}</span>
-              <svg class="gnp-nav__item-a" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          {%- endif -%}
-        {%- endfor -%}
-      </nav>
-
-      <div class="gnp-nav__aside">
-        {%- if st.aside_label != blank -%}
-          <p class="gnp__label">{{ st.aside_label | escape }}</p>
-        {%- endif -%}
-        {%- if st.email != blank -%}
-          <a class="gnp-nav__contact" href="mailto:{{ st.email }}">{{ st.email }}</a>
-        {%- endif -%}
-        {%- if st.phone != blank -%}
-          <a class="gnp-nav__contact" href="tel:{{ st.phone | replace: ' ', '' }}">{{ st.phone }}</a>
-        {%- endif -%}
-        {%- if st.cta_label != blank -%}
-          <a class="gnp__btn gnp-nav__cta" href="{{ st.cta_link | default: '#gnp-contact' }}">
-            {{ st.cta_label | escape }}
-            <svg class="gnp__arrow" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M2 8h12M9 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        {%- endif -%}
-      </div>
     </div>
   </div>
 </header>
@@ -110,16 +59,9 @@
     },
     {
       "type": "textarea",
-      "id": "links",
-      "label": "Links del menú",
-      "info": "Uno por línea, con el formato  Texto | destino",
-      "default": "Platform | #section-services\nHow we operate | #section-reliability\nWhy us | #section-edge\nEcosystem | #section-partners\nF.A.Q. | #section-faq\nContact | #gnp-contact"
-    },
-    {
-      "type": "textarea",
       "id": "utils",
-      "label": "Enlaces de utilidad",
-      "info": "Se ven en la barra, al lado del botón. Uno por línea.",
+      "label": "Enlaces de la barra",
+      "info": "Uno por línea, con el formato  Texto | destino",
       "default": "Talk with us | #gnp-contact"
     },
     { "type": "header", "content": "Logo" },
@@ -131,17 +73,7 @@
     },
     { "type": "text", "id": "logo_go", "label": "Texto · parte en color", "default": "GO" },
     { "type": "text", "id": "logo_rest", "label": "Texto · resto", "default": "nama" },
-    { "type": "url", "id": "logo_link", "label": "Link del logo" },
-    { "type": "header", "content": "Botón del menú" },
-    { "type": "text", "id": "open_label", "label": "Cerrado", "default": "Menu" },
-    { "type": "text", "id": "close_label", "label": "Abierto", "default": "Close" },
-    { "type": "header", "content": "Panel" },
-    { "type": "text", "id": "aside_label", "label": "Etiqueta", "default": "Connect with us" },
-    { "type": "text", "id": "email", "label": "Mail", "default": "go@gonama.com" },
-    { "type": "text", "id": "phone", "label": "Teléfono", "default": "+598 96 331 868" },
-    { "type": "text", "id": "cta_label", "label": "Botón", "default": "Talk with us" },
-    { "type": "url", "id": "cta_link", "label": "Link del botón" },
-    { "type": "text", "id": "nav_label", "label": "Nombre de la navegación", "default": "Main" }
+    { "type": "url", "id": "logo_link", "label": "Link del logo" }
   ],
   "presets": [{ "name": "POS · Header" }]
 }
