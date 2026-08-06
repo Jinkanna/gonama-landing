@@ -13,9 +13,43 @@
   assign logo = st.logo | default: settings.logo_image_desktop
 -%}
 
-<span id="gnp-nav-top" aria-hidden="true"></span>
 <header class="gnp gnp--{{ st.tone }} gnp-nav" data-gnp-nav>
-  <div class="gnp-nav__overlay" id="gnp-menu" data-gnp-nav-panel>
+  <div class="gnp-nav__bar">
+    <a class="gnp-nav__logo" href="{{ st.logo_link | default: routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if logo != blank -%}
+        <img
+          class="gnp-nav__logo-img gnp-nav__logo-img--light"
+          src="{{ logo | image_url: height: 90 }}"
+          alt="{{ shop.name | escape }}"
+          loading="eager"
+        >
+      {%- endif -%}
+      <span class="gnp-nav__word{% if logo != blank %} gnp-nav__word--dark{% endif %}">
+        <b>{{ st.logo_go | escape }}</b>{{ st.logo_rest | escape }}
+      </span>
+    </a>
+
+    <div class="gnp-nav__right">
+      {%- for row in utils -%}
+        {%- liquid
+          assign parts = row | strip_html | strip | split: '|'
+          assign label = parts[0] | strip
+          assign href = parts[1] | strip
+        -%}
+        {%- if label != blank -%}
+          <a class="gnp-nav__util" href="{{ href | default: '#' }}">{{ label | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <button class="gnp-nav__toggle" type="button" aria-expanded="false" aria-controls="gnp-menu" data-gnp-nav-toggle>
+        <span class="gnp-nav__toggle-txt" data-gnp-nav-open-txt>{{ st.open_label | escape }}</span>
+        <span class="gnp-nav__toggle-txt" data-gnp-nav-close-txt>{{ st.close_label | escape }}</span>
+        <span class="gnp-nav__burger" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gnp-nav__overlay" id="gnp-menu" data-gnp-nav-panel hidden>
     <div class="gnp-nav__overlay-in">
       <nav class="gnp-nav__list" aria-label="{{ st.nav_label | escape }}">
         {%- for row in nav -%}
@@ -57,44 +91,6 @@
       </div>
     </div>
   </div>
-  <div class="gnp-nav__bar">
-    <a class="gnp-nav__logo" href="{{ st.logo_link | default: routes.root_url }}" aria-label="{{ shop.name | escape }}">
-      {%- if logo != blank -%}
-        <img
-          class="gnp-nav__logo-img gnp-nav__logo-img--light"
-          src="{{ logo | image_url: height: 90 }}"
-          alt="{{ shop.name | escape }}"
-          loading="eager"
-        >
-      {%- endif -%}
-      <span class="gnp-nav__word{% if logo != blank %} gnp-nav__word--dark{% endif %}">
-        <b>{{ st.logo_go | escape }}</b>{{ st.logo_rest | escape }}
-      </span>
-    </a>
-
-    <div class="gnp-nav__right">
-      {%- for row in utils -%}
-        {%- liquid
-          assign parts = row | strip_html | strip | split: '|'
-          assign label = parts[0] | strip
-          assign href = parts[1] | strip
-        -%}
-        {%- if label != blank -%}
-          <a class="gnp-nav__util" href="{{ href | default: '#' }}">{{ label | escape }}</a>
-        {%- endif -%}
-      {%- endfor -%}
-
-      <a class="gnp-nav__toggle gnp-nav__toggle--open" href="#gnp-menu">
-        <span>{{ st.open_label | escape }}</span>
-        <span class="gnp-nav__burger" aria-hidden="true"><i></i><i></i></span>
-      </a>
-      <a class="gnp-nav__toggle gnp-nav__toggle--close" href="#gnp-nav-top">
-        <span>{{ st.close_label | escape }}</span>
-        <span class="gnp-nav__burger" aria-hidden="true"><i></i><i></i></span>
-      </a>
-    </div>
-  </div>
-
 </header>
 
 {% schema %}

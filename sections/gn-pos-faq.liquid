@@ -26,18 +26,23 @@
       {%- endif -%}
     </div>
 
-    <div class="gnp-faq__list gnp-rv">
+    <div class="gnp-faq__list gnp-rv" data-gnp-faq>
       {%- for block in section.blocks -%}
         {%- assign b = block.settings -%}
-        <details class="gnp-faq__item" {{ block.shopify_attributes }}>
-          <summary class="gnp-faq__q">
+        <div class="gnp-faq__item" {{ block.shopify_attributes }}>
+          <button
+            class="gnp-faq__q"
+            type="button"
+            aria-expanded="false"
+            aria-controls="gnp-faq-{{ block.id }}"
+          >
             <span>{{ b.q | escape }}</span>
             <span class="gnp-faq__ico" aria-hidden="true"></span>
-          </summary>
-          <div class="gnp-faq__a">
+          </button>
+          <div class="gnp-faq__a" id="gnp-faq-{{ block.id }}" style="height: 0px">
             <div class="gnp-faq__a-in">{{ b.a }}</div>
           </div>
-        </details>
+        </div>
       {%- endfor -%}
     </div>
   </div>

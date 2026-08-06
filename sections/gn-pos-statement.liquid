@@ -55,7 +55,7 @@
           <div class="gnp-num" {{ block.shopify_attributes }}>
             <p class="gnp-num__val">
               {%- if b.prefix != blank -%}<span class="gnp-num__suffix">{{ b.prefix | escape }}</span>{%- endif -%}
-              <span data-gnp-count="{{ b.value }}" data-gnp-decimals="{{ b.decimals }}">{{ b.value }}</span>
+              <span data-gnp-count="{{ b.value }}" data-gnp-decimals="{{ b.decimals }}">0</span>
               {%- if b.suffix != blank -%}<span class="gnp-num__suffix">{{ b.suffix | escape }}</span>{%- endif -%}
             </p>
             <p class="gnp-num__lab">{{ b.label | escape }}</p>

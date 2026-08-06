@@ -29,7 +29,7 @@
       {%- for line in lines -%}
         {%- assign clean = line | strip_html | strip -%}
         {%- if clean != blank -%}
-          <span class="gnp-line" style="--l: {{ forloop.index0 }}"><span>{{ clean | escape }}</span></span>
+          <span class="gnp-line"><span>{{ clean | escape }}</span></span>
         {%- endif -%}
       {%- endfor -%}
     </h1>
