@@ -938,9 +938,13 @@
   color: var(--hover);
 }
 
+/* Sin line-height propio heredaba el 1.75 del tema, y los nombres de dos
+   renglones quedaban desarmados. Los demas titulos de tarjeta van entre 1
+   y 1.14. */
 .gnp-part__name {
-  padding-top: 34px;
+  padding-top: 28px;
   font-size: 21px;
+  line-height: 1.12;
   font-weight: 600;
   letter-spacing: -0.031em;
   color: var(--fg);
