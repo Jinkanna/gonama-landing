@@ -146,7 +146,7 @@
   font-size: 44px;
   line-height: 1.02;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
 }
 
@@ -166,7 +166,7 @@
   font-size: 32px;
   line-height: 1.06;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
   max-width: 18ch;
 }
@@ -438,7 +438,7 @@
   gap: 2px;
   font-size: 42px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   line-height: 1.05;
   color: var(--fg);
 }
@@ -544,7 +544,7 @@
   font-size: 24px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
   transition: color 0.35s ease;
 }
@@ -590,7 +590,7 @@
   font-size: 21px;
   line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
 }
 
@@ -676,7 +676,7 @@
   font-size: 22px;
   line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
   transition: color 0.35s ease;
 }
@@ -750,7 +750,7 @@
 .gnp-part__text {
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
   color: var(--fg-faint);
   text-align: center;
@@ -787,7 +787,7 @@
   font-family: inherit;
   font-size: 18px;
   font-weight: 600;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   color: var(--fg);
   transition: color 0.3s ease;
 }
@@ -1061,7 +1061,7 @@
 .gnp-nav__word {
   font-size: 21px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   color: var(--fg);
 }
 
@@ -1292,7 +1292,7 @@
   font-size: 32px;
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.031em;
   text-transform: uppercase;
 }
 
