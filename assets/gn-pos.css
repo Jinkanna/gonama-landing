@@ -497,6 +497,12 @@
   .gnp-stat__grid {
     grid-template-columns: 1.1fr 1fr;
   }
+
+  /* Sin la grilla de numeros la seccion va a una sola columna, con el texto
+     limitado para que no se estire a todo el ancho. */
+  .gnp-stat__grid--solo {
+    grid-template-columns: minmax(0, 820px);
+  }
 }
 
 .gnp-stat__copy p + p {

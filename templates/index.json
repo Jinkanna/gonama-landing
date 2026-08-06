@@ -22,54 +22,6 @@
     },
     "statement": {
       "type": "gn-pos-statement",
-      "blocks": {
-        "n1": {
-          "type": "number",
-          "settings": {
-            "prefix": "",
-            "value": "99.9",
-            "decimals": 1,
-            "suffix": "%",
-            "label": "Checkout uptime"
-          }
-        },
-        "n2": {
-          "type": "number",
-          "settings": {
-            "prefix": "",
-            "value": "6",
-            "decimals": 0,
-            "suffix": "",
-            "label": "Commerce layers unified"
-          }
-        },
-        "n3": {
-          "type": "number",
-          "settings": {
-            "prefix": "",
-            "value": "8",
-            "decimals": 0,
-            "suffix": "+",
-            "label": "Years building Uruguayan e-commerce"
-          }
-        },
-        "n4": {
-          "type": "number",
-          "settings": {
-            "prefix": "",
-            "value": "1",
-            "decimals": 0,
-            "suffix": "",
-            "label": "Source of truth"
-          }
-        }
-      },
-      "block_order": [
-        "n1",
-        "n2",
-        "n3",
-        "n4"
-      ],
       "settings": {
         "tone": "b",
         "label": "The shift",

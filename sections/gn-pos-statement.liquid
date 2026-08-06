@@ -13,7 +13,12 @@
 
 <section class="gnp gnp--{{ st.tone }} gnp-stat" id="section-{{ section.id }}">
   <div class="gnp__in">
-    <div class="gnp-stat__grid">
+    {%- assign has_nums = false -%}
+    {%- if section.blocks.size > 0 -%}
+      {%- assign has_nums = true -%}
+    {%- endif -%}
+
+    <div class="gnp-stat__grid{% unless has_nums %} gnp-stat__grid--solo{% endunless %}">
       <div>
         {%- if st.label != blank -%}
           <p class="gnp__label gnp-rv" style="margin-bottom: 26px;">{{ st.label | escape }}</p>
@@ -61,19 +66,21 @@
         {%- endif -%}
       </div>
 
-      <div class="gnp-stat__nums gnp-rv">
-        {%- for block in section.blocks -%}
-          {%- assign b = block.settings -%}
-          <div class="gnp-num" {{ block.shopify_attributes }}>
-            <p class="gnp-num__val">
-              {%- if b.prefix != blank -%}<span class="gnp-num__suffix">{{ b.prefix | escape }}</span>{%- endif -%}
-              <span data-gnp-count="{{ b.value }}" data-gnp-decimals="{{ b.decimals }}">0</span>
-              {%- if b.suffix != blank -%}<span class="gnp-num__suffix">{{ b.suffix | escape }}</span>{%- endif -%}
-            </p>
-            <p class="gnp-num__lab">{{ b.label | escape }}</p>
-          </div>
-        {%- endfor -%}
-      </div>
+      {%- if has_nums -%}
+        <div class="gnp-stat__nums gnp-rv">
+          {%- for block in section.blocks -%}
+            {%- assign b = block.settings -%}
+            <div class="gnp-num" {{ block.shopify_attributes }}>
+              <p class="gnp-num__val">
+                {%- if b.prefix != blank -%}<span class="gnp-num__suffix">{{ b.prefix | escape }}</span>{%- endif -%}
+                <span data-gnp-count="{{ b.value }}" data-gnp-decimals="{{ b.decimals }}">0</span>
+                {%- if b.suffix != blank -%}<span class="gnp-num__suffix">{{ b.suffix | escape }}</span>{%- endif -%}
+              </p>
+              <p class="gnp-num__lab">{{ b.label | escape }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
   </div>
 </section>
