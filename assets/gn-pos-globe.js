@@ -162,14 +162,16 @@ function prepareLand(topology) {
 
 var landPromise = null;
 
+/* La geometría viaja como módulo y no como .json, porque assets/ solo acepta
+   las extensiones que el tema conoce. Se importa aparte del bundle para que
+   no pese en la carga inicial. */
 function loadLand(url) {
   if (!landPromise) {
-    landPromise = fetch(url, { cache: 'force-cache' })
-      .then(function (res) {
-        if (!res.ok) throw new Error('No se pudo cargar la geometría de tierra');
-        return res.json();
+    landPromise = import(url)
+      .then(function (mod) {
+        if (!mod || !mod.default) throw new Error('No se pudo cargar la geometría de tierra');
+        return prepareLand(mod.default);
       })
-      .then(prepareLand)
       .catch(function (err) {
         landPromise = null;
         throw err;
