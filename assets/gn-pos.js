@@ -345,7 +345,22 @@
       if (fill) fill.style.transform = 'scaleX(' + p + ')';
 
       // El ultimo bloque tiene que alcanzarse justo al final, de ahi el 0.999.
-      var i = Math.floor(p * 0.999 * items.length);
+      var pos = p * 0.999 * items.length;
+      var i = Math.floor(pos);
+
+      /* El encendido no es binario: cada bloque recibe su peso segun a que
+         distancia esta del centro de su tramo. Cerca del centro vale uno, y
+         hacia el borde baja con una curva suave, asi el que se va y el que
+         llega se cruzan en vez de saltar de golpe. El corrimiento vertical es
+         chico y va en la misma direccion del scroll: es lo que hace que el
+         cambio se lea como movimiento y no como un encendido. */
+      for (var w = 0; w < items.length; w++) {
+        var dist = Math.abs(pos - (w + 0.5));
+        var t = Math.min(1, Math.max(0, (dist - 0.3) / 0.45));
+        var suave = t * t * (3 - 2 * t);
+        items[w].style.setProperty('--gnp-w', (1 - suave).toFixed(3));
+        items[w].style.setProperty('--gnp-y', ((pos - (w + 0.5)) * -7).toFixed(1) + 'px');
+      }
 
       if (i !== activo) {
         activo = i;

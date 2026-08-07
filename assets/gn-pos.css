@@ -1492,20 +1492,20 @@
 
 /* El bloque inactivo se apaga y su texto se pliega. grid-template-rows de
    0fr a 1fr es lo que permite animar un alto que no se conoce de antemano. */
+/* La opacidad y el corrimiento los escribe el scroll en --gnp-w y --gnp-y, no
+   una transicion: el valor ya viene suavizado desde el JS y una transicion
+   encima solo agregaria retraso. */
 .gnp-js .gnp-about__item {
-  opacity: 0.22;
-  transition: opacity 0.5s ease;
-}
-
-.gnp-js .gnp-about__item.is-active {
-  opacity: 1;
+  opacity: calc(0.18 + 0.82 * var(--gnp-w, 1));
+  transform: translate3d(0, var(--gnp-y, 0px), 0);
+  will-change: opacity, transform;
 }
 
 .gnp-js .gnp-about__desc {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.55s cubic-bezier(0.2, 0.75, 0.25, 1),
-    opacity 0.4s ease;
+  transition: grid-template-rows 0.9s cubic-bezier(0.22, 0.68, 0.16, 1),
+    opacity 0.7s cubic-bezier(0.22, 0.68, 0.16, 1);
   opacity: 0;
 }
 
@@ -1518,6 +1518,8 @@
   grid-template-rows: 1fr;
   opacity: 1;
   padding-top: 14px;
+  transition: grid-template-rows 0.9s cubic-bezier(0.22, 0.68, 0.16, 1),
+    opacity 0.7s cubic-bezier(0.22, 0.68, 0.16, 1) 0.12s;
 }
 
 /* Riel de avance. La pista cruza todo el ancho y la barra se escala desde la
@@ -1604,6 +1606,7 @@
 
   .gnp-js .gnp-about__item {
     opacity: 1;
+    transform: none;
   }
 
   .gnp-js .gnp-about__desc {
