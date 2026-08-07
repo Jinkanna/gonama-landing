@@ -133,6 +133,14 @@ var DEFAULTS = {
   arcAltBase: 0.02,
   arcAltMultiplier: 0.01,
   cameraZ: 2.9,
+  /* Cuerpo y atmosfera. La camara va mas lejos que la esfera sola porque el
+     cascaron de la atmosfera sobresale y si no se corta contra el canvas. */
+  bodyLit: '#153a52',
+  bodyShade: '#050912',
+  bodyRim: '#178dbe',
+  atmoLit: '#2dd4bf',
+  atmoShade: '#1c6fa8',
+  atmoStrength: 1.0,
   globeRotationX: 0.15,
   globeRotationZ: 0.05,
   enableControls: true,
@@ -602,13 +610,111 @@ export function createGlobe(canvas, options) {
   group.rotation.z = opt.globeRotationZ;
   scene.add(group);
 
-  /* Esfera que no pinta color pero sí profundidad: tapa lo que queda detrás. */
-  var occluder = new THREE.Mesh(
-    new THREE.SphereGeometry(0.99, 32, 32),
-    new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: true })
+  /* --- Cuerpo y atmósfera ---
+
+     El volumen no se dibuja con sombras planas encima del canvas: son dos
+     esferas de verdad en la escena. El cuerpo se sombrea por el ángulo con una
+     luz fija, y la atmósfera es un cascarón un poco más grande que solo se
+     enciende en el borde, donde la superficie se aleja de la cámara. Al girar
+     el globo la luz se queda quieta y el terminador se mueve solo. */
+
+  var luz = new THREE.Vector3(-0.35, 0.82, 0.45).normalize();
+
+  var cuerpo = new THREE.Mesh(
+    new THREE.SphereGeometry(0.995, 64, 64),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        uLuz: { value: luz },
+        uIluminado: { value: new THREE.Color(opt.bodyLit) },
+        uSombra: { value: new THREE.Color(opt.bodyShade) },
+        uBorde: { value: new THREE.Color(opt.bodyRim) }
+      },
+      vertexShader: [
+        'varying vec3 vNormal;',
+        'varying vec3 vHaciaCamara;',
+        'void main() {',
+        '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+        '  vNormal = normalize(normalMatrix * normal);',
+        '  vHaciaCamara = normalize(-mv.xyz);',
+        '  gl_Position = projectionMatrix * mv;',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform vec3 uLuz;',
+        'uniform vec3 uIluminado;',
+        'uniform vec3 uSombra;',
+        'uniform vec3 uBorde;',
+        'varying vec3 vNormal;',
+        'varying vec3 vHaciaCamara;',
+        'void main() {',
+        '  vec3 n = normalize(vNormal);',
+        /* El terminador es suave a propósito: un corte duro parece una pelota
+           de plástico y no un planeta. */
+        '  float difusa = smoothstep(-0.45, 0.9, dot(n, normalize(uLuz)));',
+        '  vec3 col = mix(uSombra, uIluminado, difusa);',
+        /* El borde toma un poco de color aunque esté en sombra, que es lo que
+           lo despega del fondo negro. */
+        '  float borde = pow(1.0 - max(dot(n, normalize(vHaciaCamara)), 0.0), 3.0);',
+        '  col += uBorde * borde * 0.55;',
+        '  gl_FragColor = vec4(col, 1.0);',
+        '}'
+      ].join('\n')
+    })
   );
-  occluder.renderOrder = -1;
-  group.add(occluder);
+  cuerpo.renderOrder = -1;
+  group.add(cuerpo);
+
+  var atmosfera = new THREE.Mesh(
+    new THREE.SphereGeometry(1.06, 64, 64),
+    new THREE.ShaderMaterial({
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      depthWrite: false,
+      uniforms: {
+        uLuz: { value: luz },
+        uAlta: { value: new THREE.Color(opt.atmoLit) },
+        uBaja: { value: new THREE.Color(opt.atmoShade) },
+        uFuerza: { value: opt.atmoStrength }
+      },
+      vertexShader: [
+        'varying vec3 vNormal;',
+        'varying vec3 vHaciaCamara;',
+        'varying vec3 vMundo;',
+        'void main() {',
+        '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+        '  vNormal = normalize(normalMatrix * normal);',
+        '  vHaciaCamara = normalize(-mv.xyz);',
+        '  vMundo = normalize(position);',
+        '  gl_Position = projectionMatrix * mv;',
+        '}'
+      ].join('\n'),
+      fragmentShader: [
+        'uniform vec3 uLuz;',
+        'uniform vec3 uAlta;',
+        'uniform vec3 uBaja;',
+        'uniform float uFuerza;',
+        'varying vec3 vNormal;',
+        'varying vec3 vHaciaCamara;',
+        'varying vec3 vMundo;',
+        'void main() {',
+        /* El cascaron se dibuja por dentro, asi que la normal apunta al lado
+           contrario de la camara casi en toda su superficie y un producto
+           escalar comun daria cero. Con el valor absoluto el brillo queda
+           donde la normal es perpendicular a la vista, o sea el contorno.
+           Lo de adentro del disco lo tapa el cuerpo, que si escribe
+           profundidad, y por eso solo se ve el anillo. */
+        '  float halo = pow(1.0 - abs(dot(normalize(vNormal), normalize(vHaciaCamara))), 3.2);',
+        /* La luz se mide contra la normal en espacio de vista, no en el del
+           objeto: asi se queda quieta mientras el globo gira debajo. */
+        '  float lado = smoothstep(-0.75, 0.9, dot(normalize(vNormal), normalize(uLuz)));',
+        '  vec3 col = mix(uBaja, uAlta, lado);',
+        '  gl_FragColor = vec4(col, halo * uFuerza * (0.28 + 0.72 * lado));',
+        '}'
+      ].join('\n')
+    })
+  );
+  group.add(atmosfera);
 
   /* --- Puntos de tierra, en dos capas: contorno y relleno --- */
 
@@ -681,12 +787,21 @@ export function createGlobe(canvas, options) {
     node.add(glow);
 
     if (opt.showLabels && market.label) {
+      /* El punto de anclaje queda en el pin y la fila cuelga arriba a la
+         derecha, atada por una linea fina. El contenedor mide cero para que el
+         renderer lo centre en el pin sin arrastrar el texto. */
       var wrap = document.createElement('div');
       wrap.className = 'gnp-globe__label';
+      var row = document.createElement('span');
+      row.className = 'gnp-globe__row';
+      var leader = document.createElement('span');
+      leader.className = 'gnp-globe__leader';
       var text = document.createElement('span');
-      text.className = 'gnp-globe__label-text';
-      text.textContent = market.city || market.country || '';
-      wrap.appendChild(text);
+      text.className = 'gnp-globe__name';
+      text.textContent = market.city || '';
+      row.appendChild(leader);
+      row.appendChild(text);
+      wrap.appendChild(row);
       var label = new CSS2DObject(wrap);
       node.add(label);
       node.userData.labelObject = label;
@@ -988,7 +1103,7 @@ function boot() {
 
     try {
       globe = createGlobe(canvas, {
-          cameraZ: mobile ? 2.7 : tablet ? 2.8 : 2.23,
+          cameraZ: mobile ? 2.95 : tablet ? 3.0 : 2.45,
         tileDeg: mobile ? 1.5 : 1.2,
         enableControls: !mobile && !reduced,
         showLabels: !mobile

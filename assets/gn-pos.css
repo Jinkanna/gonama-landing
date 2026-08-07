@@ -395,7 +395,7 @@
 .gnp-hero--globe {
   /* El diametro vive en la seccion y no en el globo, porque el relleno del
      texto tambien se calcula a partir de el. */
-  --d: min(100vh, 1000px);
+  --d: min(88vh, 30vw + 380px, 880px);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -451,6 +451,9 @@
    más de media esfera y eso es lo que da la sensación de escala. */
 /* Proporciones tomadas de unitedcarriers: la esfera mide un alto de pantalla
    y se sale por derecha un cuarto de su ancho, así entra casi entera. */
+/* La esfera entra entera, sin cortarse contra el borde. El canvas es mas
+   grande que la esfera porque la atmosfera sobresale: con cameraZ 2.6 la
+   esfera ocupa el 80% del cuadro y el halo llega al 93%. */
 .gnp-hero__globe {
   position: absolute;
   z-index: 1;
@@ -458,8 +461,8 @@
   width: var(--d);
   height: var(--d);
   top: 50%;
-  right: calc(var(--d) * -0.26);
-  transform: translateY(-50%);
+  right: clamp(-40px, -2vw, 0px);
+  transform: translateY(-52%);
 }
 
 /* La profundidad no sale de un blur detrás: es una esfera de verdad, con
@@ -469,51 +472,6 @@
 
    El inset del 3.5% es la diferencia entre el cuadrado del canvas y la
    silueta que dibuja la cámara: si no, la bola asoma por fuera de los puntos. */
-.gnp-hero__ball {
-  position: absolute;
-  inset: 3.5%;
-  z-index: 0;
-  border-radius: 50%;
-  background: #060b14;
-  font-size: calc(var(--d) * 0.0093);
-
-  /* Dos puntos de luz, no un halo. En las sombras inset el color sale del
-     lado contrario al desplazamiento, asi que el mint de arriba lleva Y
-     positiva y el azul de abajo la lleva negativa. Las de afuera si siguen su
-     desplazamiento: la fina de arriba y un unico realce frio arriba a la
-     izquierda, para que el contorno no quede simetrico. */
-  box-shadow:
-    /* luz mint de arriba: filo, derrame y banda hacia adentro */
-    0 -0.09em 0.18em rgba(168, 240, 230, 0.85),
-    0 -0.72em 1.6em rgba(45, 212, 191, 0.45),
-    0 3.11em 2.55em -2.33em rgba(185, 243, 234, 0.9) inset,
-    0 6.11em 4.22em -4.66em rgba(45, 212, 191, 0.9) inset,
-
-    /* realce frio suelto, arriba a la izquierda */
-    -0.36em -0.36em 1.44em -3.44em rgba(140, 216, 245, 0.7),
-    -0.72em -1.08em 3.55em -0.9em rgba(11, 94, 168, 0.45),
-
-    /* masa azul del hemisferio de abajo */
-    0 -7.89em 8em -2.67em rgba(23, 141, 190, 0.8) inset,
-    0 -20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset,
-    0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.85) inset;
-}
-
-/* La camara se aleja en pantallas chicas, asi que la esfera se dibuja mas
-   chica dentro del mismo canvas y la bola tiene que seguirla. Los cortes son
-   los mismos que usa el JS para elegir cameraZ: 991 y 767. */
-@media (max-width: 991px) {
-  .gnp-hero__ball {
-    inset: 14.6%;
-  }
-}
-
-@media (max-width: 767px) {
-  .gnp-hero__ball {
-    inset: 13%;
-  }
-}
-
 .gnp-hero__canvas {
   position: relative;
   z-index: 1;
@@ -533,31 +491,46 @@
   cursor: grabbing;
 }
 
-/* Etiquetas de mercado: HTML plano posicionado por CSS2DRenderer. */
+/* Etiquetas de mercado: el nombre cuelga de una linea fina que sale del pin,
+   sin recuadro. El contenedor mide cero y la fila se posiciona desde ahi, asi
+   el renderer puede centrarlo en el pin sin mover el texto. */
 .gnp-globe__labels {
   z-index: 2;
 }
 
 .gnp-globe__label {
+  position: relative;
+  width: 0;
+  height: 0;
   opacity: 0;
   transition: opacity 0.45s ease, filter 0.45s ease;
   filter: blur(4px);
   will-change: opacity, filter;
 }
 
-.gnp-globe__label-text {
-  display: inline-block;
-  transform: translate(14px, -18px);
-  padding: 3px 7px;
-  border-radius: 4px;
-  background: rgba(7, 12, 24, 0.72);
-  border: 1px solid rgba(217, 244, 252, 0.14);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.gnp-globe__row {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   white-space: nowrap;
+}
+
+.gnp-globe__leader {
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(68, 183, 232, 0), rgba(168, 240, 230, 0.85));
+}
+
+.gnp-globe__name {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: #d9f4fc;
+  text-shadow: 0 1px 8px rgba(5, 9, 18, 0.95);
 }
 
 @media (max-width: 1199px) {
