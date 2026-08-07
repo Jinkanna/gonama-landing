@@ -476,12 +476,17 @@
   border-radius: 50%;
   background: #060b14;
   font-size: calc(var(--d) * 0.0093);
+  /* La luz de arriba va en Mint y la de abajo en Ocean, el mismo recurso que
+     usa unitedcarriers con el naranja contra el azul: dos temperaturas
+     distintas en la misma esfera es lo que la despega del fondo. Un solo tono
+     la deja plana por mucho contraste que tenga. */
   box-shadow:
-    0 0.09em 0.18em rgba(217, 244, 252, 0.6),
-    0 0.72em 1.44em rgba(68, 183, 232, 0.45),
-    0 -6.11em 4.22em -4.67em rgba(68, 183, 232, 0.5) inset,
+    0 0.09em 0.2em rgba(45, 212, 191, 0.92),
+    0 0.72em 1.75em rgba(45, 212, 191, 0.5),
+    0 -5.4em 3.4em -4.1em rgba(45, 212, 191, 0.88) inset,
+    0 -8.4em 7em -6.2em rgba(45, 212, 191, 0.35) inset,
     0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.95) inset,
-    0 7.89em 8em -2.67em rgba(23, 141, 190, 0.8) inset,
+    0 7.89em 8em -2.67em rgba(23, 141, 190, 0.85) inset,
     0 20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset;
 }
 
@@ -493,12 +498,9 @@
   z-index: 0;
   border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(
-    closest-side,
-    rgba(68, 183, 232, 0.22) 62%,
-    rgba(68, 183, 232, 0.1) 78%,
-    transparent 100%
-  );
+  background:
+    radial-gradient(58% 46% at 50% 12%, rgba(45, 212, 191, 0.42), transparent 74%),
+    radial-gradient(closest-side, rgba(23, 141, 190, 0.2) 62%, rgba(68, 183, 232, 0.08) 80%, transparent 100%);
 }
 
 .gnp-hero__canvas {
