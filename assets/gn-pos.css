@@ -393,6 +393,9 @@
 }
 
 .gnp-hero--globe {
+  /* El diametro vive en la seccion y no en el globo, porque el relleno del
+     texto tambien se calcula a partir de el. */
+  --d: min(100vh, 1000px);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -414,20 +417,18 @@
 
 /* El texto se queda en la mitad izquierda para no pisar la esfera, y el
    display baja un escalón para que el titular no se parta de más. */
-@media (min-width: 900px) {
+/* El globo va al lado del texto recien a partir de 1200. Abajo de eso no hay
+   ancho para los dos: el titular se parte contra la esfera y la bajada queda
+   en una columna de dos palabras. Es el mismo corte donde esta landing ya
+   cambia el cuerpo del display. */
+@media (min-width: 1200px) {
   .gnp-hero--globe .gnp__display {
-    font-size: 64px;
+    font-size: 84px;
   }
 
   .gnp-hero--globe .gnp__display,
   .gnp-hero--globe .gnp-hero__foot {
     max-width: 58%;
-  }
-}
-
-@media (min-width: 1200px) {
-  .gnp-hero--globe .gnp__display {
-    font-size: 84px;
   }
 }
 
@@ -451,7 +452,6 @@
 /* Proporciones tomadas de unitedcarriers: la esfera mide un alto de pantalla
    y se sale por derecha un cuarto de su ancho, así entra casi entera. */
 .gnp-hero__globe {
-  --d: min(100vh, 1000px);
   position: absolute;
   z-index: 1;
   pointer-events: none;
@@ -497,6 +497,21 @@
     0 -7.89em 8em -2.67em rgba(23, 141, 190, 0.8) inset,
     0 -20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset,
     0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.85) inset;
+}
+
+/* La camara se aleja en pantallas chicas, asi que la esfera se dibuja mas
+   chica dentro del mismo canvas y la bola tiene que seguirla. Los cortes son
+   los mismos que usa el JS para elegir cameraZ: 991 y 767. */
+@media (max-width: 991px) {
+  .gnp-hero__ball {
+    inset: 14.6%;
+  }
+}
+
+@media (max-width: 767px) {
+  .gnp-hero__ball {
+    inset: 13%;
+  }
 }
 
 .gnp-hero__canvas {
@@ -545,13 +560,21 @@
   color: #d9f4fc;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 1199px) {
+  /* El texto arranca sobre la cola del fundido del globo. Atado al diametro y
+     no a un clamp fijo: si no, cuando la esfera se achica queda un hueco. */
   .gnp-hero--globe .gnp__in {
-    padding-top: clamp(160px, 52vw, 320px);
+    padding-top: max(150px, calc(var(--d) * 0.35));
+  }
+
+  /* Tambien limitado por el alto: en tablet apaisada un globo de 720 empuja
+     el titular abajo del fold. En telefono el alto no llega a mandar y el
+     tamano queda practicamente igual. */
+  .gnp-hero--globe {
+    --d: min(150vw, 68vh, 720px);
   }
 
   .gnp-hero__globe {
-    --d: min(150vw, 720px);
     top: clamp(-140px, -14vw, -40px);
     right: 50%;
     transform: translateX(50%);
