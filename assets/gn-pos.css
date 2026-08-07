@@ -398,9 +398,18 @@
   isolation: isolate;
 }
 
+/* El bloque de texto se monta sobre el globo, y con los eventos activos se
+   comía el arrastre en toda esa franja. Ahora el contenedor deja pasar el
+   puntero y solo lo capturan el texto y los botones, así la esfera se agarra
+   desde cualquier punto que se vea. */
 .gnp-hero--globe .gnp__in {
   position: relative;
   z-index: 2;
+  pointer-events: none;
+}
+
+.gnp-hero--globe .gnp__in :where(a, button, p, h1, .gnp-hero__actions) {
+  pointer-events: auto;
 }
 
 /* El texto se queda en la mitad izquierda para no pisar la esfera, y el
@@ -439,19 +448,59 @@
 
 /* El globo se sale del borde derecho, igual que la referencia: se ve poco
    más de media esfera y eso es lo que da la sensación de escala. */
+/* Proporciones tomadas de unitedcarriers: la esfera mide un alto de pantalla
+   y se sale por derecha un cuarto de su ancho, así entra casi entera. */
 .gnp-hero__globe {
+  --d: min(100vh, 1000px);
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  width: min(96vh, 940px);
-  aspect-ratio: 1;
+  width: var(--d);
+  height: var(--d);
   top: 50%;
-  right: clamp(-380px, -17vw, -110px);
+  right: calc(var(--d) * -0.26);
   transform: translateY(-50%);
 }
 
-/* El borde izquierdo se desvanece: si no, los puntos del contorno llegan
-   hasta el titular y la palabra queda sucia. */
+/* La profundidad no sale de un blur detrás: es una esfera de verdad, con
+   sombras en capas. Las inset pintan el borde iluminado arriba y el
+   resplandor hondo abajo, y los puntos del canvas van encima. La medida está
+   en em y 1em es el 1% del diámetro, así escala sola.
+
+   El inset del 3.5% es la diferencia entre el cuadrado del canvas y la
+   silueta que dibuja la cámara: si no, la bola asoma por fuera de los puntos. */
+.gnp-hero__ball {
+  position: absolute;
+  inset: 3.5%;
+  z-index: 0;
+  border-radius: 50%;
+  background: #060b14;
+  font-size: calc(var(--d) * 0.0093);
+  box-shadow:
+    0 0.09em 0.18em rgba(217, 244, 252, 0.6),
+    0 0.72em 1.44em rgba(68, 183, 232, 0.45),
+    0 -6.11em 4.22em -4.67em rgba(68, 183, 232, 0.5) inset,
+    0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.95) inset,
+    0 7.89em 8em -2.67em rgba(23, 141, 190, 0.8) inset,
+    0 20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset;
+}
+
+/* Halo suave por fuera del contorno, para que la esfera no quede recortada
+   contra el fondo. */
+.gnp-hero__halo {
+  position: absolute;
+  inset: -14%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(68, 183, 232, 0.22) 62%,
+    rgba(68, 183, 232, 0.1) 78%,
+    transparent 100%
+  );
+}
+
 .gnp-hero__canvas {
   position: relative;
   z-index: 1;
@@ -460,8 +509,6 @@
   height: 100%;
   opacity: 0;
   transition: opacity 0.9s ease;
-  mask-image: linear-gradient(to right, transparent 0%, #000 12%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%);
 }
 
 .gnp-hero__canvas.is-ready {
@@ -471,28 +518,6 @@
 
 .gnp-hero__canvas.is-dragging {
   cursor: grabbing;
-}
-
-/* Resplandor: dos manchas difuminadas detrás de la esfera, no hay luces en
-   la escena 3D. Sale más barato y se controla desde acá. */
-.gnp-hero__glow {
-  position: absolute;
-  z-index: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(70px);
-}
-
-.gnp-hero__glow--top {
-  inset: -4% 6% auto 6%;
-  height: 46%;
-  background: radial-gradient(closest-side, rgba(68, 183, 232, 0.55), transparent 72%);
-}
-
-.gnp-hero__glow--bottom {
-  inset: auto 2% -8% 2%;
-  height: 52%;
-  background: radial-gradient(closest-side, rgba(23, 141, 190, 0.6), transparent 74%);
 }
 
 /* Etiquetas de mercado: HTML plano posicionado por CSS2DRenderer. */
@@ -528,7 +553,7 @@
   }
 
   .gnp-hero__globe {
-    width: min(150vw, 720px);
+    --d: min(150vw, 720px);
     top: clamp(-140px, -14vw, -40px);
     right: 50%;
     transform: translateX(50%);
@@ -540,14 +565,12 @@
     display: none;
   }
 
-  /* Acá el texto va debajo del globo, así que el degradado corta abajo. */
-  .gnp-hero__canvas {
+  /* Acá el texto va debajo del globo, así que el degradado corta abajo. La
+     máscara va en el contenedor y no en el canvas: si no, la esfera se
+     desvanece pero su silueta queda marcada. */
+  .gnp-hero__globe {
     mask-image: linear-gradient(to bottom, #000 52%, transparent 88%);
     -webkit-mask-image: linear-gradient(to bottom, #000 52%, transparent 88%);
-  }
-
-  .gnp-hero__glow {
-    filter: blur(48px);
   }
 }
 
