@@ -1928,12 +1928,6 @@
   padding-bottom: clamp(40px, 5vw, 64px);
 }
 
-@media (min-width: 860px) {
-  .gnp-foot__top {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
-  }
-}
-
 .gnp-foot__mark {
   font-size: 26px;
   font-weight: 700;
@@ -1955,6 +1949,34 @@
 
 .gnp-foot__cta {
   margin-top: 26px;
+}
+
+/* La grilla de dos columnas quedo de cuando el footer tenia columnas de
+   enlaces a la derecha. Sin ellas la marca se apretaba en el 42% izquierdo y
+   el resto quedaba vacio, asi que el bloque ocupa el ancho entero.
+
+   En una linea: la marca a la izquierda, la bajada en el medio y el enlace a
+   la derecha, alineados por la base de la tipografia y no por el alto de cada
+   caja, que con tres cuerpos distintos es lo que los deja parejos. */
+@media (min-width: 860px) {
+  .gnp-foot__brand {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: clamp(28px, 4vw, 72px);
+  }
+
+  /* Sin tope de ancho: el de 34ch era para la version apilada y en la fila
+     partia la bajada en dos renglones habiendo lugar de sobra. */
+  .gnp-foot__tagline {
+    margin-top: 0;
+    max-width: none;
+  }
+
+  .gnp-foot__cta {
+    margin-top: 0;
+    flex: none;
+  }
 }
 
 .gnp-foot__cols {
