@@ -2,6 +2,11 @@
   GOnama · new-pos · Hero
   Titular apilado en mayúsculas: cada línea entra desde abajo, escalonada.
   Las líneas se cargan una por renglón en el editor.
+
+  Con el globo activado el hero fija su fondo noche: el globo de puntos y su
+  resplandor solo funcionan sobre oscuro. El import map tiene que quedar antes
+  de que se dispare cualquier script type=module de la página, y esta sección
+  se renderiza antes que scripts-tag, así que este es su lugar.
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +24,37 @@
   assign lines = st.headline | newline_to_br | split: '<br />'
 -%}
 
-<section class="gnp gnp--{{ st.tone }} gnp-hero" id="section-hero">
+{%- if st.globe -%}
+  <script type="importmap">
+    {
+      "imports": {
+        "three": {{ 'gn-three.min.js' | asset_url | json }},
+        "three/addons/controls/OrbitControls.js": {{ 'gn-three-orbit.js' | asset_url | json }},
+        "three/addons/renderers/CSS2DRenderer.js": {{ 'gn-three-css2d.js' | asset_url | json }}
+      }
+    }
+  </script>
+  <script src="{{ 'gn-pos-globe.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+<section
+  class="gnp gnp--{{ st.tone }} gnp-hero{% if st.globe %} gnp-hero--night gnp-hero--globe{% endif %}"
+  id="section-hero"
+>
+  {%- if st.globe -%}
+    <div class="gnp-hero__sky" aria-hidden="true"></div>
+    <div
+      class="gnp-hero__globe"
+      data-gnp-globe
+      data-land-url="{{ 'gn-land-110m.json' | asset_url }}"
+      aria-hidden="true"
+    >
+      <span class="gnp-hero__glow gnp-hero__glow--top"></span>
+      <span class="gnp-hero__glow gnp-hero__glow--bottom"></span>
+      <canvas class="gnp-hero__canvas"></canvas>
+    </div>
+  {%- endif -%}
+
   <div class="gnp__in">
     {%- if st.label != blank -%}
       <p class="gnp__label gnp-hero__label gnp-rv">{{ st.label | escape }}</p>
@@ -72,6 +107,13 @@
         }
       ],
       "default": "a"
+    },
+    {
+      "type": "checkbox",
+      "id": "globe",
+      "label": "Globo 3D",
+      "info": "Con el globo activado el hero va siempre en fondo oscuro.",
+      "default": true
     },
     {
       "type": "text",

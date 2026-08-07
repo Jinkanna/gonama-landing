@@ -370,6 +370,198 @@
   gap: 12px;
 }
 
+/* --------------------------------------------------------------------------
+   2b. Hero con globo
+
+   El globo de puntos solo se lee sobre fondo noche, así que el hero fija su
+   paleta y no depende del tono que se elija en el editor. El azul de fondo va
+   un punto más oscuro que Panda 1 para que las estrellas se vean.
+   -------------------------------------------------------------------------- */
+
+.gnp-hero--night {
+  color-scheme: dark;
+  --bg: #070c18;
+  --fg: var(--panda-2);
+  --fg-soft: #a9b7cc;
+  --fg-faint: #7f8ea6;
+  --line: rgba(217, 244, 252, 0.16);
+  --line-soft: rgba(217, 244, 252, 0.08);
+  --accent: var(--go-blue);
+  --on-accent: var(--panda-1);
+  --veil: rgba(68, 183, 232, 0.1);
+  --surface: rgba(217, 244, 252, 0.04);
+}
+
+.gnp-hero--globe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.gnp-hero--globe .gnp__in {
+  position: relative;
+  z-index: 2;
+}
+
+/* El texto se queda en la mitad izquierda para no pisar la esfera, y el
+   display baja un escalón para que el titular no se parta de más. */
+@media (min-width: 900px) {
+  .gnp-hero--globe .gnp__display {
+    font-size: 64px;
+  }
+
+  .gnp-hero--globe .gnp__display,
+  .gnp-hero--globe .gnp-hero__foot {
+    max-width: 58%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gnp-hero--globe .gnp__display {
+    font-size: 84px;
+  }
+}
+
+/* Cielo: una trama de estrellas que se repite, más un velo que la apaga
+   hacia abajo para que el texto siempre gane contraste. */
+.gnp-hero__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='23' cy='47' r='1.1' opacity='.7'/%3E%3Ccircle cx='96' cy='19' r='.7' opacity='.45'/%3E%3Ccircle cx='158' cy='73' r='1.3' opacity='.8'/%3E%3Ccircle cx='231' cy='31' r='.6' opacity='.35'/%3E%3Ccircle cx='298' cy='88' r='1' opacity='.6'/%3E%3Ccircle cx='371' cy='42' r='.8' opacity='.5'/%3E%3Ccircle cx='405' cy='114' r='1.2' opacity='.7'/%3E%3Ccircle cx='47' cy='133' r='.7' opacity='.4'/%3E%3Ccircle cx='118' cy='167' r='1.4' opacity='.85'/%3E%3Ccircle cx='190' cy='128' r='.6' opacity='.35'/%3E%3Ccircle cx='262' cy='176' r='1' opacity='.6'/%3E%3Ccircle cx='334' cy='149' r='.8' opacity='.5'/%3E%3Ccircle cx='14' cy='214' r='1.1' opacity='.65'/%3E%3Ccircle cx='87' cy='253' r='.7' opacity='.4'/%3E%3Ccircle cx='152' cy='226' r='1.2' opacity='.75'/%3E%3Ccircle cx='224' cy='271' r='.6' opacity='.35'/%3E%3Ccircle cx='291' cy='238' r='1.3' opacity='.8'/%3E%3Ccircle cx='363' cy='283' r='.8' opacity='.5'/%3E%3Ccircle cx='33' cy='321' r='1' opacity='.6'/%3E%3Ccircle cx='109' cy='356' r='.7' opacity='.4'/%3E%3Ccircle cx='176' cy='318' r='1.2' opacity='.7'/%3E%3Ccircle cx='246' cy='372' r='.6' opacity='.35'/%3E%3Ccircle cx='312' cy='334' r='1.1' opacity='.65'/%3E%3Ccircle cx='388' cy='389' r='.9' opacity='.55'/%3E%3Ccircle cx='68' cy='402' r='.7' opacity='.4'/%3E%3Ccircle cx='205' cy='96' r='.9' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 420px 420px;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+}
+
+/* El globo se sale del borde derecho, igual que la referencia: se ve poco
+   más de media esfera y eso es lo que da la sensación de escala. */
+.gnp-hero__globe {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  width: min(96vh, 940px);
+  aspect-ratio: 1;
+  top: 50%;
+  right: clamp(-380px, -17vw, -110px);
+  transform: translateY(-50%);
+}
+
+/* El borde izquierdo se desvanece: si no, los puntos del contorno llegan
+   hasta el titular y la palabra queda sucia. */
+.gnp-hero__canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  mask-image: linear-gradient(to right, transparent 0%, #000 12%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%);
+}
+
+.gnp-hero__canvas.is-ready {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gnp-hero__canvas.is-dragging {
+  cursor: grabbing;
+}
+
+/* Resplandor: dos manchas difuminadas detrás de la esfera, no hay luces en
+   la escena 3D. Sale más barato y se controla desde acá. */
+.gnp-hero__glow {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(70px);
+}
+
+.gnp-hero__glow--top {
+  inset: -4% 6% auto 6%;
+  height: 46%;
+  background: radial-gradient(closest-side, rgba(68, 183, 232, 0.55), transparent 72%);
+}
+
+.gnp-hero__glow--bottom {
+  inset: auto 2% -8% 2%;
+  height: 52%;
+  background: radial-gradient(closest-side, rgba(23, 141, 190, 0.6), transparent 74%);
+}
+
+/* Etiquetas de mercado: HTML plano posicionado por CSS2DRenderer. */
+.gnp-globe__labels {
+  z-index: 2;
+}
+
+.gnp-globe__label {
+  opacity: 0;
+  transition: opacity 0.45s ease, filter 0.45s ease;
+  filter: blur(4px);
+  will-change: opacity, filter;
+}
+
+.gnp-globe__label-text {
+  display: inline-block;
+  transform: translate(14px, -18px);
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: rgba(7, 12, 24, 0.72);
+  border: 1px solid rgba(217, 244, 252, 0.14);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #d9f4fc;
+}
+
+@media (max-width: 899px) {
+  .gnp-hero--globe .gnp__in {
+    padding-top: clamp(160px, 52vw, 320px);
+  }
+
+  .gnp-hero__globe {
+    width: min(150vw, 720px);
+    top: clamp(-140px, -14vw, -40px);
+    right: 50%;
+    transform: translateX(50%);
+    opacity: 0.75;
+  }
+
+  /* Sin la columna de texto al lado, las etiquetas se pisan entre ellas. */
+  .gnp-globe__labels {
+    display: none;
+  }
+
+  /* Acá el texto va debajo del globo, así que el degradado corta abajo. */
+  .gnp-hero__canvas {
+    mask-image: linear-gradient(to bottom, #000 52%, transparent 88%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 52%, transparent 88%);
+  }
+
+  .gnp-hero__glow {
+    filter: blur(48px);
+  }
+}
+
+/* Sin movimiento: el globo queda quieto, no desaparece. */
+@media (prefers-reduced-motion: reduce) {
+  .gnp-hero__canvas {
+    transition: none;
+  }
+
+  .gnp-globe__label {
+    transition: none;
+  }
+}
+
 /* ==========================================================================
    PANTALLA DE ENTRADA
    ========================================================================== */
