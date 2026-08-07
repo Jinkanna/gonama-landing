@@ -19,43 +19,101 @@ import LAND_TOPOLOGY from 'gn-globe-land';
 
 /* ------------------------------------------------------------------ Datos */
 
-/* Mercados de GOnama. lat y lng reales de cada ciudad. Solo los hubs llevan
-   etiqueta: con las trece juntas el Caribe queda ilegible. */
+/* Mercados de GOnama. lat y lng reales de cada ciudad, en el mismo idioma que
+   el resto de la página. El núcleo es Latinoamérica y el resto son los hubs
+   con los que conecta. Solo unos pocos llevan etiqueta: con las veinticinco
+   juntas el Caribe y Europa quedan ilegibles. */
 var MARKETS = [
-  { city: 'Buenos Aires', country: 'Argentina', lat: -34.6037, lng: -58.3816, size: 1.25, label: true },
-  { city: 'Montevideo', country: 'Uruguay', lat: -34.9011, lng: -56.1645, size: 1 },
-  { city: 'Santiago', country: 'Chile', lat: -33.4489, lng: -70.6693, size: 1.1, label: true },
-  { city: 'São Paulo', country: 'Brasil', lat: -23.5505, lng: -46.6333, size: 1.25, label: true },
-  { city: 'Asunción', country: 'Paraguay', lat: -25.2637, lng: -57.5759, size: 1 },
-  { city: 'Lima', country: 'Perú', lat: -12.0464, lng: -77.0428, size: 1.1, label: true },
-  { city: 'Bogotá', country: 'Colombia', lat: 4.711, lng: -74.0721, size: 1.1, label: true },
-  { city: 'Quito', country: 'Ecuador', lat: -0.1807, lng: -78.4678, size: 1 },
-  { city: 'Ciudad de Panamá', country: 'Panamá', lat: 8.9824, lng: -79.5199, size: 1 },
-  { city: 'San José', country: 'Costa Rica', lat: 9.9281, lng: -84.0907, size: 1 },
-  { city: 'Ciudad de México', country: 'México', lat: 19.4326, lng: -99.1332, size: 1.25, label: true },
-  { city: 'Miami', country: 'Estados Unidos', lat: 25.7617, lng: -80.1918, size: 1.1, label: true },
-  { city: 'Madrid', country: 'España', lat: 40.4168, lng: -3.7038, size: 1.1, label: true }
+  /* Latinoamérica */
+  { city: 'Buenos Aires', lat: -34.6037, lng: -58.3816, size: 1.25, label: true },
+  { city: 'Montevideo', lat: -34.9011, lng: -56.1645, size: 1 },
+  { city: 'Santiago', lat: -33.4489, lng: -70.6693, size: 1.1, label: true },
+  { city: 'São Paulo', lat: -23.5505, lng: -46.6333, size: 1.25, label: true },
+  { city: 'Asunción', lat: -25.2637, lng: -57.5759, size: 1 },
+  { city: 'Lima', lat: -12.0464, lng: -77.0428, size: 1.1, label: true },
+  { city: 'Bogotá', lat: 4.711, lng: -74.0721, size: 1.1, label: true },
+  { city: 'Quito', lat: -0.1807, lng: -78.4678, size: 1 },
+  { city: 'Panama City', lat: 8.9824, lng: -79.5199, size: 1 },
+  { city: 'San José', lat: 9.9281, lng: -84.0907, size: 1 },
+  { city: 'Mexico City', lat: 19.4326, lng: -99.1332, size: 1.25, label: true },
+
+  /* Norteamérica */
+  { city: 'Miami', lat: 25.7617, lng: -80.1918, size: 1.1, label: true },
+  { city: 'New York', lat: 40.7128, lng: -74.006, size: 1.25, label: true },
+  { city: 'Los Angeles', lat: 34.0522, lng: -118.2437, size: 1.1 },
+  { city: 'Toronto', lat: 43.6532, lng: -79.3832, size: 1 },
+
+  /* Europa, África y Medio Oriente */
+  { city: 'Madrid', lat: 40.4168, lng: -3.7038, size: 1.1, label: true },
+  { city: 'Lisbon', lat: 38.7223, lng: -9.1393, size: 1 },
+  { city: 'London', lat: 51.5074, lng: -0.1278, size: 1.25, label: true },
+  { city: 'Amsterdam', lat: 52.3676, lng: 4.9041, size: 1 },
+  { city: 'Dubai', lat: 25.2048, lng: 55.2708, size: 1.1 },
+  { city: 'Johannesburg', lat: -26.2041, lng: 28.0473, size: 1 },
+
+  /* Asia y Oceanía */
+  { city: 'Singapore', lat: 1.3521, lng: 103.8198, size: 1.1 },
+  { city: 'Shanghai', lat: 31.2304, lng: 121.4737, size: 1.1 },
+  { city: 'Tokyo', lat: 35.6762, lng: 139.6503, size: 1.1 },
+  { city: 'Sydney', lat: -33.8688, lng: 151.2093, size: 1 }
 ];
 
-/* Rutas entre mercados. Cada par es un arco que sale y vuelve a entrar. */
+/* Rutas entre mercados. Cada par es un arco que sale y vuelve a entrar. La
+   malla es densa a propósito: de lejos lo que se lee es la red, no el tramo. */
 var ROUTES = [
+  /* Cono sur y Brasil */
   ['Buenos Aires', 'Santiago'],
   ['Buenos Aires', 'Montevideo'],
   ['Buenos Aires', 'São Paulo'],
-  ['Buenos Aires', 'Madrid'],
   ['Buenos Aires', 'Asunción'],
+  ['Buenos Aires', 'Lima'],
   ['Santiago', 'Lima'],
-  ['Santiago', 'Ciudad de México'],
-  ['São Paulo', 'Bogotá'],
-  ['São Paulo', 'Miami'],
+  ['Santiago', 'São Paulo'],
+  ['Montevideo', 'São Paulo'],
+  ['Asunción', 'São Paulo'],
+
+  /* Andes, Centroamérica y Caribe */
   ['Lima', 'Quito'],
-  ['Lima', 'Ciudad de México'],
-  ['Bogotá', 'Ciudad de Panamá'],
-  ['Bogotá', 'Miami'],
-  ['Ciudad de Panamá', 'San José'],
-  ['Ciudad de México', 'Miami'],
+  ['Lima', 'Bogotá'],
+  ['Quito', 'Bogotá'],
+  ['Bogotá', 'Panama City'],
+  ['Bogotá', 'Mexico City'],
+  ['Panama City', 'San José'],
+  ['San José', 'Mexico City'],
+  ['Panama City', 'Miami'],
+
+  /* Norteamérica */
+  ['Mexico City', 'Miami'],
+  ['Mexico City', 'Los Angeles'],
+  ['Miami', 'New York'],
+  ['New York', 'Toronto'],
+  ['Los Angeles', 'New York'],
+  ['São Paulo', 'Miami'],
+  ['Bogotá', 'New York'],
+
+  /* Cruces del Atlántico */
+  ['Buenos Aires', 'Madrid'],
+  ['São Paulo', 'Lisbon'],
   ['Miami', 'Madrid'],
-  ['San José', 'Ciudad de México']
+  ['New York', 'London'],
+  ['Mexico City', 'Madrid'],
+  ['São Paulo', 'Johannesburg'],
+
+  /* Europa y su salida al este */
+  ['Madrid', 'London'],
+  ['Lisbon', 'Madrid'],
+  ['London', 'Amsterdam'],
+  ['Amsterdam', 'Dubai'],
+  ['London', 'Dubai'],
+  ['Dubai', 'Singapore'],
+  ['Dubai', 'Johannesburg'],
+
+  /* Asia y Pacífico */
+  ['Singapore', 'Shanghai'],
+  ['Shanghai', 'Tokyo'],
+  ['Singapore', 'Sydney'],
+  ['Tokyo', 'Los Angeles'],
+  ['Sydney', 'Santiago']
 ];
 
 var DEFAULTS = {
