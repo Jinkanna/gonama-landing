@@ -313,6 +313,7 @@
 
     var items = section.querySelectorAll('[data-gnp-pin-item]');
     var dots = section.querySelectorAll('[data-gnp-pin-dot]');
+    var fill = section.querySelector('[data-gnp-pin-progress]');
     if (!items.length) return;
 
     var estado = '';
@@ -339,6 +340,10 @@
       // Recorrido util: todo lo que sobra despues de la primera pantalla.
       var total = section.offsetHeight - vh;
       var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+      // La linea de avance se actualiza siempre, no solo al cambiar de bloque:
+      // es lo que da la sensacion de que la pagina sigue respondiendo.
+      if (fill) fill.style.transform = 'scaleX(' + p + ')';
+
       // El ultimo bloque tiene que alcanzarse justo al final, de ahi el 0.999.
       var i = Math.floor(p * 0.999 * items.length);
 

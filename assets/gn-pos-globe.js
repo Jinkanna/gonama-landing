@@ -967,9 +967,10 @@ function boot() {
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var globe = null;
-  /* Arranca con el meridiano 60 oeste de frente, o sea Latinoamérica mirando
-     a cámara. Con rotación 0 el que queda al frente es el 90 oeste. */
-  var phi = 5.76;
+  /* Arranca con Montevideo de frente, meridiano 56.16 oeste. Con rotación 0 el
+     que queda al frente es el 90 oeste, así que el giro es -90 menos la
+     longitud, en radianes y en el rango de una vuelta. */
+  var phi = 5.6926;
   var visible = true;
   var last = 0;
   var frame = 0;

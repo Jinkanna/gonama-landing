@@ -1427,7 +1427,7 @@
   margin-top: 14px;
 }
 
-.gnp-about__dots {
+.gnp-about__rail {
   display: none;
 }
 
@@ -1497,21 +1497,70 @@
   padding-top: 14px;
 }
 
-.gnp-js .gnp-about__dots {
+/* Riel de avance. La pista cruza todo el ancho y la barra se escala desde la
+   izquierda con el progreso, que es lo unico que se toca por frame. */
+.gnp-js .gnp-about__rail {
+  display: block;
+  margin-top: clamp(28px, 4vw, 52px);
+}
+
+.gnp-about__rail-track {
+  display: block;
+  position: relative;
+  height: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.gnp-about__rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.gnp-about__rail-steps {
   display: flex;
+  gap: clamp(20px, 4vw, 56px);
+  margin-top: 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.gnp-about__rail-step {
+  display: flex;
+  align-items: baseline;
   gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  opacity: 0.5;
+  transition: opacity 0.4s ease, color 0.4s ease;
 }
 
-.gnp-about__dot {
-  width: 26px;
-  height: 2px;
-  background: var(--fg);
-  opacity: 0.22;
-  transition: opacity 0.4s ease;
-}
-
-.gnp-about__dot.is-active {
+.gnp-about__rail-step.is-active {
   opacity: 1;
+  color: var(--fg);
+}
+
+.gnp-about__rail-num {
+  color: var(--accent);
+}
+
+/* En pantallas angostas solo queda el paso activo: tres nombres en fila no
+   entran y cortarlos se lee peor que no mostrarlos. */
+@media (max-width: 599px) {
+  .gnp-about__rail-step {
+    display: none;
+  }
+
+  .gnp-about__rail-step.is-active {
+    display: flex;
+  }
 }
 
 /* Sin animaciones no tiene sentido clavar nada: vuelve al apilado. */
@@ -1540,7 +1589,7 @@
     transition: none;
   }
 
-  .gnp-js .gnp-about__dots {
+  .gnp-js .gnp-about__rail {
     display: none;
   }
 }

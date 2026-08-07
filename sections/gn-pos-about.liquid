@@ -59,11 +59,31 @@
           {%- endfor -%}
         </div>
 
+        {%- comment -%}
+          Mientras la seccion esta clavada la pagina parece frenarse sin motivo.
+          El riel es la respuesta: una linea que se llena con el avance y los
+          pasos numerados, para que se entienda que hay un recorrido y cuanto
+          falta. Va aria-hidden porque sin JavaScript los bloques se muestran
+          apilados y el riel no describe nada.
+        {%- endcomment -%}
         {%- if pasos > 1 -%}
-          <div class="gnp-about__dots" aria-hidden="true">
-            {%- for block in section.blocks -%}
-              <span class="gnp-about__dot{% if forloop.first %} is-active{% endif %}" data-gnp-pin-dot></span>
-            {%- endfor -%}
+          <div class="gnp-about__rail" aria-hidden="true">
+            <span class="gnp-about__rail-track">
+              <span class="gnp-about__rail-fill" data-gnp-pin-progress></span>
+            </span>
+            <ol class="gnp-about__rail-steps">
+              {%- for block in section.blocks -%}
+                <li
+                  class="gnp-about__rail-step{% if forloop.first %} is-active{% endif %}"
+                  data-gnp-pin-dot
+                >
+                  <span class="gnp-about__rail-num">
+                    {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+                  </span>
+                  <span class="gnp-about__rail-name">{{ block.settings.name | escape }}</span>
+                </li>
+              {%- endfor -%}
+            </ol>
           </div>
         {%- endif -%}
       </div>
