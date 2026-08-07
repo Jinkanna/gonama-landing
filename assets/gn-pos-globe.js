@@ -26,8 +26,11 @@ import LAND_TOPOLOGY from 'gn-globe-land';
    juntas el Caribe y Europa quedan ilegibles. */
 var MARKETS = [
   /* Latinoamérica */
-  { city: 'Buenos Aires', lat: -34.6037, lng: -58.3816, size: 1.25, label: true },
-  { city: 'Montevideo', lat: -34.9011, lng: -56.1645, size: 1 },
+  /* Montevideo es la casa, asi que lleva la etiqueta y el pin mas grande.
+     Buenos Aires queda a menos de dos grados: con las dos etiquetas puestas
+     se pisan, y por eso va sin ella. */
+  { city: 'Montevideo', lat: -34.9011, lng: -56.1645, size: 1.35, label: true },
+  { city: 'Buenos Aires', lat: -34.6037, lng: -58.3816, size: 1.1 },
   { city: 'Santiago', lat: -33.4489, lng: -70.6693, size: 1.1, label: true },
   { city: 'São Paulo', lat: -23.5505, lng: -46.6333, size: 1.25, label: true },
   { city: 'Asunción', lat: -25.2637, lng: -57.5759, size: 1 },
@@ -63,14 +66,15 @@ var MARKETS = [
    malla es densa a propósito: de lejos lo que se lee es la red, no el tramo. */
 var ROUTES = [
   /* Cono sur y Brasil */
+  ['Montevideo', 'Buenos Aires'],
+  ['Montevideo', 'São Paulo'],
+  ['Montevideo', 'Santiago'],
+  ['Montevideo', 'Asunción'],
+  ['Montevideo', 'Lima'],
   ['Buenos Aires', 'Santiago'],
-  ['Buenos Aires', 'Montevideo'],
   ['Buenos Aires', 'São Paulo'],
-  ['Buenos Aires', 'Asunción'],
-  ['Buenos Aires', 'Lima'],
   ['Santiago', 'Lima'],
   ['Santiago', 'São Paulo'],
-  ['Montevideo', 'São Paulo'],
   ['Asunción', 'São Paulo'],
 
   /* Andes, Centroamérica y Caribe */
@@ -90,10 +94,11 @@ var ROUTES = [
   ['New York', 'Toronto'],
   ['Los Angeles', 'New York'],
   ['São Paulo', 'Miami'],
+  ['Montevideo', 'Miami'],
   ['Bogotá', 'New York'],
 
   /* Cruces del Atlántico */
-  ['Buenos Aires', 'Madrid'],
+  ['Montevideo', 'Madrid'],
   ['São Paulo', 'Lisbon'],
   ['Miami', 'Madrid'],
   ['New York', 'London'],
