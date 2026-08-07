@@ -1386,7 +1386,11 @@
   padding: 0;
 }
 
+/* El escenario es flex, asi que sin width el contenedor se encoge al ancho de
+   su contenido y queda una columna angosta en el medio de la pantalla, sin
+   alinearse con el resto de la pagina. */
 .gnp-about__in {
+  width: 100%;
   display: grid;
   gap: 34px;
 }
@@ -1421,6 +1425,25 @@
   line-height: 1.6;
   color: var(--fg-soft);
   max-width: 52ch;
+}
+
+/* En pantallas anchas el nombre y su texto van uno al lado del otro, en vez de
+   apilados en una sola columna que deja media pantalla vacia. */
+@media (min-width: 1000px) {
+  .gnp-js .gnp-about__item {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    column-gap: clamp(40px, 6vw, 110px);
+    align-items: start;
+  }
+
+  .gnp-js .gnp-about__item.is-active .gnp-about__desc {
+    padding-top: 10px;
+  }
+
+  .gnp-about__desc p {
+    max-width: 58ch;
+  }
 }
 
 .gnp-about__desc p + p {
