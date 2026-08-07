@@ -385,6 +385,25 @@ onmessage = function(e){
   postMessage({ ok: true, fill: arr }, [arr.buffer]);
 };`;
 
+/* Las dos grillas, por densidad. Al cruzar un breakpoint el globo se rehace y
+   sin esto los workers volverian a recorrer todos los polígonos cada vez. Los
+   Float32Array se comparten: las geometrías los leen, no los tocan. */
+var grillaCache = {};
+
+function grillaDePuntos(land, tileDeg) {
+  var clave = String(tileDeg);
+  if (!grillaCache[clave]) {
+    grillaCache[clave] = Promise.all([
+      runWorker(EDGE_WORKER, { densityDeg: tileDeg, polysIn: land.polygons }),
+      runWorker(FILL_WORKER, { tileDeg: tileDeg, geos: land.geoPolygons })
+    ]).catch(function (err) {
+      delete grillaCache[clave];
+      throw err;
+    });
+  }
+  return grillaCache[clave];
+}
+
 function runWorker(source, payload) {
   return new Promise(function (resolve, reject) {
     var url = URL.createObjectURL(new Blob([source], { type: 'application/javascript' }));
@@ -609,10 +628,7 @@ export function createGlobe(canvas, options) {
       );
       dotMaterials.push(edgeMat, fillMat);
 
-      return Promise.all([
-        runWorker(EDGE_WORKER, { densityDeg: opt.tileDeg, polysIn: land.polygons }),
-        runWorker(FILL_WORKER, { tileDeg: opt.tileDeg, geos: land.geoPolygons })
-      ]).then(function (res) {
+      return grillaDePuntos(land, opt.tileDeg).then(function (res) {
         if (disposed) return;
         var edgeGeo = new THREE.BufferGeometry();
         edgeGeo.setAttribute('position', new THREE.BufferAttribute(res[0].edge, 3));
@@ -821,6 +837,10 @@ export function createGlobe(canvas, options) {
     if (disposed) return;
     var rw = Math.max(1, Math.round(w || canvas.clientWidth || canvas.offsetWidth || 1));
     var rh = Math.max(1, Math.round(h || canvas.clientHeight || rw));
+    /* El techo de densidad depende del ancho, así que se recalcula acá: si no,
+       una ventana que arranca angosta y se agranda se queda en 1.5. */
+    var dpr = Math.min(window.devicePixelRatio || 1, rw < 768 ? 1.5 : 2);
+    if (renderer.getPixelRatio() !== dpr) renderer.setPixelRatio(dpr);
     renderer.setSize(rw, rh, false);
     camera.aspect = rw / rh;
     camera.updateProjectionMatrix();
@@ -985,8 +1005,13 @@ function boot() {
        DOM y este ciclo tiene que morir con él. */
     if (!host.isConnected) {
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(rebuildRaf);
       io.disconnect();
       ro.disconnect();
+      cortes.forEach(function (mq) {
+        if (mq.removeEventListener) mq.removeEventListener('change', onBreakpoint);
+        else if (mq.removeListener) mq.removeListener(onBreakpoint);
+      });
       if (globe) globe.destroy();
       globe = null;
       return;
@@ -1021,28 +1046,42 @@ function boot() {
   });
   ro.observe(canvas);
 
-  /* Al cruzar el breakpoint cambian la densidad de puntos y los controles,
-     así que el globo se reconstruye en vez de escalarse. Al destruirlo se
-     pierde el contexto WebGL del canvas y ese canvas ya no sirve para uno
-     nuevo, así que se lo reemplaza por un clon limpio. */
-  var mql = window.matchMedia('(max-width: 767px)');
+  /* Los dos cortes que cambian como se arma el globo: 767 decide densidad de
+     puntos, controles y etiquetas, y 991 decide la distancia de camara. Hay
+     que escuchar los dos. Con uno solo, al pasar de tablet a escritorio la
+     camara se quedaba en la distancia vieja y la esfera dejaba de coincidir
+     con la bola del CSS, que si cambia en 991.
+
+     Reconstruir es la unica salida porque esos valores se fijan al crear la
+     escena. Al destruirla se pierde el contexto WebGL del canvas y ese canvas
+     ya no sirve para uno nuevo, asi que se lo reemplaza por un clon limpio.
+     El angulo de giro se conserva, no vuelve al inicio. */
+  var cortes = [window.matchMedia('(max-width: 767px)'), window.matchMedia('(max-width: 991px)')];
+  var rebuildRaf = 0;
   var onBreakpoint = function () {
-    if (globe) globe.destroy();
-    globe = null;
+    /* Si el arrastre de la ventana cruza los dos cortes casi al mismo tiempo,
+       esto lo deja en una sola reconstruccion. */
+    cancelAnimationFrame(rebuildRaf);
+    rebuildRaf = requestAnimationFrame(function () {
+      if (globe) globe.destroy();
+      globe = null;
 
-    var fresh = canvas.cloneNode(false);
-    fresh.removeAttribute('width');
-    fresh.removeAttribute('height');
-    fresh.className = 'gnp-hero__canvas';
-    canvas.parentNode.replaceChild(fresh, canvas);
-    ro.unobserve(canvas);
-    canvas = fresh;
-    ro.observe(canvas);
+      var fresh = canvas.cloneNode(false);
+      fresh.removeAttribute('width');
+      fresh.removeAttribute('height');
+      fresh.className = 'gnp-hero__canvas';
+      canvas.parentNode.replaceChild(fresh, canvas);
+      ro.unobserve(canvas);
+      canvas = fresh;
+      ro.observe(canvas);
 
-    build();
+      build();
+    });
   };
-  if (mql.addEventListener) mql.addEventListener('change', onBreakpoint);
-  else if (mql.addListener) mql.addListener(onBreakpoint);
+  cortes.forEach(function (mq) {
+    if (mq.addEventListener) mq.addEventListener('change', onBreakpoint);
+    else if (mq.addListener) mq.addListener(onBreakpoint);
+  });
 
   build();
   frame = requestAnimationFrame(tick);
