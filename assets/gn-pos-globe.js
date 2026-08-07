@@ -11,6 +11,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+/* La geometría entra por import estático y no por import() dinámico: Shopify
+   minifica los .js del tema y en el camino convierte el import() en un
+   require(), que en el navegador no existe. El especificador se resuelve en
+   el import map de gn-pos-hero.liquid. */
+import LAND_TOPOLOGY from 'gn-globe-land';
 
 /* ------------------------------------------------------------------ Datos */
 
@@ -73,8 +78,7 @@ var DEFAULTS = {
   globeRotationX: 0.15,
   globeRotationZ: 0.05,
   enableControls: true,
-  showLabels: true,
-  landUrl: ''
+  showLabels: true
 };
 
 /* ------------------------------------------------------- TopoJSON mínimo */
@@ -162,15 +166,15 @@ function prepareLand(topology) {
 
 var landPromise = null;
 
-/* La geometría viaja como módulo y no como .json, porque assets/ solo acepta
-   las extensiones que el tema conoce. Se importa aparte del bundle para que
-   no pese en la carga inicial. */
-function loadLand(url) {
+/* El armado de polígonos se hace una sola vez y se comparte entre instancias. */
+function loadLand() {
   if (!landPromise) {
-    landPromise = import(url)
-      .then(function (mod) {
-        if (!mod || !mod.default) throw new Error('No se pudo cargar la geometría de tierra');
-        return prepareLand(mod.default);
+    landPromise = Promise.resolve()
+      .then(function () {
+        if (!LAND_TOPOLOGY || !LAND_TOPOLOGY.objects) {
+          throw new Error('No se pudo cargar la geometría de tierra');
+        }
+        return prepareLand(LAND_TOPOLOGY);
       })
       .catch(function (err) {
         landPromise = null;
@@ -533,7 +537,7 @@ export function createGlobe(canvas, options) {
 
   var dotMaterials = [];
 
-  loadLand(opt.landUrl)
+  loadLand()
     .then(function (land) {
       if (disposed) return null;
       var sprite = dotTexture(64);
@@ -906,8 +910,7 @@ function boot() {
 
     try {
       globe = createGlobe(canvas, {
-        landUrl: host.getAttribute('data-land-url') || '',
-        cameraZ: mobile ? 2.7 : tablet ? 2.8 : 2.23,
+          cameraZ: mobile ? 2.7 : tablet ? 2.8 : 2.23,
         tileDeg: mobile ? 1.5 : 1.2,
         enableControls: !mobile && !reduced,
         showLabels: !mobile

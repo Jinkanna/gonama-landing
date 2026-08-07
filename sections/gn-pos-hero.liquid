@@ -30,7 +30,8 @@
       "imports": {
         "three": {{ 'gn-three.min.js' | asset_url | json }},
         "three/addons/controls/OrbitControls.js": {{ 'gn-three-orbit.js' | asset_url | json }},
-        "three/addons/renderers/CSS2DRenderer.js": {{ 'gn-three-css2d.js' | asset_url | json }}
+        "three/addons/renderers/CSS2DRenderer.js": {{ 'gn-three-css2d.js' | asset_url | json }},
+        "gn-globe-land": {{ 'gn-land-110m.js' | asset_url | json }}
       }
     }
   </script>
@@ -46,7 +47,6 @@
     <div
       class="gnp-hero__globe"
       data-gnp-globe
-      data-land-url="{{ 'gn-land-110m.js' | asset_url }}"
       aria-hidden="true"
     >
       <span class="gnp-hero__glow gnp-hero__glow--top"></span>
@@ -118,8 +118,7 @@
     {
       "type": "text",
       "id": "label",
-      "label": "Etiqueta",
-      "default": ""
+      "label": "Etiqueta"
     },
     {
       "type": "textarea",
