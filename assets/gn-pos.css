@@ -476,31 +476,27 @@
   border-radius: 50%;
   background: #060b14;
   font-size: calc(var(--d) * 0.0093);
-  /* La luz de arriba va en Mint y la de abajo en Ocean, el mismo recurso que
-     usa unitedcarriers con el naranja contra el azul: dos temperaturas
-     distintas en la misma esfera es lo que la despega del fondo. Un solo tono
-     la deja plana por mucho contraste que tenga. */
-  box-shadow:
-    0 0.09em 0.2em rgba(45, 212, 191, 0.92),
-    0 0.72em 1.75em rgba(45, 212, 191, 0.5),
-    0 -5.4em 3.4em -4.1em rgba(45, 212, 191, 0.88) inset,
-    0 -8.4em 7em -6.2em rgba(45, 212, 191, 0.35) inset,
-    0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.95) inset,
-    0 7.89em 8em -2.67em rgba(23, 141, 190, 0.85) inset,
-    0 20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset;
-}
 
-/* Halo suave por fuera del contorno, para que la esfera no quede recortada
-   contra el fondo. */
-.gnp-hero__halo {
-  position: absolute;
-  inset: -14%;
-  z-index: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  background:
-    radial-gradient(58% 46% at 50% 12%, rgba(45, 212, 191, 0.42), transparent 74%),
-    radial-gradient(closest-side, rgba(23, 141, 190, 0.2) 62%, rgba(68, 183, 232, 0.08) 80%, transparent 100%);
+  /* Dos puntos de luz, no un halo. En las sombras inset el color sale del
+     lado contrario al desplazamiento, asi que el mint de arriba lleva Y
+     positiva y el azul de abajo la lleva negativa. Las de afuera si siguen su
+     desplazamiento: la fina de arriba y un unico realce frio arriba a la
+     izquierda, para que el contorno no quede simetrico. */
+  box-shadow:
+    /* luz mint de arriba: filo, derrame y banda hacia adentro */
+    0 -0.09em 0.18em rgba(168, 240, 230, 0.85),
+    0 -0.72em 1.6em rgba(45, 212, 191, 0.45),
+    0 3.11em 2.55em -2.33em rgba(185, 243, 234, 0.9) inset,
+    0 6.11em 4.22em -4.66em rgba(45, 212, 191, 0.9) inset,
+
+    /* realce frio suelto, arriba a la izquierda */
+    -0.36em -0.36em 1.44em -3.44em rgba(140, 216, 245, 0.7),
+    -0.72em -1.08em 3.55em -0.9em rgba(11, 94, 168, 0.45),
+
+    /* masa azul del hemisferio de abajo */
+    0 -7.89em 8em -2.67em rgba(23, 141, 190, 0.8) inset,
+    0 -20.88em 15.77em -4.55em rgba(10, 42, 69, 0.95) inset,
+    0 -6.22em 8.89em 0.63em rgba(6, 16, 30, 0.85) inset;
 }
 
 .gnp-hero__canvas {
