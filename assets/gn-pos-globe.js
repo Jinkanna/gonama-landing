@@ -1,8 +1,9 @@
 /* ==========================================================================
    GOnama · landing new-pos · Globo del hero
-   Globo de puntos en three.js: la tierra se dibuja como una grilla de puntos,
-   los mercados como pines con halo y las rutas como arcos que se animan por
-   shader. Nada de esto toca la CPU por frame salvo la rotación.
+   Globo en three.js: la tierra son las costas dibujadas con línea fina, sin
+   relleno, sobre un cuerpo sombreado y una atmósfera que se enciende en el
+   contorno. Los mercados van como pines con halo y las rutas como arcos que
+   se animan por shader. Nada de esto toca la CPU por frame salvo la rotación.
 
    El módulo se carga con un import map declarado en gn-pos-hero.liquid, así
    three.js y sus addons viven en assets del tema y no dependen de un CDN.
@@ -117,14 +118,13 @@ var ROUTES = [
 ];
 
 var DEFAULTS = {
-  pointSize: 0.005,
-  tileDeg: 1.2,
-  edgeColor: '#ffffff',
-  fillColor: '#d9f4fc',
-  backOpacity: 0.15,
+  /* Paso de muestreo de la costa, en grados. Mas chico dibuja mas fino y pesa
+     mas; a 0.5 los anillos ya se ven curvos y no poligonales. */
+  coastStep: 0.5,
+  coastColor: '#dcf0fa',
+  coastOpacity: 0.92,
   pinColor: '#44b7e8',
   arcColor: '#44b7e8',
-  killBack: true,
   pinSize: 0.006,
   pinAltitude: 0.008,
   haloScale: 7.5,
@@ -138,9 +138,9 @@ var DEFAULTS = {
   bodyLit: '#153a52',
   bodyShade: '#050912',
   bodyRim: '#178dbe',
-  atmoLit: '#2dd4bf',
-  atmoShade: '#1c6fa8',
-  atmoStrength: 1.0,
+  atmoLit: '#6fd2d8',
+  atmoShade: '#2a7cb4',
+  atmoStrength: 0.8,
   globeRotationX: 0.15,
   globeRotationZ: 0.05,
   enableControls: true,
@@ -202,9 +202,8 @@ function topoPolygons(topology, object) {
   return polygons;
 }
 
-/* Los workers reciben dos formas del mismo dato: los contornos como pares
-   lon/lat planos, y los polígonos como anillos de pares para el punto en
-   polígono del relleno. */
+/* El worker recibe los anillos como pares lon/lat planos, que es lo que puede
+   viajar barato a otro hilo. */
 function prepareLand(topology) {
   var polys = topoPolygons(topology, topology.objects.land);
   var flatPolygons = [];
@@ -252,10 +251,14 @@ function loadLand() {
 
 /* ---------------------------------------------------------------- Workers */
 
-/* Contornos: recorre cada anillo y suelta un punto cada tantos grados. */
-var EDGE_WORKER = `
+/* Costas: recorre cada anillo, lo re-muestrea a un paso fijo en grados y
+   devuelve los pares de puntos de cada tramo, listos para dibujar como
+   segmentos. El re-muestreo no es por prolijidad: los anillos de world-atlas
+   traen tramos largos y una recta en el espacio entre dos puntos lejanos se
+   hunde por debajo de la esfera. */
+var COAST_WORKER = `
 function wrapLon(lon){ return ((lon + 540) % 360) - 180; }
-function sampleEdge(ring, maxDegStep){
+function sampleRing(ring, maxDegStep){
   var out = [];
   var currentDist = 0;
   if (ring.length >= 2) out.push(wrapLon(ring[0]), ring[1]);
@@ -263,7 +266,8 @@ function sampleEdge(ring, maxDegStep){
     var lon1 = ring[i], lat1 = ring[i+1];
     var lon2 = ring[i+2], lat2 = ring[i+3];
     var dLon = lon2 - lon1;
-    if (Math.abs(dLon) > 180){ dLon += dLon > 0 ? -360 : 360; }
+    var cortado = Math.abs(dLon) > 180;
+    if (cortado){ dLon += dLon > 0 ? -360 : 360; }
     var dLat = lat2 - lat1;
     var cosLat = Math.cos((lat1 + lat2) * 0.5 * Math.PI / 180);
     var segLen = Math.sqrt((dLon * cosLat) * (dLon * cosLat) + dLat * dLat);
@@ -278,6 +282,8 @@ function sampleEdge(ring, maxDegStep){
       currentDist = 0;
     }
     currentDist += remain;
+    out.push(wrapLon(lon2), lat2);
+    currentDist = 0;
   }
   return out;
 }
@@ -287,129 +293,43 @@ function vec3(lon, lat){
   return [-Math.sin(phi) * Math.cos(th), Math.cos(phi), Math.sin(phi) * Math.sin(th)];
 }
 onmessage = function(e){
-  var densityDeg = e.data.densityDeg;
+  var paso = e.data.paso;
   var polysIn = e.data.polysIn;
   var out = [];
   for (var p = 0; p < polysIn.length; p++){
     var poly = polysIn[p];
     for (var r = 0; r < poly.length; r++){
-      var sampled = sampleEdge(poly[r], densityDeg * 0.7);
-      for (var i = 0; i < sampled.length; i += 2){
-        var v = vec3(sampled[i], sampled[i+1]);
-        out.push(v[0], v[1], v[2]);
+      var s = sampleRing(poly[r], paso);
+      for (var i = 0; i + 3 < s.length; i += 2){
+        var lonA = s[i], latA = s[i+1], lonB = s[i+2], latB = s[i+3];
+        /* El tramo que cruza el antimeridiano daria una recta que atraviesa
+           el globo de lado a lado. Se descarta. */
+        if (Math.abs(lonB - lonA) > 180) continue;
+        var a = vec3(lonA, latA), b = vec3(lonB, latB);
+        out.push(a[0], a[1], a[2], b[0], b[1], b[2]);
       }
     }
   }
   var arr = new Float32Array(out);
-  postMessage({ ok: true, edge: arr }, [arr.buffer]);
+  postMessage({ ok: true, line: arr }, [arr.buffer]);
 };`;
 
-/* Relleno: grilla por filas de latitud, con el paso de longitud corregido
-   por cos(lat) y las filas impares corridas media celda, para que el patrón
-   quede parejo y no se apelotone cerca de los polos. */
-var FILL_WORKER = `
-var PI = Math.PI;
-function wrap180(lon){ return ((lon + 540) % 360) - 180; }
-function vec3(lon, lat){
-  var phi = (90 - lat) * PI / 180;
-  var th = (lon + 180) * PI / 180;
-  return [-Math.sin(phi) * Math.cos(th), Math.cos(phi), Math.sin(phi) * Math.sin(th)];
-}
-function unwrapRing(ring, refLon){
-  var out = new Array(ring.length), prev = null;
-  for (var i = 0; i < ring.length; i++){
-    var L = ring[i][0], A = ring[i][1];
-    var d = L - refLon;
-    if (d > 180) L -= 360; else if (d < -180) L += 360;
-    if (prev){
-      var step = L - prev[0];
-      if (step > 180) L -= 360; else if (step < -180) L += 360;
-    }
-    out[i] = [L, A];
-    prev = out[i];
-  }
-  return out;
-}
-function pointInRing(pt, ring){
-  var x = pt[0], y = pt[1], inside = false, n = ring.length;
-  for (var i = 0, j = n - 1; i < n; j = i++){
-    var xi = ring[i][0], yi = ring[i][1];
-    var xj = ring[j][0], yj = ring[j][1];
-    var denom = yj - yi;
-    if (denom === 0) continue;
-    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / denom + xi)) inside = !inside;
-  }
-  return inside;
-}
-function contains(poly, refLon, lon, lat){
-  var rings = poly.coordinates;
-  if (!rings || !rings.length) return false;
-  var pt = [lon, lat];
-  if (!pointInRing(pt, unwrapRing(rings[0], refLon))) return false;
-  for (var k = 1; k < rings.length; k++){
-    if (pointInRing(pt, unwrapRing(rings[k], refLon))) return false;
-  }
-  return true;
-}
-function bbox(r){
-  var minLon = 1e9, maxLon = -1e9, minLat = 90, maxLat = -90;
-  for (var i = 0; i < r.length; i++){
-    var L = r[i][0], A = r[i][1];
-    if (L < minLon) minLon = L;
-    if (L > maxLon) maxLon = L;
-    if (A < minLat) minLat = A;
-    if (A > maxLat) maxLat = A;
-  }
-  return { minLon: minLon, maxLon: maxLon, minLat: minLat, maxLat: maxLat };
-}
-onmessage = function(e){
-  var geos = e.data.geos;
-  var step = Math.max(0.2, Math.min(6.0, e.data.tileDeg || 1.0));
-  var out = [];
-  for (var p = 0; p < geos.length; p++){
-    var r0 = unwrapRing(geos[p].coordinates[0], 0);
-    var bb = bbox(r0);
-    var refLon = (bb.minLon + bb.maxLon) / 2;
-    r0 = unwrapRing(geos[p].coordinates[0], refLon);
-    bb = bbox(r0);
-    var latStart = Math.floor((bb.minLat - 1) / step) * step;
-    var latEnd = Math.ceil((bb.maxLat + 1) / step) * step;
-    for (var lat = latStart; lat <= latEnd; lat += step){
-      var odd = Math.round(Math.abs(lat / step)) % 2;
-      var cosLat = Math.cos(lat * PI / 180);
-      var lonStep = step / Math.max(0.15, cosLat);
-      var lonStart = Math.floor((bb.minLon - 1) / lonStep) * lonStep + (odd ? lonStep * 0.5 : 0);
-      var lonEnd = Math.ceil((bb.maxLon + 1) / lonStep) * lonStep;
-      for (var lon = lonStart; lon <= lonEnd; lon += lonStep){
-        var llLat = Math.max(-90, Math.min(90, lat));
-        if (contains(geos[p], refLon, lon, llLat)){
-          var v = vec3(wrap180(lon), llLat);
-          out.push(v[0], v[1], v[2]);
-        }
+/* Las costas, por paso de muestreo. Al cruzar un breakpoint el globo se rehace
+   y sin esto el worker volveria a recorrer todos los anillos cada vez. El
+   Float32Array se comparte: la geometría lo lee, no lo toca. */
+var costaCache = {};
+
+function costas(land, paso) {
+  var clave = String(paso);
+  if (!costaCache[clave]) {
+    costaCache[clave] = runWorker(COAST_WORKER, { paso: paso, polysIn: land.polygons }).catch(
+      function (err) {
+        delete costaCache[clave];
+        throw err;
       }
-    }
+    );
   }
-  var arr = new Float32Array(out);
-  postMessage({ ok: true, fill: arr }, [arr.buffer]);
-};`;
-
-/* Las dos grillas, por densidad. Al cruzar un breakpoint el globo se rehace y
-   sin esto los workers volverian a recorrer todos los polígonos cada vez. Los
-   Float32Array se comparten: las geometrías los leen, no los tocan. */
-var grillaCache = {};
-
-function grillaDePuntos(land, tileDeg) {
-  var clave = String(tileDeg);
-  if (!grillaCache[clave]) {
-    grillaCache[clave] = Promise.all([
-      runWorker(EDGE_WORKER, { densityDeg: tileDeg, polysIn: land.polygons }),
-      runWorker(FILL_WORKER, { tileDeg: tileDeg, geos: land.geoPolygons })
-    ]).catch(function (err) {
-      delete grillaCache[clave];
-      throw err;
-    });
-  }
-  return grillaCache[clave];
+  return costaCache[clave];
 }
 
 function runWorker(source, payload) {
@@ -433,25 +353,6 @@ function runWorker(source, payload) {
 
 /* --------------------------------------------------------------- Texturas */
 
-function dotTexture(size) {
-  size = size || 64;
-  var canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  var ctx = canvas.getContext('2d');
-  var r = size / 2;
-  var grad = ctx.createRadialGradient(r, r, r * 0.82, r, r, r);
-  grad.addColorStop(0, 'rgba(255,255,255,1)');
-  grad.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.arc(r, r, r - 0.5, 0, Math.PI * 2);
-  ctx.fill();
-  var tex = new THREE.CanvasTexture(canvas);
-  tex.minFilter = THREE.LinearFilter;
-  tex.magFilter = THREE.LinearFilter;
-  return tex;
-}
-
 function haloTexture(size) {
   size = size || 128;
   var canvas = document.createElement('canvas');
@@ -473,64 +374,45 @@ function haloTexture(size) {
 
 /* Los puntos de la cara de atrás se descartan en el fragment shader: sin eso
    la silueta se ensucia y se ven los continentes del otro lado. */
-function dotMaterial(color, size, backOpacity, map, killBack) {
-  var mat = new THREE.PointsMaterial({
+/* Los segmentos de la cara de atrás se descartan en el fragment: sin eso la
+   silueta se ensucia y se ven las costas del otro lado. El cuerpo ya tapa por
+   profundidad, pero el recorte deja el filo limpio. */
+function lineMaterial(color, opacity) {
+  var mat = new THREE.LineBasicMaterial({
     color: new THREE.Color(color),
-    size: size,
-    sizeAttenuation: true,
-    depthWrite: false,
     transparent: true,
-    map: map,
-    alphaTest: 0,
-    opacity: 1
+    opacity: opacity,
+    depthWrite: false
   });
 
   mat.onBeforeCompile = function (shader) {
     shader.uniforms.uCamPos = { value: new THREE.Vector3() };
-    shader.uniforms.uBackOpacity = { value: backOpacity };
-    shader.defines = shader.defines || {};
-    if (killBack) shader.defines.KILL_BACK = 1;
 
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
-        '#include <common>\nvarying vec3 vWorldPos;\nuniform vec3 uCamPos;'
+        '#include <common>\nvarying vec3 vWorldPos;'
       )
       .replace(
         '#include <begin_vertex>',
         '#include <begin_vertex>\nvWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;'
-      )
-      .replace(
-        '#include <project_vertex>',
-        '#include <project_vertex>\n' +
-          'float ndv = dot(normalize(uCamPos - vWorldPos), normalize(vWorldPos));\n' +
-          'gl_PointSize *= mix(0.6, 1.0, smoothstep(0.0, 0.25, ndv));'
       );
 
-    /* El chunk final del fragment se llama opaque_fragment desde r152 y
-       output_fragment en versiones viejas: se prueban los dos para que el
-       recorte de la cara trasera no quede en silencio si cambia three. */
-    var facing =
+    var recorte =
       '{\n' +
       '  vec3 viewDir = normalize(uCamPos - vWorldPos);\n' +
-      '  vec3 normalDir = normalize(vWorldPos);\n' +
-      '  float nd = dot(viewDir, normalDir);\n' +
-      '  #ifdef KILL_BACK\n' +
-      '    if (nd <= 0.0) discard;\n' +
-      '  #else\n' +
-      '    diffuseColor.a *= mix(uBackOpacity, 1.0, smoothstep(0.0, 0.25, nd));\n' +
-      '  #endif\n' +
+      '  if (dot(viewDir, normalize(vWorldPos)) <= 0.0) discard;\n' +
       '}\n';
 
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <common>',
-      '#include <common>\nvarying vec3 vWorldPos;\nuniform vec3 uCamPos;\nuniform float uBackOpacity;'
+      '#include <common>\nvarying vec3 vWorldPos;\nuniform vec3 uCamPos;'
     );
 
     ['opaque_fragment', 'output_fragment'].some(function (chunk) {
       var tag = '#include <' + chunk + '>';
       if (shader.fragmentShader.indexOf(tag) === -1) return false;
-      shader.fragmentShader = shader.fragmentShader.replace(tag, facing + tag);
+      shader.fragmentShader = shader.fragmentShader.replace(tag, recorte + tag);
       return true;
     });
 
@@ -707,7 +589,7 @@ export function createGlobe(canvas, options) {
         '  float halo = pow(1.0 - abs(dot(normalize(vNormal), normalize(vHaciaCamara))), 3.2);',
         /* La luz se mide contra la normal en espacio de vista, no en el del
            objeto: asi se queda quieta mientras el globo gira debajo. */
-        '  float lado = smoothstep(-0.75, 0.9, dot(normalize(vNormal), normalize(uLuz)));',
+        '  float lado = smoothstep(-0.15, 0.95, dot(normalize(vNormal), normalize(uLuz)));',
         '  vec3 col = mix(uBaja, uAlta, lado);',
         '  gl_FragColor = vec4(col, halo * uFuerza * (0.28 + 0.72 * lado));',
         '}'
@@ -716,34 +598,25 @@ export function createGlobe(canvas, options) {
   );
   group.add(atmosfera);
 
-  /* --- Puntos de tierra, en dos capas: contorno y relleno --- */
+  /* --- Costas ---
 
-  var dotMaterials = [];
+     Una sola capa: el contorno de cada masa de tierra como línea continua,
+     sin relleno. Las líneas de WebGL siempre miden un píxel, y para este
+     dibujo eso juega a favor. */
+
+  var capasConCamara = [];
 
   loadLand()
     .then(function (land) {
       if (disposed) return null;
-      var sprite = dotTexture(64);
-      var edgeMat = dotMaterial(opt.edgeColor, opt.pointSize, opt.backOpacity, sprite, opt.killBack);
-      var fillMat = dotMaterial(
-        opt.fillColor,
-        Math.max(opt.pointSize * 0.75, 0.003),
-        opt.backOpacity,
-        sprite,
-        opt.killBack
-      );
-      dotMaterials.push(edgeMat, fillMat);
+      var costaMat = lineMaterial(opt.coastColor, opt.coastOpacity);
+      capasConCamara.push(costaMat);
 
-      return grillaDePuntos(land, opt.tileDeg).then(function (res) {
+      return costas(land, opt.coastStep).then(function (res) {
         if (disposed) return;
-        var edgeGeo = new THREE.BufferGeometry();
-        edgeGeo.setAttribute('position', new THREE.BufferAttribute(res[0].edge, 3));
-        group.add(new THREE.Points(edgeGeo, edgeMat));
-
-        var fillGeo = new THREE.BufferGeometry();
-        fillGeo.setAttribute('position', new THREE.BufferAttribute(res[1].fill, 3));
-        group.add(new THREE.Points(fillGeo, fillMat));
-
+        var geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(res.line, 3));
+        group.add(new THREE.LineSegments(geo, costaMat));
         canvas.classList.add('is-ready');
       });
     })
@@ -1036,7 +909,7 @@ export function createGlobe(canvas, options) {
         }
       });
 
-      dotMaterials.forEach(function (mat) {
+      capasConCamara.forEach(function (mat) {
         if (mat.userData.shader) mat.userData.shader.uniforms.uCamPos.value.copy(camera.position);
       });
 
@@ -1104,7 +977,7 @@ function boot() {
     try {
       globe = createGlobe(canvas, {
           cameraZ: mobile ? 2.95 : tablet ? 3.0 : 2.45,
-        tileDeg: mobile ? 1.5 : 1.2,
+        coastStep: mobile ? 0.8 : 0.5,
         enableControls: !mobile && !reduced,
         showLabels: !mobile
       });
