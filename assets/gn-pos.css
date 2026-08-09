@@ -395,7 +395,7 @@
 .gnp-hero--globe {
   /* El diametro vive en la seccion y no en el globo, porque el relleno del
      texto tambien se calcula a partir de el. */
-  --d: min(84vh, 28vw + 340px, 820px);
+  --d: min(112vh, 40vw + 440px, 1100px);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -460,8 +460,11 @@
   pointer-events: none;
   width: var(--d);
   height: var(--d);
-  top: clamp(-150px, -9vh, -40px);
-  right: clamp(-110px, -5vw, -20px);
+  /* Los desplazamientos van en fracciones del diametro y no en pixeles: asi
+     el recorte contra la esquina es el mismo en cualquier pantalla. Se sale
+     casi un tercio por arriba y algo mas de un quinto por derecha. */
+  top: calc(var(--d) * -0.3);
+  right: calc(var(--d) * -0.22);
   transform: none;
 }
 
