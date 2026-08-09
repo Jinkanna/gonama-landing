@@ -455,6 +455,31 @@
   pointer-events: auto;
 }
 
+/* Hero alto, para que el pasaje a la seccion clara caiga abajo del pliegue.
+   El de unitedcarriers mide dos pantallas y media de negro parejo: la primera
+   es la portada y el resto es el recorrido donde el globo se apaga. Aca van
+   una pantalla y tres cuartos, que alcanza para lo mismo sin dejar tanto vacio.
+
+   El contenido deja de centrarse en toda la seccion y se centra en la primera
+   pantalla: con el centrado viejo, al subir el alto el titular se iba abajo
+   del pliegue. */
+@media (min-width: 1200px) {
+  .gnp-hero--globe {
+    min-height: 175vh;
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .gnp-hero--globe .gnp__in {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 88px;
+  }
+}
+
 /* El texto se queda en la mitad izquierda para no pisar la esfera, y el
    display baja un escalón para que el titular no se parta de más. */
 /* El globo va al lado del texto recien a partir de 1200. Abajo de eso no hay
