@@ -561,6 +561,51 @@
 
     window.addEventListener('resize', update);
     update();
+
+    initEntradaSiguiente(hero);
+  }
+
+  /**
+   * La contracara de la salida del hero: la seccion que viene abajo no espera
+   * a estar en cuadro para aparecer de golpe, sube y se enciende mientras uno
+   * baja. Las dos cosas corren a la vez, asi el pasaje se siente como un solo
+   * movimiento y no como dos bloques que se turnan.
+   */
+  function initEntradaSiguiente(hero) {
+    var cont = hero.closest('.shopify-section') || hero.parentElement;
+    var sig = cont && cont.nextElementSibling;
+    var destino = sig && (sig.classList.contains('gnp') ? sig : sig.querySelector('.gnp'));
+    if (!destino) return;
+
+    destino.setAttribute('data-gnp-entrada', '');
+
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      if (reduced) return;
+
+      var r = destino.getBoundingClientRect();
+      var vh = window.innerHeight;
+      /* Arranca cuando su tope asoma por abajo y termina cuando subio tres
+         cuartos de pantalla, o sea bastante antes de quedar centrada: si
+         terminara al llegar arriba, uno la leeria todavia entrando. */
+      var p = (vh - r.top) / (vh * 0.75);
+      destino.style.setProperty('--gnp-entrada', Math.min(1, Math.max(0, p)).toFixed(3));
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('resize', update);
+    update();
   }
 
   /* ----------------------------------------------------------------- Boot */

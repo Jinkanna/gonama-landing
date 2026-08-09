@@ -411,6 +411,22 @@
   pointer-events: none;
 }
 
+/* La seccion que sigue al hero sube y se enciende con el scroll, en vez de
+   esperar a estar en cuadro. Sin JavaScript --gnp-entrada nunca se escribe y
+   el valor de reserva la deja quieta y visible. */
+[data-gnp-entrada] {
+  opacity: var(--gnp-entrada, 1);
+  transform: translate3d(0, calc((1 - var(--gnp-entrada, 1)) * 56px), 0);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-gnp-entrada] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Cierre del hero. Abajo viene una seccion clara y el corte entre el fondo
    noche y el claro se veia como un tajo, con el campo de estrellas terminando
    de golpe. Esto lo resuelve como un horizonte: la noche se apaga y el ultimo
