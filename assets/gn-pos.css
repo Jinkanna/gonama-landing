@@ -428,9 +428,19 @@
   height: clamp(160px, 30vh, 420px);
   z-index: 1;
   pointer-events: none;
+
+  /* En reposo no se ve: el hero tiene que abrir con un solo color. El hero de
+     unitedcarriers mide dos pantallas y media de negro parejo, asi que su
+     pasaje a la luz cae bien abajo del pliegue; el nuestro mide menos de una
+     pantalla y el degradado quedaba a la vista antes de scrollear.
+
+     Entra con el mismo recorrido que apaga el globo y llega a pleno a mitad de
+     camino, asi el claro aparece recien cuando el hero ya se esta yendo. */
+  opacity: min(1, calc(var(--gnp-salida, 0) * 2));
+
   /* Noche, azul y claro, en ese orden: la sensacion es bajar de la orbita a la
-     atmosfera y salir a la luz, que es como resuelve el pasaje unitedcarriers.
-     Un corte directo de noche a claro se lee como un tajo. */
+     atmosfera y salir a la luz, que es como se lee el pasaje en su pagina. Un
+     corte directo de noche a claro se ve como un tajo. */
   background: linear-gradient(
     to bottom,
     rgba(7, 12, 24, 0) 0%,
