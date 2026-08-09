@@ -395,7 +395,7 @@
 .gnp-hero--globe {
   /* El diametro vive en la seccion y no en el globo, porque el relleno del
      texto tambien se calcula a partir de el. */
-  --d: min(88vh, 30vw + 380px, 880px);
+  --d: min(84vh, 28vw + 340px, 820px);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -451,18 +451,18 @@
    más de media esfera y eso es lo que da la sensación de escala. */
 /* Proporciones tomadas de unitedcarriers: la esfera mide un alto de pantalla
    y se sale por derecha un cuarto de su ancho, así entra casi entera. */
-/* La esfera entra entera, sin cortarse contra el borde. El canvas es mas
-   grande que la esfera porque la atmosfera sobresale: con cameraZ 2.6 la
-   esfera ocupa el 80% del cuadro y el halo llega al 93%. */
+/* La esfera entra entera y va arriba a la derecha, no centrada: deja el peso
+   de la composicion en el titular y despeja la mitad de abajo. El canvas es
+   mas grande que la esfera porque la atmosfera sobresale del radio uno. */
 .gnp-hero__globe {
   position: absolute;
   z-index: 1;
   pointer-events: none;
   width: var(--d);
   height: var(--d);
-  top: 50%;
-  right: clamp(-40px, -2vw, 0px);
-  transform: translateY(-52%);
+  top: clamp(-150px, -9vh, -40px);
+  right: clamp(-110px, -5vw, -20px);
+  transform: none;
 }
 
 /* La profundidad no sale de un blur detrás: es una esfera de verdad, con

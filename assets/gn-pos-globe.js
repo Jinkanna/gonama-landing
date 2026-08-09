@@ -140,12 +140,13 @@ var DEFAULTS = {
   cameraZ: 2.9,
   /* Cuerpo y atmosfera. La camara va mas lejos que la esfera sola porque el
      cascaron de la atmosfera sobresale y si no se corta contra el canvas. */
-  bodyLit: '#153a52',
-  bodyShade: '#050912',
-  bodyRim: '#178dbe',
-  atmoLit: '#6fd2d8',
-  atmoShade: '#2a7cb4',
-  atmoStrength: 0.8,
+  bodyLit: '#14416b',
+  bodyShade: '#03060d',
+  bodyRim: '#3f9fd6',
+  atmoLit: '#7fd6ea',
+  atmoShade: '#1d5f96',
+  atmoStrength: 1.15,
+  bodyDawn: '#57c8d6',
   globeRotationX: 0.15,
   globeRotationZ: 0.05,
   enableControls: true,
@@ -382,7 +383,7 @@ function haloTexture(size) {
 /* Los segmentos de la cara de atrás se descartan en el fragment: sin eso la
    silueta se ensucia y se ven las costas del otro lado. El cuerpo ya tapa por
    profundidad, pero el recorte deja el filo limpio. */
-function lineMaterial(color, opacity) {
+function lineMaterial(color, opacity, luz) {
   var mat = new THREE.LineBasicMaterial({
     color: new THREE.Color(color),
     transparent: true,
@@ -392,26 +393,34 @@ function lineMaterial(color, opacity) {
 
   mat.onBeforeCompile = function (shader) {
     shader.uniforms.uCamPos = { value: new THREE.Vector3() };
+    shader.uniforms.uLuz = { value: luz };
 
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
-        '#include <common>\nvarying vec3 vWorldPos;'
+        '#include <common>\nvarying vec3 vWorldPos;\nvarying vec3 vNormalVista;'
       )
       .replace(
         '#include <begin_vertex>',
-        '#include <begin_vertex>\nvWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;'
+        '#include <begin_vertex>\nvWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;\n' +
+          /* Los vertices de la costa estan sobre la esfera de radio uno, asi
+             que su posicion ya es su normal. */
+          'vNormalVista = normalize(normalMatrix * normalize(position));'
       );
 
     var recorte =
       '{\n' +
       '  vec3 viewDir = normalize(uCamPos - vWorldPos);\n' +
       '  if (dot(viewDir, normalize(vWorldPos)) <= 0.0) discard;\n' +
+      /* La costa se apaga al entrar en la noche. Es lo que hace que el dibujo
+         se lea como un planeta iluminado y no como un mapa calcado encima. */
+      '  float nl = dot(normalize(vNormalVista), normalize(uLuz));\n' +
+      '  diffuseColor.a *= mix(0.12, 1.0, smoothstep(-0.28, 0.42, nl));\n' +
       '}\n';
 
     shader.fragmentShader = shader.fragmentShader.replace(
       '#include <common>',
-      '#include <common>\nvarying vec3 vWorldPos;\nuniform vec3 uCamPos;'
+      '#include <common>\nvarying vec3 vWorldPos;\nvarying vec3 vNormalVista;\nuniform vec3 uCamPos;\nuniform vec3 uLuz;'
     );
 
     ['opaque_fragment', 'output_fragment'].some(function (chunk) {
@@ -505,7 +514,11 @@ export function createGlobe(canvas, options) {
      enciende en el borde, donde la superficie se aleja de la cámara. Al girar
      el globo la luz se queda quieta y el terminador se mueve solo. */
 
-  var luz = new THREE.Vector3(-0.35, 0.82, 0.45).normalize();
+  /* Direccion del sol, en espacio de vista y no en el del objeto: se queda
+     quieta mientras el globo gira debajo, que es como se ve un planeta
+     fotografiado desde afuera. En espacio de vista +Y es arriba en pantalla,
+     asi que esto entra por arriba a la izquierda y algo de frente. */
+  var luz = new THREE.Vector3(-0.4, 0.68, 0.6).normalize();
 
   var cuerpo = new THREE.Mesh(
     new THREE.SphereGeometry(0.995, 64, 64),
@@ -514,7 +527,8 @@ export function createGlobe(canvas, options) {
         uLuz: { value: luz },
         uIluminado: { value: new THREE.Color(opt.bodyLit) },
         uSombra: { value: new THREE.Color(opt.bodyShade) },
-        uBorde: { value: new THREE.Color(opt.bodyRim) }
+        uBorde: { value: new THREE.Color(opt.bodyRim) },
+        uAmanecer: { value: new THREE.Color(opt.bodyDawn) }
       },
       vertexShader: [
         'varying vec3 vNormal;',
@@ -531,18 +545,25 @@ export function createGlobe(canvas, options) {
         'uniform vec3 uIluminado;',
         'uniform vec3 uSombra;',
         'uniform vec3 uBorde;',
+        'uniform vec3 uAmanecer;',
         'varying vec3 vNormal;',
         'varying vec3 vHaciaCamara;',
         'void main() {',
         '  vec3 n = normalize(vNormal);',
-        /* El terminador es suave a propósito: un corte duro parece una pelota
-           de plástico y no un planeta. */
-        '  float difusa = smoothstep(-0.45, 0.9, dot(n, normalize(uLuz)));',
+        '  float nl = dot(n, normalize(uLuz));',
+        /* Terminador corto. En una foto de la NASA el paso de dia a noche se
+           resuelve en una franja angosta, no en medio planeta. */
+        '  float difusa = smoothstep(-0.12, 0.62, nl);',
         '  vec3 col = mix(uSombra, uIluminado, difusa);',
-        /* El borde toma un poco de color aunque esté en sombra, que es lo que
-           lo despega del fondo negro. */
-        '  float borde = pow(1.0 - max(dot(n, normalize(vHaciaCamara)), 0.0), 3.0);',
-        '  col += uBorde * borde * 0.55;',
+        /* La franja de amanecer: una campana centrada justo donde la luz roza
+           la superficie. Es lo que hace que la luz se lea sobre la esfera y no
+           flotando alrededor. */
+        '  float banda = exp(-(nl / 0.2) * (nl / 0.2));',
+        '  col += uAmanecer * banda * 0.55;',
+        /* El borde solo se enciende del lado iluminado: en sombra un contorno
+           parejo delataria que es un circulo pintado. */
+        '  float borde = pow(1.0 - max(dot(n, normalize(vHaciaCamara)), 0.0), 4.0);',
+        '  col += uBorde * borde * 0.5 * smoothstep(-0.35, 0.45, nl);',
         '  gl_FragColor = vec4(col, 1.0);',
         '}'
       ].join('\n')
@@ -552,7 +573,7 @@ export function createGlobe(canvas, options) {
   group.add(cuerpo);
 
   var atmosfera = new THREE.Mesh(
-    new THREE.SphereGeometry(1.06, 64, 64),
+    new THREE.SphereGeometry(1.028, 64, 64),
     new THREE.ShaderMaterial({
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -591,12 +612,12 @@ export function createGlobe(canvas, options) {
            donde la normal es perpendicular a la vista, o sea el contorno.
            Lo de adentro del disco lo tapa el cuerpo, que si escribe
            profundidad, y por eso solo se ve el anillo. */
-        '  float halo = pow(1.0 - abs(dot(normalize(vNormal), normalize(vHaciaCamara))), 3.2);',
+        '  float halo = pow(1.0 - abs(dot(normalize(vNormal), normalize(vHaciaCamara))), 4.5);',
         /* La luz se mide contra la normal en espacio de vista, no en el del
            objeto: asi se queda quieta mientras el globo gira debajo. */
-        '  float lado = smoothstep(-0.15, 0.95, dot(normalize(vNormal), normalize(uLuz)));',
+        '  float lado = smoothstep(-0.05, 0.85, dot(normalize(vNormal), normalize(uLuz)));',
         '  vec3 col = mix(uBaja, uAlta, lado);',
-        '  gl_FragColor = vec4(col, halo * uFuerza * (0.28 + 0.72 * lado));',
+        '  gl_FragColor = vec4(col, halo * uFuerza * (0.06 + 0.94 * lado));',
         '}'
       ].join('\n')
     })
@@ -614,7 +635,7 @@ export function createGlobe(canvas, options) {
   loadLand()
     .then(function (land) {
       if (disposed) return null;
-      var costaMat = lineMaterial(opt.coastColor, opt.coastOpacity);
+      var costaMat = lineMaterial(opt.coastColor, opt.coastOpacity, luz);
       capasConCamara.push(costaMat);
 
       return costas(land, opt.coastStep).then(function (res) {
