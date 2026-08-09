@@ -425,13 +425,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: clamp(90px, 14vh, 200px);
+  height: clamp(160px, 30vh, 420px);
   z-index: 1;
   pointer-events: none;
+  /* Noche, azul y claro, en ese orden: la sensacion es bajar de la orbita a la
+     atmosfera y salir a la luz, que es como resuelve el pasaje unitedcarriers.
+     Un corte directo de noche a claro se lee como un tajo. */
   background: linear-gradient(
     to bottom,
     rgba(7, 12, 24, 0) 0%,
-    rgba(7, 12, 24, 0.6) 42%,
+    rgba(11, 34, 66, 0.5) 34%,
+    rgba(64, 122, 186, 0.62) 66%,
+    rgba(196, 216, 236, 0.92) 88%,
     var(--panda-2) 100%
   );
 }
@@ -464,12 +469,15 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='23' cy='47' r='1.1' opacity='.7'/%3E%3Ccircle cx='96' cy='19' r='.7' opacity='.45'/%3E%3Ccircle cx='158' cy='73' r='1.3' opacity='.8'/%3E%3Ccircle cx='231' cy='31' r='.6' opacity='.35'/%3E%3Ccircle cx='298' cy='88' r='1' opacity='.6'/%3E%3Ccircle cx='371' cy='42' r='.8' opacity='.5'/%3E%3Ccircle cx='405' cy='114' r='1.2' opacity='.7'/%3E%3Ccircle cx='47' cy='133' r='.7' opacity='.4'/%3E%3Ccircle cx='118' cy='167' r='1.4' opacity='.85'/%3E%3Ccircle cx='190' cy='128' r='.6' opacity='.35'/%3E%3Ccircle cx='262' cy='176' r='1' opacity='.6'/%3E%3Ccircle cx='334' cy='149' r='.8' opacity='.5'/%3E%3Ccircle cx='14' cy='214' r='1.1' opacity='.65'/%3E%3Ccircle cx='87' cy='253' r='.7' opacity='.4'/%3E%3Ccircle cx='152' cy='226' r='1.2' opacity='.75'/%3E%3Ccircle cx='224' cy='271' r='.6' opacity='.35'/%3E%3Ccircle cx='291' cy='238' r='1.3' opacity='.8'/%3E%3Ccircle cx='363' cy='283' r='.8' opacity='.5'/%3E%3Ccircle cx='33' cy='321' r='1' opacity='.6'/%3E%3Ccircle cx='109' cy='356' r='.7' opacity='.4'/%3E%3Ccircle cx='176' cy='318' r='1.2' opacity='.7'/%3E%3Ccircle cx='246' cy='372' r='.6' opacity='.35'/%3E%3Ccircle cx='312' cy='334' r='1.1' opacity='.65'/%3E%3Ccircle cx='388' cy='389' r='.9' opacity='.55'/%3E%3Ccircle cx='68' cy='402' r='.7' opacity='.4'/%3E%3Ccircle cx='205' cy='96' r='.9' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 420px 420px;
   mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 86%);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 86%);
+  /* El cielo se va creciendo apenas, como si la camara se metiera en el. */
+  opacity: calc(0.5 * (1 - var(--gnp-salida, 0)));
+  transform: scale(calc(1 + var(--gnp-salida, 0) * 0.1));
+  transform-origin: 50% 30%;
 }
 
 /* El globo se sale del borde derecho, igual que la referencia: se ve poco
@@ -491,6 +499,11 @@
   top: calc(var(--d) * -0.3);
   right: calc(var(--d) * -0.22);
   transform: none;
+  /* --gnp-salida la escribe el scroll: 0 en reposo, 1 cuando el hero ya se
+     fue. El globo se apaga y se oscurece a la vez, que es distinto de solo
+     bajarle la opacidad: asi parece alejarse y no volverse transparente. */
+  opacity: calc(1 - var(--gnp-salida, 0));
+  filter: brightness(calc(1 - var(--gnp-salida, 0) * 0.8));
 }
 
 /* La profundidad no sale de un blur detrás: es una esfera de verdad, con

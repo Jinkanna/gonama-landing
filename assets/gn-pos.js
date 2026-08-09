@@ -513,6 +513,56 @@
     });
   }
 
+  /* ----------------------------------------------------------- Salida hero */
+
+  /**
+   * El hero no se corta contra la seccion siguiente: se retira mientras se lo
+   * deja atras. El globo se apaga y se oscurece, y el cielo se desvanece
+   * creciendo apenas, todo atado a la posicion del scroll y no a una duracion.
+   *
+   * Los valores estan medidos sobre unitedcarriers, que resuelve el pasaje asi
+   * mismo: el recorrido arranca cuando el hero subio un quinto de pantalla y
+   * termina cuando su centro llega al tope. Sobre el final de ese recorrido su
+   * globo queda en opacidad 0.196 con brightness 0.357 y el cielo en scale
+   * 1.08, que es lo que reproducen estas cuentas.
+   */
+  function initHeroExit(hero) {
+    if (!hero.querySelector('[data-gnp-globe]')) return;
+
+    var ticking = false;
+
+    function update() {
+      ticking = false;
+      if (reduced) return;
+
+      var r = hero.getBoundingClientRect();
+      var inicio = -0.2 * window.innerHeight;
+      /* Ellos terminan cuando el centro del hero llega al tope, pero su hero
+         mide 2395px y el nuestro 718: con la misma proporcion la salida se
+         resolvia en 257px de scroll y se sentia de golpe. Estirado a cuatro
+         quintos del alto queda un recorrido parecido al de ellos en pantalla,
+         que es lo que importa. */
+      var fin = -r.height * 0.8;
+      if (fin >= inicio) return;
+
+      var p = (r.top - inicio) / (fin - inicio);
+      hero.style.setProperty('--gnp-salida', Math.min(1, Math.max(0, p)).toFixed(3));
+    }
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('resize', update);
+    update();
+  }
+
   /* ----------------------------------------------------------------- Boot */
 
   function each(selector, fn) {
@@ -530,6 +580,7 @@
     each('[data-gn-intro]', initIntro);
     each('[data-gnp-nav]', initNav);
     each('[data-gnp-pin]', initPin);
+    each('.gnp-hero--globe', initHeroExit);
     each('[data-gnp-marquee]', initMarquee);
     each('[data-gnp-count]', initCounter);
     each('[data-gnp-faq]', initFaq);
