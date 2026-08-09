@@ -420,8 +420,7 @@
    el contenido subiendo, el cambio se lee limpio en los dos tonos. */
 [data-gnp-entrada] .gnp__in {
   opacity: var(--gnp-entrada, 1);
-  transform: translate3d(0, calc((1 - var(--gnp-entrada, 1)) * 56px), 0);
-  will-change: opacity, transform;
+  transform: translate3d(0, calc((1 - var(--gnp-entrada, 1)) * 48px), 0);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -33,6 +33,38 @@
 
   /* ---------------------------------------------------------------- Reveal */
 
+  /* ------------------------------------------------------ Ticker de scroll */
+
+  /**
+   * Todo lo que reacciona al scroll pasa por aca. Antes cada cosa registraba su
+   * propio listener con su propio requestAnimationFrame, y con tres corriendo a
+   * la vez las actualizaciones caian en cuadros distintos: el globo se movia en
+   * uno, la seccion en el siguiente, y eso se lee como tironeo aunque cada
+   * animacion por separado sea suave.
+   */
+  var tareasScroll = [];
+  var cuadroPedido = false;
+
+  function correrTareas() {
+    cuadroPedido = false;
+    for (var i = 0; i < tareasScroll.length; i++) tareasScroll[i]();
+  }
+
+  function pedirCuadro() {
+    if (cuadroPedido) return;
+    cuadroPedido = true;
+    window.requestAnimationFrame(correrTareas);
+  }
+
+  function alScroll(fn) {
+    if (!tareasScroll.length) {
+      window.addEventListener('scroll', pedirCuadro, { passive: true });
+      window.addEventListener('resize', correrTareas);
+    }
+    tareasScroll.push(fn);
+    fn();
+  }
+
   function initReveal() {
     var items = document.querySelectorAll('.gnp-rv, .gnp-line');
     if (!items.length) return;
@@ -260,7 +292,6 @@
   function initNav(root) {
     // El header se esconde al bajar y vuelve al subir.
     var last = window.pageYOffset;
-    var ticking = false;
 
     function update() {
       var y = window.pageYOffset;
@@ -276,22 +307,12 @@
 
       root.classList.toggle('is-solid', y > 90);
       last = y;
-      ticking = false;
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(update);
-      },
-      { passive: true }
-    );
-
-    // Si la pagina se abre ya scrolleada, con un ancla en la URL o al volver
-    // atras, el estado tiene que estar bien desde el primer cuadro.
-    update();
+    /* Tambien por el ticker compartido. Si la pagina se abre ya scrolleada, con
+       un ancla en la URL o al volver atras, alScroll corre update una vez al
+       registrarla y el estado queda bien desde el primer cuadro. */
+    alScroll(update);
   }
 
   /* ------------------------------------------------------- Seccion clavada */
@@ -318,10 +339,8 @@
 
     var estado = '';
     var activo = -1;
-    var ticking = false;
 
     function update() {
-      ticking = false;
       if (reduced) return;
 
       var r = section.getBoundingClientRect();
@@ -373,18 +392,7 @@
       }
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(update);
-      },
-      { passive: true }
-    );
-
-    window.addEventListener('resize', update);
-    update();
+    alScroll(update);
   }
 
   /* --------------------------------------------------------------- Intro */
@@ -529,10 +537,8 @@
   function initHeroExit(hero) {
     if (!hero.querySelector('[data-gnp-globe]')) return;
 
-    var ticking = false;
 
     function update() {
-      ticking = false;
       if (reduced) return;
 
       var r = hero.getBoundingClientRect();
@@ -549,18 +555,7 @@
       hero.style.setProperty('--gnp-salida', Math.min(1, Math.max(0, p)).toFixed(3));
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(update);
-      },
-      { passive: true }
-    );
-
-    window.addEventListener('resize', update);
-    update();
+    alScroll(update);
 
   }
 
@@ -593,12 +588,18 @@
 
     lista.forEach(function (el) {
       el.setAttribute('data-gnp-entrada', '');
+
+      /* El reveal por umbral se apaga adentro de estas secciones. Los dos
+         sistemas juntos animaban lo mismo dos veces con curvas distintas: la
+         seccion subia con el scroll y sus lineas volvian a entrar por su
+         cuenta al cruzar el umbral. Eso es lo que se sentia cortado. */
+      el.querySelectorAll('.gnp-rv, .gnp-line').forEach(function (n) {
+        n.classList.add('is-in');
+      });
     });
 
-    var ticking = false;
 
     function update() {
-      ticking = false;
       if (reduced) return;
 
       var vh = window.innerHeight;
@@ -610,23 +611,14 @@
         /* Arranca cuando el tope asoma por abajo y termina cuando subio tres
            cuartos de pantalla, o sea bastante antes de quedar centrada: si
            terminara al llegar arriba, uno la leeria todavia entrando. */
-        var p = (vh - top) / (vh * 0.75);
-        lista[i].style.setProperty('--gnp-entrada', Math.min(1, Math.max(0, p)).toFixed(3));
+        var p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.85)));
+        /* Suavizado en las puntas: lineal arranca y frena de golpe, y con el
+           scroll encima eso se nota como un tirón al principio y al final. */
+        lista[i].style.setProperty('--gnp-entrada', (p * p * (3 - 2 * p)).toFixed(3));
       });
     }
 
-    window.addEventListener(
-      'scroll',
-      function () {
-        if (ticking) return;
-        ticking = true;
-        window.requestAnimationFrame(update);
-      },
-      { passive: true }
-    );
-
-    window.addEventListener('resize', update);
-    update();
+    alScroll(update);
   }
 
   /* ----------------------------------------------------------------- Boot */
