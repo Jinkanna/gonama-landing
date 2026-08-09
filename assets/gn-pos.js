@@ -604,14 +604,22 @@
 
       var vh = window.innerHeight;
       var medidas = lista.map(function (el) {
-        return el.getBoundingClientRect().top;
+        var r = el.getBoundingClientRect();
+        return { top: r.top, alto: r.height };
       });
 
-      medidas.forEach(function (top, i) {
-        /* Arranca cuando el tope asoma por abajo y termina cuando subio tres
-           cuartos de pantalla, o sea bastante antes de quedar centrada: si
-           terminara al llegar arriba, uno la leeria todavia entrando. */
-        var p = Math.min(1, Math.max(0, (vh - top) / (vh * 0.85)));
+      medidas.forEach(function (m, i) {
+        /* Cuenta cuanto de la seccion ya entro por abajo. El recorrido termina
+           a los tres cuartos de pantalla, bastante antes de que quede centrada:
+           si terminara al llegar arriba, uno la leeria todavia entrando.
+
+           El tope no puede pasar de su propio alto: la ultima seccion nunca
+           sube mas que eso porque abajo no queda pagina. El footer mide 296px
+           en un visor de 958 y con la meta fija se quedaba en 0.36 para
+           siempre, o sea entraba a un tercio y ahi moria. */
+        var entro = vh - m.top;
+        var meta = Math.max(1, Math.min(vh * 0.85, m.alto));
+        var p = Math.min(1, Math.max(0, entro / meta));
         /* Suavizado en las puntas: lineal arranca y frena de golpe, y con el
            scroll encima eso se nota como un tirón al principio y al final. */
         lista[i].style.setProperty('--gnp-entrada', (p * p * (3 - 2 * p)).toFixed(3));
