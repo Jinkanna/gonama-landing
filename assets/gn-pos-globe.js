@@ -22,8 +22,13 @@ import LAND_TOPOLOGY from 'gn-globe-land';
 
 /* Mercados de GOnama. lat y lng reales de cada ciudad, en el mismo idioma que
    el resto de la página. El núcleo es Latinoamérica y el resto son los hubs
-   con los que conecta. Solo unos pocos llevan etiqueta: con las veinticinco
-   juntas el Caribe y Europa quedan ilegibles. */
+   con los que conecta.
+
+   Lleva etiqueta todo el que este a mas de 2000 km del vecino etiquetado mas
+   cercano. Por debajo de eso los nombres se pisan sobre la esfera: Buenos
+   Aires esta a 205 km de Montevideo, Amsterdam a 358 de Londres, Lisboa a 502
+   de Madrid, Toronto a 550 de Nueva York, Quito a 731 de Bogota, Panama a 766,
+   Asuncion a 1080 y San Jose a 1248. Esos ocho van con pin y sin nombre. */
 var MARKETS = [
   /* Latinoamérica */
   /* Montevideo es la casa, asi que lleva la etiqueta y el pin mas grande.
@@ -44,7 +49,7 @@ var MARKETS = [
   /* Norteamérica */
   { city: 'Miami', lat: 25.7617, lng: -80.1918, size: 1.1, label: true },
   { city: 'New York', lat: 40.7128, lng: -74.006, size: 1.25, label: true },
-  { city: 'Los Angeles', lat: 34.0522, lng: -118.2437, size: 1.1 },
+  { city: 'Los Angeles', lat: 34.0522, lng: -118.2437, size: 1.1, label: true },
   { city: 'Toronto', lat: 43.6532, lng: -79.3832, size: 1 },
 
   /* Europa, África y Medio Oriente */
@@ -52,14 +57,14 @@ var MARKETS = [
   { city: 'Lisbon', lat: 38.7223, lng: -9.1393, size: 1 },
   { city: 'London', lat: 51.5074, lng: -0.1278, size: 1.25, label: true },
   { city: 'Amsterdam', lat: 52.3676, lng: 4.9041, size: 1 },
-  { city: 'Dubai', lat: 25.2048, lng: 55.2708, size: 1.1 },
-  { city: 'Johannesburg', lat: -26.2041, lng: 28.0473, size: 1 },
+  { city: 'Dubai', lat: 25.2048, lng: 55.2708, size: 1.1, label: true },
+  { city: 'Johannesburg', lat: -26.2041, lng: 28.0473, size: 1, label: true },
 
   /* Asia y Oceanía */
-  { city: 'Singapore', lat: 1.3521, lng: 103.8198, size: 1.1 },
-  { city: 'Shanghai', lat: 31.2304, lng: 121.4737, size: 1.1 },
-  { city: 'Tokyo', lat: 35.6762, lng: 139.6503, size: 1.1 },
-  { city: 'Sydney', lat: -33.8688, lng: 151.2093, size: 1 }
+  { city: 'Singapore', lat: 1.3521, lng: 103.8198, size: 1.1, label: true },
+  { city: 'Shanghai', lat: 31.2304, lng: 121.4737, size: 1.1, label: true },
+  { city: 'Tokyo', lat: 35.6762, lng: 139.6503, size: 1.1, label: true },
+  { city: 'Sydney', lat: -33.8688, lng: 151.2093, size: 1, label: true }
 ];
 
 /* Rutas entre mercados. Cada par es un arco que sale y vuelve a entrar. La

@@ -411,6 +411,31 @@
   pointer-events: none;
 }
 
+/* Cierre del hero. Abajo viene una seccion clara y el corte entre el fondo
+   noche y el claro se veia como un tajo, con el campo de estrellas terminando
+   de golpe. Esto lo resuelve como un horizonte: la noche se apaga y el ultimo
+   tramo ya es el color de la seccion siguiente, asi el limite deja de existir.
+
+   El degradado va en z-index 1, o sea encima del globo pero debajo del texto,
+   que se mantiene nitido. Si alguna vez la seccion de abajo pasa a tono
+   oscuro, el color de llegada hay que cambiarlo por Panda 1. */
+.gnp-hero--globe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(90px, 14vh, 200px);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 12, 24, 0) 0%,
+    rgba(7, 12, 24, 0.6) 42%,
+    var(--panda-2) 100%
+  );
+}
+
 .gnp-hero--globe .gnp__in :where(a, button, p, h1, .gnp-hero__actions) {
   pointer-events: auto;
 }
@@ -443,8 +468,8 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='23' cy='47' r='1.1' opacity='.7'/%3E%3Ccircle cx='96' cy='19' r='.7' opacity='.45'/%3E%3Ccircle cx='158' cy='73' r='1.3' opacity='.8'/%3E%3Ccircle cx='231' cy='31' r='.6' opacity='.35'/%3E%3Ccircle cx='298' cy='88' r='1' opacity='.6'/%3E%3Ccircle cx='371' cy='42' r='.8' opacity='.5'/%3E%3Ccircle cx='405' cy='114' r='1.2' opacity='.7'/%3E%3Ccircle cx='47' cy='133' r='.7' opacity='.4'/%3E%3Ccircle cx='118' cy='167' r='1.4' opacity='.85'/%3E%3Ccircle cx='190' cy='128' r='.6' opacity='.35'/%3E%3Ccircle cx='262' cy='176' r='1' opacity='.6'/%3E%3Ccircle cx='334' cy='149' r='.8' opacity='.5'/%3E%3Ccircle cx='14' cy='214' r='1.1' opacity='.65'/%3E%3Ccircle cx='87' cy='253' r='.7' opacity='.4'/%3E%3Ccircle cx='152' cy='226' r='1.2' opacity='.75'/%3E%3Ccircle cx='224' cy='271' r='.6' opacity='.35'/%3E%3Ccircle cx='291' cy='238' r='1.3' opacity='.8'/%3E%3Ccircle cx='363' cy='283' r='.8' opacity='.5'/%3E%3Ccircle cx='33' cy='321' r='1' opacity='.6'/%3E%3Ccircle cx='109' cy='356' r='.7' opacity='.4'/%3E%3Ccircle cx='176' cy='318' r='1.2' opacity='.7'/%3E%3Ccircle cx='246' cy='372' r='.6' opacity='.35'/%3E%3Ccircle cx='312' cy='334' r='1.1' opacity='.65'/%3E%3Ccircle cx='388' cy='389' r='.9' opacity='.55'/%3E%3Ccircle cx='68' cy='402' r='.7' opacity='.4'/%3E%3Ccircle cx='205' cy='96' r='.9' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 420px 420px;
-  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 86%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 86%);
 }
 
 /* El globo se sale del borde derecho, igual que la referencia: se ve poco
