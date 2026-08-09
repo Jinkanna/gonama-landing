@@ -411,17 +411,21 @@
   pointer-events: none;
 }
 
-/* La seccion que sigue al hero sube y se enciende con el scroll, en vez de
-   esperar a estar en cuadro. Sin JavaScript --gnp-entrada nunca se escribe y
-   el valor de reserva la deja quieta y visible. */
-[data-gnp-entrada] {
+/* Cada seccion sube y se enciende con el scroll, en vez de esperar a estar en
+   cuadro. Sin JavaScript --gnp-entrada nunca se escribe y el valor de reserva
+   las deja quietas y visibles. */
+/* El efecto va en el contenedor y no en la seccion: si se le baja la opacidad
+   a la seccion entera tambien se le baja al fondo, y una seccion oscura entrando
+   sobre pagina clara se ve gris sucio hasta que termina. Con el fondo firme y
+   el contenido subiendo, el cambio se lee limpio en los dos tonos. */
+[data-gnp-entrada] .gnp__in {
   opacity: var(--gnp-entrada, 1);
   transform: translate3d(0, calc((1 - var(--gnp-entrada, 1)) * 56px), 0);
   will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-gnp-entrada] {
+  [data-gnp-entrada] .gnp__in {
     opacity: 1;
     transform: none;
   }
@@ -473,15 +477,16 @@
 
 /* Hero alto, para que el pasaje a la seccion clara caiga abajo del pliegue.
    El de unitedcarriers mide dos pantallas y media de negro parejo: la primera
-   es la portada y el resto es el recorrido donde el globo se apaga. Aca van
-   una pantalla y tres cuartos, que alcanza para lo mismo sin dejar tanto vacio.
+   es la portada y el resto es el recorrido donde el globo se apaga. Aca va
+   menos, una pantalla y media, que deja el pasaje abajo del pliegue sin que la
+   bajada se haga larga.
 
    El contenido deja de centrarse en toda la seccion y se centra en la primera
    pantalla: con el centrado viejo, al subir el alto el titular se iba abajo
    del pliegue. */
 @media (min-width: 1200px) {
   .gnp-hero--globe {
-    min-height: 175vh;
+    min-height: 148vh;
     display: block;
     padding-top: 0;
     padding-bottom: 0;

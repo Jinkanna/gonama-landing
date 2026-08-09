@@ -562,22 +562,38 @@
     window.addEventListener('resize', update);
     update();
 
-    initEntradaSiguiente(hero);
   }
 
   /**
-   * La contracara de la salida del hero: la seccion que viene abajo no espera
-   * a estar en cuadro para aparecer de golpe, sube y se enciende mientras uno
-   * baja. Las dos cosas corren a la vez, asi el pasaje se siente como un solo
-   * movimiento y no como dos bloques que se turnan.
+   * La contracara de la salida del hero, aplicada a toda la pagina: ninguna
+   * seccion espera a estar en cuadro para aparecer de golpe, todas suben y se
+   * encienden mientras uno baja. Asi el pasaje entre dos se lee como un solo
+   * movimiento y no como bloques que se turnan.
+   *
+   * Un solo listener para todas: cada seccion con el suyo eran diez callbacks
+   * por evento de scroll. Primero se miden todas y despues se escribe, para no
+   * intercalar lecturas y escrituras de layout.
+   *
+   * Quedan afuera el hero, que tiene su propia salida, la cabecera, la pantalla
+   * de entrada y la seccion clavada. Esta ultima sobre todo: el transform de
+   * esta animacion crea un contenedor de posicionamiento y le rompe el
+   * position:fixed del escenario.
    */
-  function initEntradaSiguiente(hero) {
-    var cont = hero.closest('.shopify-section') || hero.parentElement;
-    var sig = cont && cont.nextElementSibling;
-    var destino = sig && (sig.classList.contains('gnp') ? sig : sig.querySelector('.gnp'));
-    if (!destino) return;
+  function initEntradas() {
+    var lista = Array.prototype.slice.call(
+      document.querySelectorAll(
+        '.gnp:not(.gnp-hero):not(.gnp-nav):not(.gnp-intro):not([data-gnp-pin])'
+      )
+    ).filter(function (el) {
+      /* El tema tiene elementos sueltos que arrastran la clase gnp sin ser
+         secciones. Se los reconoce porque no tienen contenedor adentro. */
+      return el.querySelector('.gnp__in');
+    });
+    if (!lista.length) return;
 
-    destino.setAttribute('data-gnp-entrada', '');
+    lista.forEach(function (el) {
+      el.setAttribute('data-gnp-entrada', '');
+    });
 
     var ticking = false;
 
@@ -585,13 +601,18 @@
       ticking = false;
       if (reduced) return;
 
-      var r = destino.getBoundingClientRect();
       var vh = window.innerHeight;
-      /* Arranca cuando su tope asoma por abajo y termina cuando subio tres
-         cuartos de pantalla, o sea bastante antes de quedar centrada: si
-         terminara al llegar arriba, uno la leeria todavia entrando. */
-      var p = (vh - r.top) / (vh * 0.75);
-      destino.style.setProperty('--gnp-entrada', Math.min(1, Math.max(0, p)).toFixed(3));
+      var medidas = lista.map(function (el) {
+        return el.getBoundingClientRect().top;
+      });
+
+      medidas.forEach(function (top, i) {
+        /* Arranca cuando el tope asoma por abajo y termina cuando subio tres
+           cuartos de pantalla, o sea bastante antes de quedar centrada: si
+           terminara al llegar arriba, uno la leeria todavia entrando. */
+        var p = (vh - top) / (vh * 0.75);
+        lista[i].style.setProperty('--gnp-entrada', Math.min(1, Math.max(0, p)).toFixed(3));
+      });
     }
 
     window.addEventListener(
@@ -626,6 +647,7 @@
     each('[data-gnp-nav]', initNav);
     each('[data-gnp-pin]', initPin);
     each('.gnp-hero--globe', initHeroExit);
+    initEntradas();
     each('[data-gnp-marquee]', initMarquee);
     each('[data-gnp-count]', initCounter);
     each('[data-gnp-faq]', initFaq);
