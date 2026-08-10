@@ -43,7 +43,13 @@
               data-gnp-pin-item
               {{ block.shopify_attributes }}
             >
-              <p class="gnp-about__name">{{ b.name | escape }}</p>
+              <button
+                class="gnp-about__name"
+                type="button"
+                data-gnp-pin-go="{{ forloop.index0 }}"
+              >
+                {{- b.name | escape -}}
+              </button>
               <div class="gnp-about__desc">
                 <div class="gnp-about__desc-in">
                   {%- assign parrafos = b.desc | newline_to_br | split: '<br />' -%}
@@ -63,24 +69,31 @@
           Mientras la seccion esta clavada la pagina parece frenarse sin motivo.
           El riel es la respuesta: una linea que se llena con el avance y los
           pasos numerados, para que se entienda que hay un recorrido y cuanto
-          falta. Va aria-hidden porque sin JavaScript los bloques se muestran
-          apilados y el riel no describe nada.
+          falta.
+
+          Cada paso es un boton que lleva a su bloque. La linea de avance si
+          queda aria-hidden: describe lo mismo que los botones y en un lector
+          de pantalla seria ruido.
         {%- endcomment -%}
         {%- if pasos > 1 -%}
-          <div class="gnp-about__rail" aria-hidden="true">
-            <span class="gnp-about__rail-track">
+          <div class="gnp-about__rail">
+            <span class="gnp-about__rail-track" aria-hidden="true">
               <span class="gnp-about__rail-fill" data-gnp-pin-progress></span>
             </span>
             <ol class="gnp-about__rail-steps">
               {%- for block in section.blocks -%}
-                <li
-                  class="gnp-about__rail-step{% if forloop.first %} is-active{% endif %}"
-                  data-gnp-pin-dot
-                >
-                  <span class="gnp-about__rail-num">
-                    {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
-                  </span>
-                  <span class="gnp-about__rail-name">{{ block.settings.name | escape }}</span>
+                <li>
+                  <button
+                    class="gnp-about__rail-step{% if forloop.first %} is-active{% endif %}"
+                    type="button"
+                    data-gnp-pin-dot
+                    data-gnp-pin-go="{{ forloop.index0 }}"
+                  >
+                    <span class="gnp-about__rail-num" aria-hidden="true">
+                      {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+                    </span>
+                    <span class="gnp-about__rail-name">{{ block.settings.name | escape }}</span>
+                  </button>
                 </li>
               {%- endfor -%}
             </ol>

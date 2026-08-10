@@ -1496,7 +1496,18 @@
   gap: 26px;
 }
 
+/* El nombre es un boton, asi que hay que sacarle lo de boton: el navegador le
+   pone fondo, borde, tipografia propia y alineado al centro. */
 .gnp-about__name {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   font-size: 30px;
   line-height: 1.06;
   font-weight: 700;
@@ -1651,6 +1662,10 @@
 }
 
 .gnp-about__rail-step {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -1666,6 +1681,20 @@
 .gnp-about__rail-step.is-active {
   opacity: 1;
   color: var(--fg);
+}
+
+/* Al pasar el mouse se adelanta lo que va a pasar al hacer click. */
+.gnp-about__rail-step:hover,
+.gnp-about__name:hover {
+  opacity: 1;
+  color: var(--fg);
+}
+
+.gnp-about__rail-step:focus-visible,
+.gnp-about__name:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  opacity: 1;
 }
 
 .gnp-about__rail-num {

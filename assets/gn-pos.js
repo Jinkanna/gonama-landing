@@ -393,6 +393,31 @@
     }
 
     alScroll(update);
+
+    /* Los pasos y los nombres llevan a su bloque. La seccion esta clavada, asi
+       que "ir a un bloque" es scrollear al punto donde ese bloque queda activo:
+       el centro de su tramo dentro del recorrido util. */
+    section.addEventListener('click', function (ev) {
+      var boton = ev.target.closest('[data-gnp-pin-go]');
+      if (!boton) return;
+
+      var i = parseInt(boton.getAttribute('data-gnp-pin-go'), 10);
+      if (isNaN(i) || !items.length) return;
+
+      var arriba = section.getBoundingClientRect().top + window.pageYOffset;
+      var util = section.offsetHeight - window.innerHeight;
+
+      /* Sin recorrido util la seccion esta apilada, por movimiento reducido o
+         por una pantalla mas alta que la seccion: ahi se va al bloque mismo. */
+      var destino =
+        util > 0
+          ? arriba + ((i + 0.5) / items.length) * util
+          : items[i].getBoundingClientRect().top + window.pageYOffset - 80;
+
+      destino = Math.max(0, Math.round(destino));
+      if (reduced) window.scrollTo(0, destino);
+      else scrollSuave(destino);
+    });
   }
 
   /* --------------------------------------------------------------- Intro */
