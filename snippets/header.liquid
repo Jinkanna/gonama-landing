@@ -166,7 +166,7 @@
                 <div class="col-header-center col-menu-center bls_submenu-center">
                   {%- liquid
                     if top_search
-                      render 'top-search' | layout4: true
+                      render 'top-search', layout4: true
                     endif
                   -%}
                 </div>
@@ -220,7 +220,7 @@
               <div class="col-header-right mb-col-3 d-flex justify-content-end align-items-center">
                 {%- liquid
                   if top_search
-                    render 'top-search' | layout5: true
+                    render 'top-search', layout5: true
                   endif
                   if my_account
                     render 'my-account'
@@ -251,7 +251,7 @@
               <div class="col-header-right mb-col-3 d-flex justify-content-end align-items-center">
                 {%- liquid
                   if top_search
-                    render 'top-search' | layout6: true
+                    render 'top-search', layout6: true
                   endif
                   if my_account
                     render 'my-account'
@@ -334,3 +334,19 @@
     "url": {{ request.origin | append: page.url | json }}
   }
 </script>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "                      render 'top-search' | layout4: true"
+  to: "                      render 'top-search', layout4: true"
+  position: 6900..6956
+- from: "                    render 'top-search' | layout5: true"
+  to: "                    render 'top-search', layout5: true"
+  position: 9079..9133
+- from: "                    render 'top-search' | layout6: true"
+  to: "                    render 'top-search', layout6: true"
+  position: 10319..10373
+{% endcomment %}

@@ -1192,7 +1192,7 @@
                                           loading="lazy"
                                         >
                                       {%- else -%}
-                                        {%- render 'placeholder-render' | type: 'image' | cls: 'bls__collection-grid-plh' -%}
+                                        {%- render 'placeholder-render', type: 'image', cls: 'bls__collection-grid-plh' -%}
                                       {%- endif -%}
                                     {%- when '1' -%}
                                       {%- if bk_st.page != blank -%}
@@ -2585,3 +2585,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' | cls: 'bls__collection-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'image', cls: 'bls__collection-grid-plh'
+    -%}"
+  position: 81636..81719
+{% endcomment %}

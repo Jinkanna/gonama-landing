@@ -179,7 +179,7 @@
                     </a>
                   {% else %}
                     <a class="d-none" href="{{ 'placholder.svg' | asset_url }}">Placholder Image</a>
-                    {%- render 'placeholder-render' | type: 'image' -%}
+                    {%- render 'placeholder-render', type: 'image' -%}
                   {% endif %}
                   {% liquid
                     assign product = block.settings.product_item
@@ -190,9 +190,9 @@
                       <div class="bls-shopable-product_image mr-10">
                         <div class="bls__product-main-img">
                           {%- if img[0] != blank -%}
-                            {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                            {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                           {%- else -%}
-                            {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                            {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                           {%- endif -%}
                         </div>
                       </div>
@@ -276,7 +276,7 @@
                     {% if block.settings.banner_img != blank %}
                       {%- render 'responsive-image', aspect_ratio: aspect_ratio, image: block.settings.banner_img -%}
                     {% else %}
-                      {%- render 'placeholder-render' | type: 'image' -%}
+                      {%- render 'placeholder-render', type: 'image' -%}
                     {% endif %}
                   </a>
                 {%- endif -%}
@@ -286,9 +286,9 @@
                       <div class="bls__product-main-img">
                         {%- if product.has_only_default_variant -%}
                           {%- if product.featured_image != blank -%}
-                            {%- render 'responsive-image' | image: product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                            {%- render 'responsive-image', image: product.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                           {%- else -%}
-                            {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                            {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                           {%- endif -%}
                         {%- else -%}
                           {%- assign hasColor = false -%}
@@ -302,20 +302,20 @@
                           {%- if hasColor -%}
                             {%- for variant in product.variants limit: 1 -%}
                               {%- if variant.featured_image != blank -%}
-                                {%- render 'responsive-image' | image: variant.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                                {%- render 'responsive-image', image: variant.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                               {%- else -%}
                                 {%- if img[0] != blank -%}
-                                  {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                                  {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                                 {%- else -%}
-                                  {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                                  {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                                 {%- endif -%}
                               {%- endif -%}
                             {%- endfor -%}
                           {%- else -%}
                             {%- if img[0] != blank -%}
-                              {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                              {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                             {%- else -%}
-                              {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                              {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                             {%- endif -%}
                           {%- endif -%}
                         {%- endif -%}
@@ -627,3 +627,61 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 7786..7836
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 8344..8455
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 8523..8603
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 12581..12631
+- from: "{%- render 'responsive-image' | image: product.featured_image | type: 'product'
+    | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: product.featured_image, type: 'product',
+    cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 13109..13236
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 13304..13384
+- from: "{%- render 'responsive-image' | image: variant.featured_image | type: 'product'
+    | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: variant.featured_image, type: 'product',
+    cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 14136..14263
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 14400..14511
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 14591..14671
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 14929..15040
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 15112..15192
+{% endcomment %}

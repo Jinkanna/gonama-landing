@@ -146,7 +146,7 @@
               <div class="bls__product-item item-product-list flex flex-nowrap mb-15">
                 <div class="bls__product-img overflow-hidden relative col-3 mr-15 mw-100">
                   <a role="link" aria-disabled="true">
-                    {%- render 'placeholder-render' | type: 'product' -%}
+                    {%- render 'placeholder-render', type: 'product' -%}
                   </a>
                 </div>
                 <div class="bls__product-details flex-1">
@@ -262,9 +262,9 @@
                 <div class="bls__product-img overflow-hidden relative col-3 mr-15">
                   <a href="{{ product.url | within: collection }}">
                     {%- if product.featured_image != blank -%}
-                      {%- render 'responsive-image' | image: product.featured_image | type: 'product' -%}
+                      {%- render 'responsive-image', image: product.featured_image, type: 'product' -%}
                     {%- else -%}
-                      {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-list-plh' -%}
+                      {%- render 'placeholder-render', type: 'product', cls: 'bls__product-list-plh' -%}
                     {%- endif -%}
                   </a>
                 </div>
@@ -319,7 +319,7 @@
                     <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
                   </h3>
                   {%- if show_review -%}
-                    {% render 'product-review' | review_star: true | product: product %}
+                    {% render 'product-review', review_star: true, product: product %}
                   {%- endif -%}
                   {% if hidden_price == false %}
                     <div class="bls__product-price mt-7">
@@ -575,3 +575,26 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'product' -%}"
+  to: "{%- render 'placeholder-render', type: 'product' -%}"
+  position: 6129..6181
+- from: "{%- render 'responsive-image' | image: product.featured_image | type: 'product'
+    -%}"
+  to: "{%- render 'responsive-image', image: product.featured_image, type: 'product'
+    -%}"
+  position: 11179..11260
+- from: "{%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-list-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'product', cls: 'bls__product-list-plh'
+    -%}"
+  position: 11316..11398
+- from: "{% render 'product-review' | review_star: true | product: product %}"
+  to: "{% render 'product-review', review_star: true, product: product %}"
+  position: 14050..14116
+{% endcomment %}

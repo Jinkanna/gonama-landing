@@ -51,7 +51,7 @@
               style="--animation-order: {{ forloop.index }};"
             {% endif %}
           >
-            {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-tab-plh' -%}
+            {%- render 'responsive-image', type: 'product', cls: 'bls__product-tab-plh' -%}
             <div class="bls__product-details pt-15">
               <a role="link" aria-disabled="true">{{ 'products.product.product_placeholder' | t }}</a>
               <div>{%- render 'price' -%}</div>
@@ -63,7 +63,7 @@
       {%- for product in collection.products limit: limit_products -%}
         {%- if product.available -%}{%- endif -%}
         <div class="swiper-slide">
-          {%- render 'product-item' | product: product -%}
+          {%- render 'product-item', product: product -%}
         </div>
       {%- endfor -%}
     {%- endif -%}
@@ -77,3 +77,18 @@
     ></div>
   {%- endif -%}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-tab-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-tab-plh'
+    -%}"
+  position: 2212..2291
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 2751..2798
+{% endcomment %}

@@ -103,7 +103,7 @@
                   <div class="bls__grid {{ product_style }}">
                     <div id="search-results-list" class="search-results-list list list-view-items">
                       {%- for product in collection.products limit: 6 -%}
-                        {%- render 'product-item' | product: product -%}
+                        {%- render 'product-item', product: product -%}
                       {%- endfor -%}
                     </div>
                   </div>
@@ -121,3 +121,13 @@
   </div>
      <p class="presiona">Presiona enter o sobre la lupa una vez encuentres lo que buscabas...</p>              
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 6306..6353
+{% endcomment %}

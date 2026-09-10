@@ -71,7 +71,7 @@
               class="motion-reduce"
             >
           {%- else -%}
-            {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__placeholder border' -%}
+            {%- render 'placeholder-render', type: 'collection', cls: 'bls__placeholder border' -%}
           {%- endif -%}
         </div>
       </a>
@@ -111,4 +111,15 @@
       {%- endif -%}
     </div>
   </div>
-  
+  {%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'collection' | cls: 'bls__placeholder
+    border' -%}"
+  to: "{%- render 'placeholder-render', type: 'collection', cls: 'bls__placeholder
+    border' -%}"
+  position: 3702..3789
+{%- endcomment -%}

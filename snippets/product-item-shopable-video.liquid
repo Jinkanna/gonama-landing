@@ -107,7 +107,7 @@
               style="--point:{{ imageDev.presentation.focal_point }}"
             >
           {%- else -%}
-            {%- render 'placeholder-render' | type: 'product' -%}
+            {%- render 'placeholder-render', type: 'product' -%}
           {%- endif -%}
         </div>
       </div>
@@ -249,7 +249,7 @@
         <div
           class="bls__pro-reviews"
         >
-          {% render 'product-review' | review_star: true | product: product %}
+          {% render 'product-review', review_star: true, product: product %}
         </div>
       </div>
     {%- endif -%}
@@ -746,3 +746,16 @@
     </div>
   </div>
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'product' -%}"
+  to: "{%- render 'placeholder-render', type: 'product' -%}"
+  position: 5098..5150
+- from: "{% render 'product-review' | review_star: true | product: product %}"
+  to: "{% render 'product-review', review_star: true, product: product %}"
+  position: 11002..11068
+{% endcomment %}

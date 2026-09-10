@@ -177,7 +177,7 @@
                   style="--animation-order: {{ forloop.index }};"
                 {% endif %}
               >
-                {%- render 'product-item' | product: product -%}
+                {%- render 'product-item', product: product -%}
               </div>
             {%- endfor -%}
           </div>
@@ -498,3 +498,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 8303..8350
+{% endcomment %}

@@ -361,7 +361,7 @@
         {% endif %}
       </ul>
       {% if section.settings.menu_mb_category %}
-        {%- render 'categories-menu-mobile' | st: section.settings -%}
+        {%- render 'categories-menu-mobile', st: section.settings -%}
       {% endif %}
     </div>
   </nav>
@@ -1430,4 +1430,13 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'categories-menu-mobile' | st: section.settings -%}"
+  to: "{%- render 'categories-menu-mobile', st: section.settings -%}"
+  position: 26161..26222
+{%- endcomment -%}

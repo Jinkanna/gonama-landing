@@ -119,7 +119,7 @@
               {%- if block.settings.tiktok_embed_url != blank -%}
                 {{ block.settings.tiktok_embed_url }}
               {%- else -%}
-                {%- render 'placeholder-render' | type: product -%}
+                {%- render 'placeholder-render', type: product -%}
               {%- endif -%}
             </div>
           </div>
@@ -306,3 +306,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: product -%}"
+  to: "{%- render 'placeholder-render', type: product -%}"
+  position: 5003..5053
+{% endcomment %}

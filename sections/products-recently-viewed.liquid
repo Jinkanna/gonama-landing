@@ -125,7 +125,7 @@
         <div class="swiper-wrapper" style="--perload-gap: {{ column_gap }}px">
           {%- if search.results != blank -%}
             {%- for item in search.results -%}
-              {%- render 'product-item' | product: item -%}
+              {%- render 'product-item', product: item -%}
             {%- endfor -%}
           {%- endif -%}
         </div>
@@ -429,3 +429,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-item' | product: item -%}"
+  to: "{%- render 'product-item', product: item -%}"
+  position: 5601..5645
+{% endcomment %}

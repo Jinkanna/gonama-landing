@@ -4,7 +4,7 @@
         {%- for product in recommendations.products -%}
             <div
                 class="swiper-slide">
-                {%- render 'product-popular-list-item' | product: product | template_cart: true -%}
+                {%- render 'product-popular-list-item', product: product, template_cart: true -%}
                 </div>
         {%- endfor -%}
     </div>
@@ -12,8 +12,24 @@
         {%- for product in recommendations.products -%}
             <div
                 class="bls-cart-upsell-item" product-handle="{{ product.handle }}">
-                {%- render 'product-popular-list-item' | product: product | template_cart: true -%}
+                {%- render 'product-popular-list-item', product: product, template_cart: true -%}
                 </div>
         {%- endfor -%}
     </div>
-{%- endif -%} 
+{%- endif -%} {%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-popular-list-item' | product: product | template_cart:
+    true -%}"
+  to: "{%- render 'product-popular-list-item', product: product, template_cart: true
+    -%}"
+  position: 207..288
+- from: "{%- render 'product-popular-list-item' | product: product | template_cart:
+    true -%}"
+  to: "{%- render 'product-popular-list-item', product: product, template_cart: true
+    -%}"
+  position: 561..642
+{%- endcomment -%}

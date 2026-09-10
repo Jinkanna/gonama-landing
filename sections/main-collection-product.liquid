@@ -86,7 +86,7 @@
         class="flex-1"
       >
         {%- liquid
-          render 'collection-toolbar' | st: st, pageurl: view, enable_sidebar: enable_sidebar, sidebar_ps: sidebar_ps, products_column: products_column
+          render 'collection-toolbar', st: st, pageurl: view, enable_sidebar: enable_sidebar, sidebar_ps: sidebar_ps, products_column: products_column
         -%}
         {%- if enable_sidebar -%}
           {%- render 'filter-current' -%}
@@ -469,3 +469,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: 'render ''collection-toolbar'' | st: st, pageurl: view, enable_sidebar: enable_sidebar,
+    sidebar_ps: sidebar_ps, products_column: products_column'
+  to: 'render ''collection-toolbar'', st: st, pageurl: view, enable_sidebar: enable_sidebar,
+    sidebar_ps: sidebar_ps, products_column: products_column'
+  position: 2876..3016
+{% endcomment %}

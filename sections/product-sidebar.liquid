@@ -176,7 +176,7 @@
                         {%- for i in (1..items_to_show) -%}
                           <div class="bls__instagram-item {% if settings.image_style != blank and column_gap != 0 %} ins-radius {% endif %}">
                             <a href="#">
-                              {%- render 'responsive-image' | type: image | cls: 'bls_instagram-image' -%}
+                              {%- render 'responsive-image', type: image, cls: 'bls_instagram-image' -%}
                               <span class="bls__instagram-icon"></span>
                             </a>
                           </div>
@@ -259,7 +259,7 @@
                   {%- if collection != blank -%}
                     {% for product in collection.products limit: limit %}
                       <div class="product-sidebar-items">
-                        {%- render 'product-popular-list-item' | product: product -%}
+                        {%- render 'product-popular-list-item', product: product -%}
                       </div>
                     {% endfor %}
                   {%- else -%}
@@ -780,4 +780,17 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | type: image | cls: 'bls_instagram-image'
+    -%}"
+  to: "{%- render 'responsive-image', type: image, cls: 'bls_instagram-image' -%}"
+  position: 7348..7422
+- from: "{%- render 'product-popular-list-item' | product: product -%}"
+  to: "{%- render 'product-popular-list-item', product: product -%}"
+  position: 11649..11709
+{%- endcomment -%}

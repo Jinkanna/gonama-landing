@@ -67,7 +67,7 @@
               <div
                 class="bls__product-image mb-15"
               >
-                {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
               </div>
               <div
                 class="bls__product-details"
@@ -133,7 +133,7 @@
               style="--animation-order: {{ forloop.index }};"
             {% endif %}
           >
-            {%- render 'product-item' | product: product -%}
+            {%- render 'product-item', product: product -%}
           </div>
         {%- endfor -%}
       </div>
@@ -212,7 +212,7 @@
             <div
               class="bls__product-image mb-15"
             >
-              {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+              {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
             </div>
             <div
               class="bls__product-details"
@@ -257,9 +257,32 @@
             style="--animation-order: {{ forloop.index }};"
           {% endif %}
         >
-          {%- render 'product-item' | product: product -%}
+          {%- render 'product-item', product: product -%}
         </div>
       {%- endfor -%}
     </div>
   {%- endif -%}
 {%- endif -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 2115..2195
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 4408..4455
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 6918..6998
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 8493..8540
+{% endcomment %}

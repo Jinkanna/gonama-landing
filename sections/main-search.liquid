@@ -94,10 +94,10 @@
         {% if search.results_count != 0 %}
           {% if enable_sidebar %}
             {%- liquid
-              render 'search-toolbar' | st: st, enable_sidebar: enable_sidebar, sidebar_ps: sidebar_ps
+              render 'search-toolbar', st: st, enable_sidebar: enable_sidebar, sidebar_ps: sidebar_ps
             -%}
             {%- render 'search-filter-current' -%}
-            {%- render 'search-sidebar' | sidebar_ps: sidebar_ps, enable_sidebar: enable_sidebar, st: st -%}
+            {%- render 'search-sidebar', sidebar_ps: sidebar_ps, enable_sidebar: enable_sidebar, st: st -%}
           {% endif %}
         {% endif %}
         <div class="main-result-search flex-1">
@@ -108,7 +108,7 @@
                   {% case item.object_type %}
                     {%- when 'product' -%}
                       <div class="bls__product-load">
-                        {%- render 'product-item' | product: item -%}
+                        {%- render 'product-item', product: item -%}
                       </div>
                     {%- when 'article' -%}
                         <div class="bls__product-load">
@@ -260,3 +260,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: 'render ''search-toolbar'' | st: st, enable_sidebar: enable_sidebar, sidebar_ps:
+    sidebar_ps'
+  to: 'render ''search-toolbar'', st: st, enable_sidebar: enable_sidebar, sidebar_ps:
+    sidebar_ps'
+  position: 4862..4949
+- from: "{%- render 'search-sidebar' | sidebar_ps: sidebar_ps, enable_sidebar: enable_sidebar,
+    st: st -%}"
+  to: "{%- render 'search-sidebar', sidebar_ps: sidebar_ps, enable_sidebar: enable_sidebar,
+    st: st -%}"
+  position: 5029..5124
+- from: "{%- render 'product-item' | product: item -%}"
+  to: "{%- render 'product-item', product: item -%}"
+  position: 5661..5705
+{% endcomment %}

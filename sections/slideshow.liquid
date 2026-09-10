@@ -170,7 +170,7 @@
                       {%- else -%}
                         <div
                           class="placeholder-background absolute inset-0">
-                          {%- render 'placeholder-render' | type: 'image' -%}
+                          {%- render 'placeholder-render', type: 'image' -%}
                         </div>
                       {%- endif -%}
                     </div>
@@ -199,7 +199,7 @@
                         {%- else -%}
                           <div
                             class="placeholder-background {% if st.image_behavior != 'none' %} animate--{{ st.image_behavior }}{% endif %} absolute inset-0">
-                            {%- render 'placeholder-render' | type: 'image' -%}
+                            {%- render 'placeholder-render', type: 'image' -%}
                           </div>
                         {%- endif -%}
                       </div>
@@ -1038,4 +1038,16 @@
     }
   ]
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 8083..8133
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 9862..9912
+{%- endcomment -%}
