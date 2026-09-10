@@ -75,7 +75,7 @@
                                 <div id="search-results">
                                     <div id="search-results-list" class="search-results-list list list-view-items">
                                         {%- for product in collection.products limit: 6 -%}
-                                            {%- render 'product-popular-list-item' | product: product -%}
+                                            {%- render 'product-popular-list-item', product: product -%}
                                         {%- endfor -%}
                                     </div>
                                 </div>
@@ -90,4 +90,13 @@
             </div>
         {%- endif -%}
     </div>
-</div>
+</div>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-popular-list-item' | product: product -%}"
+  to: "{%- render 'product-popular-list-item', product: product -%}"
+  position: 6001..6061
+{%- endcomment -%}

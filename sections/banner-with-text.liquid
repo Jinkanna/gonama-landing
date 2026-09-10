@@ -166,16 +166,16 @@
             >
               {%- if st.image != blank -%}
                 <div class="desktop {% if st.image_behavior != 'none' %} animate--{{ st.image_behavior }}{% endif %} {% if image_mobile != blank %}medium-hide{% endif %}">
-                  {% render 'responsive-image', image: st.image | width: "100vw" | image_behavior: st.image_behavior %}
+                  {% render 'responsive-image', image: st.image, width: "100vw", image_behavior: st.image_behavior %}
                 </div>
               {%- else -%}
                 <div class="desktop {% if st.image_behavior != 'none' %} animate--{{ st.image_behavior }}{% endif %} {% if image_mobile != blank %}medium-hide{% endif %}">
-                  {%- render 'responsive-image' | image_behavior: st.image_behavior -%}
+                  {%- render 'responsive-image', image_behavior: st.image_behavior -%}
                 </div>
               {%- endif -%}
               {%- if image_mobile != blank -%}
                 <div class="mobile {% if st.image_behavior != 'none' %} animate--{{ st.image_behavior }}{% endif %} d-block d-md-none">
-                  {% render 'responsive-image', image: st.image_mobile | width: "100vw" | image_behavior: st.image_behavior %}
+                  {% render 'responsive-image', image: st.image_mobile, width: "100vw", image_behavior: st.image_behavior %}
                 </div>
               {%- endif -%}
             </a>
@@ -1716,3 +1716,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{% render ''responsive-image'', image: st.image | width: "100vw" | image_behavior:
+    st.image_behavior %}'
+  to: '{% render ''responsive-image'', image: st.image, width: "100vw", image_behavior:
+    st.image_behavior %}'
+  position: 7586..7685
+- from: "{%- render 'responsive-image' | image_behavior: st.image_behavior -%}"
+  to: "{%- render 'responsive-image', image_behavior: st.image_behavior -%}"
+  position: 7926..7994
+- from: '{% render ''responsive-image'', image: st.image_mobile | width: "100vw" |
+    image_behavior: st.image_behavior %}'
+  to: '{% render ''responsive-image'', image: st.image_mobile, width: "100vw", image_behavior:
+    st.image_behavior %}'
+  position: 8247..8353
+{% endcomment %}

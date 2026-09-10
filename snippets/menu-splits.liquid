@@ -152,7 +152,7 @@
               >
               </a>
             {%- else -%}
-              {%- render 'placeholder-render' | type: 'product' | cls: 'bls__collection-grid-plh' -%}
+              {%- render 'placeholder-render', type: 'product', cls: 'bls__collection-grid-plh' -%}
             {%- endif -%}
             {%- if button_title != blank -%}
               <div class="bls-banner-button bls__collection-infor pointer-events-none absolute text-center">
@@ -229,7 +229,7 @@
               >
                 {%- if image_col != blank -%}
                 {%- else -%}
-                  {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__collection-grid-plh' -%}
+                  {%- render 'placeholder-render', type: 'collection', cls: 'bls__collection-grid-plh' -%}
                 {%- endif -%}
               </a>
             </div>
@@ -362,3 +362,20 @@
       {%- assign count_item = count_item | plus: 1 -%}
   {%- endcase -%}
 {%- endfor -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'product' | cls: 'bls__collection-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'product', cls: 'bls__collection-grid-plh'
+    -%}"
+  position: 6421..6506
+- from: "{%- render 'placeholder-render' | type: 'collection' | cls: 'bls__collection-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'collection', cls: 'bls__collection-grid-plh'
+    -%}"
+  position: 9560..9648
+{% endcomment %}

@@ -25,7 +25,7 @@
           <li class="bls__breadcrumb-item d-inline">
             <span class="bls__breadcrumb-link" aria-current="page">{{ product.title }}</span>
           </li>
-        {%- when 'collection' and collection.handle -%}
+        {%- when 'collection' -%}
           {%- if current_tags -%}
             <li class="bls__breadcrumb-item d-inline">
               {{ collection.title | link_to: collection.url }}
@@ -115,9 +115,9 @@
                   <a href="{{ previous_product.url | within: collection }}">
                     <div class="bls__product-image">
                       {%- if previous_product.featured_image != blank -%}
-                        {%- render 'responsive-image' | image: previous_product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                        {%- render 'responsive-image', image: previous_product.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                       {%- else -%}
-                        {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                        {%- render 'placeholder-render', type: 'product', cls: 'bls__product-grid-plh' -%}
                       {%- endif -%}
                     </div>
                   </a>
@@ -155,9 +155,9 @@
                   <a href="{{ next_product.url | within: collection }}">
                     <div class="bls__product-image">
                       {%- if next_product.featured_image != blank -%}
-                        {%- render 'responsive-image' | image: next_product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                        {%- render 'responsive-image', image: next_product.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                       {%- else -%}
-                        {%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                        {%- render 'placeholder-render', type: 'product', cls: 'bls__product-grid-plh' -%}
                       {%- endif -%}
                     </div>
                   </a>
@@ -180,3 +180,33 @@
     {%- endif -%}
   </nav>
 {%- endunless -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- when 'collection' and collection.handle -%}"
+  to: "{%- when 'collection' -%}"
+  position: 1310..1335
+- from: "{%- render 'responsive-image' | image: previous_product.featured_image |
+    type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: previous_product.featured_image, type:
+    'product', cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 5667..5803
+- from: "{%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 5863..5945
+- from: "{%- render 'responsive-image' | image: next_product.featured_image | type:
+    'product' | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: next_product.featured_image, type: 'product',
+    cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 10027..10159
+- from: "{%- render 'placeholder-render' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 10219..10301
+{% endcomment %}

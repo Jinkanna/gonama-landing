@@ -72,7 +72,7 @@
           -%}
           {%- if image != blank -%}
             <div class="product-pickup-img width-80 mr-15">
-              {%- render 'responsive-image' | image: image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+              {%- render 'responsive-image', image: image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
             </div>
           {%- endif -%}
           <div class="bls__product-pickup__infos">
@@ -160,3 +160,15 @@
     </ul>
   </pickup-availability-drawer>
 {%- endif -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | image: image | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: image, type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 4529..4639
+{% endcomment %}

@@ -53,7 +53,7 @@
                         class="motion-reduce"
                         >
                     {%- else -%}
-                        {%- render 'placeholder-render' | type: 'collection' | cls: 'bls__collection-grid-plh' -%}
+                        {%- render 'placeholder-render', type: 'collection', cls: 'bls__collection-grid-plh' -%}
                     {%- endif -%}
                 </div>
             </a>
@@ -105,4 +105,15 @@
         </div>
     </div>
 </div>
-  
+  {%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'collection' | cls: 'bls__collection-grid-plh'
+    -%}"
+  to: "{%- render 'placeholder-render', type: 'collection', cls: 'bls__collection-grid-plh'
+    -%}"
+  position: 3415..3503
+{%- endcomment -%}

@@ -28,7 +28,7 @@
                 class="col-6 col-md-4 col-lg-3 bls__product-load bls__wl-product-js bls__product-preload-js"
                 data-product-handle="{{ item.handle }}"
               >
-                {%- render 'product-item' | product: item -%}
+                {%- render 'product-item', product: item -%}
               </div>
             {%- endfor -%}
           </div>
@@ -81,3 +81,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-item' | product: item -%}"
+  to: "{%- render 'product-item', product: item -%}"
+  position: 1260..1304
+{% endcomment %}

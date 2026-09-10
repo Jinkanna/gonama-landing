@@ -52,9 +52,9 @@
                 <a class="bls__img-url" href="{{ product.url | within: collection }}">
                   <div class="bls__product-main-img">
                     {%- if product.featured_image != blank -%}
-                      {%- render 'responsive-image' | image: product.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                      {%- render 'responsive-image', image: product.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                     {%- else -%}
-                      {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                      {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                     {%- endif -%}
                   </div>
                 </a>
@@ -186,7 +186,7 @@
               class="bls__compare-item-review-{{ product.id }} bls__compare-value"
               data-product-handle="{{ product.handle }}"
             >
-              {% render 'product-review' | review_star: true | product: product %}
+              {% render 'product-review', review_star: true, product: product %}
             </div>
           </div>
           <div class="bls__compare-row-size">
@@ -346,3 +346,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | image: product.featured_image | type: 'product'
+    | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: product.featured_image, type: 'product',
+    cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 2246..2373
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 2429..2509
+- from: "{% render 'product-review' | review_star: true | product: product %}"
+  to: "{% render 'product-review', review_star: true, product: product %}"
+  position: 10263..10329
+{% endcomment %}

@@ -159,7 +159,7 @@
                       <div
                         class="bls__collection-menu-image w-full"
                       >
-                        {%- render 'placeholder-render' | type: 'image' -%}
+                        {%- render 'placeholder-render', type: 'image' -%}
                       </div>
                     {% endif %}
                   </div>
@@ -242,7 +242,7 @@
                       <div
                         class="bls__collection-menu-image w-full"
                       >
-                        {%- render 'placeholder-render' | type: 'image' -%}
+                        {%- render 'placeholder-render', type: 'image' -%}
                       </div>
                     {% endif %}
                   </div>
@@ -587,3 +587,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 6499..6549
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 10383..10433
+{% endcomment %}

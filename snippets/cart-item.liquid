@@ -7,9 +7,9 @@
   <div class="bls-minicart-product__image global-media-settings mr-15">
     <a href="{{- item.url -}}">
       {%- if item.image != blank -%}
-        {%- render 'responsive-image' | image: item.image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+        {%- render 'responsive-image', image: item.image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
       {%- else -%}
-        {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+        {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
       {%- endif -%}
     </a>
   </div>
@@ -213,3 +213,20 @@
     </div>
   {% endif %}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | image: item.image | type: 'product' | cls:
+    'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: item.image, type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 429..544
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 572..652
+{% endcomment %}

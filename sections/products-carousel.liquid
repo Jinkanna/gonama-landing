@@ -183,14 +183,14 @@
                   {% if banner_img != blank %}
                     {%- render 'responsive-image', image: banner_img -%}
                   {% else %}
-                    {%- render 'placeholder-render' | type: 'image' -%}
+                    {%- render 'placeholder-render', type: 'image' -%}
                   {% endif %}
                 </a>
             {%- endcase -%}
           </div>
         {%- endif -%}
         <div class="bls__product-with-banner{{ show_banner }}">
-          {%- render 'product-carousel-layout' | st: section.settings -%}
+          {%- render 'product-carousel-layout', st: section.settings -%}
         </div>
       </div>
     </div>
@@ -509,3 +509,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 7455..7505
+- from: "{%- render 'product-carousel-layout' | st: section.settings -%}"
+  to: "{%- render 'product-carousel-layout', st: section.settings -%}"
+  position: 7698..7760
+{% endcomment %}

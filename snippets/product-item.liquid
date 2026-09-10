@@ -295,9 +295,9 @@
       <div class="bls__product-main-img">
         {%- if product.has_only_default_variant -%}
           {%- if img[0] != blank -%}
-            {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+            {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
           {%- else -%}
-            {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+            {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
           {%- endif -%}
         {%- else -%}
           {%- assign hasColor = false -%}
@@ -311,20 +311,20 @@
           {%- if hasColor -%}
             {%- for variant in product.variants limit: 1 -%}
               {%- if variant.featured_image != blank -%}
-                {%- render 'responsive-image' | image: variant.featured_image | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                {%- render 'responsive-image', image: variant.featured_image, type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
               {%- else -%}
                 {%- if img[0] != blank -%}
-                  {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+                  {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
                 {%- else -%}
-                  {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+                  {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
                 {%- endif -%}
               {%- endif -%}
             {%- endfor -%}
           {%- else -%}
             {%- if img[0] != blank -%}
-              {%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid bls__product-img-sw' -%}
+              {%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid bls__product-img-sw' -%}
             {%- else -%}
-              {%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh' -%}
+              {%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh' -%}
             {%- endif -%}
           {%- endif -%}
         {%- endif -%}
@@ -332,7 +332,7 @@
       {%- if enable_hover_image -%}
         {%- if img[1] != blank -%}
           <div class="bls__product-hover-img opacity-0 absolute inset-0">
-            {%- render 'responsive-image' | image: img[1] | type: 'product' | cls: 'bls__product-grid' -%}
+            {%- render 'responsive-image', image: img[1], type: 'product', cls: 'bls__product-grid' -%}
           </div>
         {%- endif -%}
       {%- endif -%}
@@ -518,7 +518,7 @@
       <div class="price-review flex flex-wrap flex-end row-reverse">
     {%- endif -%}
     {%- if show_review -%}
-      {% render 'product-review' | review_star: true | product: product %}
+      {% render 'product-review', review_star: true, product: product %}
     {%- endif -%}
     {% if hidden_price == false %}
       <div class="bls__product-price mb-4">
@@ -537,7 +537,7 @@
       </div>
     {%- endif -%}
     {%- if color_type != 'radio' and color_type != 'dropdown' and th_st.enable_sw_only_product_detail == false -%}
-      {%- render 'product-color-swatches' | product: product -%}
+      {%- render 'product-color-swatches', product: product -%}
     {%- endif -%}
     {%- if show_action -%}
       {%- if product_style == 'bls__product-style-4' %}
@@ -689,3 +689,56 @@
     </script>
   {%- endunless -%}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 12181..12292
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 12328..12408
+- from: "{%- render 'responsive-image' | image: variant.featured_image | type: 'product'
+    | cls: 'bls__product-grid bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: variant.featured_image, type: 'product',
+    cls: 'bls__product-grid bls__product-img-sw' -%}"
+  position: 12936..13063
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 13152..13263
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 13311..13391
+- from: "{%- render 'responsive-image' | image: img[0] | type: 'product' | cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  to: "{%- render 'responsive-image', image: img[0], type: 'product', cls: 'bls__product-grid
+    bls__product-img-sw' -%}"
+  position: 13553..13664
+- from: "{%- render 'responsive-image' | type: 'product' | cls: 'bls__product-grid-plh'
+    -%}"
+  to: "{%- render 'responsive-image', type: 'product', cls: 'bls__product-grid-plh'
+    -%}"
+  position: 13704..13784
+- from: "{%- render 'responsive-image' | image: img[1] | type: 'product' | cls: 'bls__product-grid'
+    -%}"
+  to: "{%- render 'responsive-image', image: img[1], type: 'product', cls: 'bls__product-grid'
+    -%}"
+  position: 14027..14118
+- from: "{% render 'product-review' | review_star: true | product: product %}"
+  to: "{% render 'product-review', review_star: true, product: product %}"
+  position: 32301..32367
+- from: "{%- render 'product-color-swatches' | product: product -%}"
+  to: "{%- render 'product-color-swatches', product: product -%}"
+  position: 33027..33084
+{% endcomment %}

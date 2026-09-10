@@ -106,7 +106,7 @@
           </a>
           {%- if st.popup_type == 'popup_item' -%}
             <div class="lookbook__popup-items items-{{ block.id }}-{{ i }} absolute transition">
-              {%- render 'product-item' | product: product -%}
+              {%- render 'product-item', product: product -%}
             </div>
           {%- endif -%}
         </div>
@@ -114,3 +114,13 @@
     {%- endfor -%}
   {%- endif -%}
 </div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'product-item' | product: product -%}"
+  to: "{%- render 'product-item', product: product -%}"
+  position: 7105..7152
+{% endcomment %}

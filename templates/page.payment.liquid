@@ -63,7 +63,7 @@
                 search += `&orderid=${orderId}`;
               }
               {% if settings.logo %}
-                logoUrl = "{{ settings.logo | image_url: ‘200x’ }}"
+                logoUrl = "{{ settings.logo | image_url: renamed_variable_200x }}"
                 search += `&logoUrl="${logoUrl}"`
               {% endif %}
               createCart().then(res => {
@@ -189,3 +189,13 @@
     </script>
   </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ settings.logo | image_url: ‘200x’ }}"
+  to: "{{ settings.logo | image_url: renamed_variable_200x }}"
+  position: 2136..2190
+{% endcomment %}

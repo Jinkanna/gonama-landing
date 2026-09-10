@@ -22,7 +22,7 @@
                   title: product.featured_image.alt
               }}
             {% else %}
-              {%- render 'placeholder-render' | type: 'product' -%}
+              {%- render 'placeholder-render', type: 'product' -%}
             {% endif %}
           </a>
         </div>
@@ -30,3 +30,13 @@
     </div>
   </div>
 {% endif %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'product' -%}"
+  to: "{%- render 'placeholder-render', type: 'product' -%}"
+  position: 1081..1133
+{% endcomment %}

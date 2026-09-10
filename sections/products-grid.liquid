@@ -193,7 +193,7 @@
                   {% if banner_img != blank %}
                     {%- render 'responsive-image', image: banner_img -%}
                   {% else %}
-                    {%- render 'placeholder-render' | type: 'image' -%}
+                    {%- render 'placeholder-render', type: 'image' -%}
                   {% endif %}
                 </a>
             {%- endcase -%}
@@ -205,7 +205,7 @@
           </div>
         {%- endif -%}
         <div class="bls__product-with-banner {{ show_banner }} {{ show_sticky_banner }}">
-          {%- render 'product-grid-layout' | st: st | | more_row: more_row -%}
+          {%- render 'product-grid-layout', st: st, more_row: more_row -%}
         </div>
       </div>
     </div>
@@ -539,3 +539,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'placeholder-render' | type: 'image' -%}"
+  to: "{%- render 'placeholder-render', type: 'image' -%}"
+  position: 8065..8115
+- from: "{%- render 'product-grid-layout' | st: st | | more_row: more_row -%}"
+  to: "{%- render 'product-grid-layout', st: st, more_row: more_row -%}"
+  position: 8592..8656
+{% endcomment %}

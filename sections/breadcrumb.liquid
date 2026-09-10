@@ -3,7 +3,7 @@
 -%}
 <section class="breadcrumbs color-{{ section.settings.color_scheme }} gradient {{ st.postion }} py-25 fs-small">
   <div class="{{ st.container }}">
-    {% render 'breadcrumbs' | next_prev: st.next_prev %}
+    {% render 'breadcrumbs', next_prev: st.next_prev %}
   </div>
 </section>
 {% schema %}
@@ -68,3 +68,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'breadcrumbs' | next_prev: st.next_prev %}"
+  to: "{% render 'breadcrumbs', next_prev: st.next_prev %}"
+  position: 198..249
+{% endcomment %}
